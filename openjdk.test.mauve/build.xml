@@ -1,0 +1,331 @@
+<!--
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+<project name="openjdk.test.mauve" default="configure">
+
+	<!-- All build files need to set a default value for source_root and then import build/include/top.xml.
+	     top.xml contains refreshes the target directory from the source directory and then restarts the build
+	     in the target directory.
+	     top.xml also contains a number of other utility targets, ant tasks and macros.  -->
+	<property name="source_root" location=".."/>
+
+	<!-- Import settings used by multiple projects.  -->
+	<import file="${source_root}/openjdk.build/include/top.xml"/>
+
+	<!-- A temporary folder in which to build the mauve test cases. -->
+	<property name="work_dir" value="${java.io.tmpdir}/mauve"/>
+	<property name="src_dir" value="${work_dir}/mauve"/>
+	<property name="work_jar_file" value="${work_dir}/mauve.jar"/>
+	<property name="final_dir" value="${prereqs_root}/mauve"/>
+
+	<!-- We need junit compile this project. -->
+	<path id="project.class.path">
+		<path refid="junit.class.path" />
+	</path>
+
+	<!-- Projects which need to be built before this one. -->
+	<!-- dir must be set on the ant task otherwise the basedir property is not set to a new value in the subant task. -->
+	<target name="build-dependencies">
+		<!-- <ant antfile="${stf_root}/stf.build/build.xml" dir="${stf_root}/stf.build" inheritAll="false"/> -->
+	</target>
+
+	<target name="configure" depends="check-if-already-built, check-if-cvs-available, output-recreate-message, set-whether-build-required, get-source, check-if-source-available, build-archives, check-if-work_jar_file-exists, install-archives, delete-work-dir">
+	</target>
+
+	<!--
+		To amend a mauve test case and rebuild:
+		1. cd to openjdk.test.mauve
+		2. Run ant get-source -Dmake=make.  This will download the mauve source to $TMP/mauve (unix) or %TEMP%/mauve (Windows)
+		3. Make amendments to the mauve source
+		4. Run ant force-build -Dmake-make -Djava8_compiler=<path_to_javac(.exe)>.
+		   The mauve test cases have compilation errors with java9 (at 28Apr2017) - they use '_' as an
+		   identifer which is illegal in java 9.
+		   This will rebuild from the source and put the results mauve.jar into ${prereqs_root}/mauve
+	-->
+	<target name="force-build" depends="check-if-cvs-available, check-if-source-available, build-archives, check-if-work_jar_file-exists, install-archives">
+	</target>
+
+	<target name="output-recreate-message" if="${already_built}">
+		<echo message="${final_dir}/mauve.jar already exists, it will not be recreated."/>
+		<echo message="If you want to recreate ${final_dir}/mauve.jar, delete it manually and rerun."/>
+	</target>
+
+	<target name="check-if-already-built">
+		<echo message="Checking if ${final_dir}/mauve.jar already exists"/>
+		<available file="mauve.jar" filepath="${final_dir}" property="already_built"/>
+		<echo message="already_built is ${already_built}"/>
+	</target>
+
+	<target name="build-archives" depends="build-jar" unless="${already_built}">
+	</target>
+
+	<target name="build-jar" depends="build-java" if="mauve_source_available">
+		<jar destfile="${work_jar_file}">
+			<!-- Include the source in case someone needs to look at it to debug a defect. -->
+			<fileset dir="${src_dir}" includes="**/*.*" />
+		</jar>
+	</target>
+
+	<target name="build-java" depends="mauve-configure, build-tests">
+	</target>
+
+	<target name="build-tests" depends="build-harness" if="mauve_source_available">
+		 <!-- The Ant javac task only checks time dependencies between .java files and their .class files,
+		      so fails to recompile in situations such as the signatures of a dependent method changing.
+		      The depend target checks the dependencies and deletes any .class files older than the files
+		      which depend on them, thereby ensuring recompilation.  -->
+		<depend srcdir="${src_dir}" destdir="${src_dir}" classpathref="project.class.path">
+			<include name="**/*.java" />
+			<exclude name="*.java" />
+			<exclude name="**/junit/framework/*.java" />
+			<exclude name="/junit/runner/*.java" />
+			<exclude name="/junit/textui/*.java" />
+		</depend>
+		<!-- The test cases are built with source="1.8" and target="1.8" because they need packages
+		    which have been moved into madules which are not visible by default in Java 9. -->
+		<javac srcdir="${src_dir}"
+			   destdir="${src_dir}"
+			   source="1.8"
+			   target="1.8"
+			   fork="true"
+			   executable="${java8_compiler}"
+			   classpathref="project.class.path"
+			   debug="true"
+			   encoding="UTF-8"
+			   includeantruntime="false"
+			   failonerror="true">
+			<include name="**/*.java" />
+			<exclude name="*.java" />
+			<exclude name="**/junit/framework/*.java" />
+			<exclude name="/junit/runner/*.java" />
+			<exclude name="/junit/textui/*.java" />
+		</javac>
+	</target>
+
+	<target name="build-harness" depends="setup-java-properties" if="mauve_source_available">
+		 <!-- The Ant javac task only checks time dependencies between .java files and their .class files,
+		      so fails to recompile in situations such as the signatures of a dependent method changing.
+		      The depend target checks the dependencies and deletes any .class files older than the files
+		      which depend on them, thereby ensuring recompilation.  -->
+		<depend srcdir="${src_dir}" destdir="${src_dir}" classpathref="project.class.path">
+			<include name="*.java" />
+			<include name="**/junit/framework/*.java" />
+			<include name="/junit/runner/*.java" />
+			<include name="/junit/textui/*.java" />
+		</depend>
+		<javac srcdir="${src_dir}"
+			   destdir="${src_dir}"
+			   source="1.8"
+			   target="1.8"
+			   verbose="false"
+			   fork="true"
+			   executable="${java8_compiler}"
+			   classpathref="project.class.path"
+			   debug="true"
+			   encoding="UTF-8"
+			   includeantruntime="false"
+			   failonerror="true">
+			<include name="*.java" />
+			<include name="**/junit/framework/*.java" />
+			<include name="**/junit/runner/*.java" />
+			<include name="**/junit/textui/*.java" />
+		</javac>
+	</target>
+
+	<target name="create-work-dir" depends="delete-work-dir" if="${build_required}">
+		<mkdir dir="${work_dir}"/>
+	</target>
+
+	<target name="delete-work-dir">
+		<delete dir="${work_dir}"/>
+	</target>
+
+	<target name="mauve-configure" if="mauve_source_available">
+		<!-- Mauve ships with a gnu/testlet/config.java.in file which is processed by the
+		     configure shell script in the mauve distribution root directory to create a config.java file.
+		     The shell script cannot be run with the Windows default shell (cmd.exe) so we
+		     just copy the file as config.java - we don't need any of the values provided by the configure script. -->
+		<!-- Uncomment the exec task to run configure instead. -->
+		<!-- <exec executable="${src_dir}/configure" dir="src_dir} failonerror="true"/> -->
+		<copy file="${src_dir}/gnu/testlet/config.java.in" tofile="${src_dir}/gnu/testlet/config.java"/>
+
+		<!-- Delete whole packages which won't compile compile without prereqs.  -->
+		<delete dir="${src_dir}/gnu/anttask"/>
+		<delete dir="${src_dir}/gnu/testlet/BinaryCompatibility"/>
+		<delete dir="${src_dir}/gnu/testlet/gnu/java/security"/>
+		<delete dir="${src_dir}/gnu/testlet/gnu/javax/crypto"/>
+		<delete dir="${src_dir}/gnu/testlet/gnu/javax/swing/text/html/parser/support"/>
+		<delete dir="${src_dir}/gnu/testlet/java/lang/InternalError"/>
+		<delete dir="${src_dir}/gnu/testlet/javax/net/ssl/SSLEngine"/>
+		<delete dir="${src_dir}/gnu/testlet/java/security/Engine"/>
+
+		<!-- Delete individual java files which won't compile (mostly because we are not using GnuClasspath, Escher) -->
+		<delete file="${src_dir}/gnu/testlet/java/lang/Integer/compareToObject.java"/>
+		<delete file="${src_dir}/gnu/testlet/javax/swing/text/html/parser/ParserDelegator/Entities2.java"/>
+		<delete file="${src_dir}/gnu/testlet/javax/swing/text/html/parser/ParserDelegator/Text2.java"/>
+		<delete file="${src_dir}/gnu/testlet/javax/swing/text/html/parser/AttributeList/AttributeListTest2.java"/>
+		<delete file="${src_dir}/gnu/testlet/javax/swing/text/html/parser/DTD/DtdTest2.java"/>
+		<delete file="${src_dir}/gnu/testlet/runner/XMLReportParser.java"/>
+		<delete file="${src_dir}/gnu/testlet/runner/compare/ReportComparator.java"/>
+		<delete file="${src_dir}/gnu/testlet/javax/security/auth/login/TestOfConfigurationParser.java"/>
+		<delete file="${src_dir}/gnu/testlet/javax/swing/text/html/parser/TagElement/TagElementTest2.java"/>
+		<delete file="${src_dir}/gnu/testlet/runner/MauveTests.java"/>
+		<delete file="${src_dir}/gnu/testlet/java/util/ConcurrentModificationException/constructor.java"/>
+		<delete file="${src_dir}/gnu/testlet/java/awt/image/ColorModel/MyColorModel.java"/>
+		<delete file="${src_dir}/gnu/testlet/java/lang/Double/compareToObject.java"/>
+		<delete file="${src_dir}/gnu/testlet/java/lang/Long/compareToObject.java"/>
+		<delete file="${src_dir}/gnu/testlet/java/lang/Boolean/compareToObject.java"/>
+		<delete file="${src_dir}/gnu/testlet/java/lang/Byte/compareToObject.java"/>
+		<delete file="${src_dir}/gnu/testlet/java/lang/Float/compareToObject.java"/>
+		<delete file="${src_dir}/gnu/testlet/java/math/BigDecimal/compareToObject.java"/>
+		<delete file="${src_dir}/gnu/testlet/java/awt/image/ColorModel/constructors.java"/>
+
+		<!-- Delete individual java files which compile with the warning
+		     warning: '_' used as an identifier
+		     (use of '_' as an identifier might not be supported in releases after Java SE 8)
+		-->
+		<delete file="${src_dir}/gnu/testlet/java/awt/BorderLayout/Test15.java"/>
+		<delete file="${src_dir}/gnu/testlet/java/beans/Beans/instantiate_1.java"/>
+		<delete file="${src_dir}/gnu/testlet/java/io/BufferedOutputStream/interrupt.java"/>
+		<delete file="${src_dir}/gnu/testlet/java/io/File/canWrite.java"/>
+		<delete file="${src_dir}/gnu/testlet/java/io/File/newFileURI.java"/>
+		<delete file="${src_dir}/gnu/testlet/java/io/File/UnicodeURI.java"/>
+		<delete file="${src_dir}/gnu/testlet/java/io/File/URI.java"/>
+		<delete file="${src_dir}/gnu/testlet/java/io/InputStreamReader/hang.java"/>
+		<delete file="${src_dir}/gnu/testlet/java/io/PrintStream/subclass.java"/>
+		<delete file="${src_dir}/gnu/testlet/java/io/Serializable/BreakMeTestSer.java"/>
+		<delete file="${src_dir}/gnu/testlet/java/io/StreamTokenizer/commentchar.java"/>
+		<delete file="${src_dir}/gnu/testlet/java/io/StreamTokenizer/newline.java"/>
+		<delete file="${src_dir}/gnu/testlet/java/io/StreamTokenizer/slashslash.java"/>
+		<delete file="${src_dir}/gnu/testlet/java/io/StreamTokenizer/slashstar.java"/>
+		<delete file="${src_dir}/gnu/testlet/java/io/StreamTokenizer/Test.java"/>
+		<delete file="${src_dir}/gnu/testlet/java/lang/Class/reflect.java"/>
+		<delete file="${src_dir}/gnu/testlet/java/lang/ClassLoader/findLoadedClass.java"/>
+		<delete file="${src_dir}/gnu/testlet/java/lang/ClassLoader/initialize.java"/>
+		<delete file="${src_dir}/gnu/testlet/java/lang/ClassLoader/redefine.java"/>
+		<delete file="${src_dir}/gnu/testlet/java/lang/InheritableThreadLocal/simple.java"/>
+		<delete file="${src_dir}/gnu/testlet/java/lang/ProcessBuilder/simple.java"/>
+		<delete file="${src_dir}/gnu/testlet/java/lang/ref/PhantomReference/phantom.java"/>
+		<delete file="${src_dir}/gnu/testlet/java/lang/ref/WeakReference/weakref.java"/>
+		<delete file="${src_dir}/gnu/testlet/java/lang/reflect/Constructor/newInstance.java"/>
+		<delete file="${src_dir}/gnu/testlet/java/lang/reflect/Constructor/toString.java"/>
+		<delete file="${src_dir}/gnu/testlet/java/lang/reflect/Field/promotion.java"/>
+		<delete file="${src_dir}/gnu/testlet/java/lang/reflect/Field/toString.java"/>
+		<delete file="${src_dir}/gnu/testlet/java/lang/reflect/InvocationTargetException/Chain.java"/>
+		<delete file="${src_dir}/gnu/testlet/java/lang/reflect/Method/invoke.java"/>
+		<delete file="${src_dir}/gnu/testlet/java/lang/String/getBytes.java"/>
+		<delete file="${src_dir}/gnu/testlet/java/lang/String/surrogate.java"/>
+		<delete file="${src_dir}/gnu/testlet/java/lang/Thread/sleep.java"/>
+		<delete file="${src_dir}/gnu/testlet/java/lang/ThreadLocal/simple.java"/>
+		<delete file="${src_dir}/gnu/testlet/java/lang/reflect/Method/toString.java"/>
+		<delete file="${src_dir}/gnu/testlet/java/net/URI/URITest.java"/>
+		<delete file="${src_dir}/gnu/testlet/java/net/URL/URLTest.java"/>
+		<delete file="${src_dir}/gnu/testlet/java/nio/channels/SocketChannel/select.java"/>
+		<delete file="${src_dir}/gnu/testlet/java/text/MessageFormat/attribute.java"/>
+		<delete file="${src_dir}/gnu/testlet/java/text/MessageFormat/attribute.java"/>
+		<delete file="${src_dir}/gnu/testlet/java/text/SimpleDateFormat/Test.java"/>
+		<delete file="${src_dir}/gnu/testlet/java/text/SimpleDateFormat/attribute.java"/>
+		<delete file="${src_dir}/gnu/testlet/java/text/SimpleDateFormat/regress.java"/>
+		<delete file="${src_dir}/gnu/testlet/java/util/Calendar/ampm.java"/>
+		<delete file="${src_dir}/gnu/testlet/java/util/Calendar/simple.java"/>
+		<delete file="${src_dir}/gnu/testlet/java/util/Currency/getInstance.java"/>
+		<delete file="${src_dir}/gnu/testlet/java/util/Observable/observable.java"/>
+		<delete file="${src_dir}/gnu/testlet/java/util/Properties/load.java"/>
+		<delete file="${src_dir}/gnu/testlet/java/util/ResourceBundle/getBundle.java"/>
+		<delete file="${src_dir}/gnu/testlet/java/util/jar/JarFile/basic.java"/>
+		<delete file="${src_dir}/gnu/testlet/java/util/logging/Level/parse.java"/>
+		<delete file="${src_dir}/gnu/testlet/java/util/logging/LogRecord/getMillis.java"/>
+		<delete file="${src_dir}/gnu/testlet/java/util/logging/LogRecord/getThreadID.java"/>
+		<delete file="${src_dir}/gnu/testlet/java/util/logging/Logger/getLogger.java"/>
+		<delete file="${src_dir}/gnu/testlet/java/util/logging/SocketHandler/SocketCapturer.java"/>
+		<delete file="${src_dir}/gnu/testlet/java/util/logging/XMLFormatter/formatMessage.java"/>
+		<delete file="${src_dir}/gnu/testlet/java/util/regex/Pattern/pcrematches.java"/>
+		<delete file="${src_dir}/gnu/testlet/java/util/zip/GZIPInputStream/basic.java"/>
+		<delete file="${src_dir}/gnu/testlet/java/util/zip/InflaterInputStream/basic.java"/>
+		<delete file="${src_dir}/gnu/testlet/java/util/zip/ZipEntry/Size.java"/>
+		<delete file="${src_dir}/gnu/testlet/java/util/zip/ZipEntry/newZipEntry.java"/>
+		<delete file="${src_dir}/gnu/testlet/java/util/zip/ZipEntry/setComment.java"/>
+		<delete file="${src_dir}/gnu/testlet/java/util/zip/ZipFile/newZipFile.java"/>
+		<delete file="${src_dir}/gnu/testlet/java/util/zip/ZipInputStream/basic.java"/>
+		<delete file="${src_dir}/gnu/testlet/java/util/zip/ZipInputStream/close.java"/>
+		<delete file="${src_dir}/gnu/testlet/javax/naming/CompositeName/composite.java"/>
+		<delete file="${src_dir}/gnu/testlet/javax/naming/CompoundName/simple.java"/>
+		<delete file="${src_dir}/gnu/testlet/javax/naming/directory/BasicAttribute/Enumerate.java"/>
+		<delete file="${src_dir}/gnu/testlet/javax/swing/text/ElementIterator/ElementIteratorTest.java"/>
+		<delete file="${src_dir}/gnu/testlet/javax/swing/text/GapContent/insertString.java"/>
+
+		<!-- Delete individual java files which won't compile because we have removed a file they depend on.  -->
+		<!-- Depends on gnu/testlet/java/lang/reflect/Method/invoke.java"/> -->
+		<delete file="${src_dir}/gnu/testlet/java/lang/reflect/sub/InvokeHelper.java"/>
+		<!-- Depends on gnu/testlet/java/util/logging/SocketHandler/SocketCapturer.java -->
+		<delete file="${src_dir}/gnu/testlet/java/util/logging/SocketHandler/publish.java"/>
+
+		<!-- Delete files which won't compile with Java 9 because they access internal fields or methods no longer present.  -->
+		<delete file="${src_dir}/gnu/testlet/java/lang/reflect/sub/InvokeHelper.java"/>
+		<delete dir="${src_dir}/gnu/testlet/java/awt/dnd/DragSourceContext"/>
+		<delete dir="${src_dir}/gnu/testlet/java/awt/Frame"/>
+		<delete dir="${src_dir}/gnu/testlet/java/awt/TextArea"/>
+		<delete dir="${src_dir}/gnu/testlet/java/awt/TextField"/>
+		<delete file="${src_dir}/gnu/testlet/java/util/logging/LogManager/Security.java"/>
+
+	</target>
+
+	<target name="set-whether-build-required">
+		<condition property="build_required">
+			<and>
+				<isset property="cvs_available"/>
+				<not>
+					<isset property="already_built"/>
+				</not>
+			</and>
+		</condition>
+	</target>
+
+	<target name="get-source" depends="check-if-cvs-available, create-work-dir" if="build_required">
+		<cvs cvsRoot=":pserver:anoncvs@sourceware.org:/cvs/mauve" command="export -r HEAD" package="mauve" dest="${work_dir}"/>
+	</target>
+
+	<target name="check-if-source-available">
+		<!-- The existence of mauve/gnu/testlet/config.java.in is used to indicate that source is available to build. -->
+		<echo message="Checking if ${work_dir}/mauve/gnu/testlet/config.java.in exists"/>
+		<available file="${work_dir}/mauve/gnu/testlet/config.java.in" property="mauve_source_available"/>
+		<echo message="mauve_source_available is ${mauve_source_available}"/>
+	</target>
+
+	<target name="check-if-cvs-available" unless="${already_built}">
+		<echo message="Checking if cvs is on the PATH"/>
+		<!-- We need cvs to checkout the mauve source code. -->
+		<available file="cvs" filepath="${env.PATH}" property="cvs_available"/>
+		<available file="cvs.exe" filepath="${env.PATH}" property="cvs_available"/>
+		<!-- On Windows PATH environment variable may be Path -->
+		<available file="cvs.exe" filepath="${env.Path}" property="cvs_available"/>
+		<fail message="Cannot find cvs (or cvs.exe) on PATH. Either install cvs or add it to PATH and retry.  If you are running the build from the Ant view in Eclipse, add cvs to your PATH before starting Eclipse." unless="cvs_available"/>
+	</target>
+
+	<target name="install-archives" if="work_jar_file_exists">
+		<echo message="Copying ${work_jar_file} to directory ${final_dir}"/>
+		<copy file="${work_jar_file}" todir="${final_dir}"/>
+	</target>
+
+	<target name="check-if-work_jar_file-exists">
+		<echo message="Checking if ${work_jar_file} exists"/>
+		<available file="${work_jar_file}" property="work_jar_file_exists"/>
+		<echo message="work_jar_file_exists is ${work_jar_file_exists}"/>
+	</target>
+
+	<target name="clean">
+		<delete dir="${final_dir}"/>
+	</target>
+
+</project>

@@ -1,0 +1,560 @@
+<?xml version="1.0"?>
+
+<!--
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+<project name="openjdk.top">
+
+	<!-- Set a property for accessing environment variables.  -->
+	<property environment="env"/>
+
+	<!-- Set default prereqs_root.  -->
+	<!-- If source has been checked out to /home/user/git/openjdk-systemtest, default location for prereqs is /home/user/systemtest_prereqs.  -->
+	<property name="prereqs_root" location="${source_root}/../../systemtest_prereqs"/>
+
+	<!-- Platform dependent settings.  -->
+	<condition property="exe_suffix" value=".exe" else="" >
+		<os family="windows" />
+	</condition>
+	<condition property="is_windows" value="true" else="false" >
+		<os family="windows" />
+	</condition>
+
+	<!--
+		Some interoperability tests may involve running two javas of different versions.
+		The test classes will need to be built using the earliest of the two versions.
+		To facilitiate this, the test project build.xml files say explicitly which compiler
+		to version to use via a javax_home property (java8_home, java9_home, etc.)
+		If no values are provided for the javax_home properties, the java running ant
+		will be used for the compiles.
+		The following targets set all this up.
+	-->
+	<!--
+		Properties are also set for the location of the directories containing JDK tools (jar, javac, idlj etc.)
+		On IBM zOS java and Java 9, the ant property java.home points at JAVA_HOME.
+		On pre Java 9 non IBM zOS java, the ant property java.home points at JAVA_HOME/jre.
+	-->
+	<target name="setup-java-properties" depends="setup-java8-properties, setup-java9-properties">
+	</target>
+	<target name="setup-java8-properties">
+		<condition property="java8_home" value="${java.home}">
+			<not>
+				<available file="${java8_home}"/>
+			</not>
+		</condition>
+		<set-platform-properties platform.property="java8_platform"
+								 platformclass.property="java8_platformclass"
+								 java.bindir.property="java8_bindir"
+								 java.compiler.property="java8_compiler"
+								 osname.property="java8_osname"
+								 arch.property="java8_arch"
+								 bits.property="java8_bits"
+								 java.home="${java8_home}"
+								 java.id="java8"/>
+		<echo message="java8_platformclass set to ${java8_platformclass}"/>
+		<echo message="java8_platform set to ${java8_platform}"/>
+		<echo message="java8_bindir set to ${java8_bindir}"/>
+		<echo message="java8_compiler set to ${java8_compiler}"/>
+		<echo message="java8_osname set to ${java8_osname}"/>
+		<echo message="java8_arch set to ${java8_arch}"/>
+		<echo message="java8_bits set to ${java8_bits}"/>
+		<property name="java8_compiler" location="${java8_bindir}/javac${exe_suffix}"/>
+		<echo message="java8_home set to ${java8_home}"/>
+		<echo message="java8_compiler set to ${java8_compiler}"/>
+	</target>
+	<target name="setup-java9-properties">
+		<condition property="java9_home" value="${java.home}">
+			<not>
+				<available file="${java9_home}"/>
+			</not>
+		</condition>
+		<set-platform-properties platform.property="java9_platform"
+								 platformclass.property="java9_platformclass"
+								 java.bindir.property="java9_bindir"
+								 java.compiler.property="java9_compiler"
+								 osname.property="java9_osname"
+								 arch.property="java9_arch"
+								 bits.property="java9_bits"
+								 java.home="${java9_home}"
+								 java.id="java9"/>
+		<echo message="java9_platformclass set to ${java9_platformclass}"/>
+		<echo message="java9_platform set to ${java9_platform}"/>
+		<echo message="java9_bindir set to ${java9_bindir}"/>
+		<echo message="java9_osname set to ${java9_osname}"/>
+		<echo message="java9_arch set to ${java9_arch}"/>
+		<echo message="java9_bits set to ${java9_bits}"/>
+		<property name="java9_compiler" location="${java9_bindir}/javac${exe_suffix}"/>
+		<echo message="java9_home set to ${java9_home}"/>
+		<echo message="java9_compiler set to ${java9_compiler}"/>
+	</target>
+
+	<!-- On Windows we need a copy of Visual Studio for compiling natives.  -->
+	<!-- Look for either version 10.0 or 14.0 in the default installation location.  -->
+	<!-- To use a different location property rtb.vcvarsall_filename needs to be set on the command line for the build.  -->
+	<!-- The vcvarsall.bat file argument amd64 is added if the javac being used to compile the java classes is a 64 bit java. -->
+
+	<target name="setup-windows-compiler">
+		<property name="vs14_vcvarsall_filename" location="c:\\Program Files (x86)\\Microsoft Visual Studio 14.0\\VC\\vcvarsall.bat"/>
+		<available file="${vs14_vcvarsall_filename}" property="vs14_available"/>
+		<property name="vs10_vcvarsall_filename" location="c:\\Program Files (x86)\\Microsoft Visual Studio 10.0\\VC\\vcvarsall.bat"/>
+		<available file="${vs10_vcvarsall_filename}" property="vs10_available"/>
+		<condition property="vcvarsall_filename" value="${vs14_vcvarsall_filename}">
+			<isset property="vs14_available"/>
+		</condition>
+		<condition property="vcvarsall_filename" value="${vs10_vcvarsall_filename}">
+			<isset property="vs10_available"/>
+		</condition>
+		<condition property="vcvarsall_bits_arg" value="amd64" else="">
+			<equals arg1="${java8_bits}" arg2="64" trim="true"/>
+		</condition>
+		<echo message="java8_bits is ${java8_bits}, vcvarsall_bits_arg is ${vcvarsall_bits_arg}"/>
+		<condition property="setup_windows_build_env" value='call "${vcvarsall_filename}" ${vcvarsall_bits_arg} &amp;&amp;' else="">
+			<equals arg1="${is_windows}" arg2="true"/>
+		</condition>
+	</target>
+
+	<!-- Set up classpaths for prereqs. -->
+	<path id="junit.class.path">
+		<pathelement location="${prereqs_root}/junit-4.12/junit-4.12.jar"/>
+		<pathelement location="${prereqs_root}/junit-4.12/hamcrest-core-1.3.jar"/>
+	</path>
+	<path id="log4j-2.3.class.path">
+		<pathelement location="${prereqs_root}/log4j-2.3/log4j-api-2.3.jar"/>
+		<pathelement location="${prereqs_root}/log4j-2.3/log4j-core-2.3.jar"/>
+	</path>
+	<path id="tools.class.path">
+		<pathelement location="${prereqs_root}/tools/tools.jar"/>
+	</path>
+	<path id="asm.5.2.class.path">
+		<pathelement location="${prereqs_root}/asm-5.2/lib/asm-5.2.jar"/>
+	</path>
+	<path id="asm.6.0_BETA.class.path">
+		<pathelement location="${prereqs_root}/asm-6.0_BETA/lib/asm-6.0_BETA.jar"/>
+	</path>
+	<path id="stf.class.path">
+		<pathelement location="${stf_root}/stf.core/bin/stf.core.jar"/>
+		<pathelement location="${stf_root}/stf.load/bin/stf.load.jar"/>
+	</path>
+
+	<!--
+		Target to check for prereqs.
+		Same as configure target except prereqs are not installed if missing.
+	-->
+	<target name="check-prereqs" depends="check-for-junit-4.12, print-junit-4.12-location, print-junit-4.12-error,
+										  check-for-hamcrest-core-1.3, print-hamcrest-core-1.3-location, print-hamcrest-core-1.3-error,
+										  check-for-log4j-2.3, print-log4j-2.3-location, print-log4j-2.3-error,
+										  check-for-asm-5.2, print-asm-5.2-location, print-asm-5.2-error,
+										  check-for-asm-6.0_BETA, print-asm-6.0_BETA-location, print-asm-6.0_BETA-error,
+										  check-for-tools-jar, print-tools-jar-location, print-tools-jar-error,
+										  fail-if-error,
+										  setup-java-properties, setup-windows-compiler">
+	</target>
+
+	<!--
+		Targets to check for and download prereqs.
+		Prereqs which are not also stf prereqs are installed.
+		Prereqs which are also stf prereqs should be installed using stf' make configure (or ant configure)
+		or by following the instructions in stf.build/build.md.
+		All prereqs are installed under the same ${prereqs_root} directory.
+	-->
+	<target name="configure" depends="check-for-wget,
+									  run-stf-configure,
+									  check-for-junit-4.12, configure-junit-4.12, print-junit-4.12-location, print-junit-4.12-error,
+									  check-for-hamcrest-core-1.3, configure-hamcrest-core-1.3, print-hamcrest-core-1.3-location, print-hamcrest-core-1.3-error,
+									  check-for-log4j-2.3, configure-log4j-2.3, print-log4j-2.3-location, print-log4j-2.3-error,
+									  check-for-asm-5.2, configure-asm-5.2, print-asm-5.2-location, print-asm-5.2-error,
+									  check-for-asm-6.0_BETA, configure-asm-6.0_BETA, print-asm-6.0_BETA-location, print-asm-6.0_BETA-error,
+									  check-for-tools-jar, configure-tools-jar, print-tools-jar-location, print-tools-jar-error,
+									  run-mauve-configure,
+									  fail-if-error">
+	</target>
+
+	<!-- Make sure stf's prereqs are installed. -->
+	<target name="run-stf-configure">
+		<ant antfile="${stf_root}/stf.build/build.xml" target="configure" dir="${stf_root}/stf.build" inheritAll="false"/>
+	</target>
+
+	<!-- Make sure mauve.jar is built. -->
+	<target name="run-mauve-configure">
+		<ant antfile="${source_root}/openjdk.test.mauve/build.xml" target="configure" dir="${source_root}/openjdk.test.mauve" inheritAll="false"/>
+	</target>
+
+	<!-- Target to check if junit 4.12 is available. -->
+	<target name="check-for-junit-4.12">
+		<property name="junit_4.12_dir" location="${prereqs_root}/junit-4.12"/>
+		<property name="junit_4.12_file" value="junit-4.12.jar"/>
+		<property name="junit_4.12" location="${junit_4.12_dir}/${junit_4.12_file}"/>
+		<available file="${junit_4.12}" property="junit_4.12_available"/>
+	</target>
+
+	<!--
+		Target to get junit from https://search.maven.org/remotecontent?filepath=junit/junit/4.12/junit-4.12.jar
+		Copy to ${prereqs_root}/junit-4.12/junit-4.12.jar
+	-->
+	<target name="configure-junit-4.12" unless="${junit_4.12_available}">
+		<download-file destdir="${prereqs_root}/junit-4.12" destfile="junit-4.12.jar" srcurl="https://search.maven.org/remotecontent?filepath=junit/junit/4.12/junit-4.12.jar"/>
+		<available file="${junit_4.12}" property="junit_4.12_available"/>
+	</target>
+
+	<!-- Target to check if hamcrest core 1.3 (required by junit) is available. -->
+	<target name="check-for-hamcrest-core-1.3">
+		<property name="hamcrest_core_1.3_dir" location="${prereqs_root}/junit-4.12"/>
+		<property name="hamcrest_core_1.3_file" value="hamcrest-core-1.3.jar"/>
+		<property name="hamcrest_core_1.3" location="${hamcrest_core_1.3_dir}/${hamcrest_core_1.3_file}"/>
+		<available file="${hamcrest_core_1.3}" property="hamcrest_core_1.3_available"/>
+	</target>
+
+	<!--
+		Target to get hamcrest core from https://search.maven.org/remotecontent?filepath=org/hamcrest/hamcrest-core/1.3/hamcrest-core-1.3.jar
+		Copy to PREREQS_ROOT/junit-4.12/hamcrest-core-1.3.jar
+	-->
+	<target name="configure-hamcrest-core-1.3" unless="${hamcrest_core_1.3_available}">
+		<download-file destdir="${prereqs_root}/junit-4.12" destfile="hamcrest-core-1.3.jar" srcurl="https://search.maven.org/remotecontent?filepath=org/hamcrest/hamcrest-core/1.3/hamcrest-core-1.3.jar"/>
+		<available file="${hamcrest_core_1.3}" property="hamcrest_core_1.3_available"/>
+	</target>
+
+	<!-- Target to check if log4j 2.3 is available. -->
+	<target name="check-for-log4j-2.3">
+		<property name="log4j_2.3_dir" location="${prereqs_root}/log4j-2.3"/>
+		<property name="log4j_api_2.3_file" value="log4j-api-2.3.jar"/>
+		<property name="log4j_core_2.3_file" value="log4j-core-2.3.jar"/>
+		<property name="log4j_api_2.3" location="${log4j_2.3_dir}/${log4j_api_2.3_file}"/>
+		<property name="log4j_core_2.3" location="${log4j_2.3_dir}/${log4j_core_2.3_file}"/>
+		<condition property="log4j_2.3_available">
+			<and>
+				<available file="${log4j_api_2.3}"/>
+				<available file="${log4j_core_2.3}"/>
+			</and>
+		</condition>
+	</target>
+
+	<!--
+		Target to get log4j 2.3 from https://archive.apache.org/dist/logging/log4j/2.3/apache-log4j-2.3-bin.zip
+		Copy to PREREQS_ROOT/log4j-2.3/log4j-api-2.3.jar and PREREQS_ROOT/log4j-2.3/log4j-core-2.3.jar
+	-->
+	<target name="configure-log4j-2.3" unless="${log4j_2.3_available}">
+		<download-file destdir="${java.io.tmpdir}/log4j-2.3" destfile="apache-log4j-2.3-bin.zip" srcurl="https://archive.apache.org/dist/logging/log4j/2.3/apache-log4j-2.3-bin.zip"/>
+		<unzip src="${java.io.tmpdir}/log4j-2.3/apache-log4j-2.3-bin.zip" dest="${java.io.tmpdir}/log4j-2.3"/>
+		<copy file="${java.io.tmpdir}/log4j-2.3/apache-log4j-2.3-bin/log4j-api-2.3.jar" tofile="${log4j_api_2.3}"/>
+		<copy file="${java.io.tmpdir}/log4j-2.3/apache-log4j-2.3-bin/log4j-core-2.3.jar" tofile="${log4j_core_2.3}"/>
+		<delete dir="${java.io.tmpdir}/log4j-2.3"/>
+		<condition property="log4j_2.3_available">
+			<and>
+				<available file="${log4j_api_2.3}"/>
+				<available file="${log4j_core_2.3}"/>
+			</and>
+		</condition>
+	</target>
+	
+		<!-- 
+			Target to check if there is a tools.jar already copied to PREREQS_ROOT/tools.
+			If we already have a tools.jar, or we are using Java >8, then tools.jar is correct.
+			If we do not have a tools.jar, and we are using Java 8, then tools.jar is not correct.
+			Note: In Java 9 the classes we need from tools.jar were folded into the Class Library, 
+			so we don't need the jar, and this is correct.
+		-->
+	<target name="check-for-tools-jar">
+		<property name="tools_jar_dir" location="${prereqs_root}/tools"/>
+		<property name="tools_jar_file" value="tools.jar"/>
+		<condition property="tools_jar_correct">
+			<or>
+				<not>
+					<equals arg1="${ant.java.version}" arg2="1.8"/>
+				</not>
+				<and>
+					<equals arg1="${ant.java.version}" arg2="1.8"/>
+					<available file="${tools_jar_dir}/${tools_jar_file}"/>
+				</and>
+			</or>
+		</condition>
+	    <available file="${tools_jar_dir}/${tools_jar_file}" property="tools_jar" value="${tools_jar_dir}/${tools_jar_file}"/>
+	</target>
+
+	<!--
+		test.debugging requires tools.jar for building.
+		tools.jar is shipped with Java.
+		The code below looks for tools.jar in Java 8, but only if we are using java 8.
+		If tools.jar is found, it is copied to PREREQS_ROOT/tools.
+		The file is not automatically refreshed once it exists in PREREQS_ROOT/tools.
+	-->
+
+	<target name="configure-tools-jar" depends="setup-java8-properties" unless="${tools_jar_correct}">
+		<property name="tools_jar_origin" value="${java8_bindir}/../lib/tools.jar"/>
+		<echo message="configure-tools-jar: Copying ${tools_jar_origin} to ${tools_jar_dir}"/>
+		<copy file="${tools_jar_origin}" todir="${tools_jar_dir}"/>
+		<property name="tools_jar" value="${tools_jar_dir}/${tools_jar_file}"/>
+		<available file="${tools_jar_dir}/${tools_jar_file}" property="tools_jar_correct"/>
+	</target>
+
+	<!-- Target to check if there is an asm-5.2.jar already copied to PREREQS_ROOT/asm-5.2 -->
+	<target name="check-for-asm-5.2">
+		<property name="asm_5.2_dir" location="${prereqs_root}/asm-5.2/lib"/>
+		<property name="asm_5.2_file" value="asm-5.2.jar"/>
+		<property name="asm_5.2" value="${asm_5.2_dir}/${asm_5.2_file}"/>
+		<available file="${asm_5.2_dir}/${asm_5.2_file}" property="asm_5.2_available"/>
+	</target>
+
+	<target name="configure-asm-5.2" unless="${asm_5.2_available}">
+		<!-- Fetch asm from http://download.forge.ow2.org/asm/asm-5.2-bin.zip. -->
+		<download-file destdir="${java.io.tmpdir}/asm-5.2-bin" destfile="asm-5.2-bin.zip" srcurl="http://download.forge.ow2.org/asm/asm-5.2-bin.zip"/>
+		<delete dir="${prereqs_root}/asm-5.2" failonerror="false"/>
+		<unzip src="${java.io.tmpdir}/asm-5.2-bin/asm-5.2-bin.zip" dest="${prereqs_root}"/>
+		<delete dir="${java.io.tmpdir}/asm-5.2-bin"/>
+		<property name="asm_5.2" value="${asm_5.2_dir}/${asm_5.2_file}"/>
+		<available file="${asm_5.2}" property="asm_5.2_available"/>
+	</target>
+
+	<!-- Target to check if there is an asm-6.0_BETA.jar already copied to PREREQS_ROOT/asm-6.0_BETA -->
+	<target name="check-for-asm-6.0_BETA">
+		<property name="asm_6.0_BETA_dir" location="${prereqs_root}/asm-6.0_BETA/lib"/>
+		<property name="asm_6.0_BETA_file" value="asm-6.0_BETA.jar"/>
+		<property name="asm_6.0_BETA" value="${asm_6.0_BETA_dir}/${asm_6.0_BETA_file}"/>
+	    <available file="${asm_6.0_BETA_dir}/${asm_6.0_BETA_file}" property="asm_6.0_BETA_available"/>
+	</target>
+
+	<target name="configure-asm-6.0_BETA" unless="${asm_6.0_BETA_available}">
+		<!-- Fetch asm from http://download.forge.ow2.org/asm/asm-6.0_BETA-bin.zip -->
+		<download-file destdir="${java.io.tmpdir}/asm-6.0_BETA-bin" destfile="asm-6.0_BETA-bin.zip" srcurl="http://download.forge.ow2.org/asm/asm-6.0_BETA-bin.zip"/>
+		<delete dir="${prereqs_root}/asm-6.0_BETA" failonerror="false"/>
+		<unzip src="${java.io.tmpdir}/asm-6.0_BETA-bin/asm-6.0_BETA-bin.zip" dest="${prereqs_root}"/>
+		<delete dir="${java.io.tmpdir}/asm-6.0_BETA-bin"/>
+		<property name="asm_6.0_BETA" value="${asm_6.0_BETA_dir}/${asm_6.0_BETA_file}"/>
+		<available file="${asm_6.0_BETA}" property="asm_6.0_BETA_available"/>
+	</target>
+	
+	<!-- Target to check if wget is available. -->
+	<target name="check-for-wget">
+		<!-- wget will be used to download files. -->
+		<!-- If it cannot be found on the PATH then the build will fail when the download-file macro (in macrodefs.xml) is invoked. -->
+		<echo message="Looking for wget on PATH"/>
+		<available file="wget" filepath="${env.PATH}" property="wget_available"/>
+		<available file="wget.exe" filepath="${env.PATH}" property="wget_available"/>
+		<!-- On Windows PATH environment variable may be Path -->
+		<available file="wget.exe" filepath="${env.Path}" property="wget_available"/>
+	</target>
+
+	<macrodef name="download-file" description="Use wget to download a file">
+		<attribute name="srcurl" description="URL of file to download"/>
+		<attribute name="destdir" description="Directory in which to place the downloaded file"/>
+		<attribute name="destfile" description="File name of the downloaded file"/>
+		<sequential>
+			<echo message="Executing macro download-file"/>
+			<echo message="srcurl is @{srcurl}"/>
+			<echo message="destdir is @{destdir}"/>
+			<echo message="destfile is @{destfile}"/>
+			<fail unless="wget_available" message="Cannot find wget (or wget.exe) on PATH, needed to download @{srcurl}. Either install wget or add it to PATH and retry.  If you are running the build from the Ant view in Eclipse, add wget to your PATH before starting Eclipse."/>
+			<mkdir dir="@{destdir}"/>
+			<exec executable="wget">
+				<arg value="--no-check-certificate"/>
+				<arg value="-O"/>
+				<arg value="@{destdir}/@{destfile}"/>
+				<arg value="@{srcurl}"/>
+			</exec>
+		</sequential>			
+	</macrodef>
+
+	<target name="print-junit-4.12-location" if="${junit_4.12_available}">
+		<echo message="Using junit-4.12 from ${junit_4.12}"/>
+	</target>
+
+	<target name="print-hamcrest-core-1.3-location" if="${hamcrest_core_1.3_available}">
+		<echo message="Using hamcrest-core-1.3 from ${hamcrest_core_1.3}"/>
+	</target>
+
+	<target name="print-log4j-2.3-location" if="${log4j_2.3_available}">
+		<echo message="Using log4j-api-2.3 from ${log4j_api_2.3} and log4j-core-2.3 from ${log4j_core_2.3}"/>
+	</target>
+
+	<target name="print-tools-jar-location" if="${log4j_2.3_available}">
+		<echo message="Using tools.jar from ${tools_jar}"/>
+	</target>
+	
+	<target name="print-asm-5.2-location" if="${asm_5.2_available}">
+		<echo message="Using ${asm_5.2_file} from ${asm_5.2}"/>
+	</target>
+	
+	<target name="print-asm-6.0_BETA-location" if="${asm_6.0_BETA_available}">
+		<echo message="Using ${asm_6.0_BETA_file} from ${asm_6.0_BETA}"/>
+	</target>
+
+	<target name="print-junit-4.12-error" unless="${junit_4.12_available}">
+		<echo message="ERROR: Cannot find junit-4.12 at ${junit_4.12}"/>
+		<property name="fail_run" value="true"/>
+	</target>
+
+	<target name="print-hamcrest-core-1.3-error" unless="${hamcrest_core_1.3_available}">
+		<echo message="ERROR: Cannot find hamcrest-core-1.3 at ${hamcrest_core_1.3}"/>
+		<property name="fail_run" value="true"/>
+	</target>
+
+	<target name="print-log4j-2.3-error" unless="${log4j_2.3_available}">
+		<echo message="ERROR: Cannot find log4j-api-2.3 at ${log4j_api_2.3} and / or log4j-core-2.3 at ${log4j_core_2.3}"/>
+		<property name="fail_run" value="true"/>
+	</target>
+	
+	<target name="print-asm-5.2-error" unless="${asm_5.2_available}">
+		<echo message="ERROR: Cannot find ${asm_5.2_file} at ${asm_5.2}"/>
+		<property name="fail_run" value="true"/>
+	</target>
+	
+	<target name="print-asm-6.0_BETA-error" unless="${asm_6.0_BETA_available}">
+		<echo message="ERROR: Cannot find ${asm_6.0_BETA_file} at ${asm_6.0_BETA}"/>
+		<property name="fail_run" value="true"/>
+	</target>
+	
+	<target name="print-tools-jar-error" unless="${tools_jar_correct}">
+		<echo message="ERROR: Cannot find tools.jar at ${tools_jar}"/>
+		<property name="fail_run" value="true"/>
+	</target>
+
+	<target name="fail-if-error" if="fail_run">
+		<fail message="Cannot find one or more prereqs.  See the above error messages.  Running 'make configure' or the ant configure target may get all the missing prereqs.  See the appropriate openjdk.build/docs/build.md or stf.build/docs/build.md for more details."/>
+	</target>
+
+	<macrodef name="set-platform-properties" description="Sets various properties for the java at the provided java_home location">
+		<attribute name="platform.property" description="The property to put the platform name in - e.g. win_x86-64"/>
+		<attribute name="platformclass.property" description="The property to put the platform class in - e.g. win_x86, linux_ppcle"/>
+		<attribute name="java.bindir.property" description="The property to put the java bin directory in"/>
+		<attribute name="java.compiler.property" description="The property to put the java compiler executable in"/>
+		<attribute name="osname.property" description="The property to put the osname in e.g. win, linux"/>
+		<attribute name="arch.property" description="The property to put the architecture in - e.g. x86, ppcle, 390"/>
+		<attribute name="bits.property" description="The property to put the bits in - e.g. 31, 32, 64"/>
+		<attribute name="java.home" description="The JAVA_HOME directory of the java to query"/>
+		<attribute name="java.id" description="A unique identifier to prefix the properties for the java instance with"/>
+		<sequential>
+			<available file="@{java.home}/bin/javac${exe_suffix}" property="@{java.bindir.property}" value="@{java.home}/bin"/>
+			<available file="@{java.home}/../bin/javac${exe_suffix}"  property="@{java.bindir.property}" value="@{java.home}/../bin"/>
+			<echo message="@{java.bindir.property} set to ${@{java.bindir.property}}"/>
+			<property name="@{java.compiler.property}" location="${@{java.bindir.property}}/javac${exe_suffix}"/>
+			<echo message="@{java.compiler.property} set to ${@{java.compiler.property}}"/>
+			<tempfile property="properties_file" destDir="${java.io.tmpdir}" prefix="openjdk.java.build.properties."/>
+			<echo message="Running ${@{java.bindir.property}}/java -XshowSettings:properties -version to determine java platform"/>
+			<exec executable="${@{java.bindir.property}}/java" output="${properties_file}">
+				<arg value="-XshowSettings:properties"/>
+				<arg value="-version"/>
+			</exec>
+			<loadproperties srcFile="${properties_file}" prefix="@{java.id}." prefixValues="false"/>
+			<echoproperties>
+				<propertyset>
+					<propertyref prefix="@{java.id}."/>
+				</propertyset>
+			</echoproperties>
+			<delete file="${properties_file}" verbose="true"/>
+			<echo message="${properties_file} deleted"/>
+			<get-platform-prefix property="@{osname.property}" osname="${@{java.id}.os.name}"/>
+			<get-platform-arch property="@{arch.property}" arch="${@{java.id}.os.arch}"/>
+			<get-platform-bits property="@{bits.property}" bits="${@{java.id}.sun.arch.data.model}"/>
+			<property name="@{platform.property}" value="${@{osname.property}}_${@{arch.property}}-${@{bits.property}}"/>
+			<property name="@{platformclass.property}" value="${@{osname.property}}_${@{arch.property}}"/>
+		</sequential>
+	</macrodef>
+
+	<macrodef name="get-platform-prefix" description="Sets a property containing a normalised platform string from the java os.name property">
+		<attribute name="property" description="The property to set"/>
+		<attribute name="osname"/>
+		<sequential>
+			<echo message="osname is @{osname}"/>
+			<condition property="@{property}" value="win">
+				<and>
+					<contains string="@{osname}" substring="Windows"/>
+				</and>
+			</condition>
+			<condition property="@{property}" value="aix">
+				<and>
+					<contains string="@{osname}" substring="AIX"/>
+				</and>
+			</condition>
+			<condition property="@{property}" value="linux">
+				<and>
+					<contains string="@{osname}" substring="Linux"/>
+				</and>
+			</condition>
+			<condition property="@{property}" value="osx">
+				<and>
+					<contains string="@{osname}" substring="Mac"/>
+				</and>
+			</condition>
+			<condition property="@{property}" value="zos">
+				<and>
+					<contains string="@{osname}" substring="390"/>
+				</and>
+			</condition>
+			<condition property="@{property}" value="sol">
+				<and>
+					<contains string="@{osname}" substring="Solaris"/>
+				</and>
+			</condition>
+			<fail unless="@{property}" message="java os.name property value @{osname} not recognised.  Update the get-platform-prefix macrodef in openjdk.build/include/top.xml"/>
+		</sequential>
+	</macrodef>
+
+	<macrodef name="get-platform-arch" description="Sets a property containing a normalised architecture string from the java os.arch property">
+		<attribute name="property" description="The property to set"/>
+		<attribute name="arch"/>
+		<sequential>
+			<echo message="arch is @{arch}"/>
+			<condition property="@{property}" value="x86">
+				<and>
+					<contains string="@{arch}" substring="x86"/>
+				</and>
+			</condition>
+			<condition property="@{property}" value="x86">
+				<and>
+					<contains string="@{arch}" substring="amd"/>
+				</and>
+			</condition>
+			<condition property="@{property}" value="ppcle">
+				<and>
+					<contains string="@{arch}" substring="ppcle"/>
+				</and>
+			</condition>
+			<condition property="@{property}" value="ppc">
+				<and>
+					<contains string="@{arch}" substring="ppc"/>
+				</and>
+			</condition>
+			<condition property="@{property}" value="390">
+				<and>
+					<contains string="@{arch}" substring="390"/>
+				</and>
+			</condition>
+			<condition property="@{property}" value="sparc">
+				<and>
+					<contains string="@{arch}" substring="sparc"/>
+				</and>
+			</condition>
+			<condition property="@{property}" value="arm">
+				<and>
+					<contains string="@{arch}" substring="arm"/>
+				</and>
+			</condition>
+			<condition property="@{property}" value="ia">
+				<and>
+					<contains string="@{arch}" substring="IA64"/>
+				</and>
+			</condition>
+			<fail unless="@{property}" message="java os.arch property value @{arch} not recognised.  Update the get-platform-arch macrodef in openjdk.build/include/top.xml"/>
+		</sequential>
+	</macrodef>
+	<macrodef name="get-platform-bits" description="Sets a property containing the java platform bits (31/32 or 64)">
+		<attribute name="property" description="The property to set"/>
+		<attribute name="bits"/>
+		<sequential>
+			<echo message="bits is @{bits}"/>
+			<property name="@{property}" value="@{bits}"/>
+		</sequential>
+	</macrodef>
+
+</project>
+

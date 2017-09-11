@@ -1,0 +1,14 @@
+<!-- 
+  This is a minimal inventory intended for tests which just want to be able
+  to generate a load which can be used for testing other capabilities alongside.
+-->
+
+<inventory>
+	<include inventory="/openjdk.test.load/config/inventories/lang/lang.xml"/>
+	<include inventory="/openjdk.test.load/config/inventories/util/util.xml"/>
+	<!-- Exclude bigdecimal until functional issues arounf MAXINT power operations are resolved.
+	<include inventory="/openjdk.test.load/config/inventories/math/bigdecimal.xml"/>
+	-->
+	<include inventory="/openjdk.test.load/config/inventories/math/autosimd.xml"/>
+	<include inventory="/openjdk.test.load/config/inventories/math/mathapitest.xml"/>
+</inventory>

@@ -1,0 +1,168 @@
+<?xml version="1.0"?>
+
+<!--
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+<project name="openjdk.test.nio" default="build">
+
+	<!-- Set default for source_root.  -->
+	<property name="source_root" location="../"/>
+
+	<!-- Set default for STF location.  -->
+	<!-- Assumes source repositories are checked out under a common root and the repository
+		has been built in-situ - i.e.
+		stf repository: /home/userid/git/stf
+		openjdk-systemtest repository: /home/userid/git/openjdk-systemtest
+		If the stf repository has been cloned or built to a different location, the stf_root property
+		must be set on the command line - e.g. -Dstf_root=/my_stf_build_dir
+	-->
+	<property name="stf_root" location="${source_root}/../stf"/>
+
+	<!-- Import settings used by multiple projects.  -->
+	<import file="${source_root}/openjdk.build/include/top.xml"/>
+
+	<!-- For modularity you need a directory above the package structure to hold the module.java file -->
+	<property name="module" value="test.nio" />
+	<property name="src_dir" value="src/${module}" />
+	<property name="bin_dir" value="bin" />
+
+	<property name="jar_file" value="${bin_dir}/${module}.jar" />
+
+	<!-- We need junit and stf to compile this project. -->
+	<path id="project.class.path">
+		<path refid="junit.class.path" />
+		<path refid="stf.class.path" />
+	</path>
+
+	<!-- Projects which need to be built before this one. -->
+	<!-- dir must be set on the ant task otherwise the basedir property is not set to a new value in the subant task. -->
+	<target name="build-dependencies">
+		<!-- <ant antfile="${stf_root}/stf.build/build.xml" dir="${stf_root}/stf.build" inheritAll="false"/> -->
+	</target>
+
+	<target name="build" depends="build-no-natives, build-natives">
+	</target>
+
+	<target name="build-no-natives" depends="build-dependencies, check-prereqs, build-archives">
+	</target>
+
+	<target name="build-natives">
+	</target>
+
+	<target name="build-archives" depends="build-jar">
+	</target>
+
+	<target name="build-jar" depends="build-java, create-bin-dir">
+		<jar destfile="${jar_file}">
+			<fileset dir="${bin_dir}" includes="**/*.class" />
+		</jar>
+	</target>
+
+	<target name="check-java-nio-filesystem" description="Checks if the NIO.2 FileSystemProviders need to be rebuilt" depends="create-bin-dir">
+		<uptodate property="java-nio-filesystem.is.uptodate" targetfile="${bin_dir}/lib/filesystem.jar">			
+			<srcfiles dir="${src_dir}">
+				<include name="net/adoptopenjdk/test/nio2/perl/filesystems/generateProviders.pl"/>
+				<include name="net/adoptopenjdk/test/nio2/perl/filesystems/MemoryFileSystemProviderImplTemplate"/>
+			</srcfiles>			
+		</uptodate>
+		<echo message="check-java-nio-filesystem result: ${java-nio-filesystem.is.uptodate}"/>
+	</target>
+	
+	<target name="build-java-nio-filesystem" description="Generates and builds NIO.2 FileSystemProviders" depends="check-java-nio-filesystem, copy-resources" unless="java-nio-filesystem.is.uptodate">
+		<!-- Delete the existing implementation classes -->
+		<echo message="Cleaning up net/adoptopenjdk/test/nio2/perl/filesystems/ of any previous Impl classes"/> 
+		<delete includeemptydirs="true">
+			<fileset dir="${src_dir}" includes="net/adoptopenjdk/test/nio2/filesystem/MemoryFileSystemProviderImpl*"/>
+		</delete>
+		
+		<!-- Generate some more -->
+		<echo message="Generating MemoryFileSystemProviderImpl classes"/>
+		<exec executable="perl">
+			<arg value="${src_dir}/net/adoptopenjdk/test/nio2/perl/filesystems/generateProviders.pl"/>
+		</exec>
+		
+		<!-- Compile -->
+		<javac srcdir="${src_dir}"
+			   destdir="${bin_dir}"
+			   fork="true"
+			   executable="${java8_compiler}"
+			   debug="true"
+			   classpathref="project.class.path"
+			   encoding="UTF-8"
+			   failonerror="true">
+			<include name="net/adoptopenjdk/test/nio2/filesystem/**"/>
+		</javac>
+		
+		<!-- Copy the services file -->
+		<mkdir dir="${bin_dir}/META-INF"/>
+		<mkdir dir="${bin_dir}/META-INF/services"/>
+		<copy file="${src_dir}/net/adoptopenjdk/test/nio2/META-INF/services/java.nio.file.spi.FileSystemProvider"
+	    	todir="${bin_dir}/META-INF/services/"/>
+		
+		<!-- Create the jar filesystem -->
+		<jar destfile="${bin_dir}/lib/filesystem.jar"
+		    basedir="${bin_dir}"
+			includes="net/adoptopenjdk/test/nio2/filesystem/**,META-INF/**"
+		/>
+		
+		<!-- Delete the (many) implementation classes -->
+		<echo message="Cleaning up net/adoptopenjdk/test/nio2/filesystem/ of Impl classes"/> 
+		<delete includeemptydirs="true">
+			<fileset dir="${src_dir}" includes="net/adoptopenjdk/test/nio2/filesystem/MemoryFileSystemProviderImpl*.java"/>
+			<fileset dir="${bin_dir}" includes="net/adoptopenjdk/test/nio2/filesystem/MemoryFileSystemProviderImpl*.class"/>
+			<fileset dir="${src_dir}/net/adoptopenjdk/test/nio2/META-INF"/>
+			<fileset dir="${bin_dir}/META-INF"/>
+		</delete>
+	</target>
+	
+	<target name="copy-resources">
+		<copy todir="${bin_dir}">
+		  <fileset dir="${src_dir}">
+		    <exclude name="**/*.java"/>
+		  </fileset>
+		</copy>
+	</target>
+	
+	<target name="build-java" depends="check-prereqs, create-bin-dir,build-java-nio-filesystem,copy-resources">
+		 <!--
+		 	The Ant javac task only checks time dependencies between .java files and their .class files,
+			so fails to recompile in situations such as the signatures of a dependent method changing.
+			The depend target checks the dependencies and deletes any .class files older than the files
+			which depend on them, thereby ensuring recompilation.
+		-->
+		<depend srcdir="${src_dir}" destdir="${bin_dir}" classpathref="project.class.path">
+			<include name="**/*.java"/>
+		</depend>
+		<javac srcdir="${src_dir}"
+			   destdir="${bin_dir}"
+			   fork="true"
+			   executable="${java8_compiler}"
+			   debug="true"
+			   classpathref="project.class.path"
+			   encoding="UTF-8"
+			   includeantruntime="false"
+			   failonerror="true">
+			<include name="**/*.java"/>
+		</javac>
+	</target>
+
+	<target name="create-bin-dir">
+		<mkdir dir="${bin_dir}"/>
+	</target>
+
+	<target name="clean">
+		<delete dir="${bin_dir}"/>
+	</target>
+
+</project>

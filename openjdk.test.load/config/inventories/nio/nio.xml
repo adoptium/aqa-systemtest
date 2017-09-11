@@ -1,0 +1,29 @@
+<inventory> 
+	<!-- Nio tests -->
+	<arbitraryJava class="net.adoptopenjdk.test.nio.WordCount" method="run"/>
+	<arbitraryJava class="net.adoptopenjdk.test.nio.NioApp" method="run"/>
+	<arbitraryJava class="net.adoptopenjdk.test.nio.NioBuffers" method="run"/>
+	<arbitraryJava class="net.adoptopenjdk.test.nio.NioBuffersTest" method="run"/>
+
+	<!-- Nio2 tests -->
+	<!-- Async Multiple Connects -->
+	<junit class="net.adoptopenjdk.test.nio2.asyncio.client.MultipleConnectFutureTest"/>
+	<junit class="net.adoptopenjdk.test.nio2.asyncio.client.MultipleConnectAsyncTest"/>
+	
+	<!-- Async Multiple R/W -->
+	<junit class="net.adoptopenjdk.test.nio2.asyncio.client.MultipleReadWriteAsyncTest"/>
+	<junit class="net.adoptopenjdk.test.nio2.asyncio.client.MultipleReadWriteFutureTest"/>
+	<junit class="net.adoptopenjdk.test.nio2.asyncio.file.AsynchronousFileChannelTest"/>
+	
+	<!-- ByteBufferMXBeans -->
+	<junit class="net.adoptopenjdk.test.nio2.mxbean.ByteBufferMXBeanTest"/>
+	
+	<!-- FileSystem SPI -->
+	<junit class="net.adoptopenjdk.test.nio2.filesystem.FileSystemsTest"/>
+	
+	<!-- Path -->
+	<junit class="net.adoptopenjdk.test.nio2.path.PathDeleteDirectoryTest"/>
+	<junit class="net.adoptopenjdk.test.nio2.path.PathDirectoryStreamTest"/>
+	<junit class="net.adoptopenjdk.test.nio2.path.ScannerTest"/>
+	<junit class="net.adoptopenjdk.test.nio2.path.WalkFileTreeTest"/>
+</inventory>

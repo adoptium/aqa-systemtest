@@ -1,0 +1,19 @@
+<inventory> 
+    <!-- Add the Lambda tests -->
+    <junit class="net.adoptopenjdk.test.lambda.ClassLibraryLambdaTests"/>
+    <junit class="net.adoptopenjdk.test.lambda.TestLambdaCapture"/>
+    <junit class="net.adoptopenjdk.test.lambda.TestLambdaContexts"/>
+    <junit class="net.adoptopenjdk.test.lambda.TestLambdaDefaultsAndStatics"/>
+    <junit class="net.adoptopenjdk.test.lambda.TestLambdaInferredTyping"/>
+    <junit class="net.adoptopenjdk.test.lambda.TestLambdaJavaInterfaces"/>
+    <junit class="net.adoptopenjdk.test.lambda.TestLambdaLexicalScoping"/>
+    <junit class="net.adoptopenjdk.test.lambda.TestLambdaMethodReferences"/>
+    <junit class="net.adoptopenjdk.test.lambda.TestLambdaMultithreaded"/>
+    <junit class="net.adoptopenjdk.test.lambda.TestLambdaNested"/>
+    <junit class="net.adoptopenjdk.test.lambda.TestLambdaRecursive"/>
+    <junit class="net.adoptopenjdk.test.lambda.TestLambdasUserDefinedInterface"/>
+    
+    <!-- Add the Streams tests -->
+    <junit class="net.adoptopenjdk.test.streams.TestParallelStreamOperations"/>
+    <junit class="net.adoptopenjdk.test.streams.TestStreamOperations"/>
+</inventory>

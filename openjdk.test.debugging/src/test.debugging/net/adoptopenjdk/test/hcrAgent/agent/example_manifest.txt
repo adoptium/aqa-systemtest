@@ -1,0 +1,7 @@
+Agent-Class: net.adoptopenjdk.test.hcrAgent.agent.StringModifierAgent
+Premain-Class: net.adoptopenjdk.test.hcrAgent.agent.StringModifierAgent
+Can-Redefine-Classes: true
+Can-Retransform-Classes: true
+Can-Set-Native-Method-Prefix: true
+Implementation-Title: StringTransformer
+Implementation-Version: 1

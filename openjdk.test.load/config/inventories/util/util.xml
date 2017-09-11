@@ -1,0 +1,8 @@
+<inventory> 
+	<arbitraryJava class="net.adoptopenjdk.test.util.calendars.CalendarTest" method="run" />
+	<arbitraryJava class="net.adoptopenjdk.test.util.hashmap.Hog" method="run" />	
+	<junit class="net.adoptopenjdk.test.util.lilac.TestArrays"/>	
+	<junit class="net.adoptopenjdk.test.util.solver.SolverTest"/>
+	<junit class="net.adoptopenjdk.test.util.treemap.TreeMapAPITest"/>
+	<junit class="net.adoptopenjdk.test.util.treemap.TreeMapTest"/>
+</inventory>

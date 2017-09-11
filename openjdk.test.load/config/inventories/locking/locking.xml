@@ -1,0 +1,4 @@
+<inventory>
+	<arbitraryJava class="net.adoptopenjdk.test.locking.Locker" method="runTest" methodArguments="10,10,1"/>
+	<arbitraryJava class="net.adoptopenjdk.test.locking.Locker" method="runTest" methodArguments="10,10,0"/>
+</inventory>

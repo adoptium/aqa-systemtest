@@ -1,0 +1,14 @@
+numOfConnections=1
+connection0=launch
+mainClass0=net.adoptopenjdk.test.jdi.util.MemoryConsumer
+numOfEvents=2
+event0=methodEntry
+event1=methodExit
+event2=accessWatchpoint
+event3=breakpoint
+event4=modificationWatchpoint
+methodEntry=true
+methodExit=true
+accessWatchpoint=string
+breakpoint=main
+modificationWatchpoint=string

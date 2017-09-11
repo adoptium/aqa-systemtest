@@ -1,0 +1,5 @@
+<inventory> 
+	<arbitraryJava class="net.adoptopenjdk.test.classloading.deadlock.DeadlockTest" method="runTest" />
+	<arbitraryJava class="net.adoptopenjdk.test.classloading.ClassMapHog" method="run" />
+	<arbitraryJava class="net.adoptopenjdk.test.classloading.ClassHog" method="run" />	
+</inventory>

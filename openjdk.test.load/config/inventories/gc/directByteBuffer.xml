@@ -1,0 +1,4 @@
+<inventory>
+    <include inventory="/openjdk.test.load/config/inventories/nio/nio.xml"/>
+	<junit class="net.adoptopenjdk.test.gc.directbytebuffer.DirectMemoryTest"/>
+</inventory>

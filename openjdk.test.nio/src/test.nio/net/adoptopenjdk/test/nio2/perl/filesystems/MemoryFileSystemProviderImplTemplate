@@ -1,0 +1,10 @@
+package net.adoptopenjdk.test.nio2.filesystem;
+
+public class MemoryFileSystemProviderImplTemplate extends AMemoryFileSystemProvider {
+
+	@Override
+	public String getScheme() {
+		return "memory" + Template;
+	}
+
+}

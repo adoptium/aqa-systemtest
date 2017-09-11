@@ -1,0 +1,3 @@
+<inventory> 
+	<junit class="net.adoptopenjdk.test.math.MathAPITest"/>
+</inventory>

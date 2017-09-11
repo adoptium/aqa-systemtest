@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/stf.core"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/stf.load"/>
+	<classpathentry kind="lib" path="/systemtest_prereqs/junit-4.12/hamcrest-core-1.3.jar"/>
+	<classpathentry kind="lib" path="/systemtest_prereqs/junit-4.12/junit-4.12.jar"/>
+	<classpathentry excluding="notonclasspath/" kind="src" output="bin" path="src/test.classloading"/>
+	<classpathentry kind="output" path="bin"/>
+	<classpathentry kind="src" output="bin_notonclasspath/url1" path="src/test.classloading/notonclasspath/url1"/>
+	<classpathentry kind="src" output="bin_notonclasspath/url2" path="src/test.classloading/notonclasspath/url2"/>	
+</classpath>

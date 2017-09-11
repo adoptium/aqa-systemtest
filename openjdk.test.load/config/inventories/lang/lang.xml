@@ -1,0 +1,36 @@
+<inventory>
+	<!-- Invoke tests -->
+	<arbitraryJava class="net.adoptopenjdk.test.lang.invoke.BasicTest" method="doTest" />
+	<arbitraryJava class="net.adoptopenjdk.test.lang.invoke.BasicTest2" method="runAllTests" />
+	<arbitraryJava class="net.adoptopenjdk.test.lang.invoke.StaticAsTypeTestExplicit" method="testAll" />
+	<arbitraryJava class="net.adoptopenjdk.test.lang.invoke.StaticAsTypeTestImplicit" method="testAll" />
+	<arbitraryJava class="net.adoptopenjdk.test.lang.invoke.AsTypeTest" method="testVoid" constructorArguments="1" />
+	<arbitraryJava class="net.adoptopenjdk.test.lang.invoke.AsTypeTest" method="testVoid" constructorArguments="0" />
+	<arbitraryJava class="net.adoptopenjdk.test.lang.invoke.AsTypeTest" method="testReference" constructorArguments="1" />
+	<arbitraryJava class="net.adoptopenjdk.test.lang.invoke.AsTypeTest" method="testReference" constructorArguments="0" />
+	<arbitraryJava class="net.adoptopenjdk.test.lang.invoke.AsTypeTest" method="testByte" constructorArguments="1" />
+	<arbitraryJava class="net.adoptopenjdk.test.lang.invoke.AsTypeTest" method="testByte" constructorArguments="0" />
+	<arbitraryJava class="net.adoptopenjdk.test.lang.invoke.AsTypeTest" method="testBoolean" constructorArguments="1" />
+	<arbitraryJava class="net.adoptopenjdk.test.lang.invoke.AsTypeTest" method="testBoolean" constructorArguments="0" />
+	<arbitraryJava class="net.adoptopenjdk.test.lang.invoke.AsTypeTest" method="testShort" constructorArguments="1" />
+	<arbitraryJava class="net.adoptopenjdk.test.lang.invoke.AsTypeTest" method="testShort" constructorArguments="0" />
+	<arbitraryJava class="net.adoptopenjdk.test.lang.invoke.AsTypeTest" method="testChar" constructorArguments="1" />
+	<arbitraryJava class="net.adoptopenjdk.test.lang.invoke.AsTypeTest" method="testChar" constructorArguments="0" />
+	<arbitraryJava class="net.adoptopenjdk.test.lang.invoke.AsTypeTest" method="testInt" constructorArguments="1" />
+	<arbitraryJava class="net.adoptopenjdk.test.lang.invoke.AsTypeTest" method="testInt" constructorArguments="0" />
+	<arbitraryJava class="net.adoptopenjdk.test.lang.invoke.AsTypeTest" method="testLong" constructorArguments="1" />
+	<arbitraryJava class="net.adoptopenjdk.test.lang.invoke.AsTypeTest" method="testLong" constructorArguments="0" />
+	<arbitraryJava class="net.adoptopenjdk.test.lang.invoke.AsTypeTest" method="testFloat" constructorArguments="1" />
+	<arbitraryJava class="net.adoptopenjdk.test.lang.invoke.AsTypeTest" method="testFloat" constructorArguments="0" />
+	<arbitraryJava class="net.adoptopenjdk.test.lang.invoke.AsTypeTest" method="testDouble" constructorArguments="1" />
+	<arbitraryJava class="net.adoptopenjdk.test.lang.invoke.AsTypeTest" method="testDouble" constructorArguments="0" />
+	<arbitraryJava class="net.adoptopenjdk.test.lang.invoke.BasicStaticTest" method="testStaticSetter" />
+	<arbitraryJava class="net.adoptopenjdk.test.lang.invoke.BasicStaticTest" method="testStaticGetter" />
+	<arbitraryJava class="net.adoptopenjdk.test.lang.invoke.BasicStaticTest" method="testStaticStringSetter" />
+	<arbitraryJava class="net.adoptopenjdk.test.lang.invoke.BasicStaticTest" method="testStaticStringGetter" />
+	
+	<!-- Java7+ tests -->
+	<junit class="net.adoptopenjdk.test.lang.java7.ProjectCoin.SwitchOnString"/>
+	<junit class="net.adoptopenjdk.test.lang.java7.ProjectCoin.TryWithResources"/>
+	<junit class="net.adoptopenjdk.test.lang.java7.ProjectCoin.MultiCatchPreciseRethrow"/>
+</inventory>

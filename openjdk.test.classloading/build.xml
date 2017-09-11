@@ -1,0 +1,153 @@
+<?xml version="1.0"?>
+
+<!--
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+<project name="openjdk.test.classloading" default="build">
+
+	<!-- Set default for source_root.  -->
+	<property name="source_root" location="../"/>
+
+	<!-- Set default for STF location.  -->
+	<!-- Assumes source repositories are checked out under a common root and the repository
+		has been built in-situ - i.e.
+		stf repository: /home/userid/git/stf
+		openjdk-systemtest repository: /home/userid/git/openjdk-systemtest
+		If the stf repository has been cloned or built to a different location, the stf_root property
+		must be set on the command line - e.g. -Dstf_root=/my_stf_build_dir
+	-->
+	<property name="stf_root" location="${source_root}/../stf"/>
+
+	<!-- Import settings used by multiple projects.  -->
+	<import file="${source_root}/openjdk.build/include/top.xml"/>
+
+	<!-- For modularity you need a directory above the package structure to hold the module.java file -->
+	<property name="module" value="test.classloading" />
+	<property name="src_dir" value="src/${module}" />
+	<property name="bin_dir" value="bin" />
+	<property name="notonclasspath_url1_bin_dir" value="bin_notonclasspath/url1" />
+	<property name="notonclasspath_url2_bin_dir" value="bin_notonclasspath/url2" />
+
+	<property name="jar_file" value="${bin_dir}/${module}.jar" />
+
+	<!-- We need junit and stf to compile this project. -->
+	<path id="project.class.path">
+		<path refid="junit.class.path" />
+		<path refid="stf.class.path" />
+	</path>
+
+	<!-- Projects which need to be built before this one. -->
+	<!-- dir must be set on the ant task otherwise the basedir property is not set to a new value in the subant task. -->
+	<target name="build-dependencies">
+		<!-- <ant antfile="${stf_root}/stf.build/build.xml" dir="${stf_root}/stf.build" inheritAll="false"/> -->
+	</target>
+
+	<target name="build" depends="build-no-natives, build-natives, copy-dict-file">
+	</target>
+
+	<target name="build-no-natives" depends="build-dependencies, check-prereqs, build-archives">
+	</target>
+
+	<target name="build-natives">
+	</target>
+
+	<target name="build-archives" depends="build-jar">
+	</target>
+
+	<target name="build-jar" depends="build-java, create-bin-dir">
+		<jar destfile="${jar_file}">
+			<fileset dir="${bin_dir}" includes="**/*.class" />
+			<!-- Note, this may need reworking in the world of Java 9 modules to ensure that the classes below do not end up on the classpath -->
+			<fileset dir="${notonclasspath_url1_bin_dir}" includes="**/*.class" />
+			<fileset dir="${notonclasspath_url2_bin_dir}" includes="**/*.class" />
+		</jar>
+	</target>
+
+	<target name="build-java" depends="check-prereqs, create-bin-dir">
+		 <!--
+		 	The Ant javac task only checks time dependencies between .java files and their .class files,
+			so fails to recompile in situations such as the signatures of a dependent method changing.
+			The depend target checks the dependencies and deletes any .class files older than the files
+			which depend on them, thereby ensuring recompilation.
+		-->
+		<depend srcdir="${src_dir}" destdir="${bin_dir}" classpathref="project.class.path">
+			<include name="**/*.java"/>
+		</depend>
+		<javac srcdir="${src_dir}"
+			   destdir="${bin_dir}"
+			   fork="true"
+			   executable="${java8_compiler}"
+			   debug="true"
+			   classpathref="project.class.path"
+			   encoding="UTF-8"
+			   includeantruntime="false"
+			   failonerror="true">
+			<compilerarg value="-Xlint:deprecation,unchecked" />
+			<exclude name="**/notonclasspath/**"/>
+		</javac>
+		<!--
+			The classes in notonclasspath/url1 and notonclasspath/url2 must not be available on the classpath as the deadlockTest will not work correctly (and in fact should fail) if they are found on the classpath.
+			
+			This takes the source from notonclasspath/url1 and notonclasspath/url2 and creates the class files in
+			/bin_notonclasspath/url1 and /bin_notonclasspath/url2. The deletes are required because javac puts all of the class
+			files under both the url1 and url2 directories which the tests do not want.
+		-->
+		<javac srcdir="${src_dir}/notonclasspath"
+					   destdir="${notonclasspath_url1_bin_dir}"
+					   fork="true"
+					   executable="${java8_compiler}"
+					   debug="true"
+					   classpath="${src_dir}/notonclasspath/url2"
+					   encoding="UTF-8"
+					   includeantruntime="false"
+					   failonerror="true">
+					   <compilerarg value="-Xlint:deprecation,unchecked" />
+					   <exclude name="**/notonclasspath/url2/**"/>
+		</javac>
+		<javac srcdir="${src_dir}/notonclasspath"
+					   destdir="${notonclasspath_url2_bin_dir}"
+					   fork="true"
+					   executable="${java8_compiler}"
+					   debug="true"
+					   classpath="${src_dir}/notonclasspath/url1"
+					   encoding="UTF-8"
+					   includeantruntime="false"
+					   failonerror="true">
+					   <compilerarg value="-Xlint:deprecation,unchecked" />
+					   <exclude name="**/notonclasspath/url1/**"/>
+		</javac>
+		
+		<delete verbose="true" dir="${notonclasspath_url1_bin_dir}/net/adoptopenjdk/test/classloading/deadlock/package2"/>
+		<delete dir="${notonclasspath_url2_bin_dir}/net/adoptopenjdk/test/classloading/deadlock/package1"/>
+	</target>
+
+	<target name="create-bin-dir">
+			<mkdir dir="${bin_dir}"/>
+			<mkdir dir="${notonclasspath_url1_bin_dir}"/>
+			<mkdir dir="${notonclasspath_url2_bin_dir}"/>
+	</target>
+	
+	<!-- Copy the dictionary file required by the ClassHog test -->
+	<target name="copy-dict-file">
+		<mkdir dir="${bin_dir}/net/adoptopenjdk/test/classloading"/>
+		<copy file="${src_dir}/net/adoptopenjdk/test/classloading/class.dict" todir="${bin_dir}/net/adoptopenjdk/test/classloading"/>
+	</target>
+		
+	<target name="clean">
+		<delete dir="${bin_dir}"/>
+		<delete dir="${notonclasspath_url1_bin_dir}"/>
+		<delete dir="${notonclasspath_url2_bin_dir}"/>
+	</target>
+
+</project>

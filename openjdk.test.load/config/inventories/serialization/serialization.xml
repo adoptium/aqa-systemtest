@@ -1,0 +1,4 @@
+<inventory> 
+    <arbitraryJava class="net.adoptopenjdk.test.serialization.Serialization" method="run" />
+    <arbitraryJava class="net.adoptopenjdk.test.serialization.SerializationBasicHFS" method="run" />	
+</inventory>

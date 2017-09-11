@@ -1,0 +1,30 @@
+<inventory> 
+   <junit class="net.adoptopenjdk.test.concurrent.ArrayBlockingQueueTest"/>
+   <junit class="net.adoptopenjdk.test.concurrent.ConcurrentHashMapTest"/>
+   <junit class="net.adoptopenjdk.test.concurrent.ConcurrentLinkedQueueTest"/>
+   <junit class="net.adoptopenjdk.test.concurrent.ConcurrentSkipListMapTest"/>
+   <junit class="net.adoptopenjdk.test.concurrent.ConcurrentSkipListSetTest"/>
+   <junit class="net.adoptopenjdk.test.concurrent.CopyOnWriteArrayListTest"/>
+   <junit class="net.adoptopenjdk.test.concurrent.CopyOnWriteArraySetTest"/>
+   <junit class="net.adoptopenjdk.test.concurrent.jsr166y.ForkJoinPoolTest"/>
+   <junit class="net.adoptopenjdk.test.concurrent.jsr166y.ForkJoinPoolTestAPI"/>
+   <junit class="net.adoptopenjdk.test.concurrent.jsr166y.ForkJoinPoolTestStress"/>
+   <junit class="net.adoptopenjdk.test.concurrent.jsr166y.ForkJoinTaskTest"/>
+   <junit class="net.adoptopenjdk.test.concurrent.jsr166y.LinkedTransferQueueTest"/>
+   <junit class="net.adoptopenjdk.test.concurrent.jsr166y.PhaserTest"/>
+   <junit class="net.adoptopenjdk.test.concurrent.jsr166y.ThreadLocalRandomTest"/>
+   <junit class="net.adoptopenjdk.test.concurrent.atomic.AtomicBooleanTest"/>
+   <junit class="net.adoptopenjdk.test.concurrent.atomic.AtomicIntegerArrayTest"/>
+   <junit class="net.adoptopenjdk.test.concurrent.atomic.AtomicIntegerFieldUpdaterTest"/>
+   <junit class="net.adoptopenjdk.test.concurrent.atomic.AtomicIntegerTest"/>
+   <junit class="net.adoptopenjdk.test.concurrent.atomic.AtomicLongArrayTest"/>
+   <junit class="net.adoptopenjdk.test.concurrent.atomic.AtomicLongFieldUpdaterTest"/>
+   <junit class="net.adoptopenjdk.test.concurrent.atomic.AtomicLongTest"/>
+   <junit class="net.adoptopenjdk.test.concurrent.atomic.AtomicMarkableReferenceTest"/>
+   <junit class="net.adoptopenjdk.test.concurrent.atomic.AtomicReferenceArrayTest"/>
+   <junit class="net.adoptopenjdk.test.concurrent.atomic.AtomicReferenceFieldUpdaterTest"/>
+   <junit class="net.adoptopenjdk.test.concurrent.atomic.AtomicReferenceTest"/>
+   <junit class="net.adoptopenjdk.test.concurrent.atomic.AtomicStampedReferenceTest"/>
+   <junit class="net.adoptopenjdk.test.concurrent.locks.ReentrantLockTest"/>
+   <junit class="net.adoptopenjdk.test.concurrent.locks.ReentrantReadWriteLockTest"/>
+</inventory>

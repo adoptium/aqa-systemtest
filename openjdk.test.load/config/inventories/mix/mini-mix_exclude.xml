@@ -1,0 +1,28 @@
+<inventory>
+	<!-- These tests are excluded because they are relatively slow. 
+	     They are best avoided by tests which need to predict when the load run will end.
+	-->
+
+	<!--  Test(s) in test.util -->
+	<junit class="net.adoptopenjdk.test.solver.SolverTest"/>
+	<!--  Test(s) in test.math -->
+	<junit class="net.adoptopenjdk.test.bigdecimal1.RBPTestSplit001"/>
+	<junit class="net.adoptopenjdk.test.bigdecimal1.RBPTestSplit003"/>
+	<junit class="net.adoptopenjdk.test.bigdecimal1.RBPTestSplit005"/>
+	<junit class="net.adoptopenjdk.test.bigdecimal1.RBPTestSplit015"/>
+	<junit class="net.adoptopenjdk.test.bigdecimal1.RBPTestSplit016"/>
+	<junit class="net.adoptopenjdk.test.bigdecimal1.RBPTestSplit018"/>
+	<junit class="net.adoptopenjdk.test.bigdecimal1.RBPTestSplit021"/>
+	<junit class="net.adoptopenjdk.test.bigdecimal1.RBPTestSplit028"/>
+	<junit class="net.adoptopenjdk.test.bigdecimal1.RBPTestSplit031"/>
+	<junit class="net.adoptopenjdk.test.bigdecimal1.RBPTestSplit042"/>
+	<junit class="net.adoptopenjdk.test.bigdecimal1.RBPTestSplit043"/>
+	<junit class="net.adoptopenjdk.test.bigdecimal1.RBPTestSplit047"/>
+	<junit class="net.adoptopenjdk.test.bigdecimal1.RBPTestSplit050"/>
+	<junit class="net.adoptopenjdk.test.bigdecimal1.RBPTestSplit051"/>
+	<junit class="net.adoptopenjdk.test.bigdecimal1.RBPTestSplit058"/>
+	<junit class="net.adoptopenjdk.test.bigdecimal1.RBPTestSplit059"/>
+	<junit class="net.adoptopenjdk.test.bigdecimal1.RBPTestSplit060"/>
+	<junit class="net.adoptopenjdk.test.bigdecimal1.RBPTestSplit061"/>
+	<junit class="net.adoptopenjdk.test.bigdecimal1.RBPTestSplit062"/>
+</inventory>

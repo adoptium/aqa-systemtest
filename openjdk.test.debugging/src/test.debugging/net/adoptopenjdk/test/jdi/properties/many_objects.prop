@@ -1,0 +1,17 @@
+numOfConnections=2
+connection0=launch
+mainClass0=net.adoptopenjdk.test.jdi.util.ObjectGenerator
+connection1=launch
+mainClass1=net.adoptopenjdk.test.jdi.util.ObjectGenerator
+
+vm0.numOfEvents=4
+vm0.event0=methodEntry
+vm0.event1=methodExit
+vm0.event2=countInstances
+vm0.event3=numOfInstances
+
+
+vm1.numOfEvents=3
+vm1.event0=methodEntry
+vm1.event1=methodExit
+vm1.event2=vmName

@@ -1,0 +1,12 @@
+numOfConnections=1
+
+connection0=launch
+mainClass0=net.adoptopenjdk.test.jdi.targetvm.Simple
+vm0.numOfEvents=7
+vm0.event0=methodEntry
+vm0.event1=methodExit
+vm0.event2=vmName
+vm0.event3=breakpoint:setName
+vm0.event4=modificationWatchpoint:name
+vm0.event5=breakpoint:getName
+vm0.event6=modificationWatchpoint:name

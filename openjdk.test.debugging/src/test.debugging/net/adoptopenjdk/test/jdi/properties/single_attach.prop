@@ -1,0 +1,13 @@
+numOfConnections=1
+
+connection0=attach
+mainClass0=net.adoptopenjdk.test.jdi.targetvm.Simple
+port0=30007
+sharedmemory0=shared_mem0
+vm0.numOfEvents=6
+vm0.event0=methodEntry
+vm0.event1=methodExit
+vm0.event2=accessWatchpoint:name
+vm0.event3=breakpoint:setName
+vm0.event4=modificationWatchpoint:name
+vm0.event5=breakpoint:getName

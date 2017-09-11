@@ -1,0 +1,5 @@
+<inventory> 
+	<include inventory="/openjdk.test.load/config/inventories/math/bigdecimal.xml"/>
+	<include inventory="/openjdk.test.load/config/inventories/math/autosimd.xml"/>
+	<include inventory="/openjdk.test.load/config/inventories/math/mathapitest.xml"/>
+</inventory>

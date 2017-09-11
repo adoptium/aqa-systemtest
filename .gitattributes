@@ -1,0 +1,34 @@
+# Default - treat files as text as convert line ending to LF
+* text eol=lf
+
+# Overrides for files to be left untouched - treat as binary
+*.bin binary
+*.bmp binary
+*.ciphertext binary
+*.class binary
+*.dat binary
+*.dict binary
+*.dll binary
+*.doc binary
+*.ear binary
+*.exe binary
+*.gif binary
+*.ico binary
+*.idx binary
+*.iv binary
+*.jar binary
+*.jks binary
+*.jpeg binary
+*.jpg binary
+*.key binary
+*.o binary
+*.obj binary
+*.odg binary
+*.pack binary
+*.pdf binary
+*.png binary
+*.rtf binary
+*.ser binary
+*.so binary
+*.war binary
+*.zip binary

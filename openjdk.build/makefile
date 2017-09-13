@@ -229,8 +229,10 @@ endif
 # To build to a different location specify OPENJDK_SYSTEMTEST_TARGET_ROOT_TARGET_ROOT=<a directory> on the make command line
 OPENJDK_SYSTEMTEST_TARGET_ROOT:=$(OPENJDK_SYSTEMTEST_ROOT)
 
+ANT_LIB:=lib
+ANT_LIB_PATH=$(ANT_HOME)$(D)$(ANT_LIB)
 ANT_JAVA_HOME:=$(JAVA_HOME)
-ANT_LAUNCHER=$(ANT_HOME)$(D)lib$(D)ant-launcher.jar
+ANT_LAUNCHER=$(ANT_LIB_PATH)$(D)ant-launcher.jar
 
 ifeq (,$(ANT_JAVA_HOME))
   $(warning ANT_JAVA_HOME not set, will use $(JAVA_HOME) to run ant)
@@ -284,6 +286,14 @@ ifndef ANT_HOME
         ANT_HOME:=$(abspath $(ANT_BINDIR)$(D)..$(D)..)
         $(warning ANT_HOME set to $(ANT_HOME))
         $(warning Found $(ANT_BINDIR), will start build with $(ANT_LAUNCHER).  Run make configure to install the required ant version 1.10.1 or follow the prereq install instructions in build$(D)build.md)
+        ifeq (,$(wildcard $(ANT_LIB_PATH)))
+        # On OSX if ant has been installed using homebrew cater for the ant-launcher.jar being in libexec/lib rather than lib.
+        $(warning WARNING: Cannot find $(ANT_LIB_PATH) directory. Looking in libexec/lib.)
+          ANT_LIB:=libexec$(D)lib
+          ifeq (,$(wildcard $(ANT_LIB_PATH)))
+            $(error ERROR: ANT_LIB_PATH directory $(ANT_LIB_PATH) does not exist.)
+          endif
+        endif
       else
         $(error Unable to locate ant to start the build. Either add ant to PATH, set ANT_HOME or follow the prereq install instructions in build$(D)build.md)
       endif

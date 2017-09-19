@@ -40,7 +40,7 @@ limitations under the License.
 		<!-- <ant antfile="${stf_root}/stf.build/build.xml" dir="${stf_root}/stf.build" inheritAll="false"/> -->
 	</target>
 
-	<target name="configure" depends="check-if-already-built, check-if-cvs-available, output-recreate-message, set-whether-build-required, get-source, check-if-source-available, build-archives, check-if-work_jar_file-exists, install-archives, delete-work-dir">
+	<target name="configure" depends="check-if-already-built, check-if-cvs-available, download-cvsclient, output-recreate-message, get-source, check-if-source-available, build-archives, check-if-work_jar_file-exists, install-archives, delete-work-dir">
 	</target>
 
 	<!--
@@ -143,7 +143,7 @@ limitations under the License.
 		</javac>
 	</target>
 
-	<target name="create-work-dir" depends="delete-work-dir" if="${build_required}">
+	<target name="create-work-dir" depends="delete-work-dir" unless="${already_built}">
 		<mkdir dir="${work_dir}"/>
 	</target>
 
@@ -281,19 +281,16 @@ limitations under the License.
 
 	</target>
 
-	<target name="set-whether-build-required">
-		<condition property="build_required">
-			<and>
-				<isset property="cvs_available"/>
-				<not>
-					<isset property="already_built"/>
-				</not>
-			</and>
-		</condition>
-	</target>
-
-	<target name="get-source" depends="check-if-cvs-available, create-work-dir" if="build_required">
-		<cvs cvsRoot=":pserver:anoncvs@sourceware.org:/cvs/mauve" command="export -r HEAD" package="mauve" dest="${work_dir}"/>
+	<target name="get-source" depends="download-cvsclient, create-work-dir" unless="already_built">
+                <exec dir="${work_dir}" executable="java">
+                                <arg value="-Dcvs.root=:pserver:anoncvs@sourceware.org:/cvs/mauve"/>
+                                <arg value="-jar"/>
+                                <arg value="${prereqs_root}/cvsclient/org-netbeans-lib-cvsclient.jar"/>
+                                <arg value="export"/>
+                                <arg value="-r"/>
+                                <arg value="HEAD"/>
+                                <arg value="mauve"/>
+                </exec>
 	</target>
 
 	<target name="check-if-source-available">
@@ -303,15 +300,17 @@ limitations under the License.
 		<echo message="mauve_source_available is ${mauve_source_available}"/>
 	</target>
 
-	<target name="check-if-cvs-available" unless="${already_built}">
-		<echo message="Checking if cvs is on the PATH"/>
-		<!-- We need cvs to checkout the mauve source code. -->
-		<available file="cvs" filepath="${env.PATH}" property="cvs_available"/>
-		<available file="cvs.exe" filepath="${env.PATH}" property="cvs_available"/>
-		<!-- On Windows PATH environment variable may be Path -->
-		<available file="cvs.exe" filepath="${env.Path}" property="cvs_available"/>
-		<fail message="Cannot find cvs (or cvs.exe) on PATH. Either install cvs or add it to PATH and retry.  If you are running the build from the Ant view in Eclipse, add cvs to your PATH before starting Eclipse." unless="cvs_available"/>
+	<target name="check-if-cvs-available">
+		<echo message="Checking if ${prereqs_root}/cvsclient/org-netbeans-lib-cvsclient.jar exists"/>
+		<available file="${prereqs_root}/cvsclient/org-netbeans-lib-cvsclient.jar" property="cvs_available"/>
+		<echo message="cvs_available is ${cvs_available}"/>
 	</target>
+
+        <target name="download-cvsclient" depends="check-for-wget" unless="${cvs_available}">
+                <mkdir dir="${prereqs_root}/cvsclient"/>
+                <download-file destdir="${prereqs_root}/cvsclient" destfile="org-netbeans-lib-cvsclient.jar" srcurl="https://netbeans.org/projects/versioncontrol/downloads/download/org-netbeans-lib-cvsclient.jar"/>
+        </target>
+
 
 	<target name="install-archives" if="work_jar_file_exists">
 		<echo message="Copying ${work_jar_file} to directory ${final_dir}"/>

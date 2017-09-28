@@ -495,6 +495,14 @@ test.LambdaLoadTest:
 	$(STF_COMMAND) -test=LambdaLoadTest $(LOG)
 	echo Target $@ completed
 
+# The test.Custom target enables users to execute arbitrary stf.pl command lines if required for investigating failures.
+# Example:
+# make test.Custom TEST=JdiTest TEST_ARGS="test=basic_launch" 
+test.Custom:
+	echo Running target $@
+	$(STF_COMMAND) -test=$(TEST) -test-args="$(TEST_ARGS)" $(LOG)
+	echo Target $@ completed
+
 help:
 	@echo make or make build: Builds openjdk-systemtest projects
 	@echo make test: Runs all openjdk-systemtest tests

@@ -13,6 +13,11 @@
 EMPTY=
 SPACE=$(EMPTY) $(EMPTY)
 
+define NEWLINE
+
+
+endef
+
 # Environment variable OSTYPE is set to cygwin if running under cygwin.
 # When the shell is switched to cmd.exe OSTYPE is no longer set, so set a make
 # macro if running under cygwin.
@@ -140,6 +145,13 @@ $(warning STF_ROOT is $(STF_ROOT))
 # Set a default PREREQS_ROOT if not provided on the command line
 PREREQS_ROOT=$(OPENJDK_SYSTEMTEST_ROOT)$(D)..$(D)..$(D)systemtest_prereqs
 $(warning PREREQS_ROOT is $(PREREQS_ROOT))
+
+# Add JCK_ROOT to the PREREQS_ROOT directories if one has been provided on the command line
+ifneq (,$(JCK_ROOT))
+  $(warning Adding JCK_ROOT $(JCK_ROOT) to PREREQS_ROOT $(PREREQS_ROOT))
+  PREREQS_ROOT:=$(PREREQS_ROOT);$(JCK_ROOT)
+  $(warning PREREQS_ROOT is now $(PREREQS_ROOT))
+endif
 
 # Change the semi-colon separated list of directories into a whitespace separated list
 ABSOLUTE_PREREQS_ROOT_LIST:=$(subst ;, ,$(PREREQS_ROOT))
@@ -349,8 +361,15 @@ BUILD_COMMAND:=$(BUILD_COMMAND) -Djava9_home=$(JAVA9_HOME)
 # and on unix
 # stf.pl -java-args="-Xjit:counts=\"- - - - - - 1 1 1 1000 250 250 - - - 10000 100000 10000\" -Xgcpolicy:optthruput"
 
+# For the JCK tests the arguments need to be added to the .jtb configuration file which is created
+# during the stf setup phase, so the java-args-setup option needs to be used rather than the usual
+# -java-args argument
 ifneq (,$(JAVA_ARGS))
-  JAVA_ARGS_ARG:=-java-args="$(subst ",$(ESC_DQ),$(JAVA_ARGS))"
+  ifneq (,$(findstring jck,$(MAKECMDGOALS)))
+    JAVA_ARGS_ARG:=-java-args-setup="$(subst ",$(ESC_DQ),$(JAVA_ARGS))"
+  else
+    JAVA_ARGS_ARG:=-java-args="$(subst ",$(ESC_DQ),$(JAVA_ARGS))"
+  endif
 endif
 
 STF_COMMAND:=perl $(STF_ROOT)$(D)stf.core$(D)scripts$(D)stf.pl $(JAVA_ARGS_ARG) -test-root="$(STF_ROOT);$(OPENJDK_SYSTEMTEST_TARGET_ROOT)" -systemtest-prereqs="$(RESOLVED_PREREQS_ROOT)"
@@ -363,10 +382,17 @@ STF_COMMAND:=perl $(STF_ROOT)$(D)stf.core$(D)scripts$(D)stf.pl $(JAVA_ARGS_ARG) 
 # make -k test LOGDIR=/home/user/logs
 
 ifneq (,$(LOGDIR))
-  LOG=&& echo $(OS_DATE) $(OS_TIME) $@ Passed >>$(LOGDIR)/openjdk.results.log || echo $(OS_DATE) $(OS_TIME) $@ Failed >>$(LOGDIR)/openjdk.results.log
+  LOG=&& echo Started $(OS_DATE) $(OS_TIME) $@ Passed >>$(LOGDIR)/openjdk.results.log || echo Started $(OS_DATE) $(OS_TIME) $@ Failed >>$(LOGDIR)/openjdk.results.log
 endif
 
-# Targets to run the tests
+# Some JCK tests require properties files for Kerberos and http server settings.
+# They need to be placed in <JCK_ROOT>/jck/<jck-version>/config/<settings-dir>
+# settings-dir is set by passing -test-args="config=<settings-dir>" to the STF Jck test.
+# The JCK_CONFIG macro allows the user to override this value on the command line.
+# The default is to look fro a directory called 'default'.
+JCK_CONFIG=default
+
+# Targets to run the non-JCK tests
 LOAD_TESTS:= test.ClassloadingLoadTest \
 test.ConcurrentLoadTest \
 test.DirectByteBufferLoadTest \
@@ -504,9 +530,16 @@ test.Custom:
 	echo Target $@ completed
 
 help:
+	@echo -------------------------------------------------------------------------------
+	@echo Help for openjdk.build makefile
+	@echo -------------------------------------------------------------------------------
 	@echo make or make build: Builds openjdk-systemtest projects
-	@echo make test: Runs all openjdk-systemtest tests
+	@echo -------------------------------------------------------------------------------
+	@echo make test: Runs all non-JCK openjdk-systemtest tests
 	@echo make $(TEST_TARGETS): Runs all openjdk-systemtest tests
 	@echo make test.xxxx: Runs individual test xxxx
 	@echo make test EXCLUDE=$(ESC)"test.xxxx test.yyyy$(ESC)": Runs all tests except test.xxxx and test.yyyy
-	
+	@echo -------------------------------------------------------------------------------
+	@echo make help.jck: Shows help for JCK test targets.
+
+include $(subst $(SPACE),\$(SPACE),$(OPENJDK_SYSTEMTEST_ROOT)/openjdk.test.jck/include/test_targets.mk)

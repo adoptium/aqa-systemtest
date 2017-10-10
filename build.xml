@@ -1,0 +1,54 @@
+<?xml version="1.0"?>
+
+<!--
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+
+This is a build.xml which executes the main openjdk.build build.xml 
+to allow tools which invoke a root level build.xml file to 
+execute a build.
+
+-->
+
+<project name="openjdk-systemtest" default="build">
+
+	<!-- Set default for source_root.  -->
+	<property name="source_root" location="."/>
+
+	<!-- Set default for STF location.  -->
+	<!-- Assumes source repositories are checked out under a common root and the repository
+		has been built in-situ - i.e.
+		stf repository: /home/userid/git/stf
+		openjdk-systemtest repository: /home/userid/git/openjdk-systemtest
+		If the stf repository has been cloned or built to a different location, the stf_root property
+		must be set on the command line - e.g. -Dstf_root=/my_stf_build_dir
+	-->
+	<property name="stf_root" location="${source_root}/../stf"/>
+
+	<!-- Import settings used by multiple projects.  -->
+	<import file="${source_root}/openjdk.build/include/top.xml"/>
+
+	<!-- target to build all projects in the repository.  -->
+	<!-- dir must be set on the ant task otherwise the basedir property is not set to a new value in the subant task. -->
+	<!-- Also make sure stf is built -->
+	<target name="build-dependencies">
+		<ant antfile="${source_root}/openjdk.build/build.xml" dir="${source_root}/openjdk.build" inheritAll="false"/>
+	</target>
+
+	<target name="build" depends="build-dependencies">
+	</target>
+	
+	<target name="clean">
+		<ant antfile="${source_root}/openjdk.build/build.xml" dir="${source_root}/openjdk.build" inheritAll="false" target="clean"/>
+	</target>
+
+</project>

@@ -248,13 +248,13 @@ public class Jck implements StfPluginInterface {
 			throw new StfException(testExecutionType + "with Agent " + withAgent + "combination is not yet supported.");
 		}
 		
-		if (jckVersion.contains("jck9")) {
-			if (testExecutionType.equals("multijvm") && withAgent.equals("off")) {
-				jck9ConfigurationForMultijvmWithNoAgent(test);
-			} else {
-				throw new StfException(testExecutionType + "with Agent " + withAgent + "combination is not yet supported.");
-			}
-		}
+		//if (jckVersion.contains("jck9")) {
+		//	if (testExecutionType.equals("multijvm") && withAgent.equals("off")) {
+		//		jck9ConfigurationForMultijvmWithNoAgent(test);
+		//	} else {
+		//		throw new StfException(testExecutionType + "with Agent " + withAgent + "combination is not yet supported.");
+		//	}
+		//}
 
 		String jtx = "";
 		if ( jtxFile.asJavaFile().exists() ) {

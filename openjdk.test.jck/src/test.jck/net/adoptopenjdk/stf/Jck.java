@@ -242,18 +242,15 @@ public class Jck implements StfPluginInterface {
 		fileContent += "workDirectory -create -overwrite " + workDir + ";\n";
 		fileContent += "tests " + tests + ";\n";
 			
-		if (jckVersion.contains("jck8")) {
-			if (testExecutionType.equals("multijvm") && withAgent.equals("off")) {
-				jck8ConfigurationForMultijvmWithNoAgent(test);
-			} else {
-				throw new StfException(testExecutionType + "with Agent " + withAgent + "combination is not yet supported.");
-			}
+		if (testExecutionType.equals("multijvm") && withAgent.equals("off")) {
+			jckConfigurationForMultijvmWithNoAgent(test);
+		} else {
+			throw new StfException(testExecutionType + "with Agent " + withAgent + "combination is not yet supported.");
 		}
 		
 		if (jckVersion.contains("jck9")) {
 			if (testExecutionType.equals("multijvm") && withAgent.equals("off")) {
 				jck9ConfigurationForMultijvmWithNoAgent(test);
-
 			} else {
 				throw new StfException(testExecutionType + "with Agent " + withAgent + "combination is not yet supported.");
 			}
@@ -418,7 +415,7 @@ public class Jck implements StfPluginInterface {
 		return jarsList;
 	}
 		
-	public void jck8ConfigurationForMultijvmWithNoAgent(StfCoreExtension test) throws Exception {
+	public void jckConfigurationForMultijvmWithNoAgent(StfCoreExtension test) throws Exception {
 		String pathToJava = test.createJavaProcessDefinition().getCommand();
 		String pathToRmic = testJdk + File.separator + "bin" + File.separator + "rmic";
 		String pathToLib = testJdk + File.separator + "jre" + File.separator + "lib";
@@ -472,7 +469,7 @@ public class Jck implements StfPluginInterface {
 				libPath = "LIBPATH";
 				robotAvailable = "No";
 				concurrency = "4";
-				if ( TestsRequireDisplay(tests) ) {
+				if ( testsRequireDisplay(tests) ) {
 					fileContent += "set jck.env.testPlatform.headless Yes" + ";\n";
 					fileContent += "set jck.env.runtime.testExecute.otherEnvVars LIBPATH=/usr/lpp/tcpip/X11R66/lib" + ";\n";
 				}
@@ -480,7 +477,7 @@ public class Jck implements StfPluginInterface {
 				throw new StfException("Unknown platform:: " + platform);
 			}
 			
-			if ( TestsRequireDisplay(tests) ) {
+			if ( testsRequireDisplay(tests) ) {
 				if (platform.equals("zos")) {
 					fileContent += "set jck.env.testPlatform.headless Yes" + ";\n";
 					fileContent += "set jck.env.runtime.testExecute.otherEnvVars LIBPATH=/usr/lpp/tcpip/X11R66/lib" + ";\n";
@@ -563,10 +560,13 @@ public class Jck implements StfPluginInterface {
 			}	
 			if ( tests.contains("api/org_omg") || tests.contains("api/javax_management") ) {
 				fileContent += "set jck.env.runtime.idl.orbHost " + hostname + ";\n";
-			}	
-			if ( tests.contains("api/java_text") || tests.contains("api/java_util")) {
-				extraJvmOptions += " -Djava.ext.dirs=" + jckBase + File.separator + "lib" + File.separator + "extensions" + File.pathSeparator + 
-										testJdk + File.separator + "jre" + File.separator + "lib" + File.separator + "ext";
+			}
+			// ext/lib was removed at Java 9
+			if ( jckVersion.contains("jck8") ) {
+				if ( tests.contains("api/java_text") || tests.contains("api/java_util")) {
+					extraJvmOptions += " -Djava.ext.dirs=" + jckBase + File.separator + "lib" + File.separator + "extensions" + File.pathSeparator + 
+						testJdk + File.separator + "jre" + File.separator + "lib" + File.separator + "ext";
+				}
 			}
 			if (tests.contains("api/signaturetest")) {
 				fileContent += "set jck.env.runtime.staticsigtest.staticSigTestClasspathRemote \"" + getSignatureTestJars(pathToLib) + "\"" + ";\n";
@@ -574,6 +574,10 @@ public class Jck implements StfPluginInterface {
 			if (extraJvmOptions.contains("nofallback") && tests.startsWith("vm") ) {
 				fileContent += "set jck.env.testPlatform.typecheckerSpecific No" + ";\n";		
 			}
+			
+			// Get any additional jvm options for specific tests.
+			extraJvmOptions += getTestSpecificJvmOptions(jckVersion, tests);
+
 			extraJvmOptions += suppressOutOfMemoryDumpOptions;
 			
 			// Add the JVM options supplied by the user plus those added in this method to the jtb file option.
@@ -618,7 +622,12 @@ public class Jck implements StfPluginInterface {
 			}
 			
 			fileContent += "set jck.env.compiler.compRefExecute.cmdAsString \"" + pathToJava + "\"" + ";\n";
-			fileContent += "set jck.env.compiler.testCompile.otherOpts \"-source 1.8 \"" + ";\n";
+			if (jckVersion.contains("jck8")) {
+				fileContent += "set jck.env.compiler.testCompile.otherOpts \"-source 1.8 \"" + ";\n";
+			}
+			else if (jckVersion.contains("jck9")) {
+				fileContent += "set jck.env.compiler.testCompile.otherOpts \"-source 9 \"" + ";\n";
+			}
 
 			extraJvmOptions += suppressOutOfMemoryDumpOptions;
 			
@@ -741,7 +750,7 @@ public class Jck implements StfPluginInterface {
 				libPath = "LIBPATH";
 				robotAvailable = "No";
 				concurrency = "4";
-				if ( TestsRequireDisplay(tests) ) {
+				if ( testsRequireDisplay(tests) ) {
 					fileContent += "set jck.env.testPlatform.headless Yes" + ";\n";
 					fileContent += "set jck.env.runtime.testExecute.otherEnvVars LIBPATH=/usr/lpp/tcpip/X11R66/lib" + ";\n";
 				}
@@ -939,7 +948,7 @@ public class Jck implements StfPluginInterface {
 		}
 	}
 	
-	private boolean TestsRequireDisplay (String tests) {
+	private boolean testsRequireDisplay (String tests) {
 		if (tests.contains("api/java_applet") || tests.contains("api/java_io") ||
 			tests.contains("api/javax_swing") || tests.contains("api/javax_sound") ||
 			tests.contains("api/java_awt")  || tests.contains("api/javax_print") ||
@@ -987,5 +996,31 @@ public class Jck implements StfPluginInterface {
 			throw new StfException(testExecutionType + "Cannot locate JCK version " + jckVersion + " in any of the directories referenced by -javatest-prereqs or under a jck subdirectory in one of those directories.");
 		}
 		return returnJckTopDir;
+	}
+	
+	private String getTestSpecificJvmOptions (String jckVersion, String tests) {
+		String testSpecificJvmOptions = "";
+		// --add-modules options are required to make some modules visible on Java 9
+		if (jckVersion.contains("jck9") ) {
+			if (tests.contains("api/javax_activation") ) {
+				testSpecificJvmOptions = "--add-modules java.activation";
+			}
+			if (tests.contains("api/javax_activity") ) {
+				testSpecificJvmOptions = "--add-modules java.corba";
+			}
+			if (tests.contains("api/javax_annotation") ) {
+				testSpecificJvmOptions = "--add-modules java.xml.ws.annotation";
+			}
+			if (tests.contains("api/javax_crypto") ) {
+				testSpecificJvmOptions = "--add-modules java.xml.crypto";
+			}
+			if (tests.contains("api/javax_sql") ) {
+				testSpecificJvmOptions = "--add-modules java.sql";
+			}
+			if (tests.contains("api/javax_transaction") ) {
+				testSpecificJvmOptions = "--add-modules java.transaction";
+			}
+		}
+		return testSpecificJvmOptions;
 	}
 }

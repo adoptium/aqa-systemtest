@@ -1002,10 +1002,10 @@ public class Jck implements StfPluginInterface {
 		String testSpecificJvmOptions = "";
 		// --add-modules options are required to make some modules visible on Java 9
 		if (jckVersion.contains("jck9") ) {
-			if (tests.contains("api/javax_activation") ) {
+			if (tests.contains("api/javax_activation") || tests.contains("api/java_lang")) {
 				testSpecificJvmOptions = "--add-modules java.activation";
 			}
-			if (tests.contains("api/javax_activity") ) {
+			if (tests.contains("api/javax_activity") || tests.contains("api/javax_rmi") || tests.contains("api/org_omg")) {
 				testSpecificJvmOptions = "--add-modules java.corba";
 			}
 			if (tests.contains("api/javax_annotation") ) {
@@ -1019,6 +1019,9 @@ public class Jck implements StfPluginInterface {
 			}
 			if (tests.contains("api/javax_transaction") ) {
 				testSpecificJvmOptions = "--add-modules java.transaction";
+			}
+			if (tests.contains("api/javax_xml") ) {
+				testSpecificJvmOptions = "--add-modules java.xml.bind";
 			}
 		}
 		return testSpecificJvmOptions;

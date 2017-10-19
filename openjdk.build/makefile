@@ -366,9 +366,9 @@ BUILD_COMMAND:=$(BUILD_COMMAND) -Djava9_home=$(JAVA9_HOME)
 # -java-args argument
 ifneq (,$(JAVA_ARGS))
   ifneq (,$(findstring jck,$(MAKECMDGOALS)))
-    JAVA_ARGS_ARG:=-java-args-setup="$(subst ",$(ESC_DQ),$(JAVA_ARGS))"
+    JAVA_ARGS_ARG=-java-args-setup="$(subst ",$(ESC_DQ),$(JAVA_ARGS))"
   else
-    JAVA_ARGS_ARG:=-java-args="$(subst ",$(ESC_DQ),$(JAVA_ARGS))"
+    JAVA_ARGS_ARG=-java-args="$(subst ",$(ESC_DQ),$(JAVA_ARGS))"
   endif
 endif
 

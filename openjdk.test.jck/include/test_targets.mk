@@ -22,7 +22,7 @@
 # The default is to look fro a directory called 'default'.
 JCK_CONFIG=default
 
-# Targets to run the JCK
+# Targets to run jck8b
 
 # Targets for the jck8b runtime test suite
 JCK8B_RUNTIME_TESTS:= \
@@ -1369,6 +1369,1373 @@ test.jck8b.devtools.schema_bind.bind_schemaBindings:
 	$(STF_COMMAND) -test=Jck -test-args="tests=schema_bind/bind_schemaBindings,jckversion=jck8b,testsuite=DEVTOOLS" $(LOG)
 	echo Target $@ completed
 
+# Targets to run jck9
+
+# Targets for the jck9 runtime test suite
+JCK9_RUNTIME_TESTS:= \
+test.jck9.runtime.api.java_math \
+test.jck9.runtime.api.java_security \
+test.jck9.runtime.api.java_sql \
+test.jck9.runtime.api.java_text \
+test.jck9.runtime.api.javax_activation \
+test.jck9.runtime.api.javax_activity \
+test.jck9.runtime.api.javax_annotation \
+test.jck9.runtime.api.javax_crypto \
+test.jck9.runtime.api.javax_imageio \
+test.jck9.runtime.api.javax_lang \
+test.jck9.runtime.api.javax_net \
+test.jck9.runtime.api.javax_script \
+test.jck9.runtime.api.javax_security \
+test.jck9.runtime.api.javax_sql \
+test.jck9.runtime.api.javax_tools \
+test.jck9.runtime.api.javax_transaction \
+test.jck9.runtime.api.org_w3c \
+test.jck9.runtime.api.org_xml \
+test.jck9.runtime.api.serializabletypes \
+test.jck9.runtime.api.signaturetest \
+test.jck9.runtime.api.xinclude \
+test.jck9.runtime.api.xsl \
+test.jck9.runtime.api.java_applet \
+test.jck9.runtime.api.java_awt \
+test.jck9.runtime.api.java_beans \
+test.jck9.runtime.api.java_io \
+test.jck9.runtime.api.java_util \
+test.jck9.runtime.api.javax_accessibility \
+test.jck9.runtime.api.javax_naming \
+test.jck9.runtime.api.javax_print \
+test.jck9.runtime.api.javax_sound \
+test.jck9.runtime.api.javax_swing \
+test.jck9.runtime.api.java_lang \
+test.jck9.runtime.api.java_net \
+test.jck9.runtime.api.java_nio \
+test.jck9.runtime.api.java_rmi \
+test.jck9.runtime.api.javax_management \
+test.jck9.runtime.api.javax_rmi \
+test.jck9.runtime.api.javax_xml \
+test.jck9.runtime.api.modulegraph \
+test.jck9.runtime.api.org_omg \
+test.jck9.runtime.api.org_ietf \
+test.jck9.runtime.api.java_time \
+test.jck9.runtime.vm.cldc \
+test.jck9.runtime.vm.concepts \
+test.jck9.runtime.vm.constantpool \
+test.jck9.runtime.vm.fp \
+test.jck9.runtime.vm.jvmti \
+test.jck9.runtime.vm.module \
+test.jck9.runtime.vm.overview \
+test.jck9.runtime.vm.typechecker \
+test.jck9.runtime.vm.classfmt \
+test.jck9.runtime.vm.instr \
+test.jck9.runtime.vm.jni \
+test.jck9.runtime.vm.jdwp \
+test.jck9.runtime.xopts.vm.cldc \
+test.jck9.runtime.xopts.vm.concepts \
+test.jck9.runtime.xopts.vm.constantpool \
+test.jck9.runtime.xopts.vm.fp \
+test.jck9.runtime.xopts.vm.jvmti \
+test.jck9.runtime.xopts.vm.overview \
+test.jck9.runtime.xopts.vm.typechecker \
+test.jck9.runtime.xopts.vm.classfmt \
+test.jck9.runtime.xopts.vm.instr \
+test.jck9.runtime.xopts.vm.jni \
+test.jck9.runtime.xopts.vm.jdwp \
+test.jck9.runtime.lang.ANNOT \
+test.jck9.runtime.lang.ARR \
+test.jck9.runtime.lang.BINC \
+test.jck9.runtime.lang.CLSS \
+test.jck9.runtime.lang.CONV \
+test.jck9.runtime.lang.DASG \
+test.jck9.runtime.lang.EXCP \
+test.jck9.runtime.lang.EXEC \
+test.jck9.runtime.lang.EXPR \
+test.jck9.runtime.lang.FP \
+test.jck9.runtime.lang.ICLS \
+test.jck9.runtime.lang.INTF \
+test.jck9.runtime.lang.LEX \
+test.jck9.runtime.lang.NAME \
+test.jck9.runtime.lang.PKGS \
+test.jck9.runtime.lang.STMT \
+test.jck9.runtime.lang.THRD \
+test.jck9.runtime.lang.TYPE \
+test.jck9.runtime.lang.INFR \
+test.jck9.runtime.lang.LMBD \
+test.jck9.runtime.xml_schema.msdata.additional \
+test.jck9.runtime.xml_schema.msdata.annotations \
+test.jck9.runtime.xml_schema.msdata.attribute \
+test.jck9.runtime.xml_schema.msdata.attributeGroup \
+test.jck9.runtime.xml_schema.msdata.complexType \
+test.jck9.runtime.xml_schema.msdata.datatypes \
+test.jck9.runtime.xml_schema.msdata.element \
+test.jck9.runtime.xml_schema.msdata.errata10 \
+test.jck9.runtime.xml_schema.msdata.group \
+test.jck9.runtime.xml_schema.msdata.identityConstraint \
+test.jck9.runtime.xml_schema.msdata.modelGroups \
+test.jck9.runtime.xml_schema.msdata.notations \
+test.jck9.runtime.xml_schema.msdata.particles \
+test.jck9.runtime.xml_schema.msdata.regex \
+test.jck9.runtime.xml_schema.msdata.schema \
+test.jck9.runtime.xml_schema.msdata.simpleType \
+test.jck9.runtime.xml_schema.msdata.wildcards \
+test.jck9.runtime.xml_schema.nistdata.atomic \
+test.jck9.runtime.xml_schema.nistdata.list \
+test.jck9.runtime.xml_schema.nistdata.union \
+test.jck9.runtime.xml_schema.sundata \
+test.jck9.runtime.xml_schema.boeingData
+# Allow the user to exclude tests from the command line
+JCK9_RUNTIME_TESTS:=$(filter-out $(EXCLUDE),$(JCK9_RUNTIME_TESTS))
+
+JCK9_TESTS_REQUIRING_CONFIG:=\
+test.jck9.runtime.api.java_net \
+test.jck9.runtime.api.java_nio \
+test.jck9.runtime.api.org_ietf \
+test.jck9.runtime.api.javax_security
+# Allow the user to exclude tests from the command line
+JCK9_TESTS_REQUIRING_CONFIG:=$(filter-out $(EXCLUDE),$(JCK9_TESTS_REQUIRING_CONFIG))
+
+JCK9_TESTS_NO_CONFIG:=$(filter-out $(JCK9_TESTS_REQUIRING_CONFIG),$(JCK9_TESTS))
+# Allow the user to exclude tests from the command line
+JCK9_TESTS_NO_CONFIG:=$(filter-out $(EXCLUDE),$(JCK9_TESTS_NO_CONFIG))
+
+JCK9_RUNTIME_TESTS_NO_CONFIG:=$(filter-out $(JCK9_TESTS_REQUIRING_CONFIG),$(JCK9_RUNTIME_TESTS))
+# Allow the user to exclude tests from the command line
+JCK9_RUNTIME_TESTS_NO_CONFIG:=$(filter-out $(EXCLUDE),$(JCK9_RUNTIME_TESTS_NO_CONFIG))
+
+# Targets for the jck9 compiler test suite
+JCK9_COMPILER_TESTS:= \
+test.jck9.compiler.api.java_rmi \
+test.jck9.compiler.api.javax_annotation \
+test.jck9.compiler.api.javax_lang \
+test.jck9.compiler.api.javax_tools \
+test.jck9.compiler.api.signaturetest \
+test.jck9.compiler.lang.ANNOT \
+test.jck9.compiler.lang.ARR  \
+test.jck9.compiler.lang.BINC  \
+test.jck9.compiler.lang.CLSS  \
+test.jck9.compiler.lang.CONV  \
+test.jck9.compiler.lang.DASG  \
+test.jck9.compiler.lang.EXCP  \
+test.jck9.compiler.lang.EXEC  \
+test.jck9.compiler.lang.EXPR  \
+test.jck9.compiler.lang.FP  \
+test.jck9.compiler.lang.ICLS  \
+test.jck9.compiler.lang.INTF  \
+test.jck9.compiler.lang.LEX  \
+test.jck9.compiler.lang.NAME  \
+test.jck9.compiler.lang.PKGS  \
+test.jck9.compiler.lang.STMT  \
+test.jck9.compiler.lang.THRD  \
+test.jck9.compiler.lang.TYPE \
+test.jck9.compiler.lang.INFR \
+test.jck9.compiler.lang.LMBD \
+test.jck9.compiler.lang.MOD
+# Allow the user to exclude tests from the command line
+JCK9_COMPILER_TESTS:=$(filter-out $(EXCLUDE),$(JCK9_COMPILER_TESTS))
+
+# Targets for the jck9 devtools test suite
+JCK9_DEVTOOLS_TESTS:= \
+test.jck9.devtools.java2schema \
+test.jck9.devtools.xml_schema.msData.additional \
+test.jck9.devtools.xml_schema.msData.annotations \
+test.jck9.devtools.xml_schema.msData.attribute  \
+test.jck9.devtools.xml_schema.msData.attributeGroup \
+test.jck9.devtools.xml_schema.msData.complexType  \
+test.jck9.devtools.xml_schema.msData.datatypes  \
+test.jck9.devtools.xml_schema.msData.element  \
+test.jck9.devtools.xml_schema.msData.errata10  \
+test.jck9.devtools.xml_schema.msData.group  \
+test.jck9.devtools.xml_schema.msData.identityConstraint  \
+test.jck9.devtools.xml_schema.msData.modelGroups  \
+test.jck9.devtools.xml_schema.msData.notations  \
+test.jck9.devtools.xml_schema.msData.particles  \
+test.jck9.devtools.xml_schema.msData.regex  \
+test.jck9.devtools.xml_schema.msData.schema \
+test.jck9.devtools.xml_schema.msData.simpleType  \
+test.jck9.devtools.xml_schema.msData.wildcards \
+test.jck9.devtools.xml_schema.nistData.atomic.anyURI \
+test.jck9.devtools.xml_schema.nistData.atomic.base64Binary   \
+test.jck9.devtools.xml_schema.nistData.atomic.boolean \
+test.jck9.devtools.xml_schema.nistData.atomic.byte \
+test.jck9.devtools.xml_schema.nistData.atomic.date \
+test.jck9.devtools.xml_schema.nistData.atomic.dateTime   \
+test.jck9.devtools.xml_schema.nistData.atomic.decimal   \
+test.jck9.devtools.xml_schema.nistData.atomic.double \
+test.jck9.devtools.xml_schema.nistData.atomic.duration   \
+test.jck9.devtools.xml_schema.nistData.atomic.float \
+test.jck9.devtools.xml_schema.nistData.atomic.gDay \
+test.jck9.devtools.xml_schema.nistData.atomic.gMonth   \
+test.jck9.devtools.xml_schema.nistData.atomic.gMonthDay \
+test.jck9.devtools.xml_schema.nistData.atomic.gYear \
+test.jck9.devtools.xml_schema.nistData.atomic.gYearMonth \
+test.jck9.devtools.xml_schema.nistData.atomic.hexBinary \
+test.jck9.devtools.xml_schema.nistData.atomic.ID \
+test.jck9.devtools.xml_schema.nistData.atomic.int \
+test.jck9.devtools.xml_schema.nistData.atomic.integer \
+test.jck9.devtools.xml_schema.nistData.atomic.language \
+test.jck9.devtools.xml_schema.nistData.atomic.long \
+test.jck9.devtools.xml_schema.nistData.atomic.Name \
+test.jck9.devtools.xml_schema.nistData.atomic.NCName \
+test.jck9.devtools.xml_schema.nistData.atomic.negativeInteger \
+test.jck9.devtools.xml_schema.nistData.atomic.NMTOKEN   \
+test.jck9.devtools.xml_schema.nistData.atomic.nonNegativeInteger \
+test.jck9.devtools.xml_schema.nistData.atomic.nonPositiveInteger   \
+test.jck9.devtools.xml_schema.nistData.atomic.normalizedString \
+test.jck9.devtools.xml_schema.nistData.atomic.positiveInteger   \
+test.jck9.devtools.xml_schema.nistData.atomic.QName \
+test.jck9.devtools.xml_schema.nistData.atomic.short \
+test.jck9.devtools.xml_schema.nistData.atomic.string \
+test.jck9.devtools.xml_schema.nistData.atomic.time \
+test.jck9.devtools.xml_schema.nistData.atomic.token \
+test.jck9.devtools.xml_schema.nistData.atomic.unsignedByte \
+test.jck9.devtools.xml_schema.nistData.atomic.unsignedInt  \
+test.jck9.devtools.xml_schema.nistData.atomic.unsignedLong \
+test.jck9.devtools.xml_schema.nistData.atomic.unsignedShort \
+test.jck9.devtools.xml_schema.nistData.list.anyURI \
+test.jck9.devtools.xml_schema.nistData.list.base64Binary \
+test.jck9.devtools.xml_schema.nistData.list.boolean \
+test.jck9.devtools.xml_schema.nistData.list.byte \
+test.jck9.devtools.xml_schema.nistData.list.date \
+test.jck9.devtools.xml_schema.nistData.list.dateTime \
+test.jck9.devtools.xml_schema.nistData.list.decimal \
+test.jck9.devtools.xml_schema.nistData.list.double \
+test.jck9.devtools.xml_schema.nistData.list.duration \
+test.jck9.devtools.xml_schema.nistData.list.float \
+test.jck9.devtools.xml_schema.nistData.list.gDay   \
+test.jck9.devtools.xml_schema.nistData.list.gMonth   \
+test.jck9.devtools.xml_schema.nistData.list.gMonthDay   \
+test.jck9.devtools.xml_schema.nistData.list.gYear \
+test.jck9.devtools.xml_schema.nistData.list.gYearMonth \
+test.jck9.devtools.xml_schema.nistData.list.hexBinary  \
+test.jck9.devtools.xml_schema.nistData.list.ID  \
+test.jck9.devtools.xml_schema.nistData.list.int \
+test.jck9.devtools.xml_schema.nistData.list.integer   \
+test.jck9.devtools.xml_schema.nistData.list.language   \
+test.jck9.devtools.xml_schema.nistData.list.long \
+test.jck9.devtools.xml_schema.nistData.list.Name      \
+test.jck9.devtools.xml_schema.nistData.list.NCName \
+test.jck9.devtools.xml_schema.nistData.list.negativeInteger  \
+test.jck9.devtools.xml_schema.nistData.list.NMTOKEN \
+test.jck9.devtools.xml_schema.nistData.list.NMTOKENS \
+test.jck9.devtools.xml_schema.nistData.list.nonNegativeInteger  \
+test.jck9.devtools.xml_schema.nistData.list.nonPositiveInteger  \
+test.jck9.devtools.xml_schema.nistData.list.normalizedString \
+test.jck9.devtools.xml_schema.nistData.list.positiveInteger \
+test.jck9.devtools.xml_schema.nistData.list.QName   \
+test.jck9.devtools.xml_schema.nistData.list.short \
+test.jck9.devtools.xml_schema.nistData.list.string \
+test.jck9.devtools.xml_schema.nistData.list.time \
+test.jck9.devtools.xml_schema.nistData.list.token \
+test.jck9.devtools.xml_schema.nistData.list.unsignedByte \
+test.jck9.devtools.xml_schema.nistData.list.unsignedInt \
+test.jck9.devtools.xml_schema.nistData.list.unsignedLong \
+test.jck9.devtools.xml_schema.nistData.list.unsignedShort \
+test.jck9.devtools.xml_schema.nistData.union \
+test.jck9.devtools.xml_schema.sunData \
+test.jck9.devtools.xml_schema.boeingData \
+test.jck9.devtools.jaxws \
+test.jck9.devtools.schema2java.nisttest \
+test.jck9.devtools.schema2java.structures \
+test.jck9.devtools.schema_bind.bind_class   \
+test.jck9.devtools.schema_bind.bind_dom \
+test.jck9.devtools.schema_bind.bind_globalBindings \
+test.jck9.devtools.schema_bind.bind_property \
+test.jck9.devtools.schema_bind.bind_factoryMethod \
+test.jck9.devtools.schema_bind.bind_inlineBinaryData \
+test.jck9.devtools.schema_bind.bind_javaType \
+test.jck9.devtools.schema_bind.bind_schemaBindings
+# Allow the user to exclude tests from the command line
+JCK9_DEVTOOLS_TESTS:=$(filter-out $(EXCLUDE),$(JCK9_DEVTOOLS_TESTS))
+
+# All the JCK9 tests
+JCK9_TESTS:=$(JCK9_RUNTIME_TESTS) \
+$(JCK9_COMPILER_TESTS) \
+$(JCK9_DEVTOOLS_TESTS)
+
+.PHONY: \
+test.jck.custom
+
+.PHONY: \
+test.jck9 \
+test.jck9.noconfig \
+test.jck9.compiler.custom \
+test.jck9.compiler.api \
+test.jck9.compiler.lang \
+test.jck9.devtools.custom \
+test.jck9.devtools.java2schema \
+test.jck9.devtools.jaxws \
+test.jck9.devtools.schema2java \
+test.jck9.devtools.schema_bindtest \
+test.jck9.devtools.xml_schema \
+test.jck9.runtime.custom \
+test.jck9.runtime.api \
+test.jck9.runtime.lang \
+test.jck9.runtime.vm \
+test.jck9.runtime.xml_schema \
+test.jck9.runtime.api.in.parts \
+test.jck9.runtime.api.noconfig
+
+# Target to run Java 9 Runtime JCK tests in one run but in smaller parts.
+test.jck9.runtime.api.in.parts: $(JCK9_RUNTIME_TESTS)
+# Target to run Java 9 Runtime JCK tests excluding the parts which require Kerberos and Http server setup
+test.jck9.runtime.api.noconfig: $(JCK9_RUNTIME_TESTS_NO_CONFIG)
+
+# Target to run tests from any JCK test directory
+test.jck.custom:
+	echo Running target $@ with custom jck test $(JCKTEST), jckversion $(JCKVERSION), testsuite $(JCKTESTSUITE)
+	$(STF_COMMAND) -test=Jck -test-args="tests=$(JCKTEST),jckversion=$(JCKVERSION),testsuite=$(JCKTESTSUITE)" $(LOG)
+	echo Target $@ completed
+
+# jck9 targets
+# Targets to run all Java 9 JCK in small parts
+test.jck9: $(JCK9_TESTS)
+# Target to run Java 9 JCK tests excluding the parts which require Kerberos and Http server setup
+test.jck9.noconfig: $(JCK9_TESTS_NO_CONFIG)
+
+# Targets to run tests from any jck9 runtime, compiler or devtools test directory
+test.jck9.runtime.custom:
+	echo Running target $@ with custom jck test ${JCKTEST}
+	$(STF_COMMAND) -test=Jck -test-args="tests=${JCKTEST},jckversion=jck9,testsuite=RUNTIME" $(LOG)
+	echo Target $@ completed
+test.jck9.compiler.custom:
+	echo Running target $@ with custom jck test ${JCKTEST}
+	$(STF_COMMAND) -test=Jck -test-args="tests=${JCKTEST},jckversion=jck9,testsuite=COMPILER" $(LOG)
+	echo Target $@ completed
+test.jck9.devtools.custom:
+	echo Running target $@ with custom jck test ${JCKTEST}
+	$(STF_COMMAND) -test=Jck -test-args="tests=${JCKTEST},jckversion=jck9,testsuite=DEVTOOLS" $(LOG)
+	echo Target $@ completed
+
+# Targets to run Java 9 JCK in very large pieces
+test.jck9.runtime.api:
+	echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=api,jckversion=jck9,testsuite=RUNTIME" $(LOG)
+	echo Target $@ completed
+test.jck9.runtime.lang:
+	echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=lang,jckversion=jck9,testsuite=RUNTIME" $(LOG)
+	echo Target $@ completed
+test.jck9.runtime.vm:
+	echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=vm,jckversion=jck9,testsuite=RUNTIME" $(LOG)
+	echo Target $@ completed
+test.jck9.runtime.xml_schema:
+	echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=xml_schema,jckversion=jck9,testsuite=RUNTIME" $(LOG)
+	echo Target $@ completed
+test.jck9.compiler.api:
+	echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=api,jckversion=jck9,testsuite=COMPILER" $(LOG)
+	echo Target $@ completed
+test.jck9.compiler.lang:
+	echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=lang,jckversion=jck9,testsuite=COMPILER" $(LOG)
+	echo Target $@ completed
+test.jck9.devtools.java2schema:
+	echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=java2schema,jckversion=jck9,testsuite=DEVTOOLS" $(LOG)
+	echo Target $@ completed
+test.jck9.devtools.jaxws:
+	echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=jaxws,jckversion=jck9,testsuite=DEVTOOLS" $(LOG)
+	echo Target $@ completed
+test.jck9.devtools.schema2java:
+	echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=schema2java,jckversion=jck9,testsuite=DEVTOOLS" $(LOG)
+	echo Target $@ completed
+test.jck9.devtools.schema_bind:
+	echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=schema_bind,jckversion=jck9,testsuite=DEVTOOLS" $(LOG)
+	echo Target $@ completed
+test.jck9.devtools.xml_schema:
+	echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=xml_schema,jckversion=jck9,testsuite=DEVTOOLS" $(LOG)
+	echo Target $@ completed
+
+
+# Target to run Java 9 Runtime JCK tests in one run but in smaller parts.
+test.jck9.runtime.api.in.parts: $(JCK9_RUNTIME_TESTS)
+# Target to run Java 9 Runtime JCK tests excluding the parts which require Kerberos and Http server setup
+test.jck9.runtime.api.noconfig: $(JCK9_RUNTIME_TESTS_NO_CONFIG)
+
+# Targets to run runtime test suites individually
+test.jck9.runtime.api.java_math:
+	@echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=api/java_math,jckversion=jck9,testsuite=RUNTIME" $(LOG)
+	@echo Target $@ completed
+test.jck9.runtime.api.java_security:
+	@echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=api/java_security,jckversion=jck9,testsuite=RUNTIME" $(LOG)
+	@echo Target $@ completed
+test.jck9.runtime.api.java_sql:
+	@echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=api/java_sql,jckversion=jck9,testsuite=RUNTIME" $(LOG)
+	@echo Target $@ completed
+test.jck9.runtime.api.java_text:
+	@echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=api/java_text,jckversion=jck9,testsuite=RUNTIME" $(LOG)
+	@echo Target $@ completed
+test.jck9.runtime.api.javax_activation:
+	@echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=api/javax_activation,jckversion=jck9,testsuite=RUNTIME" $(LOG)
+	@echo Target $@ completed
+test.jck9.runtime.api.javax_activity:
+	@echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=api/javax_activity,jckversion=jck9,testsuite=RUNTIME" $(LOG)
+	@echo Target $@ completed
+test.jck9.runtime.api.javax_annotation:
+	@echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=api/javax_annotation,jckversion=jck9,testsuite=RUNTIME" $(LOG)
+	@echo Target $@ completed
+test.jck9.runtime.api.javax_crypto:
+	@echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=api/javax_crypto,jckversion=jck9,testsuite=RUNTIME" $(LOG)
+	@echo Target $@ completed
+test.jck9.runtime.api.javax_imageio:
+	@echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=api/javax_imageio,jckversion=jck9,testsuite=RUNTIME" $(LOG)
+	@echo Target $@ completed
+test.jck9.runtime.api.javax_lang:
+	@echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=api/javax_lang,jckversion=jck9,testsuite=RUNTIME" $(LOG)
+	@echo Target $@ completed
+test.jck9.runtime.api.javax_net:
+	@echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=api/javax_net,jckversion=jck9,testsuite=RUNTIME" $(LOG)
+	@echo Target $@ completed
+test.jck9.runtime.api.javax_script:
+	@echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=api/javax_script,jckversion=jck9,testsuite=RUNTIME" $(LOG)
+	@echo Target $@ completed
+test.jck9.runtime.api.javax_security:
+	@echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=api/javax_security,jckversion=jck9,testsuite=RUNTIME,config=$(JCK_CONFIG)" $(LOG)
+	@echo Target $@ completed
+test.jck9.runtime.api.javax_sql:
+	@echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=api/javax_sql,jckversion=jck9,testsuite=RUNTIME" $(LOG)
+	@echo Target $@ completed
+test.jck9.runtime.api.javax_tools:
+	@echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=api/javax_tools,jckversion=jck9,testsuite=RUNTIME" $(LOG)
+	@echo Target $@ completed
+test.jck9.runtime.api.javax_transaction:
+	@echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=api/javax_transaction,jckversion=jck9,testsuite=RUNTIME" $(LOG)
+	@echo Target $@ completed
+test.jck9.runtime.api.org_w3c:
+	@echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=api/org_w3c,jckversion=jck9,testsuite=RUNTIME" $(LOG)
+	@echo Target $@ completed
+test.jck9.runtime.api.serializabletypes:
+	@echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=api/serializabletypes,jckversion=jck9,testsuite=RUNTIME" $(LOG)
+	@echo Target $@ completed
+test.jck9.runtime.api.org_xml:
+	@echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=api/org_xml,jckversion=jck9,testsuite=RUNTIME" $(LOG)
+	@echo Target $@ completed
+test.jck9.runtime.api.signaturetest:
+	@echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=api/signaturetest,jckversion=jck9,testsuite=RUNTIME" $(LOG)
+	@echo Target $@ completed
+test.jck9.runtime.api.xinclude:
+	@echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=api/xinclude,jckversion=jck9,testsuite=RUNTIME" $(LOG)
+	@echo Target $@ completed
+test.jck9.runtime.api.xsl:
+	@echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=api/xsl,jckversion=jck9,testsuite=RUNTIME" $(LOG)
+	@echo Target $@ completed
+test.jck9.runtime.api.java_applet:
+	@echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=api/java_applet,jckversion=jck9,testsuite=RUNTIME" $(LOG)
+	@echo Target $@ completed
+test.jck9.runtime.api.java_awt:
+	@echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=api/java_awt,jckversion=jck9,testsuite=RUNTIME" $(LOG)
+	@echo Target $@ completed
+test.jck9.runtime.api.java_beans:
+	@echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=api/java_beans,jckversion=jck9,testsuite=RUNTIME" $(LOG)
+	@echo Target $@ completed
+test.jck9.runtime.api.java_io:
+	@echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=api/java_io,jckversion=jck9,testsuite=RUNTIME" $(LOG)
+	@echo Target $@ completed
+test.jck9.runtime.api.java_util:
+	@echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=api/java_util,jckversion=jck9,testsuite=RUNTIME" $(LOG)
+	@echo Target $@ completed
+test.jck9.runtime.api.javax_accessibility:
+	@echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=api/javax_accessibility,jckversion=jck9,testsuite=RUNTIME" $(LOG)
+	@echo Target $@ completed
+test.jck9.runtime.api.javax_naming:
+	@echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=api/javax_naming,jckversion=jck9,testsuite=RUNTIME" $(LOG)
+	@echo Target $@ completed
+test.jck9.runtime.api.javax_print:
+	@echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=api/javax_print,jckversion=jck9,testsuite=RUNTIME" $(LOG)
+	@echo Target $@ completed
+test.jck9.runtime.api.javax_sound:
+	@echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=api/javax_sound,jckversion=jck9,testsuite=RUNTIME" $(LOG)
+	@echo Target $@ completed
+test.jck9.runtime.api.javax_swing:
+	@echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=api/javax_swing,jckversion=jck9,testsuite=RUNTIME" $(LOG)
+	@echo Target $@ completed
+test.jck9.runtime.api.java_lang:
+	@echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=api/java_lang,jckversion=jck9,testsuite=RUNTIME" $(LOG)
+	@echo Target $@ completed
+test.jck9.runtime.api.java_net:
+	@echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=api/java_net,jckversion=jck9,testsuite=RUNTIME,config=$(JCK_CONFIG)" $(LOG)
+	@echo Target $@ completed
+test.jck9.runtime.api.java_nio:
+	@echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=api/java_nio,jckversion=jck9,testsuite=RUNTIME,config=$(JCK_CONFIG)" $(LOG)
+	@echo Target $@ completed
+test.jck9.runtime.api.java_rmi:
+	@echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=api/java_rmi,jckversion=jck9,testsuite=RUNTIME" $(LOG)
+	@echo Target $@ completed
+test.jck9.runtime.api.javax_management:
+	@echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=api/javax_management,jckversion=jck9,testsuite=RUNTIME" $(LOG)
+	@echo Target $@ completed
+test.jck9.runtime.api.javax_rmi:
+	@echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=api/javax_rmi,jckversion=jck9,testsuite=RUNTIME" $(LOG)
+	@echo Target $@ completed
+test.jck9.runtime.api.javax_xml:
+	@echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=api/javax_xml,jckversion=jck9,testsuite=RUNTIME" $(LOG)
+	@echo Target $@ completed
+test.jck9.runtime.api.modulegraph:
+	@echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=api/modulegraph,jckversion=jck9,testsuite=RUNTIME" $(LOG)
+	@echo Target $@ completed
+test.jck9.runtime.api.org_omg:
+	@echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=api/org_omg,jckversion=jck9,testsuite=RUNTIME" $(LOG)
+	@echo Target $@ completed
+test.jck9.runtime.api.org_ietf:
+	@echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=api/org_ietf,jckversion=jck9,testsuite=RUNTIME,config=$(JCK_CONFIG)" $(LOG)
+	@echo Target $@ completed
+test.jck9.runtime.api.java_time:
+	@echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=api/java_time,jckversion=jck9,testsuite=RUNTIME" $(LOG)
+	@echo Target $@ completed
+test.jck9.runtime.vm.cldc:
+	@echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=vm/cldc,jckversion=jck9,testsuite=RUNTIME" $(LOG)
+	@echo Target $@ completed
+test.jck9.runtime.vm.concepts:
+	@echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=vm/concepts,jckversion=jck9,testsuite=RUNTIME" $(LOG)
+	@echo Target $@ completed
+test.jck9.runtime.vm.constantpool:
+	@echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=vm/constantpool,jckversion=jck9,testsuite=RUNTIME" $(LOG)
+	@echo Target $@ completed
+test.jck9.runtime.vm.fp:
+	@echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=vm/fp,jckversion=jck9,testsuite=RUNTIME" $(LOG)
+	@echo Target $@ completed
+test.jck9.runtime.vm.jvmti:
+	@echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=vm/jvmti,jckversion=jck9,testsuite=RUNTIME" $(LOG)
+	@echo Target $@ completed
+test.jck9.runtime.vm.module:
+	@echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=vm/module,jckversion=jck9,testsuite=RUNTIME" $(LOG)
+	@echo Target $@ completed
+test.jck9.runtime.vm.overview:
+	@echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=vm/overview,jckversion=jck9,testsuite=RUNTIME" $(LOG)
+	@echo Target $@ completed
+test.jck9.runtime.vm.typechecker:
+	@echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=vm/typechecker,jckversion=jck9,testsuite=RUNTIME" $(LOG)
+	@echo Target $@ completed
+test.jck9.runtime.vm.classfmt:
+	@echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=vm/classfmt,jckversion=jck9,testsuite=RUNTIME" $(LOG)
+	@echo Target $@ completed
+test.jck9.runtime.vm.instr:
+	@echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=vm/instr,jckversion=jck9,testsuite=RUNTIME" $(LOG)
+	@echo Target $@ completed
+test.jck9.runtime.vm.jni:
+	@echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=vm/jni,jckversion=jck9,testsuite=RUNTIME" $(LOG)
+	@echo Target $@ completed
+test.jck9.runtime.vm.jdwp:
+	@echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=vm/jdwp,jckversion=jck9,testsuite=RUNTIME" $(LOG)
+	@echo Target $@ completed
+test.jck9.runtime.xopts.vm.cldc:
+	@echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=vm/cldc,jckversion=jck9,testsuite=RUNTIME" $(LOG)
+	@echo Target $@ completed
+test.jck9.runtime.xopts.vm.concepts:
+	@echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=vm/concepts,jckversion=jck9,testsuite=RUNTIME" $(LOG)
+	@echo Target $@ completed
+test.jck9.runtime.xopts.vm.constantpool:
+	@echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=vm/constantpool,jckversion=jck9,testsuite=RUNTIME" $(LOG)
+	@echo Target $@ completed
+test.jck9.runtime.xopts.vm.fp:
+	@echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=vm/fp,jckversion=jck9,testsuite=RUNTIME" $(LOG)
+	@echo Target $@ completed
+test.jck9.runtime.xopts.vm.jvmti:
+	@echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=vm/jvmti,jckversion=jck9,testsuite=RUNTIME" $(LOG)
+	@echo Target $@ completed
+test.jck9.runtime.xopts.vm.overview:
+	@echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=vm/overview,jckversion=jck9,testsuite=RUNTIME" $(LOG)
+	@echo Target $@ completed
+test.jck9.runtime.xopts.vm.typechecker:
+	@echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=vm/typechecker,jckversion=jck9,testsuite=RUNTIME" $(LOG)
+	@echo Target $@ completed
+test.jck9.runtime.xopts.vm.classfmt:
+	@echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=vm/classfmt,jckversion=jck9,testsuite=RUNTIME" $(LOG)
+	@echo Target $@ completed
+test.jck9.runtime.xopts.vm.instr:
+	@echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=vm/instr,jckversion=jck9,testsuite=RUNTIME" $(LOG)
+	@echo Target $@ completed
+test.jck9.runtime.xopts.vm.jni:
+	@echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=vm/jni,jckversion=jck9,testsuite=RUNTIME" $(LOG)
+	@echo Target $@ completed
+test.jck9.runtime.xopts.vm.jdwp:
+	@echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=vm/jdwp,jckversion=jck9,testsuite=RUNTIME" $(LOG)
+	@echo Target $@ completed
+test.jck9.runtime.lang.ANNOT:
+	@echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=lang/ANNOT,jckversion=jck9,testsuite=RUNTIME" $(LOG)
+	@echo Target $@ completed
+test.jck9.runtime.lang.ARR:
+	@echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=lang/ARR,jckversion=jck9,testsuite=RUNTIME" $(LOG)
+	@echo Target $@ completed
+test.jck9.runtime.lang.BINC :
+	@echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=lang/BINC,jckversion=jck9,testsuite=RUNTIME" $(LOG)
+	@echo Target $@ completed
+test.jck9.runtime.lang.CLSS :
+	@echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=lang/CLSS,jckversion=jck9,testsuite=RUNTIME" $(LOG)
+	@echo Target $@ completed
+test.jck9.runtime.lang.CONV :
+	@echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=lang/CONV,jckversion=jck9,testsuite=RUNTIME" $(LOG)
+	@echo Target $@ completed
+test.jck9.runtime.lang.DASG :
+	@echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=lang/DASG,jckversion=jck9,testsuite=RUNTIME" $(LOG)
+	@echo Target $@ completed
+test.jck9.runtime.lang.EXCP :
+	@echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=lang/EXCP,jckversion=jck9,testsuite=RUNTIME" $(LOG)
+	@echo Target $@ completed
+test.jck9.runtime.lang.EXEC :
+	@echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=lang/EXEC,jckversion=jck9,testsuite=RUNTIME" $(LOG)
+	@echo Target $@ completed
+test.jck9.runtime.lang.EXPR :
+	@echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=lang/EXPR,jckversion=jck9,testsuite=RUNTIME" $(LOG)
+	@echo Target $@ completed
+test.jck9.runtime.lang.FP :
+	@echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=lang/FP,jckversion=jck9,testsuite=RUNTIME" $(LOG)
+	@echo Target $@ completed
+test.jck9.runtime.lang.ICLS :
+	@echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=lang/ICLS,jckversion=jck9,testsuite=RUNTIME" $(LOG)
+	@echo Target $@ completed
+test.jck9.runtime.lang.INTF :
+	@echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=lang/INTF,jckversion=jck9,testsuite=RUNTIME" $(LOG)
+	@echo Target $@ completed
+test.jck9.runtime.lang.LEX :
+	@echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=lang/LEX,jckversion=jck9,testsuite=RUNTIME" $(LOG)
+	@echo Target $@ completed
+test.jck9.runtime.lang.NAME :
+	@echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=lang/NAME,jckversion=jck9,testsuite=RUNTIME" $(LOG)
+	@echo Target $@ completed
+test.jck9.runtime.lang.PKGS :
+	@echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=lang/PKGS,jckversion=jck9,testsuite=RUNTIME" $(LOG)
+	@echo Target $@ completed
+test.jck9.runtime.lang.STMT :
+	@echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=lang/STMT,jckversion=jck9,testsuite=RUNTIME" $(LOG)
+	@echo Target $@ completed
+test.jck9.runtime.lang.THRD :
+	@echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=lang/THRD,jckversion=jck9,testsuite=RUNTIME" $(LOG)
+	@echo Target $@ completed
+test.jck9.runtime.lang.TYPE:
+	@echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=lang/TYPE,jckversion=jck9,testsuite=RUNTIME" $(LOG)
+	@echo Target $@ completed
+test.jck9.runtime.lang.INFR:
+	@echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=lang/INFR,jckversion=jck9,testsuite=RUNTIME" $(LOG)
+	@echo Target $@ completed
+test.jck9.runtime.lang.LMBD:
+	@echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=lang/LMBD,jckversion=jck9,testsuite=RUNTIME" $(LOG)
+	@echo Target $@ completed
+test.jck9.runtime.xml_schema.msdata.additional:
+	@echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=xml_schema/msData/additional,jckversion=jck9,testsuite=RUNTIME" $(LOG)
+	@echo Target $@ completed
+test.jck9.runtime.xml_schema.msdata.annotations:
+	@echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=xml_schema/msData/annotations,jckversion=jck9,testsuite=RUNTIME" $(LOG)
+	@echo Target $@ completed
+test.jck9.runtime.xml_schema.msdata.attribute:
+	@echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=xml_schema/msData/attribute,jckversion=jck9,testsuite=RUNTIME" $(LOG)
+	@echo Target $@ completed
+test.jck9.runtime.xml_schema.msdata.attributeGroup:
+	@echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=xml_schema/msData/attributeGroup,jckversion=jck9,testsuite=RUNTIME" $(LOG)
+	@echo Target $@ completed
+test.jck9.runtime.xml_schema.msdata.complexType:
+	@echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=xml_schema/msData/complexType,jckversion=jck9,testsuite=RUNTIME" $(LOG)
+	@echo Target $@ completed
+test.jck9.runtime.xml_schema.msdata.datatypes:
+	@echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=xml_schema/msData/datatypes,jckversion=jck9,testsuite=RUNTIME" $(LOG)
+	@echo Target $@ completed
+test.jck9.runtime.xml_schema.msdata.element:
+	@echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=xml_schema/msData/element,jckversion=jck9,testsuite=RUNTIME" $(LOG)
+	@echo Target $@ completed
+test.jck9.runtime.xml_schema.msdata.errata10:
+	@echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=xml_schema/msData/errata10,jckversion=jck9,testsuite=RUNTIME" $(LOG)
+	@echo Target $@ completed
+test.jck9.runtime.xml_schema.msdata.group:
+	@echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=xml_schema/msData/group,jckversion=jck9,testsuite=RUNTIME" $(LOG)
+	@echo Target $@ completed
+test.jck9.runtime.xml_schema.msdata.identityConstraint:
+	@echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=xml_schema/msData/identityConstraint,jckversion=jck9,testsuite=RUNTIME" $(LOG)
+	@echo Target $@ completed
+test.jck9.runtime.xml_schema.msdata.modelGroups:
+	@echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=xml_schema/msData/modelGroups,jckversion=jck9,testsuite=RUNTIME" $(LOG)
+	@echo Target $@ completed
+test.jck9.runtime.xml_schema.msdata.notations:
+	@echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=xml_schema/msData/notations,jckversion=jck9,testsuite=RUNTIME" $(LOG)
+	@echo Target $@ completed
+test.jck9.runtime.xml_schema.msdata.particles:
+	@echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=xml_schema/msData/particles,jckversion=jck9,testsuite=RUNTIME" $(LOG)
+	@echo Target $@ completed
+test.jck9.runtime.xml_schema.msdata.regex:
+	@echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=xml_schema/msData/regex,jckversion=jck9,testsuite=RUNTIME" $(LOG)
+	@echo Target $@ completed
+test.jck9.runtime.xml_schema.msdata.schema:
+	@echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=xml_schema/msData/schema,jckversion=jck9,testsuite=RUNTIME" $(LOG)
+	@echo Target $@ completed
+test.jck9.runtime.xml_schema.msdata.simpleType:
+	@echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=xml_schema/msData/simpleType,jckversion=jck9,testsuite=RUNTIME" $(LOG)
+	@echo Target $@ completed
+test.jck9.runtime.xml_schema.msdata.wildcards:
+	@echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=xml_schema/msData/wildcards,jckversion=jck9,testsuite=RUNTIME" $(LOG)
+	@echo Target $@ completed
+test.jck9.runtime.xml_schema.nistdata.atomic:
+	@echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=xml_schema/nistData/atomic,jckversion=jck9,testsuite=RUNTIME" $(LOG)
+	@echo Target $@ completed
+test.jck9.runtime.xml_schema.nistdata.list:
+	@echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=xml_schema/nistData/list,jckversion=jck9,testsuite=RUNTIME" $(LOG)
+	@echo Target $@ completed
+test.jck9.runtime.xml_schema.nistdata.union:
+	@echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=xml_schema/nistData/union,jckversion=jck9,testsuite=RUNTIME" $(LOG)
+	@echo Target $@ completed
+test.jck9.runtime.xml_schema.sundata:
+	@echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=xml_schema/sunData,jckversion=jck9,testsuite=RUNTIME" $(LOG)
+	@echo Target $@ completed
+test.jck9.runtime.xml_schema.boeingData:
+	@echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=xml_schema/boeingData,jckversion=jck9,testsuite=RUNTIME" $(LOG)
+	@echo Target $@ completed
+
+# Targets to run compiler test suites individually
+test.jck9.compiler.api.java_rmi:
+	echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=api/java_rmi,jckversion=jck9,testsuite=COMPILER" $(LOG)
+	echo Target $@ completed
+test.jck9.compiler.api.javax_annotation:
+	echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=api/javax_annotation,jckversion=jck9,testsuite=COMPILER" $(LOG)
+	echo Target $@ completed
+test.jck9.compiler.api.javax_lang:
+	echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=api/javax_lang,jckversion=jck9,testsuite=COMPILER" $(LOG)
+	echo Target $@ completed
+test.jck9.compiler.api.javax_tools:
+	echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=api/javax_tools,jckversion=jck9,testsuite=COMPILER" $(LOG)
+	echo Target $@ completed
+test.jck9.compiler.api.signaturetest:
+	echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=api/signaturetest,jckversion=jck9,testsuite=COMPILER" $(LOG)
+	echo Target $@ completed
+test.jck9.compiler.lang.ANNOT:
+	echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=lang/ANNOT,jckversion=jck9,testsuite=COMPILER" $(LOG)
+	echo Target $@ completed
+test.jck9.compiler.lang.ARR :
+	echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=lang/ARR,jckversion=jck9,testsuite=COMPILER" $(LOG)
+	echo Target $@ completed
+test.jck9.compiler.lang.BINC :
+	echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=lang/BINC,jckversion=jck9,testsuite=COMPILER" $(LOG)
+	echo Target $@ completed
+test.jck9.compiler.lang.CLSS :
+	echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=lang/CLSS,jckversion=jck9,testsuite=COMPILER" $(LOG)
+	echo Target $@ completed
+test.jck9.compiler.lang.CONV :
+	echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=lang/CONV,jckversion=jck9,testsuite=COMPILER" $(LOG)
+	echo Target $@ completed
+test.jck9.compiler.lang.DASG :
+	echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=lang/DASG,jckversion=jck9,testsuite=COMPILER" $(LOG)
+	echo Target $@ completed
+test.jck9.compiler.lang.EXCP :
+	echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=lang/EXCP,jckversion=jck9,testsuite=COMPILER" $(LOG)
+	echo Target $@ completed
+test.jck9.compiler.lang.EXEC :
+	echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=lang/EXEC,jckversion=jck9,testsuite=COMPILER" $(LOG)
+	echo Target $@ completed
+test.jck9.compiler.lang.EXPR :
+	echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=lang/EXPR,jckversion=jck9,testsuite=COMPILER" $(LOG)
+	echo Target $@ completed
+test.jck9.compiler.lang.FP :
+	echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=lang/FP,jckversion=jck9,testsuite=COMPILER" $(LOG)
+	echo Target $@ completed
+test.jck9.compiler.lang.ICLS :
+	echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=lang/ICLS,jckversion=jck9,testsuite=COMPILER" $(LOG)
+	echo Target $@ completed
+test.jck9.compiler.lang.INTF :
+	echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=lang/INTF,jckversion=jck9,testsuite=COMPILER" $(LOG)
+	echo Target $@ completed
+test.jck9.compiler.lang.LEX :
+	echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=lang/LEX,jckversion=jck9,testsuite=COMPILER" $(LOG)
+	echo Target $@ completed
+test.jck9.compiler.lang.NAME :
+	echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=lang/NAME,jckversion=jck9,testsuite=COMPILER" $(LOG)
+	echo Target $@ completed
+test.jck9.compiler.lang.PKGS :
+	echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=lang/PKGS,jckversion=jck9,testsuite=COMPILER" $(LOG)
+	echo Target $@ completed
+test.jck9.compiler.lang.STMT :
+	echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=lang/STMT,jckversion=jck9,testsuite=COMPILER" $(LOG)
+	echo Target $@ completed
+test.jck9.compiler.lang.THRD :
+	echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=lang/THRD,jckversion=jck9,testsuite=COMPILER" $(LOG)
+	echo Target $@ completed
+test.jck9.compiler.lang.TYPE:
+	echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=lang/TYPE,jckversion=jck9,testsuite=COMPILER" $(LOG)
+	echo Target $@ completed
+test.jck9.compiler.lang.INFR:
+	echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=lang/INFR,jckversion=jck9,testsuite=COMPILER" $(LOG)
+	echo Target $@ completed
+test.jck9.compiler.lang.LMBD:
+	echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=lang/LMBD,jckversion=jck9,testsuite=COMPILER" $(LOG)
+	echo Target $@ completed
+test.jck9.compiler.lang.MOD:
+	echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=lang/MOD,jckversion=jck9,testsuite=COMPILER" $(LOG)
+	echo Target $@ completed
+
+# Targets to run devtools test suites individually
+# java2schema already defined above, not broken down further
+#test.jck9.devtools.java2schema:
+#	echo Running target $@
+#	$(STF_COMMAND) -test=Jck -test-args="tests=java2schema,jckversion=jck9,testsuite=DEVTOOLS" $(LOG)
+#	echo Target $@ completed
+test.jck9.devtools.xml_schema.msData.additional:
+	echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=xml_schema/msData/additional,jckversion=jck9,testsuite=DEVTOOLS" $(LOG)
+	echo Target $@ completed
+test.jck9.devtools.xml_schema.msData.annotations:
+	echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=xml_schema/msData/annotations,jckversion=jck9,testsuite=DEVTOOLS" $(LOG)
+	echo Target $@ completed
+test.jck9.devtools.xml_schema.msData.attribute :
+	echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=xml_schema/msData/attribute,jckversion=jck9,testsuite=DEVTOOLS" $(LOG)
+	echo Target $@ completed
+test.jck9.devtools.xml_schema.msData.attributeGroup:
+	echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=xml_schema/msData/attributeGroup,jckversion=jck9,testsuite=DEVTOOLS" $(LOG)
+	echo Target $@ completed
+test.jck9.devtools.xml_schema.msData.complexType :
+	echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=xml_schema/msData/complexType,jckversion=jck9,testsuite=DEVTOOLS" $(LOG)
+	echo Target $@ completed
+test.jck9.devtools.xml_schema.msData.datatypes :
+	echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=xml_schema/msData/datatypes,jckversion=jck9,testsuite=DEVTOOLS" $(LOG)
+	echo Target $@ completed
+test.jck9.devtools.xml_schema.msData.element :
+	echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=xml_schema/msData/element,jckversion=jck9,testsuite=DEVTOOLS" $(LOG)
+	echo Target $@ completed
+test.jck9.devtools.xml_schema.msData.errata10 :
+	echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=xml_schema/msData/errata10,jckversion=jck9,testsuite=DEVTOOLS" $(LOG)
+	echo Target $@ completed
+test.jck9.devtools.xml_schema.msData.group :
+	echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=xml_schema/msData/group,jckversion=jck9,testsuite=DEVTOOLS" $(LOG)
+	echo Target $@ completed
+test.jck9.devtools.xml_schema.msData.identityConstraint :
+	echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=xml_schema/msData/identityConstraint,jckversion=jck9,testsuite=DEVTOOLS" $(LOG)
+	echo Target $@ completed
+test.jck9.devtools.xml_schema.msData.modelGroups :
+	echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=xml_schema/msData/modelGroups,jckversion=jck9,testsuite=DEVTOOLS" $(LOG)
+	echo Target $@ completed
+test.jck9.devtools.xml_schema.msData.notations :
+	echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=xml_schema/msData/notations,jckversion=jck9,testsuite=DEVTOOLS" $(LOG)
+	echo Target $@ completed
+test.jck9.devtools.xml_schema.msData.particles :
+	echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=xml_schema/msData/particles,jckversion=jck9,testsuite=DEVTOOLS" $(LOG)
+	echo Target $@ completed
+test.jck9.devtools.xml_schema.msData.regex :
+	echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=xml_schema/msData/regex,jckversion=jck9,testsuite=DEVTOOLS" $(LOG)
+	echo Target $@ completed
+test.jck9.devtools.xml_schema.msData.schema:
+	echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=xml_schema/msData/schema,jckversion=jck9,testsuite=DEVTOOLS" $(LOG)
+	echo Target $@ completed
+test.jck9.devtools.xml_schema.msData.simpleType :
+	echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=xml_schema/msData/simpleType,jckversion=jck9,testsuite=DEVTOOLS" $(LOG)
+	echo Target $@ completed
+test.jck9.devtools.xml_schema.msData.wildcards:
+	echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=xml_schema/msData/wildcards,jckversion=jck9,testsuite=DEVTOOLS" $(LOG)
+	echo Target $@ completed
+test.jck9.devtools.xml_schema.nistData.atomic.anyURI:
+	echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=xml_schema/nistData/atomic/anyURI,jckversion=jck9,testsuite=DEVTOOLS" $(LOG)
+	echo Target $@ completed
+test.jck9.devtools.xml_schema.nistData.atomic.base64Binary :
+	echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=xml_schema/nistData/atomic/base64Binary,jckversion=jck9,testsuite=DEVTOOLS" $(LOG)
+	echo Target $@ completed
+test.jck9.devtools.xml_schema.nistData.atomic.boolean:
+	echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=xml_schema/nistData/atomic/boolean,jckversion=jck9,testsuite=DEVTOOLS" $(LOG)
+	echo Target $@ completed
+test.jck9.devtools.xml_schema.nistData.atomic.byte:
+	echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=xml_schema/nistData/atomic/byte,jckversion=jck9,testsuite=DEVTOOLS" $(LOG)
+	echo Target $@ completed
+test.jck9.devtools.xml_schema.nistData.atomic.date:
+	echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=xml_schema/nistData/atomic/date,jckversion=jck9,testsuite=DEVTOOLS" $(LOG)
+	echo Target $@ completed
+test.jck9.devtools.xml_schema.nistData.atomic.dateTime :
+	echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=xml_schema/nistData/atomic/dateTime,jckversion=jck9,testsuite=DEVTOOLS" $(LOG)
+	echo Target $@ completed
+test.jck9.devtools.xml_schema.nistData.atomic.decimal :
+	echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=xml_schema/nistData/atomic/decimal,jckversion=jck9,testsuite=DEVTOOLS" $(LOG)
+	echo Target $@ completed
+test.jck9.devtools.xml_schema.nistData.atomic.double:
+	echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=xml_schema/nistData/atomic/double,jckversion=jck9,testsuite=DEVTOOLS" $(LOG)
+	echo Target $@ completed
+test.jck9.devtools.xml_schema.nistData.atomic.duration :
+	echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=xml_schema/nistData/atomic/duration,jckversion=jck9,testsuite=DEVTOOLS" $(LOG)
+	echo Target $@ completed
+test.jck9.devtools.xml_schema.nistData.atomic.float:
+	echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=xml_schema/nistData/atomic/float,jckversion=jck9,testsuite=DEVTOOLS" $(LOG)
+	echo Target $@ completed
+test.jck9.devtools.xml_schema.nistData.atomic.gDay:
+	echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=xml_schema/nistData/atomic/gDay,jckversion=jck9,testsuite=DEVTOOLS" $(LOG)
+	echo Target $@ completed
+test.jck9.devtools.xml_schema.nistData.atomic.gMonth :
+	echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=xml_schema/nistData/atomic/gMonth,jckversion=jck9,testsuite=DEVTOOLS" $(LOG)
+	echo Target $@ completed
+test.jck9.devtools.xml_schema.nistData.atomic.gMonthDay:
+	echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=xml_schema/nistData/atomic/gMonthDay,jckversion=jck9,testsuite=DEVTOOLS" $(LOG)
+	echo Target $@ completed
+test.jck9.devtools.xml_schema.nistData.atomic.gYear:
+	echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=xml_schema/nistData/atomic/gYear,jckversion=jck9,testsuite=DEVTOOLS" $(LOG)
+	echo Target $@ completed
+test.jck9.devtools.xml_schema.nistData.atomic.gYearMonth:
+	echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=xml_schema/nistData/atomic/gYearMonth,jckversion=jck9,testsuite=DEVTOOLS" $(LOG)
+	echo Target $@ completed
+test.jck9.devtools.xml_schema.nistData.atomic.hexBinary:
+	echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=xml_schema/nistData/atomic/hexBinary,jckversion=jck9,testsuite=DEVTOOLS" $(LOG)
+	echo Target $@ completed
+test.jck9.devtools.xml_schema.nistData.atomic.ID:
+	echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=xml_schema/nistData/atomic/ID,jckversion=jck9,testsuite=DEVTOOLS" $(LOG)
+	echo Target $@ completed
+test.jck9.devtools.xml_schema.nistData.atomic.int:
+	echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=xml_schema/nistData/atomic/int,jckversion=jck9,testsuite=DEVTOOLS" $(LOG)
+	echo Target $@ completed
+test.jck9.devtools.xml_schema.nistData.atomic.integer:
+	echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=xml_schema/nistData/atomic/integer,jckversion=jck9,testsuite=DEVTOOLS" $(LOG)
+	echo Target $@ completed
+test.jck9.devtools.xml_schema.nistData.atomic.language:
+	echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=xml_schema/nistData/atomic/language,jckversion=jck9,testsuite=DEVTOOLS" $(LOG)
+	echo Target $@ completed
+test.jck9.devtools.xml_schema.nistData.atomic.long:
+	echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=xml_schema/nistData/atomic/long,jckversion=jck9,testsuite=DEVTOOLS" $(LOG)
+	echo Target $@ completed
+test.jck9.devtools.xml_schema.nistData.atomic.Name:
+	echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=xml_schema/nistData/atomic/Name,jckversion=jck9,testsuite=DEVTOOLS" $(LOG)
+	echo Target $@ completed
+test.jck9.devtools.xml_schema.nistData.atomic.NCName:
+	echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=xml_schema/nistData/atomic/NCName,jckversion=jck9,testsuite=DEVTOOLS" $(LOG)
+	echo Target $@ completed
+test.jck9.devtools.xml_schema.nistData.atomic.negativeInteger:
+	echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=xml_schema/nistData/atomic/negativeInteger,jckversion=jck9,testsuite=DEVTOOLS" $(LOG)
+	echo Target $@ completed
+test.jck9.devtools.xml_schema.nistData.atomic.NMTOKEN :
+	echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=xml_schema/nistData/atomic/NMTOKEN,jckversion=jck9,testsuite=DEVTOOLS" $(LOG)
+	echo Target $@ completed
+test.jck9.devtools.xml_schema.nistData.atomic.nonNegativeInteger:
+	echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=xml_schema/nistData/atomic/nonNegativeInteger,jckversion=jck9,testsuite=DEVTOOLS" $(LOG)
+	echo Target $@ completed
+test.jck9.devtools.xml_schema.nistData.atomic.nonPositiveInteger :
+	echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=xml_schema/nistData/atomic/nonPositiveInteger,jckversion=jck9,testsuite=DEVTOOLS" $(LOG)
+	echo Target $@ completed
+test.jck9.devtools.xml_schema.nistData.atomic.normalizedString:
+	echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=xml_schema/nistData/atomic/normalizedString,jckversion=jck9,testsuite=DEVTOOLS" $(LOG)
+	echo Target $@ completed
+test.jck9.devtools.xml_schema.nistData.atomic.positiveInteger :
+	echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=xml_schema/nistData/atomic/positiveInteger,jckversion=jck9,testsuite=DEVTOOLS" $(LOG)
+	echo Target $@ completed
+test.jck9.devtools.xml_schema.nistData.atomic.QName:
+	echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=xml_schema/nistData/atomic/QName,jckversion=jck9,testsuite=DEVTOOLS" $(LOG)
+	echo Target $@ completed
+test.jck9.devtools.xml_schema.nistData.atomic.short:
+	echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=xml_schema/nistData/atomic/short,jckversion=jck9,testsuite=DEVTOOLS" $(LOG)
+	echo Target $@ completed
+test.jck9.devtools.xml_schema.nistData.atomic.string:
+	echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=xml_schema/nistData/atomic/string,jckversion=jck9,testsuite=DEVTOOLS" $(LOG)
+	echo Target $@ completed
+test.jck9.devtools.xml_schema.nistData.atomic.time:
+	echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=xml_schema/nistData/atomic/time,jckversion=jck9,testsuite=DEVTOOLS" $(LOG)
+	echo Target $@ completed
+test.jck9.devtools.xml_schema.nistData.atomic.token:
+	echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=xml_schema/nistData/atomic/token,jckversion=jck9,testsuite=DEVTOOLS" $(LOG)
+	echo Target $@ completed
+test.jck9.devtools.xml_schema.nistData.atomic.unsignedByte:
+	echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=xml_schema/nistData/atomic/unsignedByte,jckversion=jck9,testsuite=DEVTOOLS" $(LOG)
+	echo Target $@ completed
+test.jck9.devtools.xml_schema.nistData.atomic.unsignedInt :
+	echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=xml_schema/nistData/atomic/unsignedInt,jckversion=jck9,testsuite=DEVTOOLS" $(LOG)
+	echo Target $@ completed
+test.jck9.devtools.xml_schema.nistData.atomic.unsignedLong:
+	echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=xml_schema/nistData/atomic/unsignedLong,jckversion=jck9,testsuite=DEVTOOLS" $(LOG)
+	echo Target $@ completed
+test.jck9.devtools.xml_schema.nistData.atomic.unsignedShort:
+	echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=xml_schema/nistData/atomic/unsignedShort,jckversion=jck9,testsuite=DEVTOOLS" $(LOG)
+	echo Target $@ completed
+test.jck9.devtools.xml_schema.nistData.list.anyURI:
+	echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=xml_schema/nistData/list/anyURI,jckversion=jck9,testsuite=DEVTOOLS" $(LOG)
+	echo Target $@ completed
+test.jck9.devtools.xml_schema.nistData.list.base64Binary:
+	echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=xml_schema/nistData/list/base64Binary,jckversion=jck9,testsuite=DEVTOOLS" $(LOG)
+	echo Target $@ completed
+test.jck9.devtools.xml_schema.nistData.list.boolean:
+	echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=xml_schema/nistData/list/boolean,jckversion=jck9,testsuite=DEVTOOLS" $(LOG)
+	echo Target $@ completed
+test.jck9.devtools.xml_schema.nistData.list.byte:
+	echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=xml_schema/nistData/list/byte,jckversion=jck9,testsuite=DEVTOOLS" $(LOG)
+	echo Target $@ completed
+test.jck9.devtools.xml_schema.nistData.list.date:
+	echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=xml_schema/nistData/list/date,jckversion=jck9,testsuite=DEVTOOLS" $(LOG)
+	echo Target $@ completed
+test.jck9.devtools.xml_schema.nistData.list.dateTime:
+	echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=xml_schema/nistData/list/dateTime,jckversion=jck9,testsuite=DEVTOOLS" $(LOG)
+	echo Target $@ completed
+test.jck9.devtools.xml_schema.nistData.list.decimal:
+	echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=xml_schema/nistData/list/decimal,jckversion=jck9,testsuite=DEVTOOLS" $(LOG)
+	echo Target $@ completed
+test.jck9.devtools.xml_schema.nistData.list.double:
+	echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=xml_schema/nistData/list/double,jckversion=jck9,testsuite=DEVTOOLS" $(LOG)
+	echo Target $@ completed
+test.jck9.devtools.xml_schema.nistData.list.duration:
+	echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=xml_schema/nistData/list/duration,jckversion=jck9,testsuite=DEVTOOLS" $(LOG)
+	echo Target $@ completed
+test.jck9.devtools.xml_schema.nistData.list.float:
+	echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=xml_schema/nistData/list/float,jckversion=jck9,testsuite=DEVTOOLS" $(LOG)
+	echo Target $@ completed
+test.jck9.devtools.xml_schema.nistData.list.gDay :
+	echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=xml_schema/nistData/list/gDay,jckversion=jck9,testsuite=DEVTOOLS" $(LOG)
+	echo Target $@ completed
+test.jck9.devtools.xml_schema.nistData.list.gMonth :
+	echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=xml_schema/nistData/list/gMonth,jckversion=jck9,testsuite=DEVTOOLS" $(LOG)
+	echo Target $@ completed
+test.jck9.devtools.xml_schema.nistData.list.gMonthDay :
+	echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=xml_schema/nistData/list/gMonthDay,jckversion=jck9,testsuite=DEVTOOLS" $(LOG)
+	echo Target $@ completed
+test.jck9.devtools.xml_schema.nistData.list.gYear:
+	echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=xml_schema/nistData/list/gYear,jckversion=jck9,testsuite=DEVTOOLS" $(LOG)
+	echo Target $@ completed
+test.jck9.devtools.xml_schema.nistData.list.gYearMonth:
+	echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=xml_schema/nistData/list/gYearMonth,jckversion=jck9,testsuite=DEVTOOLS" $(LOG)
+	echo Target $@ completed
+test.jck9.devtools.xml_schema.nistData.list.hexBinary :
+	echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=xml_schema/nistData/list/hexBinary,jckversion=jck9,testsuite=DEVTOOLS" $(LOG)
+	echo Target $@ completed
+test.jck9.devtools.xml_schema.nistData.list.ID :
+	echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=xml_schema/nistData/list/ID,jckversion=jck9,testsuite=DEVTOOLS" $(LOG)
+	echo Target $@ completed
+test.jck9.devtools.xml_schema.nistData.list.int:
+	echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=xml_schema/nistData/list/int,jckversion=jck9,testsuite=DEVTOOLS" $(LOG)
+	echo Target $@ completed
+test.jck9.devtools.xml_schema.nistData.list.integer :
+	echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=xml_schema/nistData/list/integer,jckversion=jck9,testsuite=DEVTOOLS" $(LOG)
+	echo Target $@ completed
+test.jck9.devtools.xml_schema.nistData.list.language :
+	echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=xml_schema/nistData/list/language,jckversion=jck9,testsuite=DEVTOOLS" $(LOG)
+	echo Target $@ completed
+test.jck9.devtools.xml_schema.nistData.list.long:
+	echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=xml_schema/nistData/list/long,jckversion=jck9,testsuite=DEVTOOLS" $(LOG)
+	echo Target $@ completed
+test.jck9.devtools.xml_schema.nistData.list.Name   :
+	echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=xml_schema/nistData/list/Name,jckversion=jck9,testsuite=DEVTOOLS" $(LOG)
+	echo Target $@ completed
+test.jck9.devtools.xml_schema.nistData.list.NCName:
+	echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=xml_schema/nistData/list/NCName,jckversion=jck9,testsuite=DEVTOOLS" $(LOG)
+	echo Target $@ completed
+test.jck9.devtools.xml_schema.nistData.list.negativeInteger :
+	echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=xml_schema/nistData/list/negativeInteger,jckversion=jck9,testsuite=DEVTOOLS" $(LOG)
+	echo Target $@ completed
+test.jck9.devtools.xml_schema.nistData.list.NMTOKEN:
+	echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=xml_schema/nistData/list/NMTOKEN,jckversion=jck9,testsuite=DEVTOOLS" $(LOG)
+	echo Target $@ completed
+test.jck9.devtools.xml_schema.nistData.list.NMTOKENS:
+	echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=xml_schema/nistData/list/NMTOKENS,jckversion=jck9,testsuite=DEVTOOLS" $(LOG)
+	echo Target $@ completed
+test.jck9.devtools.xml_schema.nistData.list.nonNegativeInteger :
+	echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=xml_schema/nistData/list/nonNegativeInteger,jckversion=jck9,testsuite=DEVTOOLS" $(LOG)
+	echo Target $@ completed
+test.jck9.devtools.xml_schema.nistData.list.nonPositiveInteger :
+	echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=xml_schema/nistData/list/nonPositiveInteger,jckversion=jck9,testsuite=DEVTOOLS" $(LOG)
+	echo Target $@ completed
+test.jck9.devtools.xml_schema.nistData.list.normalizedString:
+	echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=xml_schema/nistData/list/normalizedString,jckversion=jck9,testsuite=DEVTOOLS" $(LOG)
+	echo Target $@ completed
+test.jck9.devtools.xml_schema.nistData.list.positiveInteger:
+	echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=xml_schema/nistData/list/positiveInteger,jckversion=jck9,testsuite=DEVTOOLS" $(LOG)
+	echo Target $@ completed
+test.jck9.devtools.xml_schema.nistData.list.QName :
+	echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=xml_schema/nistData/list/QName,jckversion=jck9,testsuite=DEVTOOLS" $(LOG)
+	echo Target $@ completed
+test.jck9.devtools.xml_schema.nistData.list.short:
+	echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=xml_schema/nistData/list/short,jckversion=jck9,testsuite=DEVTOOLS" $(LOG)
+	echo Target $@ completed
+test.jck9.devtools.xml_schema.nistData.list.string:
+	echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=xml_schema/nistData/list/string,jckversion=jck9,testsuite=DEVTOOLS" $(LOG)
+	echo Target $@ completed
+test.jck9.devtools.xml_schema.nistData.list.time:
+	echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=xml_schema/nistData/list/time,jckversion=jck9,testsuite=DEVTOOLS" $(LOG)
+	echo Target $@ completed
+test.jck9.devtools.xml_schema.nistData.list.token:
+	echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=xml_schema/nistData/list/token,jckversion=jck9,testsuite=DEVTOOLS" $(LOG)
+	echo Target $@ completed
+test.jck9.devtools.xml_schema.nistData.list.unsignedByte:
+	echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=xml_schema/nistData/list/unsignedByte,jckversion=jck9,testsuite=DEVTOOLS" $(LOG)
+	echo Target $@ completed
+test.jck9.devtools.xml_schema.nistData.list.unsignedInt:
+	echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=xml_schema/nistData/list/unsignedInt,jckversion=jck9,testsuite=DEVTOOLS" $(LOG)
+	echo Target $@ completed
+test.jck9.devtools.xml_schema.nistData.list.unsignedLong:
+	echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=xml_schema/nistData/list/unsignedLong,jckversion=jck9,testsuite=DEVTOOLS" $(LOG)
+	echo Target $@ completed
+test.jck9.devtools.xml_schema.nistData.list.unsignedShort:
+	echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=xml_schema/nistData/list/unsignedShort,jckversion=jck9,testsuite=DEVTOOLS" $(LOG)
+	echo Target $@ completed
+test.jck9.devtools.xml_schema.nistData.union:
+	echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=xml_schema/nistData/union,jckversion=jck9,testsuite=DEVTOOLS" $(LOG)
+	echo Target $@ completed
+test.jck9.devtools.xml_schema.sunData:
+	echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=xml_schema/sunData,jckversion=jck9,testsuite=DEVTOOLS" $(LOG)
+	echo Target $@ completed
+test.jck9.devtools.xml_schema.boeingData:
+	echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=xml_schema/boeingData,jckversion=jck9,testsuite=DEVTOOLS" $(LOG)
+	echo Target $@ completed
+# jaxws already defined above, not broken down further
+#test.jck9.devtools.jaxws:
+#	echo Running target $@
+#	$(STF_COMMAND) -test=Jck -test-args="tests=jaxws,jckversion=jck9,testsuite=DEVTOOLS" $(LOG)
+#	echo Target $@ completed
+test.jck9.devtools.schema2java.nisttest:
+	echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=schema2java/nisttest,jckversion=jck9,testsuite=DEVTOOLS" $(LOG)
+	echo Target $@ completed
+test.jck9.devtools.schema2java.structures:
+	echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=schema2java/structures,jckversion=jck9,testsuite=DEVTOOLS" $(LOG)
+	echo Target $@ completed
+test.jck9.devtools.schema_bind.bind_class :
+	echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=schema_bind/bind_class,jckversion=jck9,testsuite=DEVTOOLS" $(LOG)
+	echo Target $@ completed
+test.jck9.devtools.schema_bind.bind_dom:
+	echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=schema_bind/bind_dom,jckversion=jck9,testsuite=DEVTOOLS" $(LOG)
+	echo Target $@ completed
+test.jck9.devtools.schema_bind.bind_globalBindings:
+	echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=schema_bind/bind_globalBindings,jckversion=jck9,testsuite=DEVTOOLS" $(LOG)
+	echo Target $@ completed
+test.jck9.devtools.schema_bind.bind_property:
+	echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=schema_bind/bind_property,jckversion=jck9,testsuite=DEVTOOLS" $(LOG)
+	echo Target $@ completed
+test.jck9.devtools.schema_bind.bind_factoryMethod:
+	echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=schema_bind/bind_factoryMethod,jckversion=jck9,testsuite=DEVTOOLS" $(LOG)
+	echo Target $@ completed
+test.jck9.devtools.schema_bind.bind_inlineBinaryData:
+	echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=schema_bind/bind_inlineBinaryData,jckversion=jck9,testsuite=DEVTOOLS" $(LOG)
+	echo Target $@ completed
+test.jck9.devtools.schema_bind.bind_javaType:
+	echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=schema_bind/bind_javaType,jckversion=jck9,testsuite=DEVTOOLS" $(LOG)
+	echo Target $@ completed
+test.jck9.devtools.schema_bind.bind_schemaBindings:
+	echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=schema_bind/bind_schemaBindings,jckversion=jck9,testsuite=DEVTOOLS" $(LOG)
+	echo Target $@ completed
+
 help.jck:
 	@echo -------------------------------------------------------------------------------
 	@echo Help for JCK tests
@@ -1434,3 +2801,13 @@ help.jcktests:
 	@echo -------------------------------------------------------------------------------
 	@echo The following targets run preset subsets of the jck8b devtools tests
 	@echo $(subst $(SPACE),$(NEWLINE)echo ,$(JCK8B_DEVTOOLS_TESTS))
+	@echo -------------------------------------------------------------------------------
+	@echo The following targets run preset subsets of the jck9 runtime tests
+	@echo $(subst $(SPACE),$(NEWLINE)echo ,$(JCK9_RUNTIME_TESTS))
+	@echo -------------------------------------------------------------------------------
+	@echo The following targets run preset subsets of the jck9 compiler tests
+	@echo $(subst $(SPACE),$(NEWLINE)echo ,$(JCK9_COMPILER_TESTS))
+	@echo -------------------------------------------------------------------------------
+	@echo The following targets run preset subsets of the jck9 devtools tests
+	@echo $(subst $(SPACE),$(NEWLINE)echo ,$(JCK9_DEVTOOLS_TESTS))
+	

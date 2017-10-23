@@ -261,9 +261,9 @@ public class Jck implements StfPluginInterface {
 		fileContent += "runTests" + ";\n";
 		fileContent += "writeReport " + reportDir + ";\n";
 		
-		// Replacing with Double backslash in the .JTB file. As the harness requires this to run tests.
-		fileContent = fileContent.replace("\\\\", "\\"); 		// This replaces \\ with \.
-		fileContent = fileContent.replace("\\", "\\\\\\\\");	// This replaces \ with \\.  But ("\\", "\\\\") works. 
+		// Make sure any backslashes are escaped, required by the test harness.
+		fileContent = fileContent.replace("\\\\", "\\"); 		// Replaces \\ with \, leave \ alone.
+		fileContent = fileContent.replace("\\", "\\\\");		// Replaces \ with \\
 		 
 		test.doWriteFile("Writing into jtb file.", newJtbFileRef, fileContent);
 	}
@@ -286,9 +286,14 @@ public class Jck implements StfPluginInterface {
 			
 			if ( (testSuite == TestSuite.RUNTIME) && (tests.contains("api/java_util") || tests.contains("api/java_net") || tests.contains("api/java_rmi")  || tests.contains("api/javax_management") 
 					|| tests.contains("api/org_omg") || tests.contains("api/javax_xml") || tests.contains("vm/jdwp")) ) {
+				String addModules = "";
+				// Post Java 8 the javatest agent needs to be given access to non default modules.
+				if ( ! jckVersion.contains("jck8") ) {
+					addModules = "--add-modules java.xml.ws,java.corba";
+				}
 				javatestAgent = test.doRunBackgroundProcess("Starting javatest agent", "AGNT", ECHO_ON, ExpectedOutcome.neverCompletes(), test.createJavaProcessDefinition()
 						.addJvmOption("-Djavatest.security.allowPropertiesAccess=true -Djava.security.policy=" + test.env().findPrereqFile(jckTopDir + jckVersion + "/" + testSuiteFolder + "/lib/jck.policy").toString())
-						.addJvmOption(" --add-modules java.xml.ws,java.corba")
+						.addJvmOption(addModules)
 						.addJarToClasspath(test.env().findPrereqFile(jckTopDir + jckVersion + "/" + testSuiteFolder + executeJar))
 						.addDirectoryToClasspath(test.env().findPrereqDirectory(jckTopDir + jckVersion + "/" + testSuiteFolder + "/classes"))
 						.runClass("com.sun.javatest.agent.AgentMain")
@@ -381,7 +386,8 @@ public class Jck implements StfPluginInterface {
 		File[] files = f.listFiles();
 		for (File file : files) {
 			if (file.getName().contains(pattern)) {
-				sb.append(file.toString()).append(File.pathSeparator);
+				sb.append(file.toString()).append(" ");
+				//sb.append(file.toString()).append(File.pathSeparator);
 			}
 			
 			if (file.isDirectory() && !(file.getName().contains("ext")) ) {
@@ -410,12 +416,22 @@ public class Jck implements StfPluginInterface {
 		logger.info("Using " + jarsList + " for signaturetest.");
 		return jarsList;
 	}
-		
+	
 	public void jckConfigurationForMultijvmWithNoAgent(StfCoreExtension test) throws Exception {
 		String pathToJava = test.createJavaProcessDefinition().getCommand();
 		String pathToRmic = testJdk + File.separator + "bin" + File.separator + "rmic";
 		String pathToLib = testJdk + File.separator + "jre" + File.separator + "lib";
 		String pathToJavac = testJdk + File.separator + "bin" + File.separator + "javac";
+		String pathToToolsJar = testJdk + File.separator + "lib" + File.separator + "tools.jar";
+		// Use escaped backslashes for paths on Windows
+		if (platform.equals("win32")) {
+			pathToJava = pathToJava.replace("/", "\\") + ".exe";
+			pathToRmic = pathToRmic.replace("/", "\\") + ".exe";
+			pathToLib = pathToLib.replace("/", "\\");
+			pathToJavac = pathToJavac.replace("/", "\\" + ".exe");
+			pathToToolsJar = pathToToolsJar.replace("/", "\\");
+		}
+		
 		DirectoryRef jckRuntimeNativeLibValue = nativesLoc;
 		DirectoryRef jckRuntimeJmxLibValue = nativesLoc;
 		String concurrency = "";
@@ -439,29 +455,34 @@ public class Jck implements StfPluginInterface {
 			throw new StfException("Unable to get a free port");
 		}
 		
+		// If Windows is specified for the property jck.env.testPlatform.os then 
+		// different properties are used for some settings - e.g. parameter
+		// jck.env.runtime.testExecute.cmdAsFile is used for the path to java rather than
+		// jck.env.runtime.testExecute.cmdAsFile.
+		// If "Current system" is specified for jck.env.testPlatform.os then the non Windows
+		// values appear to be used and execute the tests as normal.
+		// "Current system" should also be chosen for the property in the JCK Configuration editor
+		// for the template .jti files.
+		testPlatform = "Current system";
 		// Runtime settings
 		if (testSuite == TestSuite.RUNTIME) {
 			keyword = "keywords !interactive";
 			
 			if (platform.equals("win32")) {
-				testPlatform = "Windows";
 				libPath = "PATH";
 				robotAvailable = "Yes";
 				concurrency = "1";
 				fileContent += "set jck.env.testPlatform.systemRoot " + System.getenv("WINDIR") + ";\n";
 			} else if (platform.equals("linux") || platform.equals("mac")) {
-				testPlatform = "Linux";
 				libPath = "LD_LIBRARY_PATH";
 				robotAvailable = "Yes";
 				concurrency = "1";
 			} else if (platform.equals("aix")) {
-				testPlatform = "Linux";
 				libPath = "LIBPATH";
 				robotAvailable = "Yes";
 				concurrency = "1";
 			} else if (platform.equals("zos")) {
 				pathToLib = testJdk + File.separator + "lib";
-				testPlatform = "Linux";
 				libPath = "LIBPATH";
 				robotAvailable = "No";
 				concurrency = "4";
@@ -492,8 +513,8 @@ public class Jck implements StfPluginInterface {
 			fileContent += "concurrency " + concurrency + ";\n";
 			fileContent += "timeoutfactor 1" + ";\n";				// java_awt and javax_management require more than 1h to finish tests
 			fileContent += keyword + ";\n";
-			fileContent += "set jck.env.testPlatform.os " + testPlatform + ";\n";
-			fileContent += "set jck.env.runtime.testExecute.cmdAsString \"" + pathToJava + "\"" + ";\n";
+			fileContent += "set jck.env.testPlatform.os \"" + testPlatform + "\";\n";
+			fileContent += "set jck.env.runtime.testExecute.cmdAsFile \"" + pathToJava + "\"" + ";\n";
 			
 			if ( tests.contains("api/java_awt") || tests.contains("api/javax_swing") ) {
 				fileContent += "set jck.env.runtime.awt.robotAvailable " + robotAvailable + ";\n";
@@ -502,10 +523,25 @@ public class Jck implements StfPluginInterface {
 			if ( tests.equals("api/java_lang") || tests.contains("api/java_lang/instrument") ||
 				tests.contains("api/javax_management") || tests.startsWith("vm") ) {
 				fileContent += "set jck.env.runtime.testExecute.libPathEnv " + libPath + ";\n";
-				fileContent += "set jck.env.runtime.testExecute.nativeLibPathValue \"" + jckRuntimeNativeLibValue + "\"" + ";\n";
+				fileContent += "set jck.env.runtime.testExecute.nativeLibPathFileValue \"" + jckRuntimeNativeLibValue + "\"" + ";\n";
 			}
+			if ( tests.equals("api/java_lang") || tests.contains("api/java_lang/instrument") ) {
+				fileContent += "set jck.env.runtime.jplis.jplisLivePhase Yes;\n";
+			}
+
+			// tools.jar was incorporated into modules from Java 9
+			if ( jckVersion.contains("jck8") ) {
+				if ( tests.startsWith("vm/jvmti") || tests.equals("api/java_lang") || tests.contains("api/java_lang/instrument") ) {
+					fileContent += "set jck.env.runtime.testExecute.additionalClasspath \"" + pathToToolsJar + "\"" + ";\n";
+				}
+			}
+
+			if ( tests.startsWith("vm/jvmti") ) {
+				fileContent += "set jck.env.runtime.testExecute.jvmtiLivePhase Yes;\n";
+			}
+
 			if ( tests.contains("api/javax_management") ) {
-				fileContent += "set jck.env.runtime.testExecute.jmxResourcePathValue \"" + jckRuntimeJmxLibValue + "\"" + ";\n";
+				fileContent += "set jck.env.runtime.testExecute.jmxResourcePathFileValue \"" + jckRuntimeJmxLibValue + "\"" + ";\n";
 			}
 			if ( tests.contains("api/javax_sound") ) {
 				fileContent += "set jck.env.runtime.audio.canPlaySound No" + ";\n";
@@ -565,9 +601,9 @@ public class Jck implements StfPluginInterface {
 						testJdk + File.separator + "jre" + File.separator + "lib" + File.separator + "ext";
 				}
 			}
-			if (jckVersion.contains("jck8b")) {
+			if (jckVersion.contains("jck8")) {
 				if (tests.contains("api/signaturetest")) {
-					fileContent += "set jck.env.runtime.staticsigtest.staticSigTestClasspathRemote \"" + getSignatureTestJars(pathToLib) + "\"" + ";\n";
+					fileContent += "set jck.env.runtime.staticsigtest.staticSigTestClasspath \"" + getSignatureTestJars(pathToLib) + "\"" + ";\n";
 				}
 			}
 			if (extraJvmOptions.contains("nofallback") && tests.startsWith("vm") ) {
@@ -589,18 +625,13 @@ public class Jck implements StfPluginInterface {
 			keyword = "keywords compiler";
 			
 			if (platform.equals("win32")) {
-				pathToRmic += ".exe";
-				testPlatform = "Windows";
 				concurrency = "1";
 			} else if (platform.equals("linux") || platform.equals("mac")) {
-				testPlatform = "Linux";
 				concurrency = "1";	
 			} else if (platform.equals("aix")) {
-				testPlatform = "Linux";		
 				concurrency = "1";
 			} else if (platform.equals("zos")) {
 				pathToLib = testJdk + File.separator + "lib";
-				testPlatform = "Linux";
 				concurrency = "4";
 			} else {
 				throw new StfException("Unknown platform:: " + platform);
@@ -609,29 +640,29 @@ public class Jck implements StfPluginInterface {
 			fileContent += "concurrency " + concurrency + ";\n";
 			fileContent += "timeoutfactor 1" + ";\n";							// lang.CLSS,CONV,STMT,INFR requires more than 1h to complete. lang.Annot,EXPR,LMBD require more than 2h to complete tests
 			fileContent += keyword + ";\n";
-			fileContent += "set jck.env.testPlatform.os " + testPlatform + ";\n";
+			fileContent += "set jck.env.testPlatform.os \"" + testPlatform + "\";\n";
 			
 			// If the Select Compiler question in the JCK interview was answered as "Java Compiler API (JSR199)",
-			// set jck.env.compiler.testCompile.testCompileAPImultiJVM.cmdAsString.
-			fileContent += "set jck.env.compiler.testCompile.testCompileAPImultiJVM.cmdAsString \"" + pathToJava + "\"" + ";\n";
+			// set jck.env.compiler.testCompile.testCompileAPImultiJVM.cmdAsFile.
+			fileContent += "set jck.env.compiler.testCompile.testCompileAPImultiJVM.cmdAsFile \"" + pathToJava + "\"" + ";\n";
 
 			// If the Select Compiler question in the JCK interview was answered as "command line tool",
-			// set set jck.env.compiler.testCompile.cmdAsString.
-			// fileContent += "set jck.env.compiler.testCompile.cmdAsString \"" + pathToJavac + "\"" + ";\n";
+			// set set jck.env.compiler.testCompile.cmdAsFile.
+			// fileContent += "set jck.env.compiler.testCompile.cmdAsFile \"" + pathToJavac + "\"" + ";\n";
 
 			if (jckVersion.contains("jck8")) {
 				fileContent += "set jck.env.compiler.testCompile.otherOpts \"-source 1.8 \"" + ";\n";
 				if (tests.contains("api/signaturetest")) {
-					fileContent += "set jck.env.compiler.testCompile.compilerstaticsigtest.compilerStaticSigTestClasspathRemote \"" + getSignatureTestJars(pathToLib) + "\"" + ";\n";
+					fileContent += "set jck.env.compiler.testCompile.compilerstaticsigtest.compilerStaticSigTestClasspath \"" + getSignatureTestJars(pathToLib) + "\"" + ";\n";
 				}
 			}
 			else {
 				fileContent += "set jck.env.compiler.testCompile.otherOpts \"-source 9 \"" + ";\n";
 			}
 			if (tests.contains("api/java_rmi")) {
-				fileContent += "set jck.env.compiler.testRmic.cmdAsString \"" + pathToRmic + "\"" + ";\n";
+				fileContent += "set jck.env.compiler.testRmic.cmdAsFile \"" + pathToRmic + "\"" + ";\n";
 			}
-			fileContent += "set jck.env.compiler.compRefExecute.cmdAsString \"" + pathToJava + "\"" + ";\n";
+			fileContent += "set jck.env.compiler.compRefExecute.cmdAsFile \"" + pathToJava + "\"" + ";\n";
 
 			extraJvmOptions += suppressOutOfMemoryDumpOptions;
 			
@@ -646,16 +677,12 @@ public class Jck implements StfPluginInterface {
 			String genCmd,impCmd  = "";		// Required for "jaxws" test
 		
 			if (platform.equals("win32")) {
-				pathToJava += ".exe";
-				pathToJavac += ".exe";
-				testPlatform = "Windows";
 				concurrency = "1";
 				xjcCmd = jckBase + File.separator + "win32" + File.separator + "bin" + File.separator + "xjc.bat"; 
 				jxcCmd = jckBase + File.separator + "win32" + File.separator + "bin" + File.separator + "schemagen.bat"; 
 				genCmd = jckBase + File.separator + "win32" + File.separator + "bin" + File.separator + "wsgen.bat"; 
 				impCmd = jckBase + File.separator + "win32" + File.separator + "bin" + File.separator + "wsimport.bat"; 
 			} else if (platform.equals("linux") || platform.equals("aix") || platform.equals("mac")) {
-				testPlatform = "Linux";
 				concurrency = "1";
 				xjcCmd = jckBase + File.separator + "linux" + File.separator + "bin" + File.separator + "xjc.sh";
 				jxcCmd = jckBase + File.separator + "linux" + File.separator + "bin" + File.separator + "schemagen.sh";
@@ -663,7 +690,6 @@ public class Jck implements StfPluginInterface {
 				impCmd = jckBase + File.separator + "linux" + File.separator + "bin" + File.separator + "wsimport.sh";
 			} else if (platform.equals("zos")) {
 				pathToJavac = testJdk + File.separator + "bin" + File.separator + "javac";
-				testPlatform = "Linux";
 				concurrency = "4";
 				xjcCmd = jckBase + File.separator + "solaris" + File.separator + "bin" + File.separator + "xjc.sh";
 				jxcCmd = jckBase + File.separator + "solaris" + File.separator + "bin" + File.separator + "schemagen.sh";
@@ -676,8 +702,8 @@ public class Jck implements StfPluginInterface {
 			fileContent += "concurrency " + concurrency + ";\n";
 			fileContent += "timeoutfactor 1" + ";\n";							// All Devtools tests take less than 1h to finish.
 			
-			fileContent += "set jck.env.testPlatform.os " + testPlatform + ";\n";
-			fileContent += "set jck.env.devtools.testExecute.cmdAsString \"" + pathToJava + "\"" + ";\n";
+			fileContent += "set jck.env.testPlatform.os \"" + testPlatform + "\";\n";
+			fileContent += "set jck.env.devtools.testExecute.cmdAsFile \"" + pathToJava + "\"" + ";\n";
 			fileContent += "set jck.env.devtools.refExecute.cmdAsFile \"" + pathToJava + "\"" + ";\n";
 			
 			fileContent += "set jck.env.devtools.scriptEnvVars \"" + "JAVA_HOME=\"" + testJdk + "\" TOOLS_HOME=\"" + testJdk + "\"" + "\"" + ";\n";

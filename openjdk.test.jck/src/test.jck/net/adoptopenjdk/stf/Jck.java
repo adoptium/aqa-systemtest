@@ -387,7 +387,6 @@ public class Jck implements StfPluginInterface {
 		for (File file : files) {
 			if (file.getName().contains(pattern)) {
 				sb.append(file.toString()).append(" ");
-				//sb.append(file.toString()).append(File.pathSeparator);
 			}
 			
 			if (file.isDirectory() && !(file.getName().contains("ext")) ) {

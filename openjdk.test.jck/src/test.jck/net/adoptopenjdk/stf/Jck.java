@@ -62,8 +62,10 @@ public class Jck implements StfPluginInterface {
 	private FileRef jtiFile;
 	private DirectoryRef nativesLoc;
 	private DirectoryRef jckConfigLoc;
-	private FileRef jtxFile;
-	private FileRef kflFile;
+	private String jtxRelativePath;
+	private String jtxFullPath;
+	private String kflRelativePath;
+	private String kflFullPath;
 	private FileRef krbConfFile;
 	private String fileUrl;
 	private String jckTopDir;
@@ -180,12 +182,22 @@ public class Jck implements StfPluginInterface {
 		
 		fileUrl = "file:///" + test.env().findPrereqFile(jckTopDir + jckVersion + "/" + testSuiteFolder + "/testsuite.jtt");
 		
+		// Assume we will have a .jtx file but not necessarily a .kfl (known failures list) file.
 		if (jckVersion.contains("jck6") || jckVersion.contains("jck7")) {
-			 jtxFile = test.env().findPrereqFile(jckTopDir + jckVersion + "/excludes/jdk" + versionNo + ".jtx");
-			 kflFile = test.env().findPrereqFile(jckTopDir + jckVersion + "/excludes/jdk" + versionNo + ".kfl");
+			jtxRelativePath = jckTopDir + jckVersion + "/excludes/jdk" + versionNo + ".jtx";
+			kflRelativePath = jckTopDir + jckVersion + "/excludes/jdk" + versionNo + ".kfl";
 		} else {
-			 jtxFile = test.env().findPrereqFile(jckTopDir + jckVersion + "/excludes/jck" + versionNo + ".jtx");
-			 kflFile = test.env().findPrereqFile(jckTopDir + jckVersion + "/excludes/jck" + versionNo + ".kfl");
+			jtxRelativePath = jckTopDir + jckVersion + "/excludes/jck" + versionNo + ".jtx";
+			kflRelativePath = jckTopDir + jckVersion + "/excludes/jck" + versionNo + ".kfl";
+		}
+		jtxFullPath = test.env().findPrereqFile(jtxRelativePath).toString();
+		logger.info("Using excludes file " + jtxFullPath);
+		try {
+			kflFullPath = test.env().findPrereqFile(kflRelativePath).toString();
+			logger.info("Using known failures list file " + kflFullPath);
+		} catch (StfException e) {
+			logger.info("Unable to find known failures list file " + kflRelativePath);
+			kflFullPath = "";
 		}
 		
 		// Some of the tests require details of remote services (http and kerberos).
@@ -247,17 +259,8 @@ public class Jck implements StfPluginInterface {
 		} else {
 			throw new StfException(testExecutionType + "with Agent " + withAgent + "combination is not yet supported.");
 		}
-
-		String jtx = "";
-		if ( jtxFile.asJavaFile().exists() ) {
-			jtx += jtxFile + " ";
-		}
 		
-		if ( kflFile.asJavaFile().exists() ) {
-			jtx += kflFile + " ";
-		}
-		
-		fileContent += "set jck.excludeList.customFiles \"" + jtx + "\"" + ";\n";
+		fileContent += "set jck.excludeList.customFiles \"" + jtxFullPath + " " + kflFullPath + "\"" + ";\n";
 		fileContent += "runTests" + ";\n";
 		fileContent += "writeReport " + reportDir + ";\n";
 		
@@ -387,7 +390,6 @@ public class Jck implements StfPluginInterface {
 		for (File file : files) {
 			if (file.getName().contains(pattern)) {
 				sb.append(file.toString()).append(" ");
-				//sb.append(file.toString()).append(File.pathSeparator);
 			}
 			
 			if (file.isDirectory() && !(file.getName().contains("ext")) ) {

@@ -2,7 +2,10 @@
 	<test>
 		<testCaseName>ClassLoadingTest</testCaseName>
 		<variations>
-			<variation></variation>
+			<variation>Mode100</variation>
+			<variation>Mode101</variation>
+			<variation>Mode138</variation>
+			<variation>Mode199</variation>
 		</variations>
 		<command>cd $(OPENJDK_SYSTEMTEST_ROOT)/openjdk.build && make test.ClassloadingLoadTest JAVA_ARGS=$(Q)$(JVM_OPTIONS)$(Q); \
 		$(TEST_STATUS)</command> 
@@ -18,7 +21,10 @@
 	<test>
 		<testCaseName>ConcurrentLoadTest</testCaseName>
 		<variations>
-			<variation></variation>
+			<variation>Mode615</variation>
+			<variation>Mode687</variation>
+			<variation>Mode112</variation>
+			<variation>Mode121</variation>
 		</variations>
 		<command>cd $(OPENJDK_SYSTEMTEST_ROOT)/openjdk.build && make test.ConcurrentLoadTest JAVA_ARGS=$(Q)$(JVM_OPTIONS)$(Q); \
 		$(TEST_STATUS)</command>
@@ -34,7 +40,10 @@
 	<test>
 		<testCaseName>DirectByteBufferLoadTest</testCaseName>
 		<variations>
-			<variation></variation>
+			<variation>Mode687</variation>
+			<variation>Mode688</variation>
+			<variation>Mode615</variation>
+			<variation>Mode607</variation>
 		</variations>
 		<command>cd $(OPENJDK_SYSTEMTEST_ROOT)/openjdk.build && make test.DirectByteBufferLoadTest JAVA_ARGS=$(Q)$(JVM_OPTIONS)$(Q); \
 		$(TEST_STATUS)</command>
@@ -50,7 +59,10 @@
 	<test>
 		<testCaseName>LangLoadTest</testCaseName>
 		<variations>
-			<variation></variation>
+			<variation>Mode687</variation>
+			<variation>Mode688</variation>
+			<variation>Mode112</variation>
+			<variation>Mode121</variation>
 		</variations>
 		<command>cd $(OPENJDK_SYSTEMTEST_ROOT)/openjdk.build && make test.LangLoadTest JAVA_ARGS=$(Q)$(JVM_OPTIONS)$(Q); \
 		$(TEST_STATUS)</command>
@@ -66,7 +78,10 @@
 	<test>
 		<testCaseName>LockingLoadTest</testCaseName>
 		<variations>
-			<variation></variation>
+			<variation>Mode687</variation>
+			<variation>Mode688</variation>
+			<variation>Mode121</variation>
+			<variation>Mode188</variation>
 		</variations>
 		<command>cd $(OPENJDK_SYSTEMTEST_ROOT)/openjdk.build && make test.LockingLoadTest JAVA_ARGS=$(Q)$(JVM_OPTIONS)$(Q); \
 		$(TEST_STATUS)</command>
@@ -82,7 +97,10 @@
 	<test>
 		<testCaseName>MathLoadTest_all</testCaseName>
 		<variations>
-			<variation></variation>
+			<variation>Mode151</variation>
+			<variation>Mode155</variation>
+			<variation>Mode138</variation>
+			<variation>Mode199</variation>
 		</variations>
 		<command>cd $(OPENJDK_SYSTEMTEST_ROOT)/openjdk.build && make test.MathLoadTest_all JAVA_ARGS=$(Q)$(JVM_OPTIONS)$(Q); \
 		$(TEST_STATUS)</command>
@@ -98,7 +116,10 @@
 	<test>
 		<testCaseName>MathLoadTest_autosimd</testCaseName>
 		<variations>
-			<variation></variation>
+			<variation>Mode151</variation>
+			<variation>Mode155</variation>
+			<variation>Mode138</variation>
+			<variation>Mode199</variation>
 		</variations>
 		<command>cd $(OPENJDK_SYSTEMTEST_ROOT)/openjdk.build && make test.MathLoadTest_autosimd JAVA_ARGS=$(Q)$(JVM_OPTIONS)$(Q); \
 		$(TEST_STATUS)</command>
@@ -114,7 +135,10 @@
 	<test>
 		<testCaseName>MathLoadTest_bigdecimal</testCaseName>
 		<variations>
-			<variation></variation>
+			<variation>Mode100</variation>
+			<variation>Mode101</variation>
+			<variation>Mode138</variation>
+			<variation>Mode199</variation>
 		</variations>
 		<command>cd $(OPENJDK_SYSTEMTEST_ROOT)/openjdk.build && make test.MathLoadTest_bigdecimal JAVA_ARGS=$(Q)$(JVM_OPTIONS)$(Q); \
 		$(TEST_STATUS)</command>
@@ -130,7 +154,10 @@
 	<test>
 		<testCaseName>MauveSingleThreadLoadTest</testCaseName>
 		<variations>
-			<variation></variation>
+			<variation>Mode151</variation>
+			<variation>Mode155</variation>
+			<variation>Mode138</variation>
+			<variation>Mode199</variation>
 		</variations>
 		<command>cd $(OPENJDK_SYSTEMTEST_ROOT)/openjdk.build && make test.MauveSingleThreadLoadTest JAVA_ARGS=$(Q)$(JVM_OPTIONS)$(Q); \
 		$(TEST_STATUS)</command>
@@ -146,7 +173,10 @@
 	<test>
 		<testCaseName>MauveSingleInvocationLoadTest</testCaseName>
 		<variations>
-			<variation></variation>
+			<variation>Mode151</variation>
+			<variation>Mode155</variation>
+			<variation>Mode138</variation>
+			<variation>Mode199</variation>
 		</variations>
 		<command>cd $(OPENJDK_SYSTEMTEST_ROOT)/openjdk.build && make test.MauveSingleInvocationLoadTest JAVA_ARGS=$(Q)$(JVM_OPTIONS)$(Q); \
 		$(TEST_STATUS)</command>
@@ -162,7 +192,10 @@
 	<test>
 		<testCaseName>MauveMultiThreadLoadTest</testCaseName>
 		<variations>
-			<variation></variation>
+			<variation>Mode615</variation>
+			<variation>Mode687</variation>
+			<variation>Mode557</variation>
+			<variation>Mode607</variation>
 		</variations>
 		<command>cd $(OPENJDK_SYSTEMTEST_ROOT)/openjdk.build && make test.MauveMultiThreadLoadTest JAVA_ARGS=$(Q)$(JVM_OPTIONS)$(Q); \
 		$(TEST_STATUS)</command>
@@ -178,7 +211,10 @@
 	<test>
 		<testCaseName>NioLoadTest</testCaseName>
 		<variations>
-			<variation></variation>
+			<variation>Mode121</variation>
+			<variation>Mode188</variation>
+			<variation>Mode138</variation>
+			<variation>Mode199</variation>
 		</variations>
 		<command>cd $(OPENJDK_SYSTEMTEST_ROOT)/openjdk.build && make test.NioLoadTest JAVA_ARGS=$(Q)$(JVM_OPTIONS)$(Q); \
 		$(TEST_STATUS)</command>
@@ -194,7 +230,10 @@
 	<test>
 		<testCaseName>UtilLoadTest</testCaseName>
 		<variations>
-			<variation></variation>
+			<variation>Mode151</variation>
+			<variation>Mode155</variation>
+			<variation>Mode138</variation>
+			<variation>Mode199</variation>
 		</variations>
 		<command>cd $(OPENJDK_SYSTEMTEST_ROOT)/openjdk.build && make test.UtilLoadTest JAVA_ARGS=$(Q)$(JVM_OPTIONS)$(Q); \
 		$(TEST_STATUS)</command>
@@ -210,7 +249,10 @@
 	<test>
 		<testCaseName>LambdaLoadTest</testCaseName>
 		<variations>
-			<variation></variation>
+			<variation>Mode100</variation>
+			<variation>Mode101</variation>
+			<variation>Mode138</variation>
+			<variation>Mode199</variation>
 		</variations>
 		<command>cd $(OPENJDK_SYSTEMTEST_ROOT)/openjdk.build && make test.LambdaLoadTest JAVA_ARGS=$(Q)$(JVM_OPTIONS)$(Q); \
 		$(TEST_STATUS)</command>
@@ -226,7 +268,10 @@
 	<test>
 		<testCaseName>JdiTest</testCaseName>
 		<variations>
-			<variation></variation>
+			<variation>Mode615</variation>
+			<variation>Mode687</variation>
+			<variation>Mode557</variation>
+			<variation>Mode607</variation>
 		</variations>
 		<command>cd $(OPENJDK_SYSTEMTEST_ROOT)/openjdk.build && make test.JdiTest JAVA_ARGS=$(Q)$(JVM_OPTIONS)$(Q); \
 		$(TEST_STATUS)</command>
@@ -242,7 +287,10 @@
 	<test>
 		<testCaseName>HCRLateAttachWorkload</testCaseName>
 		<variations>
-			<variation></variation>
+			<variation>Mode615</variation>
+			<variation>Mode687</variation>
+			<variation>Mode557</variation>
+			<variation>Mode607</variation>
 		</variations>
 		<command>cd $(OPENJDK_SYSTEMTEST_ROOT)/openjdk.build && make test.HCRLateAttachWorkload JAVA_ARGS=$(Q)$(JVM_OPTIONS)$(Q); \
 		$(TEST_STATUS)</command>

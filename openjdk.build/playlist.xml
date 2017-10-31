@@ -4,7 +4,8 @@
 		<variations>
 			<variation></variation>
 		</variations>
-		<command>cd $(OPENJDK_SYSTEMTEST_ROOT)/openjdk.build && make test.ClassloadingLoadTest  JAVA_ARGS="$(JVM_OPTIONS)"</command>
+		<command>cd $(OPENJDK_SYSTEMTEST_ROOT)/openjdk.build && make test.ClassloadingLoadTest JAVA_ARGS=$(Q)$(JVM_OPTIONS)$(Q); \
+		$(TEST_STATUS)</command> 
 		<tags>
 			<tag>extended</tag>
 		</tags>
@@ -19,7 +20,8 @@
 		<variations>
 			<variation></variation>
 		</variations>
-		<command>cd $(OPENJDK_SYSTEMTEST_ROOT)/openjdk.build && make test.ConcurrentLoadTest  JAVA_ARGS="$(JVM_OPTIONS)"</command>
+		<command>cd $(OPENJDK_SYSTEMTEST_ROOT)/openjdk.build && make test.ConcurrentLoadTest JAVA_ARGS=$(Q)$(JVM_OPTIONS)$(Q); \
+		$(TEST_STATUS)</command>
 		<tags>
 			<tag>extended</tag>
 		</tags>
@@ -34,7 +36,8 @@
 		<variations>
 			<variation></variation>
 		</variations>
-		<command>cd $(OPENJDK_SYSTEMTEST_ROOT)/openjdk.build && make test.DirectByteBufferLoadTest  JAVA_ARGS="$(JVM_OPTIONS)"</command>
+		<command>cd $(OPENJDK_SYSTEMTEST_ROOT)/openjdk.build && make test.DirectByteBufferLoadTest JAVA_ARGS=$(Q)$(JVM_OPTIONS)$(Q); \
+		$(TEST_STATUS)</command>
 		<tags>
 			<tag>extended</tag>
 		</tags>
@@ -49,7 +52,8 @@
 		<variations>
 			<variation></variation>
 		</variations>
-		<command>cd $(OPENJDK_SYSTEMTEST_ROOT)/openjdk.build && make test.LangLoadTest  JAVA_ARGS="$(JVM_OPTIONS)"</command>
+		<command>cd $(OPENJDK_SYSTEMTEST_ROOT)/openjdk.build && make test.LangLoadTest JAVA_ARGS=$(Q)$(JVM_OPTIONS)$(Q); \
+		$(TEST_STATUS)</command>
 		<tags>
 			<tag>extended</tag>
 		</tags>
@@ -64,7 +68,8 @@
 		<variations>
 			<variation></variation>
 		</variations>
-		<command>cd $(OPENJDK_SYSTEMTEST_ROOT)/openjdk.build && make test.LockingLoadTest  JAVA_ARGS="$(JVM_OPTIONS)"</command>
+		<command>cd $(OPENJDK_SYSTEMTEST_ROOT)/openjdk.build && make test.LockingLoadTest JAVA_ARGS=$(Q)$(JVM_OPTIONS)$(Q); \
+		$(TEST_STATUS)</command>
 		<tags>
 			<tag>extended</tag>
 		</tags>
@@ -79,7 +84,8 @@
 		<variations>
 			<variation></variation>
 		</variations>
-		<command>cd $(OPENJDK_SYSTEMTEST_ROOT)/openjdk.build && make test.MathLoadTest_all  JAVA_ARGS="$(JVM_OPTIONS)"</command>
+		<command>cd $(OPENJDK_SYSTEMTEST_ROOT)/openjdk.build && make test.MathLoadTest_all JAVA_ARGS=$(Q)$(JVM_OPTIONS)$(Q); \
+		$(TEST_STATUS)</command>
 		<tags>
 			<tag>extended</tag>
 		</tags>
@@ -94,7 +100,8 @@
 		<variations>
 			<variation></variation>
 		</variations>
-		<command>cd $(OPENJDK_SYSTEMTEST_ROOT)/openjdk.build && make test.MathLoadTest_autosimd  JAVA_ARGS="$(JVM_OPTIONS)"</command>
+		<command>cd $(OPENJDK_SYSTEMTEST_ROOT)/openjdk.build && make test.MathLoadTest_autosimd JAVA_ARGS=$(Q)$(JVM_OPTIONS)$(Q); \
+		$(TEST_STATUS)</command>
 		<tags>
 			<tag>extended</tag>
 		</tags>
@@ -109,7 +116,8 @@
 		<variations>
 			<variation></variation>
 		</variations>
-		<command>cd $(OPENJDK_SYSTEMTEST_ROOT)/openjdk.build && make test.MathLoadTest_bigdecimal  JAVA_ARGS="$(JVM_OPTIONS)"</command>
+		<command>cd $(OPENJDK_SYSTEMTEST_ROOT)/openjdk.build && make test.MathLoadTest_bigdecimal JAVA_ARGS=$(Q)$(JVM_OPTIONS)$(Q); \
+		$(TEST_STATUS)</command>
 		<tags>
 			<tag>extended</tag>
 		</tags>
@@ -124,7 +132,8 @@
 		<variations>
 			<variation></variation>
 		</variations>
-		<command>cd $(OPENJDK_SYSTEMTEST_ROOT)/openjdk.build && make test.MauveSingleThreadLoadTest  JAVA_ARGS="$(JVM_OPTIONS)"</command>
+		<command>cd $(OPENJDK_SYSTEMTEST_ROOT)/openjdk.build && make test.MauveSingleThreadLoadTest JAVA_ARGS=$(Q)$(JVM_OPTIONS)$(Q); \
+		$(TEST_STATUS)</command>
 		<tags>
 			<tag>extended</tag>
 		</tags>
@@ -139,7 +148,8 @@
 		<variations>
 			<variation></variation>
 		</variations>
-		<command>cd $(OPENJDK_SYSTEMTEST_ROOT)/openjdk.build && make test.MauveSingleInvocationLoadTest  JAVA_ARGS="$(JVM_OPTIONS)"</command>
+		<command>cd $(OPENJDK_SYSTEMTEST_ROOT)/openjdk.build && make test.MauveSingleInvocationLoadTest JAVA_ARGS=$(Q)$(JVM_OPTIONS)$(Q); \
+		$(TEST_STATUS)</command>
 		<tags>
 			<tag>extended</tag>
 		</tags>
@@ -154,7 +164,8 @@
 		<variations>
 			<variation></variation>
 		</variations>
-		<command>cd $(OPENJDK_SYSTEMTEST_ROOT)/openjdk.build && make test.MauveMultiThreadLoadTest  JAVA_ARGS="$(JVM_OPTIONS)"</command>
+		<command>cd $(OPENJDK_SYSTEMTEST_ROOT)/openjdk.build && make test.MauveMultiThreadLoadTest JAVA_ARGS=$(Q)$(JVM_OPTIONS)$(Q); \
+		$(TEST_STATUS)</command>
 		<tags>
 			<tag>extended</tag>
 		</tags>
@@ -169,7 +180,8 @@
 		<variations>
 			<variation></variation>
 		</variations>
-		<command>cd $(OPENJDK_SYSTEMTEST_ROOT)/openjdk.build && make test.NioLoadTest  JAVA_ARGS="$(JVM_OPTIONS)"</command>
+		<command>cd $(OPENJDK_SYSTEMTEST_ROOT)/openjdk.build && make test.NioLoadTest JAVA_ARGS=$(Q)$(JVM_OPTIONS)$(Q); \
+		$(TEST_STATUS)</command>
 		<tags>
 			<tag>extended</tag>
 		</tags>
@@ -184,7 +196,8 @@
 		<variations>
 			<variation></variation>
 		</variations>
-		<command>cd $(OPENJDK_SYSTEMTEST_ROOT)/openjdk.build && make test.UtilLoadTest  JAVA_ARGS="$(JVM_OPTIONS)"</command>
+		<command>cd $(OPENJDK_SYSTEMTEST_ROOT)/openjdk.build && make test.UtilLoadTest JAVA_ARGS=$(Q)$(JVM_OPTIONS)$(Q); \
+		$(TEST_STATUS)</command>
 		<tags>
 			<tag>extended</tag>
 		</tags>
@@ -199,7 +212,8 @@
 		<variations>
 			<variation></variation>
 		</variations>
-		<command>cd $(OPENJDK_SYSTEMTEST_ROOT)/openjdk.build && make test.LambdaLoadTest  JAVA_ARGS="$(JVM_OPTIONS)"</command>
+		<command>cd $(OPENJDK_SYSTEMTEST_ROOT)/openjdk.build && make test.LambdaLoadTest JAVA_ARGS=$(Q)$(JVM_OPTIONS)$(Q); \
+		$(TEST_STATUS)</command>
 		<tags>
 			<tag>extended</tag>
 		</tags>
@@ -214,7 +228,8 @@
 		<variations>
 			<variation></variation>
 		</variations>
-		<command>cd $(OPENJDK_SYSTEMTEST_ROOT)/openjdk.build && make test.JdiTest  JAVA_ARGS="$(JVM_OPTIONS)"</command>
+		<command>cd $(OPENJDK_SYSTEMTEST_ROOT)/openjdk.build && make test.JdiTest JAVA_ARGS=$(Q)$(JVM_OPTIONS)$(Q); \
+		$(TEST_STATUS)</command>
 		<tags>
 			<tag>extended</tag>
 		</tags>
@@ -229,7 +244,8 @@
 		<variations>
 			<variation></variation>
 		</variations>
-		<command>cd $(OPENJDK_SYSTEMTEST_ROOT)/openjdk.build && make test.HCRLateAttachWorkload  JAVA_ARGS="$(JVM_OPTIONS)"</command>
+		<command>cd $(OPENJDK_SYSTEMTEST_ROOT)/openjdk.build && make test.HCRLateAttachWorkload JAVA_ARGS=$(Q)$(JVM_OPTIONS)$(Q); \
+		$(TEST_STATUS)</command>
 		<tags>
 			<tag>extended</tag>
 		</tags>

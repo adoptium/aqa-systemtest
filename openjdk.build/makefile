@@ -372,7 +372,11 @@ ifneq (,$(JAVA_ARGS))
   endif
 endif
 
-STF_COMMAND:=perl $(STF_ROOT)$(D)stf.core$(D)scripts$(D)stf.pl $(JAVA_ARGS_ARG) -test-root="$(STF_ROOT);$(OPENJDK_SYSTEMTEST_TARGET_ROOT)" -systemtest-prereqs="$(RESOLVED_PREREQS_ROOT)"
+ifneq (,$(REPEAT_ARG))
+	REPEAT_ARG_ARG:=-repeat=$(REPEAT_ARG)
+endif
+
+STF_COMMAND:=perl $(STF_ROOT)$(D)stf.core$(D)scripts$(D)stf.pl $(JAVA_ARGS_ARG) -test-root="$(STF_ROOT);$(OPENJDK_SYSTEMTEST_TARGET_ROOT)" -systemtest-prereqs="$(RESOLVED_PREREQS_ROOT)" $(REPEAT_ARG_ARG)
 
 # Macros to allow the tests to run to completion with a log of what passed and failed.
 # To turn on run 

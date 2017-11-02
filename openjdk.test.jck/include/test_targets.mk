@@ -142,13 +142,7 @@ test.jck8b.runtime.api.javax_security
 # Allow the user to exclude tests from the command line
 JCK8B_TESTS_REQUIRING_CONFIG:=$(filter-out $(EXCLUDE),$(JCK8B_TESTS_REQUIRING_CONFIG))
 
-JCK8B_TESTS_NO_CONFIG:=$(filter-out $(JCK8B_TESTS_REQUIRING_CONFIG),$(JCK8B_TESTS))
-# Allow the user to exclude tests from the command line
-JCK8B_TESTS_NO_CONFIG:=$(filter-out $(EXCLUDE),$(JCK8B_TESTS_NO_CONFIG))
-
 JCK8B_RUNTIME_TESTS_NO_CONFIG:=$(filter-out $(JCK8B_TESTS_REQUIRING_CONFIG),$(JCK8B_RUNTIME_TESTS))
-# Allow the user to exclude tests from the command line
-JCK8B_RUNTIME_TESTS_NO_CONFIG:=$(filter-out $(EXCLUDE),$(JCK8B_RUNTIME_TESTS_NO_CONFIG))
 
 # Targets for the jck8b compiler test suite
 JCK8B_COMPILER_TESTS:= \
@@ -298,6 +292,9 @@ JCK8B_DEVTOOLS_TESTS:=$(filter-out $(EXCLUDE),$(JCK8B_DEVTOOLS_TESTS))
 JCK8B_TESTS:=$(JCK8B_RUNTIME_TESTS) \
 $(JCK8B_COMPILER_TESTS) \
 $(JCK8B_DEVTOOLS_TESTS)
+
+# The tests which do not require http or kerberos setup
+JCK8B_TESTS_NO_CONFIG:=$(filter-out $(JCK8B_TESTS_REQUIRING_CONFIG),$(JCK8B_TESTS))
 
 .PHONY: \
 test.jck.custom
@@ -1492,13 +1489,7 @@ test.jck9.runtime.api.javax_security
 # Allow the user to exclude tests from the command line
 JCK9_TESTS_REQUIRING_CONFIG:=$(filter-out $(EXCLUDE),$(JCK9_TESTS_REQUIRING_CONFIG))
 
-JCK9_TESTS_NO_CONFIG:=$(filter-out $(JCK9_TESTS_REQUIRING_CONFIG),$(JCK9_TESTS))
-# Allow the user to exclude tests from the command line
-JCK9_TESTS_NO_CONFIG:=$(filter-out $(EXCLUDE),$(JCK9_TESTS_NO_CONFIG))
-
 JCK9_RUNTIME_TESTS_NO_CONFIG:=$(filter-out $(JCK9_TESTS_REQUIRING_CONFIG),$(JCK9_RUNTIME_TESTS))
-# Allow the user to exclude tests from the command line
-JCK9_RUNTIME_TESTS_NO_CONFIG:=$(filter-out $(EXCLUDE),$(JCK9_RUNTIME_TESTS_NO_CONFIG))
 
 # Targets for the jck9 compiler test suite
 JCK9_COMPILER_TESTS:= \
@@ -1649,6 +1640,9 @@ JCK9_DEVTOOLS_TESTS:=$(filter-out $(EXCLUDE),$(JCK9_DEVTOOLS_TESTS))
 JCK9_TESTS:=$(JCK9_RUNTIME_TESTS) \
 $(JCK9_COMPILER_TESTS) \
 $(JCK9_DEVTOOLS_TESTS)
+
+# The tests which do not require http or kerberos setup
+JCK9_TESTS_NO_CONFIG:=$(filter-out $(JCK9_TESTS_REQUIRING_CONFIG),$(JCK9_TESTS))
 
 .PHONY: \
 test.jck.custom

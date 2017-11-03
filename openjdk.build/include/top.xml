@@ -444,7 +444,11 @@ limitations under the License.
 				<arg value="-XshowSettings:properties"/>
 				<arg value="-version"/>
 			</exec>
-			<loadproperties srcFile="${properties_file}" prefix="@{java.id}." prefixValues="false"/>
+			<loadproperties srcFile="${properties_file}" prefix="@{java.id}." prefixValues="false">
+				<filterchain>
+					<replacestring from="\" to="\\" />
+				</filterchain>
+			</loadproperties>
 			<echoproperties>
 				<propertyset>
 					<propertyref prefix="@{java.id}."/>

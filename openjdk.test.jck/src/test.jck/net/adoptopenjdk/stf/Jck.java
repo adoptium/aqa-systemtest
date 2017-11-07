@@ -205,7 +205,7 @@ public class Jck implements StfPluginInterface {
 		// we only insist on the presence of those files if those tests are requested to be executed.
 		// findPrereqDirectory will throw an exception if the directory cannot be found, so we need to catch it.
 		config = testArgs.get("config");
-		if ( ( testSuite == TestSuite.RUNTIME ) && ( tests.contains("api/java_net") || tests.contains("api/java_nio") || tests.contains("api/org_ietf") || tests.contains("api/javax_security") ) ) {
+		if ( ( testSuite == TestSuite.RUNTIME ) && ( tests.contains("api/java_net") || tests.contains("api/java_nio") || tests.contains("api/org_ietf") || tests.contains("api/javax_security") || tests.equals("api") ) ) {
 			if (config.equals("NULL")) {
 				config = "default";	
 			}
@@ -288,7 +288,7 @@ public class Jck implements StfPluginInterface {
 			}
 			
 			if ( (testSuite == TestSuite.RUNTIME) && (tests.contains("api/java_util") || tests.contains("api/java_net") || tests.contains("api/java_rmi")  || tests.contains("api/javax_management") 
-					|| tests.contains("api/org_omg") || tests.contains("api/javax_xml") || tests.contains("vm/jdwp")) ) {
+					|| tests.contains("api/org_omg") || tests.contains("api/javax_xml") || tests.equals("api") || tests.contains("vm/jdwp") || tests.equals("vm")) ) {
 				String addModules = "";
 				// Post Java 8 the javatest agent needs to be given access to non default modules.
 				if ( ! jckVersion.contains("jck8") ) {
@@ -322,7 +322,13 @@ public class Jck implements StfPluginInterface {
 			test.doEchoFile("The JTB file generated\n", jtbFile);
 
 			ExpectedOutcome outcome;
-			outcome = ExpectedOutcome.cleanRun().within("7h");
+			String timeout = "24h";
+			// Use the presence of a '/' to signify that we are running a subset of tests.
+			// If one of the highest level test nodes is being run it is likely to take a long time.
+			if ( tests.contains("/") ) {
+				timeout = "3h";
+			}
+			outcome = ExpectedOutcome.cleanRun().within(timeout);
 
 			test.doRunForegroundProcess(comment, "JCK", ECHO_ON, outcome, test.createJavaProcessDefinition().setExecutableJar(test.env().findPrereqFile(jckTopDir + jckVersion + "/" + testSuiteFolder + executeJar)).addArg(commandLine));
 			// The Compiler -ANNOT, EXPR and LMBD may take over 6 hours to run on some machines.
@@ -508,7 +514,7 @@ public class Jck implements StfPluginInterface {
 				}
 			}
 			
-			if ( tests.contains("api/java_awt") || tests.contains("api/javax_swing") ) {
+			if ( tests.contains("api/java_awt") || tests.contains("api/javax_swing") || tests.equals("api") ) {
 				keyword += "&!robot";
 			}
 			
@@ -518,39 +524,32 @@ public class Jck implements StfPluginInterface {
 			fileContent += "set jck.env.testPlatform.os \"" + testPlatform + "\";\n";
 			fileContent += "set jck.env.runtime.testExecute.cmdAsFile \"" + pathToJava + "\"" + ";\n";
 			
-			if ( tests.contains("api/java_awt") || tests.contains("api/javax_swing") ) {
-				fileContent += "set jck.env.runtime.awt.robotAvailable " + robotAvailable + ";\n";
-			}
-			
 			if ( tests.equals("api/java_lang") || tests.contains("api/java_lang/instrument") ||
-				tests.contains("api/javax_management") || tests.startsWith("vm") ) {
+				tests.contains("api/javax_management") || tests.equals("api") || tests.startsWith("vm") ) {
 				fileContent += "set jck.env.runtime.testExecute.libPathEnv " + libPath + ";\n";
 				fileContent += "set jck.env.runtime.testExecute.nativeLibPathFileValue \"" + jckRuntimeNativeLibValue + "\"" + ";\n";
-			}
-			if ( tests.equals("api/java_lang") || tests.contains("api/java_lang/instrument") ) {
-				fileContent += "set jck.env.runtime.jplis.jplisLivePhase Yes;\n";
 			}
 
 			// tools.jar was incorporated into modules from Java 9
 			if ( jckVersion.contains("jck8") ) {
-				if ( tests.startsWith("vm/jvmti") || tests.equals("api/java_lang") || tests.contains("api/java_lang/instrument") ) {
+				if ( tests.startsWith("vm/jvmti") || tests.equals("vm") || tests.equals("api") || tests.equals("api/java_lang") || tests.contains("api/java_lang/instrument") ) {
 					fileContent += "set jck.env.runtime.testExecute.additionalClasspath \"" + pathToToolsJar + "\"" + ";\n";
 				}
 			}
 
-			if ( tests.startsWith("vm/jvmti") ) {
+			if ( tests.startsWith("vm/jvmti") || tests.equals("vm") ) {
 				fileContent += "set jck.env.runtime.testExecute.jvmtiLivePhase Yes;\n";
 			}
 
-			if ( tests.contains("api/javax_management") ) {
+			if ( tests.contains("api/javax_management") || tests.equals("api") ) {
 				fileContent += "set jck.env.runtime.testExecute.jmxResourcePathFileValue \"" + jckRuntimeJmxLibValue + "\"" + ";\n";
 			}
-			if ( tests.contains("api/javax_sound") ) {
+			if ( tests.contains("api/javax_sound") || tests.equals("api") ) {
 				fileContent += "set jck.env.runtime.audio.canPlaySound No" + ";\n";
 				fileContent += "set jck.env.runtime.audio.canPlayMidi No" + ";\n";
 				fileContent += "set jck.env.runtime.audio.canRecordSound No" + ";\n";
 			}
-			if ( tests.contains("api/org_ietf") || tests.contains("api/javax_security") ) {
+			if ( tests.contains("api/org_ietf") || tests.contains("api/javax_security") || tests.equals("api") ) {
 				readKrbConfFile();
 				if (KerberosConfig.kdcHostName == null || KerberosConfig.kdcRealmName == null){
 					throw new StfException(tests + "expects kdcHostname and kdcRealmname. Recheck if the values are proper in the supplied kdc conf file.");
@@ -565,7 +564,7 @@ public class Jck implements StfPluginInterface {
 				
 				extraJvmOptions += "-Djava.security.krb5.conf=" + krbConfFile + " -DKRB5CCNAME=" + test.env().getResultsDir().toString() + File.separator + "krb5.cache" + " -DKRB5_KTNAME=" + test.env().getResultsDir().toString() + File.separator + "krb5.keytab";
 			}	
-			if ( tests.contains("api/java_net") || tests.contains("api/java_nio") ) {
+			if ( tests.contains("api/java_net") || tests.contains("api/java_nio") || tests.equals("api") ) {
 				fileContent += "set jck.env.runtime.net.localHostName " + hostname + ";\n";
 				fileContent += "set jck.env.runtime.net.localHostIPAddr " + ipAddress + ";\n";
 				fileContent += "set jck.env.runtime.net.testHost1Name " + testHost1Name + ";\n";
@@ -573,12 +572,12 @@ public class Jck implements StfPluginInterface {
 				fileContent += "set jck.env.runtime.net.testHost2Name " + testHost2Name + ";\n";
 				fileContent += "set jck.env.runtime.net.testHost2IPAddr " + testHost2Ip + ";\n";
 			}
-			if ( tests.contains("api/java_net") ) {
-				fileContent += "set jck.env.runtime.url.httpURL " + httpUrl + ";\n";
+			if ( tests.contains("api/java_net") || tests.equals("api") ) {
 				fileContent += "set jck.env.runtime.url.ftpURL " + ftpUrl + ";\n";
+				fileContent += "set jck.env.runtime.url.httpURL " + httpUrl + ";\n";
 				fileContent += "set jck.env.runtime.url.fileURL " + fileUrl + ";\n";
 			}
-			if ( tests.contains("api/java_net") || tests.contains("api/org_omg") || tests.contains("api/javax_management") || tests.contains("api/javax_xml") || tests.contains("vm/jdwp") ) {
+			if ( tests.contains("api/java_net") || tests.contains("api/org_omg") || tests.contains("api/javax_management") || tests.contains("api/javax_xml") || tests.contains("vm/jdwp") || tests.equals("api")) {
 				if ( !tests.contains("api/javax_xml/bind") &&
 					 !tests.contains("api/javax_xml/soap") &&
 					 !tests.contains("api/org_omg/PortableInterceptor") &&
@@ -590,21 +589,21 @@ public class Jck implements StfPluginInterface {
 			// Without the following override the following failures occur:
 			// Fatal Error: file:/jck/jck8b/JCK-runtime-8b/tests/api/javax_xml/xmlCore/w3c/ibm/valid/P85/ibm85v01.xml(6,3384): JAXP00010005: The length of entity "[xml]" is "3,381" that exceeds the "1,000" limit set by "FEATURE_SECURE_PROCESSING".
 			// Fatal Error: file:/jck/jck8b/JCK-runtime-8b/tests/api/javax_xml/xmlCore/w3c/ibm/valid/P85/ibm85v01.xml(6,3384): JAXP00010005: The length of entity "[xml]" is "3,381" that exceeds the "1,000" limit set by "default".
-			if ( tests.contains("api/javax_xml") ) {
+			if ( tests.contains("api/javax_xml")  || tests.equals("api")) {
 				extraJvmOptions += " -Djdk.xml.maxXMLNameLimit=4000";
 			}	
-			if ( tests.contains("api/org_omg") || tests.contains("api/javax_management") ) {
+			if ( tests.contains("api/org_omg") || tests.contains("api/javax_management") || tests.equals("api") ) {
 				fileContent += "set jck.env.runtime.idl.orbHost " + hostname + ";\n";
 			}
 			// ext/lib was removed at Java 9
 			if ( jckVersion.contains("jck8") ) {
-				if ( tests.contains("api/java_text") || tests.contains("api/java_util")) {
+				if ( tests.contains("api/java_text") || tests.contains("api/java_util") || tests.equals("api")) {
 					extraJvmOptions += " -Djava.ext.dirs=" + jckBase + File.separator + "lib" + File.separator + "extensions" + File.pathSeparator + 
 						testJdk + File.separator + "jre" + File.separator + "lib" + File.separator + "ext";
 				}
 			}
 			if (jckVersion.contains("jck8")) {
-				if (tests.contains("api/signaturetest")) {
+				if (tests.contains("api/signaturetest") || tests.equals("api")) {
 					fileContent += "set jck.env.runtime.staticsigtest.staticSigTestClasspath \"" + getSignatureTestJars(pathToLib) + "\"" + ";\n";
 				}
 			}
@@ -612,6 +611,14 @@ public class Jck implements StfPluginInterface {
 				fileContent += "set jck.env.testPlatform.typecheckerSpecific No" + ";\n";		
 			}
 			
+			// The jplisLivePhase and Robot available settings are rejected if placed higher up in the .jtb file
+			if ( tests.contains("api/java_awt") || tests.contains("api/javax_swing") || tests.equals("api") ) {
+				fileContent += "set jck.env.runtime.awt.robotAvailable " + robotAvailable + ";\n";
+			}
+			if ( tests.equals("api/java_lang") || tests.contains("api/java_lang/instrument") || tests.equals("api") ) {
+				fileContent += "set jck.env.runtime.jplis.jplisLivePhase Yes;\n";
+			}
+
 			// Get any additional jvm options for specific tests.
 			extraJvmOptions += getTestSpecificJvmOptions(jckVersion, tests);
 
@@ -654,14 +661,14 @@ public class Jck implements StfPluginInterface {
 
 			if (jckVersion.contains("jck8")) {
 				fileContent += "set jck.env.compiler.testCompile.otherOpts \"-source 1.8 \"" + ";\n";
-				if (tests.contains("api/signaturetest")) {
+				if (tests.contains("api/signaturetest") || tests.equals("api")) {
 					fileContent += "set jck.env.compiler.testCompile.compilerstaticsigtest.compilerStaticSigTestClasspath \"" + getSignatureTestJars(pathToLib) + "\"" + ";\n";
 				}
 			}
 			else {
 				fileContent += "set jck.env.compiler.testCompile.otherOpts \"-source 9 \"" + ";\n";
 			}
-			if (tests.contains("api/java_rmi")) {
+			if (tests.contains("api/java_rmi") || tests.equals("api")) {
 				fileContent += "set jck.env.compiler.testRmic.cmdAsFile \"" + pathToRmic + "\"" + ";\n";
 			}
 			fileContent += "set jck.env.compiler.compRefExecute.cmdAsFile \"" + pathToJava + "\"" + ";\n";
@@ -732,7 +739,8 @@ public class Jck implements StfPluginInterface {
 	}
 	
 	private boolean testsRequireDisplay (String tests) {
-		if (tests.contains("api/java_applet") || tests.contains("api/java_io") ||
+		if (tests.equals("api") ||
+			tests.contains("api/java_applet") || tests.contains("api/java_io") ||
 			tests.contains("api/javax_swing") || tests.contains("api/javax_sound") ||
 			tests.contains("api/java_awt")  || tests.contains("api/javax_print") ||
 			tests.contains("api/java_beans") || tests.contains("api/javax_accessibility") ||

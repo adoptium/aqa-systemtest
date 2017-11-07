@@ -1,6 +1,6 @@
 # openjdk-systemtest
 
-This repository contains the test cases which can be run against an Oracle based (e.g. OpenJDK) or IBM based java implementation.
+This repository contains the test cases which can be run against an OpenJDK with Hotspot or OpenJDK with Eclipse OpenJ9 based java implementation.
 
 The tests all run under the [STF System Test Framework](https://github.com/AdoptOpenJDK/stf).
 

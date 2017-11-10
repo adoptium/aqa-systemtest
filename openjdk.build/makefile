@@ -376,6 +376,7 @@ ifneq (,$(REPEAT_ARG))
 	REPEAT_ARG_ARG:=-repeat=$(REPEAT_ARG)
 endif
 
+# enable the user to override results-root from make command line
 ifneq (,$(RESULTS_ROOT))
 	RESULTS_ROOT_ARG:=-results-root="$(RESULTS_ROOT)"
 endif

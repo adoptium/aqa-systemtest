@@ -187,13 +187,7 @@ config/&lt;config-name&gt;/jcktest.properties and /config/&lt;config-name&gt;/kr
  The files contain values for Kerberos and Http services - URLs of machines hosting the services and
  the authentication and IP details to be passed  to the JCK test harness in order to run the tests. 
 
-- executiontype: This option is an input to the JCK test harness to specify how to execute the tests.
--- multijvm - Multiple sub tests are run using a single JVM. The tests are run with this option by default.
--- multijvmgroup - Multiple Groups of sub tests are run using a single JVM started.
--- singlejvm - Each test is run in its own JVM.  This greatly increases the test execution time.
-      
-- withagent: This option is passed to the JCK test harness and specifies whether an external agent should start and stop some of the
-services (rmi , tmsserver. etc.). The tests are run without thise option by default.
+- executiontype: The stf automation runs tests in multijvm way.
 
 Example command lines:
 

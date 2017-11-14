@@ -617,7 +617,6 @@ public class Jck implements StfPluginInterface {
 			}
 			if (jckVersion.contains("jck8")) {
 				if (tests.contains("api/signaturetest") || tests.equals("api")) {
-					//fileContent += "set jck.env.runtime.staticsigtest.staticSigTestClasspath \"" + getSignatureTestJars(pathToLib) + "\"" + ";\n";
 					fileContent += "set jck.env.runtime.staticsigtest.staticSigTestClasspathRemote \"" + getSignatureTestJars(pathToLib) + "\"" + ";\n";
 				}
 			}
@@ -741,7 +740,6 @@ public class Jck implements StfPluginInterface {
 				// On Windows set the testplatform.os to Windows and set systemRoot, but do not
 				// set the file and path separators (an error is thrown if they are set).
 				fileContent += "set jck.env.testPlatform.os \"Windows\";\n";
-				//fileContent += "set jck.env.testPlatform.systemRoot " + System.getenv("WINDIR") + ";\n";
 			}
 			else {
 				// On other platforms set the testplatform.os to other and set the file and path separators.

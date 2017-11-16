@@ -462,13 +462,10 @@ public class Jck implements StfPluginInterface {
 			throw new StfException("Unable to get a free port");
 		}
 		
-		// Set the operating system as 'Windows' for Windows and 'other' for all other operating
-		// systems.
+		// Set the operating system as 'Windows' for Windows and 'other' for all other operating systems.
 		// If 'other' is specified when executing on Windows, then Windows specific settings such
-		// as systemRoot are rejected, and the JCK harness assumes that DISPLAY is required for
-		// GUI tests.
-		// Otherwise 'other' is required because the JCK harness has no inherent knowledge of AIX and
-		// zOS.
+		// as systemRoot are rejected, and the JCK harness assumes that DISPLAY is required for GUI tests.
+		// Otherwise 'other' is required because the JCK harness has no inherent knowledge of AIX and zOS.
 		// Runtime settings
 		if (testSuite == TestSuite.RUNTIME) {
 			keyword = "keywords !interactive";

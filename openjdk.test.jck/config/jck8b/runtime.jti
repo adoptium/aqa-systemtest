@@ -207,7 +207,7 @@ jck.env.testPlatform.jvmti=Yes
 jck.env.testPlatform.multiJVM=Yes
 jck.env.testPlatform.nativeCode=Yes
 jck.env.testPlatform.needProxy=No
-jck.env.testPlatform.os=Current system
+jck.env.testPlatform.os=other
 jck.env.testPlatform.proxyPort=
 jck.env.testPlatform.remoteNetworking=Remote network support
 # jck.env.testPlatform.systemRoot example: C\:\\WINDOWS

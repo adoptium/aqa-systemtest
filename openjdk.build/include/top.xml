@@ -270,10 +270,10 @@ limitations under the License.
 		<condition property="tools_jar_correct">
 			<or>
 				<not>
-					<equals arg1="${ant.java.version}" arg2="1.8"/>
+					<equals arg1="${java.specification.version}" arg2="1.8"/>
 				</not>
 				<and>
-					<equals arg1="${ant.java.version}" arg2="1.8"/>
+					<equals arg1="${java.specification.version}" arg2="1.8"/>
 					<available file="${tools_jar_dir}/${tools_jar_file}"/>
 				</and>
 			</or>
@@ -444,7 +444,11 @@ limitations under the License.
 				<arg value="-XshowSettings:properties"/>
 				<arg value="-version"/>
 			</exec>
-			<loadproperties srcFile="${properties_file}" prefix="@{java.id}." prefixValues="false"/>
+			<loadproperties srcFile="${properties_file}" prefix="@{java.id}." prefixValues="false">
+				<filterchain>
+					<replacestring from="\" to="\\" />
+				</filterchain>
+			</loadproperties>
 			<echoproperties>
 				<propertyset>
 					<propertyref prefix="@{java.id}."/>

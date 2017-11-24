@@ -826,6 +826,10 @@ public class Jck implements StfPluginInterface {
 		String testSpecificJvmOptions = "";
 		// --add-modules options are required to make some modules visible on Java 9
 		if (jckVersion.contains("jck9") ) {
+			// If the top level api node is being run, add all modules required by the api tests
+			if (tests.equals("api")) {
+				testSpecificJvmOptions = " --add-modules java.activation,java.corba,java.xml.crypto,java.xml.ws.annotation,java.se.ee,java.sql,java.transaction,java.xml.bind,java.xml.ws";
+			}
 			if (tests.contains("api/javax_activation")) {
 				testSpecificJvmOptions = " --add-modules java.activation";
 			}
@@ -877,7 +881,7 @@ public class Jck implements StfPluginInterface {
 			if (tests.contains("schema_bind") ) {
 				testSpecificJvmOptions = " --add-modules java.xml.bind";
 			}
-			//testSpecificJvmOptions = " --add-modules java.activation,java.corba,java.datatransfer,java.desktop,java.instrument,java.logging,java.management,java.management.rmi,java.naming,java.prefs,java.rmi,java.scripting,java.se,java.se.ee,java.security.jgss,java.security.sasl,java.sql,java.sql.rowset,java.transaction,java.xml,java.xml.bind,java.xml.crypto,java.xml.ws,java.xml.ws.annotation";
+			testSpecificJvmOptions += " -Djdk.attach.allowAttachSelf=true";
 		}
 		return testSpecificJvmOptions;
 	}

@@ -164,6 +164,7 @@ jck.env.testPlatform.typecheckerSpecific=Yes
 jck.env.testPlatform.useAgent=No
 # jck.excludeList.customFiles example: /jck/jck9/excludes/jck9.jtx\n/jck/jck9/excludes/jck9.kfl
 jck.excludeList.customFiles=will_be_set_by_test_automation_at_run_time
+jck.excludeList.excludeListType=custom
 jck.excludeList.latestAutoCheck=No
 jck.excludeList.latestAutoCheckInterval=7
 jck.excludeList.latestAutoCheckMode=everyXDays

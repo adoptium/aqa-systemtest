@@ -402,6 +402,12 @@ test.jck8b.runtime.api.in.parts: $(JCK8B_RUNTIME_TESTS)
 # Target to run Java 8 Runtime JCK tests excluding the parts which require Kerberos and Http server setup
 test.jck8b.runtime.api.noconfig: $(JCK8B_RUNTIME_TESTS_NO_CONFIG)
 
+# Target to run the interactive tests
+test.jck8b.runtime.api.interactive:
+	@echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=api,jckversion=jck8b,testsuite=RUNTIME,interactive=yes" $(LOG)
+	@echo Target $@ completed
+
 # Targets to run runtime test suites individually
 test.jck8b.runtime.api.java_math:
 	@echo Running target $@
@@ -1749,6 +1755,12 @@ test.jck9.devtools.xml_schema:
 test.jck9.runtime.api.in.parts: $(JCK9_RUNTIME_TESTS)
 # Target to run Java 9 Runtime JCK tests excluding the parts which require Kerberos and Http server setup
 test.jck9.runtime.api.noconfig: $(JCK9_RUNTIME_TESTS_NO_CONFIG)
+
+# Target to run the interactive tests
+test.jck9.runtime.api.interactive:
+	@echo Running target $@
+	$(STF_COMMAND) -test=Jck -test-args="tests=api,jckversion=jck9,testsuite=RUNTIME,interactive=yes" $(LOG)
+	@echo Target $@ completed
 
 # Targets to run runtime test suites individually
 test.jck9.runtime.api.java_math:

@@ -47,6 +47,7 @@ public class Jck implements StfPluginInterface {
 	private String tests;
 	private String testExecutionType;
 	private String withAgent;
+	private String interactive;
 	private String extraJvmOptions;
 	private String jckVersion;
 	private String config;
@@ -123,10 +124,15 @@ public class Jck implements StfPluginInterface {
 		
 		help.outputArgName("withagent", "[on|off]");
 		help.outputArgDesc("This option is an input to the JCK harness to specify whether to run with the agent option.");
+		
+		help.outputArgName("interactive", "[yes|no]");
+		help.outputArgDesc("This option is an input to the JCK harness to specify whether to run the interative tests.\n"
+				+ "Note this should option should only be set to 'yes' if you have access to a display, keyboard and mouse "
+				+ "attached to the test machine and have allocated sufficient time (several hours) to complete the testing,");
 	}
 
 	public void pluginInit(StfCoreExtension test) throws Exception {
-		StfTestArguments testArgs = test.env().getTestProperties("tests","jckversion","testsuite","config=[NULL]","executiontype=[multijvm]","withagent=[off]","jckRoot=[NULL]");
+		StfTestArguments testArgs = test.env().getTestProperties("tests","jckversion","testsuite","config=[NULL]","executiontype=[multijvm]","withagent=[off]","interactive=[no]","jckRoot=[NULL]");
 		
 		testJdk = System.getenv("JAVA_HOME");
 		tests = testArgs.get("tests");
@@ -168,6 +174,7 @@ public class Jck implements StfPluginInterface {
 		
 		testExecutionType = testArgs.get("executiontype");
 		withAgent = testArgs.get("withagent");
+		interactive = testArgs.get("interactive");
 		
 		versionNo = jckVersion.replace("jck", "");
 		testSuiteFolder = "JCK-" + testSuite.toString().toLowerCase() + "-" + versionNo;
@@ -468,7 +475,12 @@ public class Jck implements StfPluginInterface {
 		// Otherwise 'other' is required because the JCK harness has no inherent knowledge of AIX and zOS.
 		// Runtime settings
 		if (testSuite == TestSuite.RUNTIME) {
-			keyword = "keywords !interactive";
+			if ( interactive.equals("yes")) {
+				keyword = "keywords interactive";
+			}
+			else { 
+				keyword = "keywords !interactive";
+			}
 			
 			if (platform.equals("win32")) {
 				libPath = "PATH";

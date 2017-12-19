@@ -48,7 +48,7 @@ limitations under the License.
 	<target name="setup-java-properties" depends="setup-java8-properties, setup-java9-properties">
 	</target>
 	<target name="setup-java8-properties">
-		<echo message="java.home is ${java.home}/>
+		<echo message="java.home is ${java.home}"/>
 		<condition property="java8_home" value="${java.home}">
 			<not>
 				<available file="${java8_home}"/>

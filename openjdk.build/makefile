@@ -385,7 +385,17 @@ ifneq (,$(RESULTS_ROOT))
 	RESULTS_ROOT_ARG:=-results-root="$(RESULTS_ROOT)"
 endif
 
-STF_COMMAND:=perl $(STF_ROOT)$(D)stf.core$(D)scripts$(D)stf.pl $(JAVA_ARGS_ARG) -test-root="$(STF_ROOT);$(OPENJDK_SYSTEMTEST_TARGET_ROOT)" -systemtest-prereqs="$(RESOLVED_PREREQS_ROOT)" $(REPEAT_ARG_ARG) $(RESULTS_ROOT_ARG) $(RM_PASS_ARG)
+# enable the user to override results-root from make command line
+ifneq (,$(RETAIN))
+	RETAIN_ARG:=-retain="$(RETAIN)"
+endif
+
+# enable the user to override results-root from make command line
+ifneq (,$(RETAIN_LIMIT))
+	RETAIN_LIMIT_ARG:=-retain-limit="$(RETAIN_LIMIT)"
+endif
+
+STF_COMMAND:=perl $(STF_ROOT)$(D)stf.core$(D)scripts$(D)stf.pl $(JAVA_ARGS_ARG) -test-root="$(STF_ROOT);$(OPENJDK_SYSTEMTEST_TARGET_ROOT)" -systemtest-prereqs="$(RESOLVED_PREREQS_ROOT)" $(REPEAT_ARG_ARG) $(RESULTS_ROOT_ARG) $(RETAIN_ARG) $(RETAIN_LIMIT_ARG) $(RM_PASS_ARG)
 
 # Macros to allow the tests to run to completion with a log of what passed and failed.
 # To turn on run 

@@ -47,7 +47,11 @@ LIBPREF=lib
 ifneq (,$(findstring aix,$(PLATFORM)))
 	LIBEXT=a
 else
+ifneq (,$(findstring osx,$(PLATFORM)))
+	LIBEXT=dylib
+else
 	LIBEXT=so
+endif
 endif
 ifneq (,$(findstring hp,$(PLATFORM)))
 	OFLAG=
@@ -95,6 +99,12 @@ endif
 ifeq ($(PLATFORM),linux_x86-64)
 	CC=gcc
 	CFLAGS=-fPIC -D_LP64 -m64 -I$(SRCDIR)/src/share/lib/jni/include/solaris
+	LDFLAGS=-shared
+endif
+
+ifeq ($(PLATFORM),osx_x86-64)
+	CC=gcc
+	CFLAGS=-fPIC -D_LP64 -m64 -I$(SRCDIR)/src/share/lib/jni/include/amd64
 	LDFLAGS=-shared
 endif
 

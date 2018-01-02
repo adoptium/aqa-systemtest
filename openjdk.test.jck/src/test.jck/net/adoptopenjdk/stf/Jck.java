@@ -486,7 +486,7 @@ public class Jck implements StfPluginInterface {
 				libPath = "PATH";
 				robotAvailable = "Yes";
 				concurrency = "1";
-			} else if (platform.equals("linux") || platform.equals("mac")) {
+			} else if (platform.equals("linux"))  {
 				libPath = "LD_LIBRARY_PATH";
 				robotAvailable = "Yes";
 				concurrency = "1";
@@ -499,6 +499,10 @@ public class Jck implements StfPluginInterface {
 				libPath = "LIBPATH";
 				robotAvailable = "No";
 				concurrency = "4";
+			} else if (platform.equals("macosx")) {
+				libPath = "DYLD_LIBRARY_PATH";
+				robotAvailable = "Yes";
+				concurrency = "1";
 			} else {
 				throw new StfException("Unknown platform:: " + platform);
 			}

@@ -661,7 +661,7 @@ public class Jck implements StfPluginInterface {
 			
 			if (platform.equals("win32")) {
 				concurrency = "1";
-			} else if (platform.equals("linux") || platform.equals("mac")) {
+			} else if (platform.equals("linux") || platform.equals("macosx")) {
 				concurrency = "1";	
 			} else if (platform.equals("aix")) {
 				concurrency = "1";
@@ -729,12 +729,18 @@ public class Jck implements StfPluginInterface {
 				jxcCmd = jckBase + File.separator + "win32" + File.separator + "bin" + File.separator + "schemagen.bat"; 
 				genCmd = jckBase + File.separator + "win32" + File.separator + "bin" + File.separator + "wsgen.bat"; 
 				impCmd = jckBase + File.separator + "win32" + File.separator + "bin" + File.separator + "wsimport.bat"; 
-			} else if (platform.equals("linux") || platform.equals("aix") || platform.equals("mac")) {
+			} else if (platform.equals("linux") || platform.equals("aix")) {
 				concurrency = "1";
 				xjcCmd = jckBase + File.separator + "linux" + File.separator + "bin" + File.separator + "xjc.sh";
 				jxcCmd = jckBase + File.separator + "linux" + File.separator + "bin" + File.separator + "schemagen.sh";
 				genCmd = jckBase + File.separator + "linux" + File.separator + "bin" + File.separator + "wsgen.sh";
 				impCmd = jckBase + File.separator + "linux" + File.separator + "bin" + File.separator + "wsimport.sh";
+			} else if (platform.equals("macosx")) {
+				concurrency = "1";
+				xjcCmd = jckBase + File.separator + "macos" + File.separator + "bin" + File.separator + "xjc.sh";
+				jxcCmd = jckBase + File.separator + "macos" + File.separator + "bin" + File.separator + "schemagen.sh";
+				genCmd = jckBase + File.separator + "macos" + File.separator + "bin" + File.separator + "wsgen.sh";
+				impCmd = jckBase + File.separator + "macos" + File.separator + "bin" + File.separator + "wsimport.sh";
 			} else if (platform.equals("zos")) {
 				pathToJavac = testJdk + File.separator + "bin" + File.separator + "javac";
 				concurrency = "4";

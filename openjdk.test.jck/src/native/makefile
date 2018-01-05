@@ -140,7 +140,7 @@ endif
 
 ifeq ($(PLATFORM),linux_arm-64)
 	CC=gcc
-	CFLAGS=-fPIC -D_LP64 -m64 -I$(SRCDIR)/src/share/lib/jni/include/solaris
+	CFLAGS=-fPIC -D_LP64 -I$(SRCDIR)/src/share/lib/jni/include/solaris
 	LDFLAGS=-shared
 endif
 

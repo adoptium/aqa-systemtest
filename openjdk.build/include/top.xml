@@ -541,7 +541,7 @@ limitations under the License.
 			</condition>
 			<condition property="@{property}" value="arm">
 				<and>
-					<contains string="@{arch}" substring="arm"/>
+					<contains string="@{arch}" substring="aarch64"/>
 				</and>
 			</condition>
 			<condition property="@{property}" value="ia">

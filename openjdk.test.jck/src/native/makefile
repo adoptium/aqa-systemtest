@@ -132,6 +132,12 @@ ifeq ($(PLATFORM),linux_390-64)
 	LDFLAGS=-shared
 endif
 
+ifeq ($(PLATFORM),linux_arm)
+	CC=gcc
+	CFLAGS=-fPIC -I$(SRCDIR)/src/share/lib/jni/include/solaris
+	LDFLAGS=-shared
+endif
+
 ifeq ($(PLATFORM),zos_390-31)
 	CC=c89
 	CFLAGS=-I$(SRCDIR)/src/share/lib/jni/include -I$(FULLOUTDIR)/include -Wc,ASCII -W"c,xplink(backchain,oscall(downstack)),noansialias,float(ieee),langlvl(extended),ROCONST,ROSTRING,enum(4),noupconv,sscom" -W"c,target(zOSV1R6)" -W"c,inline(auto,noreport,1200,8000)" -W"a,goff,ESD" -W"c,dll,expo" -W"l,xplink,compat=min" -Wl,dll -Ds390 -DARCH='"s390"'

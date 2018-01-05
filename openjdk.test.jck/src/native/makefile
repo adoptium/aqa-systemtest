@@ -132,9 +132,15 @@ ifeq ($(PLATFORM),linux_390-64)
 	LDFLAGS=-shared
 endif
 
-ifeq ($(PLATFORM),linux_arm)
+ifeq ($(PLATFORM),linux_arm-32)
 	CC=gcc
 	CFLAGS=-fPIC -I$(SRCDIR)/src/share/lib/jni/include/solaris
+	LDFLAGS=-shared
+endif
+
+ifeq ($(PLATFORM),linux_arm-64)
+	CC=gcc
+	CFLAGS=-fPIC -D_LP64 -m64 -I$(SRCDIR)/src/share/lib/jni/include/solaris
 	LDFLAGS=-shared
 endif
 

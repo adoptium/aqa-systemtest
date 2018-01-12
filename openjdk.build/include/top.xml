@@ -273,19 +273,12 @@ limitations under the License.
 				<not>
 					<equals arg1="${java.specification.version}" arg2="1.8"/>
 				</not>
-				<not>
-					<equals arg1="${java.vm.specification.version}" arg2="1.8"/>
-				</not>
 				<and>
 					<equals arg1="${java.specification.version}" arg2="1.8"/>
 					<available file="${tools_jar_dir}/${tools_jar_file}"/>
 				</and>
 			</or>
 		</condition>
-		<echo message="ant.java.version = ${ant.java.version}"/>
-		<echo message="java.specification.version = ${java.specification.version}"/>
-		<echo message="tools_jar_correct = ${tools_jar_correct}"/>
-		<echo message="java.home = ${java.home}"/>
 	    <available file="${tools_jar_dir}/${tools_jar_file}" property="tools_jar" value="${tools_jar_dir}/${tools_jar_file}"/>
 	</target>
 
@@ -302,7 +295,6 @@ limitations under the License.
 		<echo message="configure-tools-jar: Copying ${tools_jar_origin} to ${tools_jar_dir}"/>
 		<copy file="${tools_jar_origin}" todir="${tools_jar_dir}"/>
 		<property name="tools_jar" value="${tools_jar_dir}/${tools_jar_file}"/>
-		<echo message="tools_jar = ${tools_jar_dir}/${tools_jar_file}"/>
 		<available file="${tools_jar_dir}/${tools_jar_file}" property="tools_jar_correct"/>
 	</target>
 
@@ -570,3 +562,4 @@ limitations under the License.
 	</macrodef>
 
 </project>
+

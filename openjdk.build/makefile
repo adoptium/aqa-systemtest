@@ -33,9 +33,13 @@ endif
 
 # Use a macro to say whether we are running under Windows.
 # Don't set it under cygwin yet, first we need to resolve any unix style paths.
+# If we're on Windows, set the shell for started processes to be cmd.exe, otherwise
+# if the Windows environment has a unix style shell on the path, make will invoke
+# that, and then Windows commands may not work as expected. 
 ifeq ($(OS),Windows_NT)
   ifneq ($(CYGWIN),1)
     WINDOWS:=1
+    SHELL=cmd.exe
   endif
 else
   UNIX:=1

@@ -96,6 +96,12 @@ ifeq ($(PLATFORM),linux_ppc-64)
 	LDFLAGS=-shared
 endif
 
+ifeq ($(PLATFORM),linux_ppcle-64)
+	CC=gcc
+	CFLAGS=-fPIC -D_LP64 -m64 -I$(SRCDIR)/src/share/lib/jni/include/solaris
+	LDFLAGS=-shared
+endif
+
 ifeq ($(PLATFORM),linux_x86-64)
 	CC=gcc
 	CFLAGS=-fPIC -D_LP64 -m64 -I$(SRCDIR)/src/share/lib/jni/include/solaris
@@ -240,6 +246,7 @@ help:
 	@echo   linux_x86-32
 	@echo   linux_x86-64
 	@echo   linux_ppc-32
+	@echo   linux_ppcle-64
 	@echo   linux_ppc-64
 	@echo   linux_390-31
 	@echo   linux_390-64

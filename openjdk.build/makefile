@@ -254,24 +254,24 @@ ifeq (,$(ANT_JAVA_HOME))
   $(warning ANT_JAVA_HOME not set, will use $(JAVA_HOME) to run ant)
 endif
 
-# See if there is a apache-ant-1.10.1 directory present in one of the $(PREREQS_ROOT) directories.
-ANT_SUBDIR:=apache-ant-1.10.1
-ANT_1.10.1_DIRS:=$(foreach PREREQS_ROOT,$(ABSOLUTE_PREREQS_ROOT_LIST),$(wildcard $(PREREQS_ROOT)$(D)$(ANT_SUBDIR)))
-ANT_1.10.1_DIR:=$(firstword $(ANT_1.10.1_DIRS))
-#$(warning ANT_1.10.1_DIRS is $(ANT_1.10.1_DIRS))
-#$(warning ANT_1.10.1_DIR is $(ANT_1.10.1_DIR))
-ifeq (,$(ANT_1.10.1_DIR))
+# See if there is a apache-ant-1.10.2 directory present in one of the $(PREREQS_ROOT) directories.
+ANT_SUBDIR:=apache-ant-1.10.2
+ANT_1.10.2_DIRS:=$(foreach PREREQS_ROOT,$(ABSOLUTE_PREREQS_ROOT_LIST),$(wildcard $(PREREQS_ROOT)$(D)$(ANT_SUBDIR)))
+ANT_1.10.2_DIR:=$(firstword $(ANT_1.10.2_DIRS))
+#$(warning ANT_1.10.2_DIRS is $(ANT_1.10.2_DIRS))
+#$(warning ANT_1.10.2_DIR is $(ANT_1.10.2_DIR))
+ifeq (,$(ANT_1.10.2_DIR))
   $(warning No ant dir found in $(PREREQS_ROOT))
 endif
 
 ifndef ANT_HOME
   # If we haven't been told which ant to use via ANT_HOME, see if there is an ant present in one of the $(PREREQS_ROOT) directories?
   # If not, try to find ant on the path and use that one.
-  ifndef ANT_1.10.1_DIR
-    $(warning ANT_HOME not set, and apache-ant-1.10.1 was not found in $(PREREQS_ROOT), looking for ant on the PATH)
+  ifndef ANT_1.10.2_DIR
+    $(warning ANT_HOME not set, and apache-ant-1.10.2 was not found in $(PREREQS_ROOT), looking for ant on the PATH)
     ANT_NOT_FOUND:=1
   else
-    ANT_HOME:=$(ANT_1.10.1_DIR)
+    ANT_HOME:=$(ANT_1.10.2_DIR)
     ifneq (,$(wildcard $(ANT_LAUNCHER)))
       $(warning Found $(ANT_LAUNCHER))
     else
@@ -289,7 +289,7 @@ ifndef ANT_HOME
       ifneq (,$(ANT_BINDIR))
         ANT_HOME:=$(ANT_BINDIR)$(D)..
         $(warning ANT_HOME set to $(ANT_HOME))
-        $(warning Found $(ANT_BINDIR), will start build with $(ANT_LAUNCHER).  Run make configure to install the required ant version 1.10.1 or follow the prereq install instructions in build$(D)build.md)
+        $(warning Found $(ANT_BINDIR), will start build with $(ANT_LAUNCHER).  Run make configure to install the required ant version 1.10.2 or follow the prereq install instructions in build$(D)build.md)
       else
         $(error Unable to locate ant to start the build. Either add ant to PATH, set ANT_HOME or follow the prereq install instructions in openjdk.build$(D)docs$(D)build$(D)build.md)
       endif
@@ -301,7 +301,7 @@ ifndef ANT_HOME
         ANT_BINDIR:=$(realpath $(ANT_BINDIR)$(D)ant$(BAT))
         ANT_HOME:=$(abspath $(ANT_BINDIR)$(D)..$(D)..)
         $(warning ANT_HOME set to $(ANT_HOME))
-        $(warning Found $(ANT_BINDIR), will start build with $(ANT_LAUNCHER).  Run make configure to install the required ant version 1.10.1 or follow the prereq install instructions in build$(D)build.md)
+        $(warning Found $(ANT_BINDIR), will start build with $(ANT_LAUNCHER).  Run make configure to install the required ant version 1.10.2 or follow the prereq install instructions in build$(D)build.md)
         ifeq (,$(wildcard $(ANT_LIB_PATH)))
         # On OSX if ant has been installed using homebrew cater for the ant-launcher.jar being in libexec/lib rather than lib.
         $(warning WARNING: Cannot find $(ANT_LIB_PATH) directory. Looking in libexec/lib.)

@@ -665,10 +665,14 @@ public class MathAPITest extends TestCase
 		assertEquals("exp(double)[4] ::", 1.0, Math.exp((-Double.MIN_VALUE * 1000)));
 		assertEquals("exp(double)[5] ::", 0.0, Math.exp(-2929112212.129231481346));
 		assertEquals("exp(double)[6] ::", 0.0, Math.exp(-2372.228212D));
-		// At 20170906, IBM Java returns 0.29428694035725067, not 0.29428694035725067
-		// assertEquals("exp(double)[7] ::", 0.2942869403572507, Math.exp(-1.2232D));
-		assertEquals("exp(double)[8] ::", 1.0, Math.exp(0D));
-		assertEquals("exp(double)[9] ::", 11.3842406513381, Math.exp(2.43223D));
+		// Accepting both IBM as well as Oracle results, since the difference between the two 
+		// is acceptable as long as both the value are within 1 ulp of the reference value. 
+		// We may not depend on the Oracle result as it may also contain the 1 ulp error tolerance. 
+		// For exact value, the user is expected to use ExactMath as opposed to Math.
+	    assertTrue("exp(double)[7] ::", Math.exp(-1.2232D) == 0.2942869403572507 || Math.exp(-1.2232D) == 0.29428694035725067);
+	    assertEquals("exp(double)[8] ::", 1.0, Math.exp(0D));
+	    // Accepting both IBM and Oracle results for the same reason as in the case for exp(double)[7] use case above
+		assertTrue("exp(double)[9] ::", Math.exp(2.43223D) == 11.3842406513381 || Math.exp(2.43223D) == 11.384240651338098);
 		assertEquals("exp(double)[10] ::", Infinity, Math.exp(18232155.3323566D));
 		assertEquals("exp(double)[11] ::", 1.0, Math.exp(Double.MIN_VALUE));
 		assertEquals("exp(double)[12] ::", 1.0, Math.exp((Double.MIN_VALUE * 200)));

@@ -666,7 +666,7 @@ public class MathAPITest extends TestCase
 		assertEquals("exp(double)[5] ::", 0.0, Math.exp(-2929112212.129231481346));
 		assertEquals("exp(double)[6] ::", 0.0, Math.exp(-2372.228212D));
 		// Accepting both IBM as well as Oracle results, since the difference between the two 
-		// is acceptable as long as both the value are within 1 ulp of the reference value. 
+		// is acceptable as long as both the values are within 1 ulp of the reference value. 
 		// We may not depend on the Oracle result as it may also contain the 1 ulp error tolerance. 
 		// For exact value, the user is expected to use ExactMath as opposed to Math.
 	    assertTrue("exp(double)[7] ::", Math.exp(-1.2232D) == 0.2942869403572507 || Math.exp(-1.2232D) == 0.29428694035725067);
@@ -2029,7 +2029,12 @@ public class MathAPITest extends TestCase
 		assertEquals("pow(double)[2] ::", 1.192932595380642E130, Math.pow(2.43223D, 336.982D));
 		assertEquals("pow(double)[3] ::", 0.4111453275389252, Math.pow(2.43223D, -1.0D));
 		assertEquals("pow(double)[4] ::", 0.9999111230965859, Math.pow(2.43223D, -0.0001D));
-		assertEquals("pow(double)[5] ::", 8.382703296667981E-131, Math.pow(2.43223D, -336.982D));
+		
+		// Accepting both IBM as well as Oracle results, since the difference between the two 
+		// is acceptable as long as both the values are within 1 ulp of the reference value. 
+		// We may not depend on the Oracle result as it may also contain the 1 ulp error tolerance. 
+		// For exact value, the user is expected to use ExactMath, as opposed to Math.
+		assertTrue("pow(double)[5] ::", 8.382703296667981E-131 == Math.pow(2.43223D, -336.982D) || 8.382703296667982E-131 == Math.pow(2.43223D, -336.982D));
 		assertEquals("pow(double)[6] ::", 8.686644887130356, Math.pow(2.43223D,2.43223D));
 		assertEquals("pow(double)[7] ::", 1.0, Math.pow(18232155.3323566D, 0.0D));
 		assertEquals("pow(double)[8] ::", 1.82321553323566E7, Math.pow(18232155.3323566D, 1.0D));

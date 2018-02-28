@@ -2322,7 +2322,11 @@ public class MathAPITest extends TestCase
 			assertEquals("toRadians(double)[4] ::", (double)-8.4E-323, Math.toRadians((-Double.MIN_VALUE * 1000)));
 			assertEquals("toRadians(double)[5] ::", (double)318211.1402846637, Math.toRadians(18232155.3323566D));
 		} else {
-			assertEquals("toRadians(double)[0] ::", (double)-1.5687832071922932E304, Math.toRadians((-Double.MAX_VALUE / 200)));
+			// Accepting both IBM as well as Oracle results, since the difference between the two 
+			// is acceptable as long as both the values are within 1 ulp of the reference value. 
+			// We may not depend on the Oracle result as it may also contain the 1 ulp error tolerance. 
+			// For exact value, the user is expected to use ExactMath as opposed to Math.
+		    assertTrue("toRadians(double)[0] ::", (double)-1.5687832071922932E304 == Math.toRadians((-Double.MAX_VALUE / 200)) || (double)-1.5687832071922935E304 == Math.toRadians((-Double.MAX_VALUE / 200)));
 			assertEquals("toRadians(double)[1] ::", (double)-6.275132828769172E303, Math.toRadians((-Double.MAX_VALUE / 500)));
 			assertEquals("toRadians(double)[2] ::", (double)6.275132828769172E303, Math.toRadians((Double.MAX_VALUE / 500)));
 			assertEquals("toRadians(double)[3] ::", (double)1.5687832071922932E304, Math.toRadians((Double.MAX_VALUE / 200)));

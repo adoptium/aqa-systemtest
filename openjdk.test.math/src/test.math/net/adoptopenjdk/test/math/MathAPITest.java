@@ -2326,8 +2326,9 @@ public class MathAPITest extends TestCase
 			// is acceptable as long as both the values are within 1 ulp of the reference value. 
 			// We may not depend on the Oracle result as it may also contain the 1 ulp error tolerance. 
 			// For exact value, the user is expected to use ExactMath as opposed to Math.
-		    assertTrue("toRadians(double)[0] ::", (double)-1.5687832071922932E304 == Math.toRadians((-Double.MAX_VALUE / 200)) || (double)-1.5687832071922935E304 == Math.toRadians((-Double.MAX_VALUE / 200)));
-			assertEquals("toRadians(double)[1] ::", (double)-6.275132828769172E303, Math.toRadians((-Double.MAX_VALUE / 500)));
+			assertTrue("toRadians(double)[0] ::", (double)-1.5687832071922932E304 == Math.toRadians((-Double.MAX_VALUE / 200)) || (double)-1.5687832071922935E304 == Math.toRadians((-Double.MAX_VALUE / 200)));
+			assertTrue("toRadians(double)[1] ::", (double)-6.275132828769172E303 == Math.toRadians((-Double.MAX_VALUE / 200)) || (double)-6.275132828769174E303 == Math.toRadians((-Double.MAX_VALUE / 200)));
+			
 			assertEquals("toRadians(double)[2] ::", (double)6.275132828769172E303, Math.toRadians((Double.MAX_VALUE / 500)));
 			assertEquals("toRadians(double)[3] ::", (double)1.5687832071922932E304, Math.toRadians((Double.MAX_VALUE / 200)));
 			assertEquals("toRadians(double)[4] ::", (double)-9.4E-323, Math.toRadians((-Double.MIN_VALUE * 1000)));
@@ -2342,7 +2343,7 @@ public class MathAPITest extends TestCase
 		assertEquals("toRadians(double)[12] ::", (double)0.04245042166578168, Math.toRadians(2.43223D));
 		assertEquals("toRadians(double)[13] ::", (double)0.0, Math.toRadians(Double.MIN_VALUE));
 		assertEquals("toRadians(double)[14] ::", (double)1.5E-323, Math.toRadians((Double.MIN_VALUE * 200)));
-		assertEquals("toRadians(double)[15] ::", (double)3.1375664143845866E306, Math.toRadians(Double.MAX_VALUE));
+		assertEquals("toRadians(double)[15] ::", (double)3.13756641F43845866E306, Math.toRadians(Double.MAX_VALUE));
 		assertEquals("toRadians(double)[16] ::", (double)3.1375664143845866E306, Math.toRadians(Double.MAX_VALUE + 1));
 	}
 

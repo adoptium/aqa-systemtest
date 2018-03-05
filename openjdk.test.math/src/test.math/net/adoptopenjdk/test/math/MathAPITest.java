@@ -2343,7 +2343,7 @@ public class MathAPITest extends TestCase
 		assertEquals("toRadians(double)[12] ::", (double)0.04245042166578168, Math.toRadians(2.43223D));
 		assertEquals("toRadians(double)[13] ::", (double)0.0, Math.toRadians(Double.MIN_VALUE));
 		assertEquals("toRadians(double)[14] ::", (double)1.5E-323, Math.toRadians((Double.MIN_VALUE * 200)));
-		assertEquals("toRadians(double)[15] ::", (double)3.13756641F43845866E306, Math.toRadians(Double.MAX_VALUE));
+		assertEquals("toRadians(double)[15] ::", (double)3.1375664143845866E306, Math.toRadians(Double.MAX_VALUE));
 		assertEquals("toRadians(double)[16] ::", (double)3.1375664143845866E306, Math.toRadians(Double.MAX_VALUE + 1));
 	}
 

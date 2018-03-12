@@ -2326,13 +2326,12 @@ public class MathAPITest extends TestCase
 			// is acceptable as long as both the values are within 1 ulp of the reference value. 
 			// We may not depend on the Oracle result as it may also contain the 1 ulp error tolerance. 
 			// For exact value, the user is expected to use ExactMath as opposed to Math.
-			assertTrue("toRadians(double)[0] ::", (double)-1.5687832071922932E304 == Math.toRadians((-Double.MAX_VALUE / 200)) || (double)-1.5687832071922935E304 == Math.toRadians((-Double.MAX_VALUE / 200)));
-			assertTrue("toRadians(double)[1] ::", (double)-6.275132828769172E303 == Math.toRadians((-Double.MAX_VALUE / 500)) || (double)-6.275132828769174E303 == Math.toRadians((-Double.MAX_VALUE / 500)));
-			
-			assertEquals("toRadians(double)[2] ::", (double)6.275132828769172E303, Math.toRadians((Double.MAX_VALUE / 500)));
-			assertEquals("toRadians(double)[3] ::", (double)1.5687832071922932E304, Math.toRadians((Double.MAX_VALUE / 200)));
-			assertEquals("toRadians(double)[4] ::", (double)-9.4E-323, Math.toRadians((-Double.MIN_VALUE * 1000)));
-			assertEquals("toRadians(double)[5] ::", (double)318211.14028466365, Math.toRadians(18232155.3323566D));
+			assertTrue("toRadians(double)[0] ::", (double)-1.5687832071922932E304 == Math.toRadians(-Double.MAX_VALUE / 200) || (double)-1.5687832071922935E304 == Math.toRadians(-Double.MAX_VALUE / 200));
+			assertTrue("toRadians(double)[1] ::", (double)-6.275132828769172E303 == Math.toRadians(-Double.MAX_VALUE / 500) || (double)-6.275132828769174E303 == Math.toRadians(-Double.MAX_VALUE / 500));
+			assertTrue("toRadians(double)[2] ::", (double)6.275132828769172E303 == Math.toRadians(Double.MAX_VALUE / 500) || (double)6.275132828769174E303 == Math.toRadians(Double.MAX_VALUE / 500));
+			assertTrue("toRadians(double)[3] ::", (double)1.5687832071922932E304 == Math.toRadians(Double.MAX_VALUE / 200) || (double)1.5687832071922935E304 == Math.toRadians(Double.MAX_VALUE / 200));
+			assertTrue("toRadians(double)[4] ::", (double)-9.4E-323 == Math.toRadians(-Double.MIN_VALUE * 1000) || (double)-8.4E-323 == Math.toRadians(-Double.MIN_VALUE * 1000));
+			assertTrue("toRadians(double)[5] ::", (double)318211.14028466365 == Math.toRadians(18232155.3323566D) || (double)318211.1402846637 == Math.toRadians(18232155.3323566D));
 		}
 		assertEquals("toRadians(double)[6] ::", (double)-3.1375664143845866E306, Math.toRadians(-Double.MAX_VALUE));
 		assertEquals("toRadians(double)[7] ::", (double)-1.73E-322, Math.toRadians((-Double.MIN_VALUE * 2000)));

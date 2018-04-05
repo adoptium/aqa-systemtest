@@ -889,7 +889,7 @@ public class Jck implements StfPluginInterface {
 				testSpecificJvmOptions = "--add-modules java.activation,java.corba,java.transaction,java.se.ee,java.xml.bind,java.xml.ws,java.xml.ws.annotation";
 			}
 			if (tests.contains("api/signaturetest")) {
-				testSpecificJvmOptions = "--add-modules java.activation,,java.corba,java.transaction,java.xml.bind,java.xml.ws,java.xml.ws.annotation";
+				testSpecificJvmOptions = "--add-modules java.activation,java.corba,java.transaction,java.xml.bind,java.xml.ws,java.xml.ws.annotation";
 			}
 			if (tests.contains("java2schema") ) {
 				testSpecificJvmOptions = " --add-modules java.xml.bind";

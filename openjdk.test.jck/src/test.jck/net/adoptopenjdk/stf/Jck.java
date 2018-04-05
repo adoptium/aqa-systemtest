@@ -288,10 +288,13 @@ public class Jck implements StfPluginInterface {
 			StfProcess tnameserv = null;
 			
 			String executeJar;
-			if ((jckVersion.contains("jck9") || jckVersion.contains("jck8"))  && (testSuite == TestSuite.RUNTIME) ) {
-					executeJar = "/lib/jtlite.jar" ;
+			if ((jckVersion.contains("jck10") ||
+				 jckVersion.contains("jck9") ||
+				 jckVersion.contains("jck8")) &&
+				 (testSuite == TestSuite.RUNTIME) ) {
+				executeJar = "/lib/jtlite.jar" ;
 			} else {
-					executeJar = "/lib/javatest.jar" ;
+				executeJar = "/lib/javatest.jar" ;
 			}
 			
 			if ( (testSuite == TestSuite.RUNTIME) && (tests.contains("api/java_util") || tests.contains("api/java_net") || tests.contains("api/java_rmi")  || tests.contains("api/javax_management") 
@@ -846,8 +849,8 @@ public class Jck implements StfPluginInterface {
 	
 	private String getTestSpecificJvmOptions (String jckVersion, String tests) {
 		String testSpecificJvmOptions = "";
-		// --add-modules options are required to make some modules visible on Java 9
-		if (jckVersion.contains("jck9") ) {
+		// --add-modules options are required to make some modules visible for Java 9 onwards.
+		if (jckVersion.contains("jck9") || jckVersion.contains("jck10")) {
 			// If the top level api node is being run, add all modules required by the api tests
 			if (tests.equals("api")) {
 				testSpecificJvmOptions = " --add-modules java.activation,java.corba,java.xml.crypto,java.xml.ws.annotation,java.se.ee,java.sql,java.transaction,java.xml.bind,java.xml.ws";

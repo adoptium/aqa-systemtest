@@ -77,76 +77,76 @@ export AND_IF_SUCCESSFUL
 
 VPATH=$(SRCDIR)/src/share/lib/jni/:$(SRCDIR)/src/share/lib/atr/:$(SRCDIR)/src/share/lib/jvmti/:$(SRCDIR)/tests/api/javax_management/loading/data/archives/src/C/
 
-#Following are platform and compiler specific settingss
+#Following are platform and compiler specific settings
 ifeq ($(PLATFORM),linux_x86-32)
 	CC=gcc
-	CFLAGS=-fPIC -I$(SRCDIR)/src/share/lib/jni/include/solaris
+	CFLAGS=-fPIC -I$(SRCDIR)/src/share/lib/jni/include/solaris -I$(SRCDIR)/src/share/lib/jni/include/linux
 	LDFLAGS=-shared 
 endif	
 
 ifeq ($(PLATFORM),linux_ppc-32)
 	CC=gcc
-	CFLAGS=-fPIC -I$(SRCDIR)/src/share/lib/jni/include/solaris
+	CFLAGS=-fPIC -I$(SRCDIR)/src/share/lib/jni/include/solaris -I$(SRCDIR)/src/share/lib/jni/include/linux
 	LDFLAGS=-shared 
 endif	
 
 ifeq ($(PLATFORM),linux_ppc-64)
 	CC=gcc
-	CFLAGS=-fPIC -D_LP64 -m64 -I$(SRCDIR)/src/share/lib/jni/include/solaris
+	CFLAGS=-fPIC -D_LP64 -m64 -I$(SRCDIR)/src/share/lib/jni/include/solaris -I$(SRCDIR)/src/share/lib/jni/include/linux
 	LDFLAGS=-shared
 endif
 
 ifeq ($(PLATFORM),linux_ppcle-64)
 	CC=gcc
-	CFLAGS=-fPIC -D_LP64 -m64 -I$(SRCDIR)/src/share/lib/jni/include/solaris
+	CFLAGS=-fPIC -D_LP64 -m64 -I$(SRCDIR)/src/share/lib/jni/include/solaris -I$(SRCDIR)/src/share/lib/jni/include/linux
 	LDFLAGS=-shared
 endif
 
 ifeq ($(PLATFORM),linux_x86-64)
 	CC=gcc
-	CFLAGS=-fPIC -D_LP64 -m64 -I$(SRCDIR)/src/share/lib/jni/include/solaris
+	CFLAGS=-fPIC -D_LP64 -m64 -I$(SRCDIR)/src/share/lib/jni/include/solaris -I$(SRCDIR)/src/share/lib/jni/include/linux
 	LDFLAGS=-shared
 endif
 
 ifeq ($(PLATFORM),osx_x86-64)
 	CC=gcc
-	CFLAGS=-fPIC -D_LP64 -m64 -I$(SRCDIR)/src/share/lib/jni/include/amd64
+	CFLAGS=-fPIC -D_LP64 -m64 -I$(SRCDIR)/src/share/lib/jni/include/amd64 
 	LDFLAGS=-shared
 endif
 
 ifeq ($(PLATFORM),aix_ppc-32)
 	CC=xlc
-	CFLAGS=-qstaticinline -I$(SRCDIR)/src/share/lib/jni/include/solaris
+	CFLAGS=-qstaticinline -I$(SRCDIR)/src/share/lib/jni/include/solaris -I$(SRCDIR)/src/share/lib/jni/include/linux
 	LDFLAGS=-G
 endif
 
 ifeq ($(PLATFORM),aix_ppc-64)
 	CC=xlc
-	CFLAGS=-q64 -qstaticinline -D_LP64 -I$(SRCDIR)/src/share/lib/jni/include/solaris
+	CFLAGS=-q64 -qstaticinline -D_LP64 -I$(SRCDIR)/src/share/lib/jni/include/solaris -I$(SRCDIR)/src/share/lib/jni/include/linux
 	LDFLAGS=-G 
 endif
 
 ifeq ($(PLATFORM),linux_390-31)
 	CC=gcc
-	CFLAGS=-m31 -fPIC -I$(SRCDIR)/src/share/lib/jni/include/solaris
+	CFLAGS=-m31 -fPIC -I$(SRCDIR)/src/share/lib/jni/include/solaris -I$(SRCDIR)/src/share/lib/jni/include/linux
 	LDFLAGS=-shared
 endif
 
 ifeq ($(PLATFORM),linux_390-64)
 	CC=gcc
-	CFLAGS=-fPIC -D_LP64 -m64 -I$(SRCDIR)/src/share/lib/jni/include/solaris
+	CFLAGS=-fPIC -D_LP64 -m64 -I$(SRCDIR)/src/share/lib/jni/include/solaris -I$(SRCDIR)/src/share/lib/jni/include/linux
 	LDFLAGS=-shared
 endif
 
 ifeq ($(PLATFORM),linux_arm-32)
 	CC=gcc
-	CFLAGS=-fPIC -I$(SRCDIR)/src/share/lib/jni/include/solaris
+	CFLAGS=-fPIC -I$(SRCDIR)/src/share/lib/jni/include/solaris -I$(SRCDIR)/src/share/lib/jni/include/linux
 	LDFLAGS=-shared
 endif
 
 ifeq ($(PLATFORM),linux_arm-64)
 	CC=gcc
-	CFLAGS=-fPIC -D_LP64 -I$(SRCDIR)/src/share/lib/jni/include/solaris
+	CFLAGS=-fPIC -D_LP64 -I$(SRCDIR)/src/share/lib/jni/include/solaris -I$(SRCDIR)/src/share/lib/jni/include/linux
 	LDFLAGS=-shared
 endif
 
@@ -191,45 +191,45 @@ endif
 
 ifeq ($(PLATFORM),hp_ux-32)
         CC=cc
-        CFLAGS=+DD32 +z -c -I$(SRCDIR)/src/share/lib/jni/include/solaris
+        CFLAGS=+DD32 +z -c -I$(SRCDIR)/src/share/lib/jni/include/solaris -I$(SRCDIR)/src/share/lib/jni/include/linux
         LDFLAGS=
 endif
 ifeq ($(PLATFORM),hp_ux-64)
         CC=cc
-        CFLAGS=+DD64 +z -c -I$(SRCDIR)/src/share/lib/jni/include/solaris
+        CFLAGS=+DD64 +z -c -I$(SRCDIR)/src/share/lib/jni/include/solaris -I$(SRCDIR)/src/share/lib/jni/include/linux
         LDFLAGS=
 endif
 ifeq ($(PLATFORM),hp_ia-32)
         CC=cc
-        CFLAGS=+DD32 +z -c -I$(SRCDIR)/src/share/lib/jni/include/solaris
+        CFLAGS=+DD32 +z -c -I$(SRCDIR)/src/share/lib/jni/include/solaris -I$(SRCDIR)/src/share/lib/jni/include/linux
         LDFLAGS=
 endif
 ifeq ($(PLATFORM),hp_ia-64)
         CC=cc
-        CFLAGS=+DD64 +z -c -I$(SRCDIR)/src/share/lib/jni/include/solaris
+        CFLAGS=+DD64 +z -c -I$(SRCDIR)/src/share/lib/jni/include/solaris -I$(SRCDIR)/src/share/lib/jni/include/linux
         LDFLAGS=
 endif
 ifeq ($(PLATFORM),sol_sparc-32)
         CC=gcc
-        CFLAGS=-nodefaultlibs -fPIC -I$(SRCDIR)/src/share/lib/jni/include/solaris
+        CFLAGS=-nodefaultlibs -fPIC -I$(SRCDIR)/src/share/lib/jni/include/solaris -I$(SRCDIR)/src/share/lib/jni/include/linux
         LDFLAGS=-shared
 endif
 ifeq ($(PLATFORM),sol_sparc-64)
         CC=gcc
-        CFLAGS= -m64 -nodefaultlibs -fPIC -R/usr/sfw/lib/64 -I$(SRCDIR)/src/share/lib/jni/include/solaris
+        CFLAGS= -m64 -nodefaultlibs -fPIC -R/usr/sfw/lib/64 -I$(SRCDIR)/src/share/lib/jni/include/solaris -I$(SRCDIR)/src/share/lib/jni/include/linux
         LDFLAGS=-shared
 endif
 ifeq ($(PLATFORM),sol_x86-32)
         #CC=cc
         #CFLAGS=-G -KPIC -I$(SRCDIR)/src/share/lib/jni/include/solaris
 	CC=gcc
-	CFLAGS=-G -fPIC -I$(SRCDIR)/src/share/lib/jni/include/solaris
+	CFLAGS=-G -fPIC -I$(SRCDIR)/src/share/lib/jni/include/solaris -I$(SRCDIR)/src/share/lib/jni/include/linux
         LDFLAGS=
 endif
 ifeq ($(PLATFORM),sol_x86-64)
         #CC=gcc
 	CC=cc
-        CFLAGS=-m64 -fPIC -R/usr/sfw/lib/64  -I$(SRCDIR)/src/share/lib/jni/include/solaris
+        CFLAGS=-m64 -fPIC -R/usr/sfw/lib/64  -I$(SRCDIR)/src/share/lib/jni/include/solaris -I$(SRCDIR)/src/share/lib/jni/include/linux
         LDFLAGS=-shared
 endif
 

@@ -63,6 +63,7 @@ public class Jck implements StfPluginInterface {
 	private FileRef jtiFile;
 	private DirectoryRef nativesLoc;
 	private DirectoryRef jckConfigLoc;
+	private String initialJtxFullPath;
 	private String jtxRelativePath;
 	private String jtxFullPath;
 	private String kflRelativePath;
@@ -189,7 +190,13 @@ public class Jck implements StfPluginInterface {
 		
 		fileUrl = "file:///" + test.env().findPrereqFile(jckTopDir + jckVersion + "/" + testSuiteFolder + "/testsuite.jtt");
 		
-		// Assume we will have a .jtx file but not necessarily a .kfl (known failures list) file.
+		// The first release of a JCK will have an initial excludes (.jtx) file in test-suite/lib - e.g. JCK-runtime-8b/lib/jck8b.jtx.
+		// Updates to the excludes list may subsequently be supplied as a separate file, which supersedes the initial file.
+		// A known failures list (.kfl) file is optional.
+		// The automation here adds any files found (initial or updates) as 'custom' files. 
+		initialJtxFullPath = jckBase + "/lib/" + jckVersion + ".jtx";
+
+		// Look for an update to the initial excludes file
 		if (jckVersion.contains("jck6") || jckVersion.contains("jck7")) {
 			jtxRelativePath = jckTopDir + jckVersion + "/excludes/jdk" + versionNo + ".jtx";
 			kflRelativePath = jckTopDir + jckVersion + "/excludes/jdk" + versionNo + ".kfl";
@@ -197,8 +204,15 @@ public class Jck implements StfPluginInterface {
 			jtxRelativePath = jckTopDir + jckVersion + "/excludes/jck" + versionNo + ".jtx";
 			kflRelativePath = jckTopDir + jckVersion + "/excludes/jck" + versionNo + ".kfl";
 		}
-		jtxFullPath = test.env().findPrereqFile(jtxRelativePath).toString();
-		logger.info("Using excludes file " + jtxFullPath);
+		try {
+			jtxFullPath = test.env().findPrereqFile(jtxRelativePath).toString();
+			logger.info("Using excludes list file " + jtxFullPath);
+		} catch (StfException e) {
+			logger.info("Unable to find excludes list file " + jtxRelativePath);
+			jtxFullPath = "";
+		}
+
+		// Look for a known failures list file
 		try {
 			kflFullPath = test.env().findPrereqFile(kflRelativePath).toString();
 			logger.info("Using known failures list file " + kflFullPath);
@@ -267,7 +281,7 @@ public class Jck implements StfPluginInterface {
 			throw new StfException(testExecutionType + "with Agent " + withAgent + "combination is not yet supported.");
 		}
 		
-		fileContent += "set jck.excludeList.customFiles \"" + jtxFullPath + " " + kflFullPath + "\"" + ";\n";
+		fileContent += "set jck.excludeList.customFiles \"" + initialJtxFullPath + " " + jtxFullPath + " " + kflFullPath + "\"" + ";\n";
 		fileContent += "runTests" + ";\n";
 		fileContent += "writeReport " + reportDir + ";\n";
 		

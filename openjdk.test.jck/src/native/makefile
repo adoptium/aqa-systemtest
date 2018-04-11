@@ -77,7 +77,10 @@ export AND_IF_SUCCESSFUL
 
 VPATH=$(SRCDIR)/src/share/lib/jni/:$(SRCDIR)/src/share/lib/atr/:$(SRCDIR)/src/share/lib/jvmti/:$(SRCDIR)/tests/api/javax_management/loading/data/archives/src/C/
 
-#Following are platform and compiler specific settings
+# Following are platform and compiler specific settings
+# Prior to jck10 the unix include files are in src/share/lib/jni/include/solaris
+# From jck10 the unix include files are in src/share/lib/jni/include/linux
+
 ifeq ($(PLATFORM),linux_x86-32)
 	CC=gcc
 	CFLAGS=-fPIC -I$(SRCDIR)/src/share/lib/jni/include/solaris -I$(SRCDIR)/src/share/lib/jni/include/linux

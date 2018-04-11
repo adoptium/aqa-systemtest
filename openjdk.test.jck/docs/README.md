@@ -175,7 +175,11 @@ eg: 'api/java_awt', 'vm/jni', 'lang/ANNOT', 'xml_schema/nistData/list/language'
 
 There are 239 such packages for the JCK version jck8b.
 
-- jckversion : Is the jck testsuite version to use, jck8b is used for Java8,  jck9 is used for Java9.
+- jckversion : Is the jck testsuite version to use:
+-- specify jck8b for Java8
+-- specify jck9 for Java9
+-- specify jck10 for Java10
+
 These are the subdirectories referred to in the setup section above.
 
 - testsuite: Is the type of the testsuite which we are going to run. There are - RUNTIME|COMPILER|DEVTOOLS.

@@ -50,6 +50,7 @@ limitations under the License.
 		<ant antfile="${source_root}/openjdk.test.nio/build.xml" dir="${source_root}/openjdk.test.nio" inheritAll="false"/>
 		<ant antfile="${source_root}/openjdk.test.serialization/build.xml" dir="${source_root}/openjdk.test.serialization" inheritAll="false"/>
 		<ant antfile="${source_root}/openjdk.test.util/build.xml" dir="${source_root}/openjdk.test.util" inheritAll="false"/>
+		<ant antfile="${source_root}/openjdk.test.jlm/build.xml" dir="${source_root}/openjdk.test.jlm" inheritAll="false"/>
 	</target>
 
 	<target name="build" depends="build-dependencies">
@@ -69,6 +70,7 @@ limitations under the License.
 		<ant antfile="${source_root}/openjdk.test.nio/build.xml" target="clean" dir="${source_root}/openjdk.test.nio" inheritAll="false"/>
 		<ant antfile="${source_root}/openjdk.test.serialization/build.xml" target="clean" dir="${source_root}/openjdk.test.serialization" inheritAll="false"/>
 		<ant antfile="${source_root}/openjdk.test.util/build.xml" target="clean" dir="${source_root}/openjdk.test.util" inheritAll="false"/>
+		<ant antfile="${source_root}/openjdk.test.jlm/build.xml" target="clean" dir="${source_root}/openjdk.test.jlm" inheritAll="false"/>
 	</target>
 
 	<target name="clean-prereqs">

@@ -741,11 +741,17 @@ public class Jck implements StfPluginInterface {
 			String genCmd,impCmd  = "";		// Required for "jaxws" test
 		
 			if (platform.equals("win32")) {
+				String winscriptdir;
+				if ( jckVersion.contains("jck6") || jckVersion.contains("jck7") || jckVersion.contains("jck8") || jckVersion.contains("jck9") ) {
+					winscriptdir="win32";
+				} else {
+					winscriptdir="windows";
+				}
 				concurrency = "1";
-				xjcCmd = jckBase + File.separator + "win32" + File.separator + "bin" + File.separator + "xjc.bat"; 
-				jxcCmd = jckBase + File.separator + "win32" + File.separator + "bin" + File.separator + "schemagen.bat"; 
-				genCmd = jckBase + File.separator + "win32" + File.separator + "bin" + File.separator + "wsgen.bat"; 
-				impCmd = jckBase + File.separator + "win32" + File.separator + "bin" + File.separator + "wsimport.bat"; 
+				xjcCmd = jckBase + File.separator + winscriptdir + File.separator + "bin" + File.separator + "xjc.bat"; 
+				jxcCmd = jckBase + File.separator + winscriptdir + File.separator + "bin" + File.separator + "schemagen.bat"; 
+				genCmd = jckBase + File.separator + winscriptdir + File.separator + "bin" + File.separator + "wsgen.bat"; 
+				impCmd = jckBase + File.separator + winscriptdir + File.separator + "bin" + File.separator + "wsimport.bat"; 
 			} else if (platform.equals("linux") || platform.equals("aix")) {
 				concurrency = "1";
 				xjcCmd = jckBase + File.separator + "linux" + File.separator + "bin" + File.separator + "xjc.sh";

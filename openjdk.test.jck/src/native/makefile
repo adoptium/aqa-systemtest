@@ -171,7 +171,7 @@ endif
 ifeq ($(PLATFORM),win_x86-32)
 	CC=cl
 	CFLAGS=/DWIN32 /D_WINDOWS 
-	LDFLAGS=/LD /MD -I$(SRCDIR)/src/share/lib/jni/include/win32
+	LDFLAGS=/LD /MD -I$(SRCDIR)/src/share/lib/jni/include/win32 -I$(SRCDIR)/src/share/lib/jni/include/windows
 	LIBPREF=
 	LIBEXT=dll
 	OFLAG=/Fe
@@ -183,7 +183,7 @@ endif
 ifeq ($(PLATFORM),win_x86-64)
 	CC=cl
 	CFLAGS=/DWIN32 /D_WINDOWS 
-	LDFLAGS=/LD /MD -I$(SRCDIR)/src/share/lib/jni/include/win32
+	LDFLAGS=/LD /MD -I$(SRCDIR)/src/share/lib/jni/include/win32 -I$(SRCDIR)/src/share/lib/jni/include/windows
 	LIBPREF=
 	LIBEXT=dll
 	OFLAG=/Fe

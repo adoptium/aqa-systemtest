@@ -159,7 +159,7 @@ endif
 
 # Change the semi-colon separated list of directories into a whitespace separated list
 ABSOLUTE_PREREQS_ROOT_LIST:=$(subst ;, ,$(PREREQS_ROOT))
-$(warning ABSOLUTE_PREREQS_ROOT_LIST is $(ABSOLUTE_PREREQS_ROOT_LIST))
+#$(warning ABSOLUTE_PREREQS_ROOT_LIST is $(ABSOLUTE_PREREQS_ROOT_LIST))
 
 # On cygwin convert the PREREQS_ROOT paths to windows style path names
 ifeq ($(CYGWIN),1)
@@ -179,7 +179,7 @@ else
   CHECK_PREREQS_ROOT_LIST:=$(subst \,/,$(ABSOLUTE_PREREQS_ROOT_LIST))
   CHECK_PREREQS_ROOT_LIST:=$(subst //,/,$(CHECK_PREREQS_ROOT_LIST))
   EXISTING_PREREQS_ROOT_LIST:=$(wildcard $(CHECK_PREREQS_ROOT_LIST))
-  $(warning EXISTING_PREREQS_ROOT_LIST is $(EXISTING_PREREQS_ROOT_LIST))
+  #$(warning EXISTING_PREREQS_ROOT_LIST is $(EXISTING_PREREQS_ROOT_LIST))
   ERROR_PREREQS_ROOT_LIST:=$(filter-out $(EXISTING_PREREQS_ROOT_LIST),$(CHECK_PREREQS_ROOT_LIST))
   $(foreach ERROR_PREREQS_ROOT,$(ERROR_PREREQS_ROOT_LIST),$(warning ERROR: PREREQS_ROOT directory $(ERROR_PREREQS_ROOT) does not exist. Either setup the directory $(ERROR_PREREQS_ROOT) or use PREREQS_ROOT=xxxx on the make command line to point to a different location.   Running make configure will get most of the prereqs.  See openjdk.build/docs/build.md for more details.))
   ifneq (,$(ERROR_PREREQS_ROOT_LIST))

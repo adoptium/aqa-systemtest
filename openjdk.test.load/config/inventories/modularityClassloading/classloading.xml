@@ -1,0 +1,3 @@
+<inventory> 
+	<junit class="net.adoptopenjdk.test.modularity.junit.TestClassLoading"/>	
+</inventory>

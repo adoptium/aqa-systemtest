@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/stf.core"/>
+	<classpathentry kind="output" path="bin"/>
+	<classpathentry kind="j9output" path="bin/common-mods/displayService"/>
+	<classpathentry kind="j9output" path="bin/common-mods/com.helper"/>
+	<classpathentry kind="j9output" path="bin/common-mods/displayServiceImpl1"/>
+	<classpathentry kind="j9output" path="bin/common-mods/com.discreet"/>
+	<classpathentry kind="j9output" path="bin/common-mods/com.hello"/>
+	<classpathentry kind="j9output" path="bin/common-mods/com.hola"/>
+	<classpathentry kind="j9output" path="bin/common-mods/displayServiceImpl2"/>
+	<classpathentry kind="j9output" path="bin/common-mods/com.hi"/>
+	<classpathentry kind="j9output" path="bin/common-override"/>
+	<classpathentry kind="j9output" path="bin/common-override-new"/>
+	<classpathentry kind="j9output" path="bin/common/displayServiceImpl3"/>
+	<classpathentry kind="j9output" path="bin/common/displayServiceImpl4"/>
+	<classpathentry kind="j9output" path="bin/common"/>
+	<classpathentry kind="j9output" path="bin/tests"/>
+</classpath>

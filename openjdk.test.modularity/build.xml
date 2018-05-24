@@ -1,0 +1,327 @@
+<?xml version="1.0"?>
+<!--
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+<project name="adoptopenjdk.test.modularity" default="build">
+	<taskdef resource="net/sf/antcontrib/antlib.xml" />
+	<!-- Set default for source_root.  -->
+	<property name="source_root" location="../"/>
+	
+	<!-- Set default for STF location.  -->
+	<!-- Assumes source repositories are checked out under a common root - e.g. and the repository
+		has been built in-situ - i.e.
+		stf repository: /home/userid/git/stf
+		java.svt repository: /home/userid/git/java.svt
+		If the stf repository has been cloned or built to a different location, the stf_root property
+		must be set on the command line - e.g. -Dstf_root=/my_stf_build_dir
+	-->
+	<property name="stf_root" location="${source_root}/../stf"/>
+
+	<!-- Import settings used by multiple projects.  -->
+	<import file="${source_root}/openjdk.build/include/top.xml"/>
+	
+	<!-- We think that you need a directory above the package structure to hold the module.java file -->
+        
+	<property name="module" value="openjdk.test.modularity" />
+    <property name="src_dir" value="src" />
+	<property name="bin_dir" value="${source_root}/${module}/./bin" /> 
+	
+	<property name="native-releases" value="${JAVA_VERSION}"/>
+	<property name="jlink-testcase-src" value="${src_dir}/tests/com.test.jlink"/>
+	<property name="jlink-nativedir" value="${bin_dir}/tests/com.test.jlink/native"/>
+	<property name="jlink-outdir" value="${jlink-nativedir}/bin/${native-releases}"/>
+	<property name="jlink-headerdir" value="${jlink-nativedir}/lib/${native-releases}"/>
+		
+	<!--List of JNI testcases-->
+	<property name="native_src" value= "JniTest"/>
+	
+	<!-- List of source JNI test Java files that need headers -->
+	<property name="java_src" value= "JniTest"/>
+
+	<path id="project.class.path">
+		<path refid="junit.class.path" />	
+		<path refid="stf.class.path" />
+		<path path="${bin_dir}/" />
+		<path path="${bin_dir}/common" />
+		<path path="${bin_dir}/common-mods/displayService" />	
+	</path>
+
+	<path id="module.path">
+		<path path="${bin_dir}/common-mods" />
+	</path>
+
+	<target name="build">
+		<if>
+			<equals arg1="${JAVA_VERSION}" arg2="SE80"/>
+			<then>
+				<echo>Skipping Modularity tests compilation as Java version is not SE90 or above</echo>
+			</then>
+			<else>
+				<echo>Building Modularity tests</echo>
+				<antcall target="build-no-natives" inheritall="true" inheritrefs="true"/>
+				<antcall target="build-natives" inheritall="true" inheritrefs="true" />
+			</else>
+		</if>
+	</target>
+	
+	<target name="build-no-natives" depends="check-prereqs, build-java, build-javah">
+	</target>
+
+	<target name="build-archives" depends="build-jar">
+	</target>	
+
+	<target name="build-jar" depends="build-java, create-bin-dir">
+		<jar destfile="${jar_file}">
+			<fileset dir="${bin_dir}" includes="**/*.class" />
+		</jar>
+	</target>
+
+	<target name="build-java" depends="check-prereqs, create-bin-dir" description="Using ${JAVA_VERSION} java to compile the source">
+		 <!-- The Ant javac task only checks time dependencies between .java files and their .class files,
+		      so fails to recompile in situations such as the signatures of a dependent method changing.
+		      The depend target checks the dependencies and deletes any .class files older than the files
+		      which depend on them, thereby ensuring recompilation.  -->
+		<echo>Ant version is ${ant.version}</echo>
+		<apply executable="${java9_compiler}" failonerror="true" parallel="true">
+			<arg value="-d" />
+			<arg value="${bin_dir}/common-mods" />
+
+			<arg value="--class-path" />
+			<arg pathref="project.class.path" />
+			
+			<arg value="--module-source-path" />
+			<arg value="${src_dir}/common-mods" />
+
+			<arg value="--module-path" />
+			<arg value="${bin_dir}" />
+
+			<fileset dir="${src_dir}/common-mods" includes="**/*.java" />
+		</apply>
+		
+		<property name="javac-ran" value="true"/>
+
+		<apply executable="${java9_compiler}" failonerror="true" parallel="true">
+			<arg value="-d" />
+			<arg value="${bin_dir}/common-override" />
+
+			<arg value="--class-path" />
+			<arg pathref="project.class.path" />
+			
+			<arg value="--module-source-path" />
+			<arg value="${src_dir}/common-override" />
+
+			<arg value="--module-path" />
+			<arg value="${bin_dir}" />
+
+			<fileset dir="${src_dir}/common-override" includes="**/*.java" />
+		</apply>
+
+		<apply executable="${java9_compiler}" failonerror="true" parallel="true">
+			<arg value="-d" />
+			<arg value="${bin_dir}/common-override-new" />
+
+			<arg value="--class-path" />
+			<arg pathref="project.class.path" />
+			
+			<arg value="--module-source-path" />
+			<arg value="${src_dir}/common-override-new" />
+
+			<arg value="--module-path" />
+			<arg value="${bin_dir}" />
+
+			<fileset dir="${src_dir}/common-override-new" includes="**/*.java" />
+		</apply>
+
+		<apply executable="${java9_compiler}" failonerror="true" parallel="true">
+			<arg value="-d" />
+			<arg value="${bin_dir}/common/displayServiceImpl3" />
+
+			<arg value="--class-path" />
+			<arg pathref="project.class.path" />
+
+			<fileset dir="${src_dir}/common/displayServiceImpl3" includes="**/*.java" />
+		</apply>
+
+		<apply executable="${java9_compiler}" failonerror="true" parallel="true">
+			<arg value="-d" />
+			<arg value="${bin_dir}/common/displayServiceImpl4" />
+
+			<arg value="--class-path" />
+			<arg pathref="project.class.path" />
+
+			<fileset dir="${src_dir}/common/displayServiceImpl4" includes="**/*.java" />
+		</apply>
+		
+		<copy todir="${bin_dir}/common/displayServiceImpl3/META-INF">
+			<fileset dir="${src_dir}/common/displayServiceImpl3/META-INF" 
+				includes="**"/>
+		</copy> 
+       	 
+ 	    <copy todir="${bin_dir}/common/displayServiceImpl4/META-INF">
+			<fileset dir="${src_dir}/common/displayServiceImpl4/META-INF" 
+				includes="**"/>
+        </copy>
+			
+		<copy todir="${bin_dir}/common-mods/com.discreet/adoptopenjdk/test/modularity/exported">
+			<fileset dir="${src_dir}/common-mods/com.discreet/adoptopenjdk/test/modularity/exported"
+				includes="**/*.properties" />
+		</copy>
+		
+		<copy todir="${bin_dir}/tests/com.test/net/adoptopenjdk/test/modularity/junit">
+		    <fileset dir="${src_dir}/tests/com.test/net/adoptopenjdk/test/modularity/junit"
+		        includes="**/*.properties" />
+		</copy>
+		
+		<copy todir="${bin_dir}/tests/com.test.jlink/conf">
+			<fileset dir="${src_dir}/tests/com.test.jlink/conf"
+				includes="**/*.properties" />
+		</copy>
+
+		<apply executable="${java9_compiler}" failonerror="true" parallel="true">
+			<arg value="-d" />
+			<arg value="${bin_dir}/common" />
+
+			<arg value="--class-path" />
+			<arg pathref="project.class.path" />
+
+			<fileset dir="${src_dir}/common" includes="**/*.java" excludes="displayServiceImpl*/*.java" />
+		</apply>
+		
+		<echo>${toString:module.path}</echo>
+		<apply executable="${java9_compiler}" failonerror="true" parallel="true">
+			<arg value="-d" />
+			<arg value="${bin_dir}/tests" />
+
+			<arg value="--class-path" />
+			<arg pathref="project.class.path" />
+
+			<arg value="--module-path" />
+			<arg pathref="module.path" />
+			
+			<arg value="--module-source-path" />
+			<arg value="${src_dir}/tests" />
+			
+			<arg value="--add-reads" />
+			<arg value="com.test=ALL-UNNAMED" />
+			
+			<arg value="--add-reads" />
+			<arg value="com.test.serviceloaders=ALL-UNNAMED,displayService" />
+
+			<arg value="--add-reads" />
+			<arg value="com.test.serviceloaders2=ALL-UNNAMED,displayService" />
+
+			<arg value="--add-reads" />
+			<arg value="com.test.jlink=ALL-UNNAMED" />
+			
+			<fileset dir="${src_dir}/tests" includes="**/*.java" />
+		</apply>
+		
+		<echo>${toString:project.class.path}</echo>
+		<apply executable="${java9_compiler}" failonerror="true" parallel="true">
+			<arg value="--source-path" />
+			<arg value="${src_dir}/com.stf" />
+			<arg value="-d" />
+			<arg value="${bin_dir}" />
+			<arg value="--class-path" />
+			<arg pathref="project.class.path" />
+			<fileset dir="${src_dir}/com.stf" includes="**/*.java" />
+		</apply>		
+	</target> 
+	
+	<target name="create-bin-dir">
+		<mkdir dir="${bin_dir}"/>
+		<mkdir dir="${bin_dir}/common-mods"/>
+		<mkdir dir="${bin_dir}/common-override"/>
+		<mkdir dir="${bin_dir}/common-override-new"/>
+		<mkdir dir="${bin_dir}/tests"/>
+		<mkdir dir="${bin_dir}/common"/>
+		<mkdir dir="${bin_dir}/common/displayServiceImpl3"/>
+		<mkdir dir="${bin_dir}/common/displayServiceImpl4"/>
+	</target>
+	
+	<!-- This block will check if javac ran by checking if javac-ran is true -->
+	<target name="check-if-javac-ran">
+		<condition property="javac-did-not-run">
+			<not>
+				<isset property="javac-ran"/>
+			</not>
+		</condition>
+		<echo message="javac-ran is ${javac-ran}" />
+		<echo message="javac-did-not-run is ${javac-did-not-run}" />
+	</target>
+	
+	<target name="build-javah" depends="check-if-javac-ran" unless="javac-did-not-run">
+		<!-- Build JNI files using javah -->
+		<!-- According to the ant doc, javah will not recreate a header file if it already exists.
+			 So we need to delete header files in order to rebuild them.
+			 The relationship between a class file and its geenrated header file is not simple.
+			 The package name is prepended to the class file name (underscores replacing dots in the package name)
+			 and for inner classes the '$' in the class file name is replaced by an underscore too.
+			 The dependency checking here checks whether the javac actually recreated any class files when it
+			 ran in the build-java task.  If any class files were created, all the header files are deleted and
+			 recreated. This means that most of the time, when the test cases are not being worked on, rebuilding the
+			 header files will be skipped.
+		-->
+		<for list="${native-releases}" param="release">
+			<sequential>
+				<var name="headerdir" value="${jlink-nativedir}/lib/@{release}"/>
+				<mkdir dir="${headerdir}" />
+				<!-- Lets loop through the java test files -->
+				<for list="${java_src}" param="test">
+					<sequential>
+						<!-- First delete the header files -->
+						<delete includeemptydirs="true" verbose="true">
+							<fileset dir="${headerdir}" includes="adoptopenjdk_test_modularity_jlink_@{test}.h"/>
+						</delete>
+						<!-- Then recreate them -->
+						<echo message="Building JNI header files for @{test} to ${headerdir}" />
+						<exec executable="${java9_bindir}/javah" failonerror="true">
+							<arg value="-classpath"/>
+							<arg pathref="junit.class.path" />
+							<arg value="-classpath"/>
+							<arg value="${jlink-testcase-src}"/>
+							<arg value="-d"/>
+							<arg value="${headerdir}"/>
+							<arg value="adoptopenjdk.test.modularity.jlink.@{test}"/>
+						</exec>
+					</sequential>
+				</for>
+			</sequential>
+		</for>
+	</target>
+	
+	<target name="build-natives" depends="setup-native-build-command, build-natives-windows, build-natives-unix">
+	</target>
+	
+	<target name="setup-native-build-command">
+		<echo message="building natives for java-platform ${java9_platform}"/>
+		<property name="native_build_command" value='${setup_windows_build_env}make -C ${jlink-testcase-src}/native SRC=${native_src} PLATFORM=${java9_platform} JAVA_HOME=${java9_home} OUTDIR=${jlink-outdir} HEADERDIR=${jlink-headerdir} OSNAME=${java9_osname}'/>
+		<tempfile property="native_build_command_file" destDir="${java.io.tmpdir}" prefix="openjdk.build.command."/>
+	</target>
+
+	<target name="build-natives-windows" if="${is_windows}">
+		<echo message="${native_build_command}" file="${native_build_command_file}.bat"/>
+		<exec executable="${native_build_command_file}.bat" failonerror="true"/>
+		<delete file="${native_build_command_file}.bat" verbose="true"/>
+	</target>
+
+	<target name="build-natives-unix" unless="${is_windows}">
+		<echo message="${native_build_command}" file="${native_build_command_file}.sh"/>
+		<exec executable="/bin/sh" failonerror="true">
+			<arg value="${native_build_command_file}.sh"/>
+		</exec>
+		<delete file="${native_build_command_file}.sh" verbose="true"/>
+	</target>
+	
+</project>

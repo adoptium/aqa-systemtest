@@ -261,7 +261,7 @@ limitations under the License.
 		<echo message="javac-did-not-run is ${javac-did-not-run}" />
 	</target>
 	
-	<target name="build-javah" depends="check-if-javac-ran" unless="javac-did-not-run">
+	<target name="build-javah" depends="check-prereqs, check-if-javac-ran" unless="javac-did-not-run">
 		<!-- Build JNI files using javah -->
 		<!-- According to the ant doc, javah will not recreate a header file if it already exists.
 			 So we need to delete header files in order to rebuild them.
@@ -301,7 +301,7 @@ limitations under the License.
 		</for>
 	</target>
 	
-	<target name="build-natives" depends="setup-native-build-command, build-natives-windows, build-natives-unix">
+	<target name="build-natives" depends="check-prereqs, setup-native-build-command, build-natives-windows, build-natives-unix">
 	</target>
 	
 	<target name="setup-native-build-command">

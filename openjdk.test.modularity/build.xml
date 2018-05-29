@@ -60,26 +60,20 @@ limitations under the License.
 		<path refid="junit.class.path" />	
 		<path refid="stf.class.path" />
 		<path path="${jlink-testcase-src}" />
-	</path>
-		
-		
-
+	</path>	
+	
 	<path id="module.path">
 		<path path="${bin_dir}/common-mods" />
 	</path>
 
-	<target name="build">
-		<if>
-			<equals arg1="${JAVA_VERSION}" arg2="SE80"/>
-			<then>
-				<echo>Skipping Modularity tests compilation as Java version is not SE90 or above</echo>
-			</then>
-			<else>
-				<echo>Building Modularity tests</echo>
-				<antcall target="build-no-natives" inheritall="true" inheritrefs="true"/>
-				<antcall target="build-natives" inheritall="true" inheritrefs="true" />
-			</else>
-		</if>
+	<condition property="isSE80" value="true">
+		<equals arg1="${JAVA_VERSION}" arg2="SE80"/>
+	</condition>
+		
+	<target name="build" unless="isSE80">
+		<echo>Building Modularity tests</echo>
+		<antcall target="build-no-natives" inheritall="true" inheritrefs="true"/>
+		<antcall target="build-natives" inheritall="true" inheritrefs="true" />
 	</target>
 	
 	<target name="build-no-natives" depends="check-prereqs, build-java, build-javah">

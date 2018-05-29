@@ -35,13 +35,13 @@ limitations under the License.
         
 	<property name="module" value="openjdk.test.modularity" />
     <property name="src_dir" value="src" />
-	<property name="bin_dir" value="${source_root}/${module}/./bin" /> 
+	<property name="bin_dir" value="${source_root}/${module}/bin" /> 
 	
-	<property name="native-releases" value="${JAVA_VERSION}"/>
-	<property name="jlink-testcase-src" value="${src_dir}/tests/com.test.jlink"/>
+	<property name="native-release" value="${JAVA_VERSION}"/>
+	<property name="jlink-testcase-src" value="${source_root}/${module}/${src_dir}/tests/com.test.jlink"/>
 	<property name="jlink-nativedir" value="${bin_dir}/tests/com.test.jlink/native"/>
-	<property name="jlink-outdir" value="${jlink-nativedir}/bin/${native-releases}"/>
-	<property name="jlink-headerdir" value="${jlink-nativedir}/lib/${native-releases}"/>
+	<property name="jlink-outdir" value="${jlink-nativedir}/bin/${native-release}"/>
+	<property name="jlink-headerdir" value="${jlink-nativedir}/lib/${native-release}"/>
 		
 	<!--List of JNI testcases-->
 	<property name="native_src" value= "JniTest"/>
@@ -56,6 +56,14 @@ limitations under the License.
 		<path path="${bin_dir}/common" />
 		<path path="${bin_dir}/common-mods/displayService" />	
 	</path>
+	
+	<path id="jlink.project.class.path">
+		<path refid="junit.class.path" />	
+		<path refid="stf.class.path" />
+		<path path="${jlink-testcase-src}" />
+	</path>
+		
+		
 
 	<path id="module.path">
 		<path path="${bin_dir}/common-mods" />
@@ -273,32 +281,51 @@ limitations under the License.
 			 recreated. This means that most of the time, when the test cases are not being worked on, rebuilding the
 			 header files will be skipped.
 		-->
-		<for list="${native-releases}" param="release">
-			<sequential>
-				<var name="headerdir" value="${jlink-nativedir}/lib/@{release}"/>
-				<mkdir dir="${headerdir}" />
-				<!-- Lets loop through the java test files -->
-				<for list="${java_src}" param="test">
-					<sequential>
-						<!-- First delete the header files -->
-						<delete includeemptydirs="true" verbose="true">
-							<fileset dir="${headerdir}" includes="adoptopenjdk_test_modularity_jlink_@{test}.h"/>
-						</delete>
-						<!-- Then recreate them -->
-						<echo message="Building JNI header files for @{test} to ${headerdir}" />
-						<exec executable="${java9_bindir}/javah" failonerror="true">
-							<arg value="-classpath"/>
-							<arg pathref="junit.class.path" />
-							<arg value="-classpath"/>
-							<arg value="${jlink-testcase-src}"/>
-							<arg value="-d"/>
-							<arg value="${headerdir}"/>
-							<arg value="adoptopenjdk.test.modularity.jlink.@{test}"/>
-						</exec>
-					</sequential>
-				</for>
-			</sequential>
-		</for>
+		
+		<!--From Java10, the 'javah' executable has been replaced with 'javac with options'. 
+			We need to determine which Java version we are using and use the correct executrable 
+			to generate the header file based on that
+		-->
+		<condition property="javah_exec" value="${java8_bindir}/javah" else="${java8_bindir}/javac">
+			<or>
+				<equals arg1="${JAVA_VERSION}" arg2="SE80"/>
+				<equals arg1="${JAVA_VERSION}" arg2="SE90"/>
+			</or>
+		</condition>
+		
+		<condition property="javah_headerdir_option" value="-d" else="-h">
+			<or>
+				<equals arg1="${JAVA_VERSION}" arg2="SE80"/>
+				<equals arg1="${JAVA_VERSION}" arg2="SE90"/>
+			</or>
+		</condition>
+		
+		<condition property="javah_src" 
+				value="adoptopenjdk.test.modularity.jlink.JniTest"
+							else="${src_dir}/tests/com.test.jlink/adoptopenjdk/test/modularity/jlink/JniTest.java">
+			<or>
+				<equals arg1="${JAVA_VERSION}" arg2="SE80"/>
+				<equals arg1="${JAVA_VERSION}" arg2="SE90"/>
+			</or>
+		</condition>
+		
+		<var name="headerdir" value="${jlink-nativedir}/lib/${native-release}"/>
+		<mkdir dir="${headerdir}" />
+		 
+		<!-- First delete the header files -->
+		<delete includeemptydirs="true" verbose="true">
+			<fileset dir="${headerdir}" includes="adoptopenjdk_test_modularity_jlink_JniTest.h"/>
+		</delete>
+		
+		<!-- Then recreate them -->
+		<echo message="Building JNI header files for JniTest to ${headerdir}" />
+		<exec executable="${javah_exec}" failonerror="true">
+			<arg value="-classpath"/>
+			<arg pathref="jlink.project.class.path" />
+			<arg value="${javah_headerdir_option}"/>
+			<arg value="${headerdir}"/>
+			<arg value="${javah_src}"/>
+		</exec>
 	</target>
 	
 	<target name="build-natives" depends="check-prereqs, setup-native-build-command, build-natives-windows, build-natives-unix">

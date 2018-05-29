@@ -14,7 +14,6 @@ limitations under the License.
 -->
 
 <project name="adoptopenjdk.test.modularity" default="build">
-	<taskdef resource="net/sf/antcontrib/antlib.xml" />
 	<!-- Set default for source_root.  -->
 	<property name="source_root" location="../"/>
 	

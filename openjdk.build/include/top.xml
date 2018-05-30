@@ -61,6 +61,7 @@ limitations under the License.
 								 osname.property="java8_osname"
 								 arch.property="java8_arch"
 								 bits.property="java8_bits"
+								 java.specification.version.property="java8_java_specification_version"
 								 java.home="${java8_home}"
 								 java.id="java8"/>
 		<echo message="java8_platformclass set to ${java8_platformclass}"/>
@@ -70,6 +71,7 @@ limitations under the License.
 		<echo message="java8_osname set to ${java8_osname}"/>
 		<echo message="java8_arch set to ${java8_arch}"/>
 		<echo message="java8_bits set to ${java8_bits}"/>
+		<echo message="java8_java_specification_version set to ${java8_java_specification_version}"/>
 		<property name="java8_compiler" location="${java8_bindir}/javac${exe_suffix}"/>
 		<echo message="java8_home set to ${java8_home}"/>
 		<echo message="java8_compiler set to ${java8_compiler}"/>
@@ -87,6 +89,7 @@ limitations under the License.
 								 osname.property="java9_osname"
 								 arch.property="java9_arch"
 								 bits.property="java9_bits"
+								 java.specification.version.property="java9_java_specification_version"
 								 java.home="${java9_home}"
 								 java.id="java9"/>
 		<echo message="java9_platformclass set to ${java9_platformclass}"/>
@@ -95,6 +98,7 @@ limitations under the License.
 		<echo message="java9_osname set to ${java9_osname}"/>
 		<echo message="java9_arch set to ${java9_arch}"/>
 		<echo message="java9_bits set to ${java9_bits}"/>
+		<echo message="java9_java_specification_version set to ${java9_java_specification_version}"/>
 		<property name="java9_compiler" location="${java9_bindir}/javac${exe_suffix}"/>
 		<echo message="java9_home set to ${java9_home}"/>
 		<echo message="java9_compiler set to ${java9_compiler}"/>
@@ -431,6 +435,7 @@ limitations under the License.
 		<attribute name="osname.property" description="The property to put the osname in e.g. win, linux"/>
 		<attribute name="arch.property" description="The property to put the architecture in - e.g. x86, ppcle, 390"/>
 		<attribute name="bits.property" description="The property to put the bits in - e.g. 31, 32, 64"/>
+		<attribute name="java.specification.version.property" description="The property to put the java version in - e.g. 1.8, 9"/>
 		<attribute name="java.home" description="The JAVA_HOME directory of the java to query"/>
 		<attribute name="java.id" description="A unique identifier to prefix the properties for the java instance with"/>
 		<sequential>
@@ -462,6 +467,7 @@ limitations under the License.
 			<get-platform-bits property="@{bits.property}" bits="${@{java.id}.sun.arch.data.model}"/>
 			<property name="@{platform.property}" value="${@{osname.property}}_${@{arch.property}}-${@{bits.property}}"/>
 			<property name="@{platformclass.property}" value="${@{osname.property}}_${@{arch.property}}"/>
+			<property name="@{java.specification.version.property}" value="${@{java.id}.java.specification.version}"/>
 		</sequential>
 	</macrodef>
 

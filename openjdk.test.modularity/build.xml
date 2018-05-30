@@ -36,11 +36,10 @@ limitations under the License.
     <property name="src_dir" value="src" />
 	<property name="bin_dir" value="${source_root}/${module}/bin" /> 
 	
-	<property name="native-release" value="${JAVA_VERSION}"/>
 	<property name="jlink-testcase-src" value="${source_root}/${module}/${src_dir}/tests/com.test.jlink"/>
 	<property name="jlink-nativedir" value="${bin_dir}/tests/com.test.jlink/native"/>
-	<property name="jlink-outdir" value="${jlink-nativedir}/bin/${native-release}"/>
-	<property name="jlink-headerdir" value="${jlink-nativedir}/lib/${native-release}"/>
+	<property name="jlink-outdir" value="${jlink-nativedir}/bin"/>
+	<property name="jlink-headerdir" value="${jlink-nativedir}/lib"/>
 		
 	<!--List of JNI testcases-->
 	<property name="native_src" value= "JniTest"/>
@@ -321,7 +320,7 @@ limitations under the License.
 			</or>
 		</condition>
 		
-		<property name="headerdir" value="${jlink-nativedir}/lib/${native-release}"/>
+		<property name="headerdir" value="${jlink-nativedir}/lib"/>
 		<mkdir dir="${headerdir}" />
 		 
 		<!-- First delete the header files -->

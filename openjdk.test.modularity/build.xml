@@ -77,13 +77,13 @@ limitations under the License.
 		</condition>
 		<condition property="can_build_modularity_natives_windows" value="true">
 			<and>
-				<equals arg1="${can_build_modularity}" arg2="1.8"/>
+				<equals arg1="${can_build_modularity}" arg2="true"/>
 				<equals arg1="${is_windows}" arg2="true"/>
 			</and>
 		</condition>
 		<condition property="can_build_modularity_natives_unix" value="true">
 			<and>
-				<equals arg1="${can_build_modularity}" arg2="1.8"/>
+				<equals arg1="${can_build_modularity}" arg2="true"/>
 				<not>
 					<equals arg1="${is_windows}" arg2="true"/>
 				</not>

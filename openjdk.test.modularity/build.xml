@@ -75,22 +75,19 @@ limitations under the License.
 				<equals arg1="${java9_java_specification_version}" arg2="1.8"/>
 			</not>
 		</condition>
-		<condition property="can_build_modularity_windows_natives" value="true">
+		<condition property="can_build_modularity_natives_windows" value="true">
 			<and>
 				<equals arg1="${can_build_modularity}" arg2="1.8"/>
 				<equals arg1="${is_windows}" arg2="true"/>
 			</and>
 		</condition>
-		<condition property="can_build_modularity_windows_unix" value="true">
+		<condition property="can_build_modularity_natives_unix" value="true">
 			<and>
 				<equals arg1="${can_build_modularity}" arg2="1.8"/>
 				<not>
 					<equals arg1="${is_windows}" arg2="true"/>
 				</not>
 			</and>
-		</condition>
-		<condition property="build_modularitycompiler_is_java8" value="true">
-			<equals arg1="${java9_java_specification_version}" arg2="1.8"/>
 		</condition>
 		<echo message="java9_java_specification_version is ${java9_java_specification_version}"/>
 		<echo message="can_build_modularity is ${can_build_modularity}"/>
@@ -301,7 +298,7 @@ limitations under the License.
 			We need to determine which Java version we are using and use the correct executrable 
 			to generate the header file based on that
 		-->
-		<condition property="javah_exec" value="${java8_bindir}/javah" else="${java8_bindir}/javac">
+		<condition property="javah_exec" value="${java9_bindir}/javah" else="${java9_bindir}/javac">
 			<or>
 				<equals arg1="${java9_java_specification_version}" arg2="1.8"/>
 				<equals arg1="${java9_java_specification_version}" arg2="9"/>
@@ -364,6 +361,10 @@ limitations under the License.
 			<arg value="${native_build_command_file}.sh"/>
 		</exec>
 		<delete file="${native_build_command_file}.sh" verbose="true"/>
+	</target>
+
+	<target name="clean">
+		<delete dir="${bin_dir}"/>
 	</target>
 	
 </project>

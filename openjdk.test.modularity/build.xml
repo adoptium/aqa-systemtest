@@ -98,10 +98,10 @@ limitations under the License.
 	<target name="build-no-natives" depends="check-prereqs, check-compiler-level, build-java, build-javah">
 	</target>
 
-	<target name="build-archives" depends="build-jar" unless="compiler_is_java8">
+	<target name="build-archives" depends="build-jar" if="can_build_modularity">
 	</target>	
 
-	<target name="build-jar" depends="build-java, create-bin-dir" unless="compiler_is_java8">
+	<target name="build-jar" depends="build-java, create-bin-dir" if="can_build_modularity">
 		<jar destfile="${jar_file}">
 			<fileset dir="${bin_dir}" includes="**/*.class" />
 		</jar>

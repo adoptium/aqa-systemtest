@@ -440,7 +440,52 @@ test.MauveMultiThreadLoadTest \
 test.NioLoadTest \
 test.SerializationLoadTest \
 test.UtilLoadTest \
-test.LambdaLoadTest 
+test.LambdaLoadTest \
+test.CpMpTest_CpMp \
+test.CpMpTest_MP \
+test.CpMpTest2 \
+test.CpMpTest3 \
+test.CpMpModularJarTest \
+test.CpMpModularJarTest2 \
+test.CpMpModularJarTest3 \
+test.JDKInternalAPIsTest \
+test.AutomaticModulesTest1 \
+test.AutomaticModulesTest2 \
+test.AutomaticModulesTest_ImpliedReadabilityTest1 \
+test.AutomaticModulesTest_ImpliedReadabilityTest2 \
+test.AutomaticModulesTest_ImpliedReadabilityTest3 \
+test.ExplicitModulesTest \
+test.JDKInternalAPIsTest \
+test.ServiceLoadersTest \
+test.PatchModuleTest_PlatformModPatchModule \
+test.PatchModuleTest_AppModPatchModule \
+test.PatchModuleTest_UnexportedTypePatchModule \
+test.PatchModuleTest_AdvancedPatchModule \
+test.PatchModuleImageTest_PlatformModPatchModule \
+test.PatchModuleImageTest_AppModPatchModule \
+test.PatchModuleImageTest_UnexportedTypePatchModule \
+test.PatchModuleImageTest_AdvancedPatchModule \
+test.UpgradeModPathTest_ExpDirModUpgrade \
+test.UpgradeModPathTest_ExpDirModUpgradeCRImage \
+test.UpgradeModPathTest_JarredModUpgrade \
+test.UpgradeModPathTest_JarredModUpgradeCRImage \
+test.JlinkTest_RequiredMod \
+test.JlinkTest_AddModLimitMod \
+test.CpMpJlinkTest \
+test.JlinkPluginOptionsTest_GeneralOptionsTest \
+test.LayersTest \
+test.CLTest \
+test.CLTestImage \
+test.CLLoadTest \
+test.CLStressWithLayers \
+test.CLStressWithLayersCRI \
+test.TestJlmLocal \
+test.TestJlmRemoteClassAuth \
+test.TestJlmRemoteClassNoAuth \
+test.TestJlmRemoteMemoryAuth \
+test.TestJlmRemoteMemoryNoAuth \
+test.TestJlmRemoteNotifierProxyAuth \
+test.TestJlmRemoteThreadNoAuth 
 
 TEST_TARGETS:= \
 $(LOAD_TESTS)
@@ -551,7 +596,187 @@ test.LambdaLoadTest:
 	echo Running target $@
 	$(STF_COMMAND) -test=LambdaLoadTest $(LOG)
 	echo Target $@ completed
-
+test.CpMpTest_CpMp:
+	echo Running target $@
+	$(STF_COMMAND) -test=CpMpTest -test-args="variant=CpMp" $(LOG)
+	echo Target $@ completed
+test.CpMpTest_MP:
+	echo Running target $@
+	$(STF_COMMAND) -test=CpMpTest -test-args="variant=Mp" $(LOG)
+	echo Target $@ completed
+test.CpMpTest2:
+	echo Running target $@
+	$(STF_COMMAND) -test=CpMpTest2 $(LOG)
+	echo Target $@ completed	
+test.CpMpTest3:
+	echo Running target $@
+	$(STF_COMMAND) -test=CpMpTest3 $(LOG)
+	echo Target $@ completed
+test.CpMpModularJarTest:
+	echo Running target $@
+	$(STF_COMMAND) -test=CpMpModularJarTest $(LOG)
+	echo Target $@ completed	
+test.CpMpModularJarTest2:
+	echo Running target $@
+	$(STF_COMMAND) -test=CpMpModularJarTest2 $(LOG)
+	echo Target $@ completed	
+test.CpMpModularJarTest3:
+	echo Running target $@
+	$(STF_COMMAND) -test=CpMpModularJarTest3 $(LOG)
+	echo Target $@ completed	
+test.JDKInternalAPIsTest:
+	echo Running target $@
+	$(STF_COMMAND) -test=JDKInternalAPIsTest $(LOG)
+	echo Target $@ completed
+test.AutomaticModulesTest1:
+	echo Running target $@
+	$(STF_COMMAND) -test=AutomaticModulesTest1 $(LOG)
+	echo Target $@ completed
+test.AutomaticModulesTest2:
+	echo Running target $@
+	$(STF_COMMAND) -test=AutomaticModulesTest2 $(LOG)
+	echo Target $@ completed		
+test.AutomaticModulesTest_ImpliedReadabilityTest1:
+	echo Running target $@
+	$(STF_COMMAND) -test=AutomaticModulesTest -test-args="variant=ImpliedReadabilityTest1" $(LOG)
+	echo Target $@ completed	
+test.AutomaticModulesTest_ImpliedReadabilityTest2:
+	echo Running target $@
+	$(STF_COMMAND) -test=AutomaticModulesTest -test-args="variant=ImpliedReadabilityTest2" $(LOG)
+	echo Target $@ completed		
+test.AutomaticModulesTest_ImpliedReadabilityTest3:
+	echo Running target $@
+	$(STF_COMMAND) -test=AutomaticModulesTest -test-args="variant=ImpliedReadabilityTest3" $(LOG)
+	echo Target $@ completed		
+test.ExplicitModulesTest:
+	echo Running target $@
+	$(STF_COMMAND) -test=ExplicitModulesTest $(LOG)
+	echo Target $@ completed	
+test.JDKInternalAPIsTest:
+	echo Running target $@
+	$(STF_COMMAND) -test=JDKInternalAPIsTest $(LOG)
+	echo Target $@ completed		
+test.ServiceLoadersTest:
+	echo Running target $@
+	$(STF_COMMAND) -test=ServiceLoadersTest $(LOG)
+	echo Target $@ completed	
+test.PatchModuleTest_PlatformModPatchModule:
+	echo Running target $@
+	$(STF_COMMAND) -test=PatchModuleTest -test-args="variant=PlatformModPatchModule" $(LOG)
+	echo Target $@ completed		
+test.PatchModuleTest_AppModPatchModule:
+	echo Running target $@
+	$(STF_COMMAND) -test=PatchModuleTest -test-args="variant=AppModPatchModule" $(LOG)
+	echo Target $@ completed		
+test.PatchModuleTest_UnexportedTypePatchModule:
+	echo Running target $@
+	$(STF_COMMAND) -test=PatchModuleTest -test-args="variant=UnexportedTypePatchModule" $(LOG)
+	echo Target $@ completed									
+test.PatchModuleTest_AdvancedPatchModule:
+	echo Running target $@
+	$(STF_COMMAND) -test=PatchModuleTest -test-args="variant=AdvancedPatchModule" $(LOG)
+	echo Target $@ completed
+test.PatchModuleImageTest_PlatformModPatchModule:
+	echo Running target $@
+	$(STF_COMMAND) -test=PatchModuleImageTest -test-args="variant=PlatformModPatchModule" $(LOG)
+	echo Target $@ completed	
+test.PatchModuleImageTest_AppModPatchModule:
+	echo Running target $@
+	$(STF_COMMAND) -test=PatchModuleImageTest -test-args="variant=AppModPatchModule" $(LOG)
+	echo Target $@ completed		
+test.PatchModuleImageTest_UnexportedTypePatchModule:
+	echo Running target $@
+	$(STF_COMMAND) -test=PatchModuleImageTest -test-args="variant=UnexportedTypePatchModule" $(LOG)
+	echo Target $@ completed		
+test.PatchModuleImageTest_AdvancedPatchModule:
+	echo Running target $@
+	$(STF_COMMAND) -test=PatchModuleImageTest -test-args="variant=AdvancedPatchModule" $(LOG)
+	echo Target $@ completed			
+test.UpgradeModPathTest_ExpDirModUpgrade:
+	echo Running target $@
+	$(STF_COMMAND) -test=UpgradeModPathTest -test-args="variant=ExpDirModUpgrade" $(LOG)
+	echo Target $@ completed			
+test.UpgradeModPathTest_ExpDirModUpgradeCRImage:
+	echo Running target $@
+	$(STF_COMMAND) -test=UpgradeModPathTest -test-args="variant=ExpDirModUpgradeCRImage" $(LOG)
+	echo Target $@ completed	
+test.UpgradeModPathTest_JarredModUpgrade:
+	echo Running target $@
+	$(STF_COMMAND) -test=UpgradeModPathTest -test-args="variant=JarredModUpgrade" $(LOG)
+	echo Target $@ completed	
+test.UpgradeModPathTest_JarredModUpgradeCRImage:
+	echo Running target $@
+	$(STF_COMMAND) -test=UpgradeModPathTest -test-args="variant=JarredModUpgradeCRImage" $(LOG)
+	echo Target $@ completed	
+test.JlinkTest_RequiredMod:
+	echo Running target $@
+	$(STF_COMMAND) -test=JlinkTest -test-args="variant=RequiredMod" $(LOG)
+	echo Target $@ completed					
+test.JlinkTest_AddModLimitMod:
+	echo Running target $@
+	$(STF_COMMAND) -test=JlinkTest -test-args="variant=AddModLimitMod" $(LOG)
+	echo Target $@ completed		
+test.CpMpJlinkTest:
+	echo Running target $@
+	$(STF_COMMAND) -test=CpMpJlinkTest $(LOG)
+	echo Target $@ completed
+test.JlinkPluginOptionsTest_GeneralOptionsTest:
+	echo Running target $@
+	$(STF_COMMAND) -test=JlinkPluginOptionsTest -test-args="variant=GeneralOptionsTest" $(LOG)
+	echo Target $@ completed	
+test.LayersTest:
+	echo Running target $@
+	$(STF_COMMAND) -test=LayersTest $(LOG)
+	echo Target $@ completed		
+test.CLTest:
+	echo Running target $@
+	$(STF_COMMAND) -test=CLTest $(LOG)
+	echo Target $@ completed		
+test.CLTestImage:
+	echo Running target $@
+	$(STF_COMMAND) -test=CLTestImage test-args="variant=CLTest" $(LOG)
+	echo Target $@ completed			
+test.CLLoadTest:
+	echo Running target $@
+	$(STF_COMMAND) -test=CLLoadTest $(LOG)
+	echo Target $@ completed				
+test.CLStressWithLayers:
+	echo Running target $@
+	$(STF_COMMAND) -test=CLStressWithLayers $(LOG)
+	echo Target $@ completed
+test.CLStressWithLayersCRI:
+	echo Running target $@
+	$(STF_COMMAND) -test=CLStressWithLayersCRI $(LOG)
+	echo Target $@ completed
+test.TestJlmLocal:
+	echo Running target $@
+	$(STF_COMMAND) -test=TestJlmLocal $(LOG)
+	echo Target $@ completed
+test.TestJlmRemoteClassAuth:
+	echo Running target $@
+	$(STF_COMMAND) -test=TestJlmRemoteClassAuth $(LOG)
+	echo Target $@ completed		
+test.TestJlmRemoteClassNoAuth:
+	echo Running target $@
+	$(STF_COMMAND) -test=TestJlmRemoteClassNoAuth $(LOG)
+	echo Target $@ completed
+test.TestJlmRemoteMemoryAuth:
+	echo Running target $@
+	$(STF_COMMAND) -test=TestJlmRemoteMemoryAuth $(LOG)
+	echo Target $@ completed	
+test.TestJlmRemoteMemoryNoAuth:
+	echo Running target $@
+	$(STF_COMMAND) -test=TestJlmRemoteMemoryNoAuth $(LOG)
+	echo Target $@ completed	
+test.TestJlmRemoteNotifierProxyAuth:
+	echo Running target $@
+	$(STF_COMMAND) -test=TestJlmRemoteNotifierProxyAuth $(LOG)
+	echo Target $@ completed	
+test.TestJlmRemoteThreadNoAuth:
+	echo Running target $@
+	$(STF_COMMAND) -test=TestJlmRemoteThreadNoAuth $(LOG)
+	echo Target $@ completed
+																					
 # The test.Custom target enables users to execute arbitrary stf.pl command lines if required for investigating failures.
 # Example:
 # make test.Custom TEST=JdiTest TEST_ARGS="test=basic_launch" 

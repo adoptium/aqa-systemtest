@@ -630,11 +630,11 @@ test.JDKInternalAPIsTest:
 	echo Target $@ completed
 test.AutomaticModulesTest1:
 	echo Running target $@
-	$(STF_COMMAND) -test=AutomaticModulesTest1 $(LOG)
+	$(STF_COMMAND) -test=AutomaticModulesTest -test-args="variant=AutomaticModulesTest1" $(LOG)
 	echo Target $@ completed
 test.AutomaticModulesTest2:
 	echo Running target $@
-	$(STF_COMMAND) -test=AutomaticModulesTest2 $(LOG)
+	$(STF_COMMAND) -test=AutomaticModulesTest -test-args="variant=AutomaticModulesTest2" $(LOG)
 	echo Target $@ completed		
 test.AutomaticModulesTest_ImpliedReadabilityTest1:
 	echo Running target $@

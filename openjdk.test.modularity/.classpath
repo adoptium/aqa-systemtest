@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Dummy classpath file which prevents Eclipse from trying to build the test.modularity project which must be built using the supplied ant build.xml file.  -->
+<classpath>
+</classpath>

@@ -173,7 +173,7 @@ limitations under the License.
 		or by following the instructions in stf.build/build.md.
 		All prereqs are installed under the same ${prereqs_root} directory.
 	-->
-	<target name="configure" depends="check-for-wget,
+	<target name="configure" depends="check-for-download-tool,
 									  run-stf-configure,
 									  check-for-junit-4.12, configure-junit-4.12, print-junit-4.12-location, print-junit-4.12-error,
 									  check-for-hamcrest-core-1.3, configure-hamcrest-core-1.3, print-hamcrest-core-1.3-location, print-hamcrest-core-1.3-error,
@@ -338,8 +338,17 @@ limitations under the License.
 		<available file="${asm_6.0_BETA}" property="asm_6.0_BETA_available"/>
 	</target>
 	
+	<target name="check-for-download-tool" depends="check-for-wget, check-for-curl">
+		<condition property="downloadtool_available" value="true">
+			<or>
+				<isset property="wget_available"/>
+				<isset property="curl_available"/>
+			</or>
+		</condition>
+	</target>
+	
 	<!-- Target to check if wget is available. -->
-	<target name="check-for-wget">
+	<target name="check-for-wget" unless="useCurl">
 		<!-- wget will be used to download files. -->
 		<!-- If it cannot be found on the PATH then the build will fail when the download-file macro (in macrodefs.xml) is invoked. -->
 		<echo message="Looking for wget on PATH"/>
@@ -349,26 +358,50 @@ limitations under the License.
 		<available file="wget.exe" filepath="${env.Path}" property="wget_available"/>
 	</target>
 
+	<!-- Target to check if curl is available. -->
+	<target name="check-for-curl" if="useCurl">
+		<!-- curl will be used to download files. -->
+		<!-- If it cannot be found on the PATH then the build will fail when the download-file macro (in macrodefs.xml) is invoked. -->
+		<echo message="Looking for curl on PATH"/>
+		<available file="curl" filepath="${env.PATH}" property="curl_available"/>
+	</target>
+	
+	<condition property="useCurl" value="true">
+			<equals arg1="${os.name}" arg2="z/OS"/>
+	</condition>
+			
+	<condition property="download-tool" value="curl" else="wget">
+		<isset property="useCurl"/>
+	</condition>
+	
+	<condition property="download-tool-security-options" value="-k" else="--no-check-certificate">
+		<isset property="useCurl"/>
+	</condition>
+	
+	<condition property="download-tool-srcfile-option" value="-o" else="-O">
+		<isset property="useCurl"/>
+	</condition>
+
 	<macrodef name="download-file" description="Use wget to download a file">
 		<attribute name="srcurl" description="URL of file to download"/>
 		<attribute name="destdir" description="Directory in which to place the downloaded file"/>
 		<attribute name="destfile" description="File name of the downloaded file"/>
 		<sequential>
 			<echo message="Executing macro download-file"/>
-			<echo message="srcurl is @{srcurl}"/>
-			<echo message="destdir is @{destdir}"/>
-			<echo message="destfile is @{destfile}"/>
-			<fail unless="wget_available" message="Cannot find wget (or wget.exe) on PATH, needed to download @{srcurl}. Either install wget or add it to PATH and retry.  If you are running the build from the Ant view in Eclipse, add wget to your PATH before starting Eclipse."/>
+			<echo message="File to download: @{srcurl}"/>
+			<echo message="Destination: @{destdir}/@{destfile}"/>
+			<echo message="Download tool: ${download-tool}"/>
+			<fail unless="downloadtool_available" message="Cannot find ${download-tool} on PATH, needed to download @{srcurl}. Either install ${download-tool} or add it to PATH and retry.  If you are running the build from the Ant view in Eclipse, add ${download-tool} to your PATH before starting Eclipse."/>
 			<mkdir dir="@{destdir}"/>
-			<exec executable="wget">
-				<arg value="--no-check-certificate"/>
-				<arg value="-O"/>
+			<exec executable="${download-tool}">
+				<arg value="${download-tool-security-options}"/>
+				<arg value="${download-tool-srcfile-option}"/>
 				<arg value="@{destdir}/@{destfile}"/>
 				<arg value="@{srcurl}"/>
 			</exec>
-		</sequential>			
+		</sequential>
 	</macrodef>
-
+	
 	<target name="print-junit-4.12-location" if="${junit_4.12_available}">
 		<echo message="Using junit-4.12 from ${junit_4.12}"/>
 	</target>
@@ -501,6 +534,11 @@ limitations under the License.
 					<contains string="@{osname}" substring="390"/>
 				</and>
 			</condition>
+			<condition property="@{property}" value="zos">
+				<and>
+					<contains string="@{osname}" substring="z/OS"/>
+				</and>
+			</condition>
 			<condition property="@{property}" value="sol">
 				<and>
 					<contains string="@{osname}" substring="Solaris"/>
@@ -568,4 +606,3 @@ limitations under the License.
 	</macrodef>
 
 </project>
-

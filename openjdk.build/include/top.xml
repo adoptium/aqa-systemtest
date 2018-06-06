@@ -207,7 +207,7 @@ limitations under the License.
 		Target to get junit from https://search.maven.org/remotecontent?filepath=junit/junit/4.12/junit-4.12.jar
 		Copy to ${prereqs_root}/junit-4.12/junit-4.12.jar
 	-->
-	<target name="configure-junit-4.12" unless="${junit_4.12_available}">
+	<target name="configure-junit-4.12" unless="junit_4.12_available">
 		<download-file destdir="${prereqs_root}/junit-4.12" destfile="junit-4.12.jar" srcurl="https://search.maven.org/remotecontent?filepath=junit/junit/4.12/junit-4.12.jar"/>
 		<available file="${junit_4.12}" property="junit_4.12_available"/>
 	</target>
@@ -224,7 +224,7 @@ limitations under the License.
 		Target to get hamcrest core from https://search.maven.org/remotecontent?filepath=org/hamcrest/hamcrest-core/1.3/hamcrest-core-1.3.jar
 		Copy to PREREQS_ROOT/junit-4.12/hamcrest-core-1.3.jar
 	-->
-	<target name="configure-hamcrest-core-1.3" unless="${hamcrest_core_1.3_available}">
+	<target name="configure-hamcrest-core-1.3" unless="hamcrest_core_1.3_available">
 		<download-file destdir="${prereqs_root}/junit-4.12" destfile="hamcrest-core-1.3.jar" srcurl="https://search.maven.org/remotecontent?filepath=org/hamcrest/hamcrest-core/1.3/hamcrest-core-1.3.jar"/>
 		<available file="${hamcrest_core_1.3}" property="hamcrest_core_1.3_available"/>
 	</target>
@@ -248,7 +248,7 @@ limitations under the License.
 		Target to get log4j 2.3 from https://archive.apache.org/dist/logging/log4j/2.3/apache-log4j-2.3-bin.zip
 		Copy to PREREQS_ROOT/log4j-2.3/log4j-api-2.3.jar and PREREQS_ROOT/log4j-2.3/log4j-core-2.3.jar
 	-->
-	<target name="configure-log4j-2.3" unless="${log4j_2.3_available}">
+	<target name="configure-log4j-2.3" unless="log4j_2.3_available">
 		<download-file destdir="${java.io.tmpdir}/log4j-2.3" destfile="apache-log4j-2.3-bin.zip" srcurl="https://archive.apache.org/dist/logging/log4j/2.3/apache-log4j-2.3-bin.zip"/>
 		<unzip src="${java.io.tmpdir}/log4j-2.3/apache-log4j-2.3-bin.zip" dest="${java.io.tmpdir}/log4j-2.3"/>
 		<copy file="${java.io.tmpdir}/log4j-2.3/apache-log4j-2.3-bin/log4j-api-2.3.jar" tofile="${log4j_api_2.3}"/>
@@ -310,7 +310,7 @@ limitations under the License.
 		<available file="${asm_5.2_dir}/${asm_5.2_file}" property="asm_5.2_available"/>
 	</target>
 
-	<target name="configure-asm-5.2" unless="${asm_5.2_available}">
+	<target name="configure-asm-5.2" unless="asm_5.2_available">
 		<!-- Fetch asm from http://download.forge.ow2.org/asm/asm-5.2-bin.zip. -->
 		<download-file destdir="${java.io.tmpdir}/asm-5.2-bin" destfile="asm-5.2-bin.zip" srcurl="http://download.forge.ow2.org/asm/asm-5.2-bin.zip"/>
 		<delete dir="${prereqs_root}/asm-5.2" failonerror="false"/>
@@ -328,7 +328,7 @@ limitations under the License.
 	    <available file="${asm_6.0_BETA_dir}/${asm_6.0_BETA_file}" property="asm_6.0_BETA_available"/>
 	</target>
 
-	<target name="configure-asm-6.0_BETA" unless="${asm_6.0_BETA_available}">
+	<target name="configure-asm-6.0_BETA" unless="asm_6.0_BETA_available">
 		<!-- Fetch asm from http://download.forge.ow2.org/asm/asm-6.0_BETA-bin.zip -->
 		<download-file destdir="${java.io.tmpdir}/asm-6.0_BETA-bin" destfile="asm-6.0_BETA-bin.zip" srcurl="http://download.forge.ow2.org/asm/asm-6.0_BETA-bin.zip"/>
 		<delete dir="${prereqs_root}/asm-6.0_BETA" failonerror="false"/>
@@ -402,56 +402,56 @@ limitations under the License.
 		</sequential>
 	</macrodef>
 	
-	<target name="print-junit-4.12-location" if="${junit_4.12_available}">
+	<target name="print-junit-4.12-location" if="junit_4.12_available">
 		<echo message="Using junit-4.12 from ${junit_4.12}"/>
 	</target>
 
-	<target name="print-hamcrest-core-1.3-location" if="${hamcrest_core_1.3_available}">
+	<target name="print-hamcrest-core-1.3-location" if="hamcrest_core_1.3_available">
 		<echo message="Using hamcrest-core-1.3 from ${hamcrest_core_1.3}"/>
 	</target>
 
-	<target name="print-log4j-2.3-location" if="${log4j_2.3_available}">
+	<target name="print-log4j-2.3-location" if="log4j_2.3_available">
 		<echo message="Using log4j-api-2.3 from ${log4j_api_2.3} and log4j-core-2.3 from ${log4j_core_2.3}"/>
 	</target>
 
-	<target name="print-tools-jar-location" if="${log4j_2.3_available}">
+	<target name="print-tools-jar-location" if="log4j_2.3_available">
 		<echo message="Using tools.jar from ${tools_jar}"/>
 	</target>
 	
-	<target name="print-asm-5.2-location" if="${asm_5.2_available}">
+	<target name="print-asm-5.2-location" if="asm_5.2_available">
 		<echo message="Using ${asm_5.2_file} from ${asm_5.2}"/>
 	</target>
 	
-	<target name="print-asm-6.0_BETA-location" if="${asm_6.0_BETA_available}">
+	<target name="print-asm-6.0_BETA-location" if="asm_6.0_BETA_available">
 		<echo message="Using ${asm_6.0_BETA_file} from ${asm_6.0_BETA}"/>
 	</target>
 
-	<target name="print-junit-4.12-error" unless="${junit_4.12_available}">
+	<target name="print-junit-4.12-error" unless="junit_4.12_available">
 		<echo message="ERROR: Cannot find junit-4.12 at ${junit_4.12}"/>
 		<property name="fail_run" value="true"/>
 	</target>
 
-	<target name="print-hamcrest-core-1.3-error" unless="${hamcrest_core_1.3_available}">
+	<target name="print-hamcrest-core-1.3-error" unless="hamcrest_core_1.3_available">
 		<echo message="ERROR: Cannot find hamcrest-core-1.3 at ${hamcrest_core_1.3}"/>
 		<property name="fail_run" value="true"/>
 	</target>
 
-	<target name="print-log4j-2.3-error" unless="${log4j_2.3_available}">
+	<target name="print-log4j-2.3-error" unless="log4j_2.3_available">
 		<echo message="ERROR: Cannot find log4j-api-2.3 at ${log4j_api_2.3} and / or log4j-core-2.3 at ${log4j_core_2.3}"/>
 		<property name="fail_run" value="true"/>
 	</target>
 	
-	<target name="print-asm-5.2-error" unless="${asm_5.2_available}">
+	<target name="print-asm-5.2-error" unless="asm_5.2_available">
 		<echo message="ERROR: Cannot find ${asm_5.2_file} at ${asm_5.2}"/>
 		<property name="fail_run" value="true"/>
 	</target>
 	
-	<target name="print-asm-6.0_BETA-error" unless="${asm_6.0_BETA_available}">
+	<target name="print-asm-6.0_BETA-error" unless="asm_6.0_BETA_available">
 		<echo message="ERROR: Cannot find ${asm_6.0_BETA_file} at ${asm_6.0_BETA}"/>
 		<property name="fail_run" value="true"/>
 	</target>
 	
-	<target name="print-tools-jar-error" unless="${tools_jar_correct}">
+	<target name="print-tools-jar-error" unless="tools_jar_correct">
 		<echo message="ERROR: Cannot find tools.jar at ${tools_jar}"/>
 		<property name="fail_run" value="true"/>
 	</target>

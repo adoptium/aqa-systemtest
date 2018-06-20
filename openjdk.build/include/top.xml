@@ -565,7 +565,7 @@ limitations under the License.
 			</condition>
 			<condition property="@{property}" value="ppcle">
 				<and>
-					<contains string="@{arch}" substring="ppcle"/>
+					<contains string="@{arch}" substring="ppc64le"/>
 				</and>
 			</condition>
 			<condition property="@{property}" value="ppc">

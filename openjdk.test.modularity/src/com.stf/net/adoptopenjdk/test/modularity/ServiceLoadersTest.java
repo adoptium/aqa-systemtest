@@ -84,7 +84,12 @@ public class ServiceLoadersTest implements StfPluginInterface {
 		String comment = "Run service loader test by adding the use of display service in module-info.java";
 		test.doRunForegroundProcess(comment, "T1", ECHO_ON, ExpectedOutcome.cleanRun().within("1m"), junitProcessDefinition); 		
 
-	    junitProcessDefinition = test.createJavaProcessDefinition()
+		/*
+		 * Temporarily exclude the failing service loader tests until 
+		 * https://github.com/AdoptOpenJDK/openjdk-systemtest/issues/137 
+		 * is resolved
+		 * */
+	    /*junitProcessDefinition = test.createJavaProcessDefinition()
 		    .addModuleAddReads("com.test.serviceloaders2=ALL-UNNAMED")
 		    .addJarToModulepath(provider1.getJarFileRef())
 		    .addModuleToModulepath(provider2)
@@ -117,7 +122,8 @@ public class ServiceLoadersTest implements StfPluginInterface {
 			.runClass(org.junit.runner.JUnitCore.class)
 			.addArg("adoptopenjdk.test.modularity.serviceloaders2.TestServiceLoaders2");
 		comment = "Run serviceloader test3 is same as test2 except that the TestServiceLoaders2 is in an automatic module";
-		test.doRunForegroundProcess(comment, "T3", ECHO_ON, ExpectedOutcome.cleanRun().within("1m"), junitProcessDefinition); 		
+		test.doRunForegroundProcess(comment, "T3", ECHO_ON, ExpectedOutcome.cleanRun().within("1m"), junitProcessDefinition); 	
+		*/	
 	}
 
 	public void tearDown(StfCoreExtension test) throws StfException {

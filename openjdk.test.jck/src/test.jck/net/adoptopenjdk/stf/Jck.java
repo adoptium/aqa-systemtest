@@ -49,6 +49,7 @@ public class Jck implements StfPluginInterface {
 	private String withAgent;
 	private String interactive;
 	private String extraJvmOptions;
+	private String concurrencyString;
 	private String jckVersion;
 	private String config;
 	private String jckRoot;
@@ -130,10 +131,14 @@ public class Jck implements StfPluginInterface {
 		help.outputArgDesc("This option is an input to the JCK harness to specify whether to run the interative tests.\n"
 				+ "Note this should option should only be set to 'yes' if you have access to a display, keyboard and mouse "
 				+ "attached to the test machine and have allocated sufficient time (several hours) to complete the testing,");
+		
+		help.outputArgName("concurrency", "INTEGER");
+		help.outputArgDesc("This option is an input to the JCK harness to specify whether to run tests in parallel.\n"
+				+ "If this is not set, then the value used is the value returned by Runtime.getRuntime().availableProcessors() plus one.");
 	}
 
 	public void pluginInit(StfCoreExtension test) throws Exception {
-		StfTestArguments testArgs = test.env().getTestProperties("tests","jckversion","testsuite","config=[NULL]","executiontype=[multijvm]","withagent=[off]","interactive=[no]","jckRoot=[NULL]");
+		StfTestArguments testArgs = test.env().getTestProperties("tests","jckversion","testsuite","config=[NULL]","executiontype=[multijvm]","withagent=[off]","interactive=[no]","jckRoot=[NULL]","concurrency=[NULL]");
 		
 		testJdk = System.getenv("JAVA_HOME");
 		tests = testArgs.get("tests");
@@ -176,6 +181,7 @@ public class Jck implements StfPluginInterface {
 		testExecutionType = testArgs.get("executiontype");
 		withAgent = testArgs.get("withagent");
 		interactive = testArgs.get("interactive");
+		concurrencyString = testArgs.get("concurrency");
 		
 		versionNo = jckVersion.replace("jck", "");
 		testSuiteFolder = "JCK-" + testSuite.toString().toLowerCase() + "-" + versionNo;
@@ -466,7 +472,7 @@ public class Jck implements StfPluginInterface {
 		
 		DirectoryRef jckRuntimeNativeLibValue = nativesLoc;
 		DirectoryRef jckRuntimeJmxLibValue = nativesLoc;
-		String concurrency = "";
+		int concurrency;
 		String keyword = "";
 		String libPath = "";
 		String robotAvailable = "";
@@ -485,6 +491,13 @@ public class Jck implements StfPluginInterface {
 		if (freePort == -1) {
 			throw new StfException("Unable to get a free port");
 		}
+
+		// If concurrency was not specified as a test-arg it will have been assigned the value NULL.
+		// Default to setting concurrency to the number of processors + 1.
+		if ( concurrencyString.equals("NULL") ) {
+			concurrency = Runtime.getRuntime().availableProcessors() + 1;
+			concurrencyString = String.valueOf(concurrency);
+		}
 		
 		// Set the operating system as 'Windows' for Windows and 'other' for all other operating systems.
 		// If 'other' is specified when executing on Windows, then Windows specific settings such
@@ -502,29 +515,26 @@ public class Jck implements StfPluginInterface {
 			if (platform.equals("win32")) {
 				libPath = "PATH";
 				robotAvailable = "Yes";
-				concurrency = "1";
 			} else if (platform.equals("linux"))  {
 				libPath = "LD_LIBRARY_PATH";
 				robotAvailable = "Yes";
-				concurrency = "1";
 			} else if (platform.equals("aix")) {
 				libPath = "LIBPATH";
 				robotAvailable = "Yes";
-				concurrency = "1";
 			} else if (platform.equals("zos")) {
 				pathToLib = testJdk + File.separator + "lib";
 				libPath = "LIBPATH";
 				robotAvailable = "No";
-				concurrency = "4";
+				// Override value from availableProcessors() until value returned on zOS has been evaluated
+				concurrencyString = "4";
 			} else if (platform.equals("macosx")) {
 				libPath = "DYLD_LIBRARY_PATH";
 				robotAvailable = "Yes";
-				concurrency = "1";
 			} else {
 				throw new StfException("Unknown platform:: " + platform);
 			}
 
-			fileContent += "concurrency " + concurrency + ";\n";
+			fileContent += "concurrency " + concurrencyString + ";\n";
 			fileContent += "timeoutfactor 1" + ";\n";				// java_awt and javax_management require more than 1h to finish tests
 			fileContent += keyword + ";\n";
 			
@@ -676,20 +686,20 @@ public class Jck implements StfPluginInterface {
 			
 			keyword = "keywords compiler";
 			
+			// Overrides only required on zOS for compiler tests
 			if (platform.equals("win32")) {
-				concurrency = "1";
-			} else if (platform.equals("linux") || platform.equals("macosx")) {
-				concurrency = "1";	
+			} else if (platform.equals("linux")) {
+			} else if (platform.equals("macosx")) {
 			} else if (platform.equals("aix")) {
-				concurrency = "1";
 			} else if (platform.equals("zos")) {
 				pathToLib = testJdk + File.separator + "lib";
-				concurrency = "4";
+				// Override value from availableProcessors() until value returned on zOS has been evaluated
+				concurrencyString = "4";
 			} else {
 				throw new StfException("Unknown platform:: " + platform);
 			}
 			
-			fileContent += "concurrency " + concurrency + ";\n";
+			fileContent += "concurrency " + concurrencyString + ";\n";
 			fileContent += "timeoutfactor 1" + ";\n";							// lang.CLSS,CONV,STMT,INFR requires more than 1h to complete. lang.Annot,EXPR,LMBD require more than 2h to complete tests
 			fileContent += keyword + ";\n";
 			
@@ -747,26 +757,24 @@ public class Jck implements StfPluginInterface {
 				} else {
 					winscriptdir="windows";
 				}
-				concurrency = "1";
 				xjcCmd = jckBase + File.separator + winscriptdir + File.separator + "bin" + File.separator + "xjc.bat"; 
 				jxcCmd = jckBase + File.separator + winscriptdir + File.separator + "bin" + File.separator + "schemagen.bat"; 
 				genCmd = jckBase + File.separator + winscriptdir + File.separator + "bin" + File.separator + "wsgen.bat"; 
 				impCmd = jckBase + File.separator + winscriptdir + File.separator + "bin" + File.separator + "wsimport.bat"; 
 			} else if (platform.equals("linux") || platform.equals("aix")) {
-				concurrency = "1";
 				xjcCmd = jckBase + File.separator + "linux" + File.separator + "bin" + File.separator + "xjc.sh";
 				jxcCmd = jckBase + File.separator + "linux" + File.separator + "bin" + File.separator + "schemagen.sh";
 				genCmd = jckBase + File.separator + "linux" + File.separator + "bin" + File.separator + "wsgen.sh";
 				impCmd = jckBase + File.separator + "linux" + File.separator + "bin" + File.separator + "wsimport.sh";
 			} else if (platform.equals("macosx")) {
-				concurrency = "1";
 				xjcCmd = jckBase + File.separator + "macos" + File.separator + "bin" + File.separator + "xjc.sh";
 				jxcCmd = jckBase + File.separator + "macos" + File.separator + "bin" + File.separator + "schemagen.sh";
 				genCmd = jckBase + File.separator + "macos" + File.separator + "bin" + File.separator + "wsgen.sh";
 				impCmd = jckBase + File.separator + "macos" + File.separator + "bin" + File.separator + "wsimport.sh";
 			} else if (platform.equals("zos")) {
 				pathToJavac = testJdk + File.separator + "bin" + File.separator + "javac";
-				concurrency = "4";
+				// Override value from availableProcessors() until value returned on zOS has been evaluated
+				concurrencyString = "4";
 				xjcCmd = jckBase + File.separator + "solaris" + File.separator + "bin" + File.separator + "xjc.sh";
 				jxcCmd = jckBase + File.separator + "solaris" + File.separator + "bin" + File.separator + "schemagen.sh";
 				genCmd = jckBase + File.separator + "solaris" + File.separator + "bin" + File.separator + "wsgen.sh";
@@ -775,7 +783,7 @@ public class Jck implements StfPluginInterface {
 				throw new StfException("Unknown platform:: " + platform);
 			}
 			
-			fileContent += "concurrency " + concurrency + ";\n";
+			fileContent += "concurrency " + concurrencyString + ";\n";
 			fileContent += "timeoutfactor 1" + ";\n";							// All Devtools tests take less than 1h to finish.
 			
 			if (platform.equals("win32")) {

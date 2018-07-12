@@ -132,9 +132,11 @@ public class Jck implements StfPluginInterface {
 				+ "Note this should option should only be set to 'yes' if you have access to a display, keyboard and mouse "
 				+ "attached to the test machine and have allocated sufficient time (several hours) to complete the testing,");
 		
-		help.outputArgName("concurrency", "INTEGER");
+		help.outputArgName("concurrency", "cpus|nn");
 		help.outputArgDesc("This option is an input to the JCK harness to specify whether to run tests in parallel.\n"
-				+ "If this is not set, then the value used is the value returned by Runtime.getRuntime().availableProcessors() plus one.");
+				+ "concurrency=nn means run nn tests in parallel.\n"
+				+ "concurrency=cpus means run Runtime.getRuntime().availableProcessors() plus one tests in parallel.\n"
+				+ "If the concurrency option is not set, concurrency=1 is used.");
 	}
 
 	public void pluginInit(StfCoreExtension test) throws Exception {
@@ -493,8 +495,13 @@ public class Jck implements StfPluginInterface {
 		}
 
 		// If concurrency was not specified as a test-arg it will have been assigned the value NULL.
-		// Default to setting concurrency to the number of processors + 1.
+		// Default to concurrency=1.
 		if ( concurrencyString.equals("NULL") ) {
+			concurrencyString = "1";
+		}
+
+		// If concurrency=cpus was specified, set concurrency to the number of processors + 1.
+		if ( concurrencyString.equals("cpus") ) {
 			concurrency = Runtime.getRuntime().availableProcessors() + 1;
 			concurrencyString = String.valueOf(concurrency);
 		}
@@ -525,8 +532,6 @@ public class Jck implements StfPluginInterface {
 				pathToLib = testJdk + File.separator + "lib";
 				libPath = "LIBPATH";
 				robotAvailable = "No";
-				// Override value from availableProcessors() until value returned on zOS has been evaluated
-				concurrencyString = "4";
 			} else if (platform.equals("macosx")) {
 				libPath = "DYLD_LIBRARY_PATH";
 				robotAvailable = "Yes";
@@ -693,8 +698,6 @@ public class Jck implements StfPluginInterface {
 			} else if (platform.equals("aix")) {
 			} else if (platform.equals("zos")) {
 				pathToLib = testJdk + File.separator + "lib";
-				// Override value from availableProcessors() until value returned on zOS has been evaluated
-				concurrencyString = "4";
 			} else {
 				throw new StfException("Unknown platform:: " + platform);
 			}
@@ -773,8 +776,6 @@ public class Jck implements StfPluginInterface {
 				impCmd = jckBase + File.separator + "macos" + File.separator + "bin" + File.separator + "wsimport.sh";
 			} else if (platform.equals("zos")) {
 				pathToJavac = testJdk + File.separator + "bin" + File.separator + "javac";
-				// Override value from availableProcessors() until value returned on zOS has been evaluated
-				concurrencyString = "4";
 				xjcCmd = jckBase + File.separator + "solaris" + File.separator + "bin" + File.separator + "xjc.sh";
 				jxcCmd = jckBase + File.separator + "solaris" + File.separator + "bin" + File.separator + "schemagen.sh";
 				genCmd = jckBase + File.separator + "solaris" + File.separator + "bin" + File.separator + "wsgen.sh";

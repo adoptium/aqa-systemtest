@@ -238,7 +238,7 @@ public class UpgradeModPathTest implements StfPluginInterface {
 				 * indicates the expected failure*/			
 				String combinedFileOT16 = test.env().getResultsDir().getSpec() + System.getProperty("file.separator") + "combinedOT16.txt";
 				test.doRunForegroundProcess("Combine stderr and stdout files of process OT16", "CO", 
-						ECHO_OFF, ExpectedOutcome.exitValue(0).within("30s"), 
+						ECHO_OFF, ExpectedOutcome.exitValue(0).within("5m"), 
 						test.createJavaProcessDefinition()
 							.addJvmOption("-Dfile1=" + ot16.getStdoutFileRef())
 							.addJvmOption("-Dfile2=" + ot16.getStderrFileRef())

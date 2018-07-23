@@ -102,7 +102,7 @@ limitations under the License.
 			   executable="${java8_compiler}"
 			   classpathref="project.class.path"
 			   debug="true"
-			   encoding="UTF-8"
+			   encoding="${src-encoding}"
 			   includeantruntime="false"
 			   failonerror="true">
 			<include name="**/*.java" />
@@ -133,7 +133,7 @@ limitations under the License.
 			   executable="${java8_compiler}"
 			   classpathref="project.class.path"
 			   debug="true"
-			   encoding="UTF-8"
+			   encoding="${src-encoding}"
 			   includeantruntime="false"
 			   failonerror="true">
 			<include name="*.java" />

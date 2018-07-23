@@ -1,0 +1,54 @@
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+
+# The default for text files
+* git-encoding=iso8859-1 working-tree-encoding=ibm-1047
+
+# Specific types of files remain as ASCII
+*.xml git-encoding=iso8859-1 working-tree-encoding=iso8859-1
+*.dtd git-encoding=iso8859-1 working-tree-encoding=iso8859-1
+*.xsd git-encoding=iso8859-1 working-tree-encoding=iso8859-1
+*.classpath git-encoding=iso8859-1 working-tree-encoding=iso8859-1
+
+# Default - treat files as text as convert line ending to LF
+* text eol=lf
+
+# Overrides for files to be left untouched - treat as binary
+*.bin binary
+*.bmp binary
+*.ciphertext binary
+*.class binary
+*.dat binary
+*.dict binary
+*.dll binary
+*.doc binary
+*.ear binary
+*.exe binary
+*.gif binary
+*.ico binary
+*.idx binary
+*.iv binary
+*.jar binary
+*.jks binary
+*.jpeg binary
+*.jpg binary
+*.key binary
+*.o binary
+*.obj binary
+*.odg binary
+*.pack binary
+*.pdf binary
+*.png binary
+*.rtf binary
+*.ser binary
+*.so binary
+*.war binary
+*.zip binary

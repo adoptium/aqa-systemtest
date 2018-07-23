@@ -348,7 +348,7 @@ limitations under the License.
 	</target>
 	
 	<!-- Target to check if wget is available. -->
-	<target name="check-for-wget" unless="useCurl">
+	<target name="check-for-wget" unless="isZOS">
 		<!-- wget will be used to download files. -->
 		<!-- If it cannot be found on the PATH then the build will fail when the download-file macro (in macrodefs.xml) is invoked. -->
 		<echo message="Looking for wget on PATH"/>
@@ -359,27 +359,31 @@ limitations under the License.
 	</target>
 
 	<!-- Target to check if curl is available. -->
-	<target name="check-for-curl" if="useCurl">
+	<target name="check-for-curl" if="isZOS">
 		<!-- curl will be used to download files. -->
 		<!-- If it cannot be found on the PATH then the build will fail when the download-file macro (in macrodefs.xml) is invoked. -->
 		<echo message="Looking for curl on PATH"/>
 		<available file="curl" filepath="${env.PATH}" property="curl_available"/>
 	</target>
 	
-	<condition property="useCurl" value="true">
-			<equals arg1="${os.name}" arg2="z/OS"/>
+	<condition property="isZOS" value="true">
+		<equals arg1="${os.name}" arg2="z/OS"/>
 	</condition>
 			
 	<condition property="download-tool" value="curl" else="wget">
-		<isset property="useCurl"/>
+		<isset property="isZOS"/>
+	</condition>
+	
+	<condition property="src-encoding" value="IBM-1047" else="UTF-8">
+		<isset property="isZOS"/>
 	</condition>
 	
 	<condition property="download-tool-security-options" value="-k" else="--no-check-certificate">
-		<isset property="useCurl"/>
+		<isset property="isZOS"/>
 	</condition>
 	
 	<condition property="download-tool-srcfile-option" value="-o" else="-O">
-		<isset property="useCurl"/>
+		<isset property="isZOS"/>
 	</condition>
 
 	<macrodef name="download-file" description="Use ${download-tool} to download a file">

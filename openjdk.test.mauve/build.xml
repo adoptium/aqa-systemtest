@@ -278,7 +278,66 @@ limitations under the License.
 		<delete dir="${src_dir}/gnu/testlet/java/awt/TextArea"/>
 		<delete dir="${src_dir}/gnu/testlet/java/awt/TextField"/>
 		<delete file="${src_dir}/gnu/testlet/java/util/logging/LogManager/Security.java"/>
-
+		
+		<!-- Delete files dependent on CORBA as CORBA is not available from Java 11-->	
+		<delete file="${src_dir}/gnu/testlet/org/omg/CORBA_2_3/ORB/Valtype/cmInfo.java"/>
+		<delete file="${src_dir}/gnu/testlet/org/omg/CORBA_2_3/ORB/Valtype/Info.java"/>
+		<delete file="${src_dir}/gnu/testlet/javax/rmi/CORBA/Tie/RMI_test.java"/>
+		<delete file="${src_dir}/gnu/testlet/javax/rmi/CORBA/Tie/RMI_IIOP.java"/>
+		<delete file="${src_dir}/gnu/testlet/javax/rmi/CORBA/Tie/RMI_testImpl.java"/>
+		<delete file="${src_dir}/gnu/testlet/javax/rmi/CORBA/Tie/_RMI_testImpl_Tie.java"/>
+		<delete file="${src_dir}/gnu/testlet/javax/rmi/CORBA/Tie/_RMI_test_Stub.java"/>
+		<delete file="${src_dir}/gnu/testlet/org/omg/CORBA/Any/testAny.java"/>
+		<delete file="${src_dir}/gnu/testlet/org/omg/CORBA/ORB/Asynchron/_asyncImplBase.java"/>
+		<delete file="${src_dir}/gnu/testlet/org/omg/CORBA/ORB/Asynchron/_asyncStub.java"/>
+		<delete file="${src_dir}/gnu/testlet/org/omg/CORBA_2_3/ORB/Valtype/cmInfoImpl.java"/>
+		<delete file="${src_dir}/gnu/testlet/org/omg/CORBA_2_3/ORB/Valtype/cmInfoHelper.java"/>
+		<delete file="${src_dir}/gnu/testlet/org/omg/CORBA_2_3/ORB/Valtype/cmInfoDefaultFactory.java"/>
+		<delete file="${src_dir}/gnu/testlet/org/omg/CORBA_2_3/ORB/Valtype/InfoValueFactory.java"/>
+		<delete file="${src_dir}/gnu/testlet/javax/rmi/CORBA/Tie/NodeObject.java"/>
+		<delete file="${src_dir}/gnu/testlet/org/omg/CORBA/ORB/Asynchron/assServant.java"/>
+		<delete file="${src_dir}/gnu/testlet/org/omg/CORBA_2_3/ORB/Valtype/cmInfoHolder.java"/>
+		<delete file="${src_dir}/gnu/testlet/org/omg/CORBA_2_3/ORB/Valtype/InfoHelper.java"/>
+		<delete file="${src_dir}/gnu/testlet/org/omg/CORBA_2_3/ORB/Valtype/InfoHolder.java"/>
+		<delete file="${src_dir}/gnu/testlet/org/omg/CORBA_2_3/ORB/Valtype/GreetingsServant.java"/>
+		<delete file="${src_dir}/gnu/testlet/org/omg/CORBA_2_3/ORB/Valtype/InfoDefaultFactory.java"/>
+		<delete file="${src_dir}/gnu/testlet/org/omg/CORBA_2_3/ORB/Valtype/_GreetingsImplBase.java"/>
+		<delete file="${src_dir}/gnu/testlet/org/omg/CORBA_2_3/ORB/Valtype/InfoImpl.java"/>
+		<delete file="${src_dir}/gnu/testlet/org/omg/CORBA_2_3/ORB/Valtype/_GreetingsStub.java"/>
+		<delete file="${src_dir}/gnu/testlet/org/omg/CORBA_2_3/ORB/ValueTypeTest.java"/>
+		<delete file="${src_dir}/gnu/testlet/org/omg/PortableServer/POA/Util.java"/>	
+		<delete file="${src_dir}/gnu/testlet/org/omg/CORBA/ORB/comServer.java"/>
+		<delete file="${src_dir}/gnu/testlet/org/omg/CORBA_2_3/ORB/Valtype/Greetings.java"/>
+		<delete file="${src_dir}/gnu/testlet/org/omg/CORBA/ORB/Asynchron/assServer.java"/>
+		<delete file="${src_dir}/gnu/testlet/org/omg/CORBA/ORB/comServer.java"/>
+		<delete file="${src_dir}/gnu/testlet/org/omg/CORBA_2_3/ORB/Valtype/GreetingsHelper.java"/>	
+		<delete file="${src_dir}/gnu/testlet/org/omg/CORBA/ORB/parallelRunTest.java"/>
+		<delete file="${src_dir}/gnu/testlet/org/omg/CORBA/ORB/RequestTest.java"/>
+		<delete file="${src_dir}/gnu/testlet/org/omg/CORBA/ORB/DirectTest.java"/>	
+		<delete file="${src_dir}/gnu/testlet/org/omg/CORBA/ORB/NEC_Corporation_RF11.java"/>	
+		<delete file="${src_dir}/gnu/testlet/org/omg/CORBA/ServiceInformationHelper/basicHelperOperations.java"/>
+		<delete file="${src_dir}/gnu/testlet/org/omg/CORBA/TypeCode/orbTypecodes.java"/>
+		<delete file="${src_dir}/gnu/testlet/org/omg/CORBA/portable/InputStream/cdrIO.java"/>
+		<delete file="${src_dir}/gnu/testlet/org/omg/CORBA_2_3/ORB/Valtype/cmInfoValueFactory.java"/>
+		<delete file="${src_dir}/gnu/testlet/java/beans/beancontext/BeanContextSupport/toArray.java"/>
+		<delete file="${src_dir}/gnu/testlet/java/lang/Runtime/security.java"/>
+		<delete file="${src_dir}/gnu/testlet/java/util/AbstractCollection/AcuniaAbstractCollectionTest.java"/>
+		<delete file="${src_dir}/gnu/testlet/java/util/AbstractSequentialList/AcuniaAbstractSequentialListTest.java"/>
+		<delete file="${src_dir}/gnu/testlet/java/util/ArrayList/AcuniaArrayListTest.java"/>
+		<delete file="${src_dir}/gnu/testlet/java/util/LinkedList/AcuniaLinkedListTest.java"/>
+		<delete file="${src_dir}/gnu/testlet/java/util/Vector/AcuniaVectorTest.java"/>
+		<delete file="${src_dir}/gnu/testlet/java/lang/System/security.java"/>
+		<delete dir="${src_dir}/gnu/testlet/org/omg/CORBA/ORB/RF11"/>
+		<delete dir="${src_dir}/gnu/testlet/org/omg/CORBA/ORB/communication"/>
+		<delete dir="${src_dir}/gnu/testlet/org/omg/DynamicAny/DynAny"/>
+		<delete dir="${src_dir}/gnu/testlet/org/omg/CORBA/portable/OutputStream"/>
+		<delete dir="${src_dir}/gnu/testlet/org/omg/PortableInterceptor/Interceptor"/>
+		<delete dir="${src_dir}/gnu/testlet/org/omg/IOP/IOR"/>
+		<delete dir="${src_dir}/gnu/testlet/org/omg/PortableServer/POA"/>
+		<delete dir="${src_dir}/gnu/testlet/org/omg/PortableServer/POAOperations"/>
+							
+				
+			
 	</target>
 
 	<target name="get-source" depends="download-cvsclient, create-work-dir" unless="already_built">

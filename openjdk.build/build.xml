@@ -35,7 +35,12 @@ limitations under the License.
 	<!-- target to build all projects in the repository.  -->
 	<!-- dir must be set on the ant task otherwise the basedir property is not set to a new value in the subant task. -->
 	<!-- Also make sure stf is built -->
-	<target name="build-dependencies">
+	
+	<condition property="isJava11" value="true">
+		<equals arg1="${JAVA_VERSION}" arg2="SE110"/>
+	</condition>
+
+	<target name="build-dependencies" depends="build-modularity">
 		<ant antfile="${stf_root}/stf.build/build.xml" dir="${stf_root}/stf.build" inheritAll="false"/>
 		<ant antfile="${source_root}/openjdk.test.concurrent/build.xml" dir="${source_root}/openjdk.test.concurrent" inheritAll="false"/>
 		<ant antfile="${source_root}/openjdk.test.classloading/build.xml" dir="${source_root}/openjdk.test.classloading" inheritAll="false"/>
@@ -51,6 +56,12 @@ limitations under the License.
 		<ant antfile="${source_root}/openjdk.test.serialization/build.xml" dir="${source_root}/openjdk.test.serialization" inheritAll="false"/>
 		<ant antfile="${source_root}/openjdk.test.util/build.xml" dir="${source_root}/openjdk.test.util" inheritAll="false"/>
 		<ant antfile="${source_root}/openjdk.test.jlm/build.xml" dir="${source_root}/openjdk.test.jlm" inheritAll="false"/>
+	</target>
+	
+	<!--Temporarily exclude compilation/running of test.modularity on Java11 due to 
+				https://github.com/AdoptOpenJDK/openjdk-systemtest/issues/150
+	-->
+	<target name="build-modularity" unless="isJava11">
 		<ant antfile="${source_root}/openjdk.test.modularity/build.xml" dir="${source_root}/openjdk.test.modularity" inheritAll="false"/>
 	</target>
 

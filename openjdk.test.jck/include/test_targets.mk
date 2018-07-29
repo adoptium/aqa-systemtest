@@ -530,7 +530,7 @@ test.jck8b.runtime.api.java_io:
 	@echo Target $@ completed
 test.jck8b.runtime.api.java_util:
 	@echo Running target $@
-	$(STF_COMMAND) -test=Jck -test-args="tests=api/java_util,jckversion=jck8b,testsuite=RUNTIME$(JCKCONCURRENCY_CPUS_ARG)" $(LOG)
+	$(STF_COMMAND) -test=Jck -test-args="tests=api/java_util,jckversion=jck8b,testsuite=RUNTIME$(JCKCONCURRENCY_1_ARG)" $(LOG)
 	@echo Target $@ completed
 test.jck8b.runtime.api.javax_accessibility:
 	@echo Running target $@
@@ -610,7 +610,7 @@ test.jck8b.runtime.vm.fp:
 	@echo Target $@ completed
 test.jck8b.runtime.vm.jvmti:
 	@echo Running target $@
-	$(STF_COMMAND) -test=Jck -test-args="tests=vm/jvmti,jckversion=jck8b,testsuite=RUNTIME$(JCKCONCURRENCY_CPUS_ARG)" $(LOG)
+	$(STF_COMMAND) -test=Jck -test-args="tests=vm/jvmti,jckversion=jck8b,testsuite=RUNTIME$(JCKCONCURRENCY_1_ARG)" $(LOG)
 	@echo Target $@ completed
 test.jck8b.runtime.vm.overview:
 	@echo Running target $@

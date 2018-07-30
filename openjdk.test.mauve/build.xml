@@ -151,7 +151,11 @@ limitations under the License.
 		<delete dir="${work_dir}"/>
 	</target>
 
-	<target name="mauve-configure" if="mauve_source_available">
+	<condition property="corbaSupported" value="true">
+		<matches string="${JAVA_VERSION}" pattern="^SE(8|9|10)0$$" />
+	</condition>
+
+	<target name="mauve-configure" if="mauve_source_available" depends="delete-corba-files">
 		<!-- Mauve ships with a gnu/testlet/config.java.in file which is processed by the
 		     configure shell script in the mauve distribution root directory to create a config.java file.
 		     The shell script cannot be run with the Windows default shell (cmd.exe) so we
@@ -277,8 +281,10 @@ limitations under the License.
 		<delete dir="${src_dir}/gnu/testlet/java/awt/Frame"/>
 		<delete dir="${src_dir}/gnu/testlet/java/awt/TextArea"/>
 		<delete dir="${src_dir}/gnu/testlet/java/awt/TextField"/>
-		<delete file="${src_dir}/gnu/testlet/java/util/logging/LogManager/Security.java"/>
-		
+		<delete file="${src_dir}/gnu/testlet/java/util/logging/LogManager/Security.java"/>	
+	</target>
+
+	<target name="delete-corba-files" unless="corbaSupported">
 		<!-- Delete files dependent on CORBA as CORBA is not available from Java 11-->	
 		<delete file="${src_dir}/gnu/testlet/org/omg/CORBA_2_3/ORB/Valtype/cmInfo.java"/>
 		<delete file="${src_dir}/gnu/testlet/org/omg/CORBA_2_3/ORB/Valtype/Info.java"/>
@@ -327,6 +333,9 @@ limitations under the License.
 		<delete file="${src_dir}/gnu/testlet/java/util/LinkedList/AcuniaLinkedListTest.java"/>
 		<delete file="${src_dir}/gnu/testlet/java/util/Vector/AcuniaVectorTest.java"/>
 		<delete file="${src_dir}/gnu/testlet/java/lang/System/security.java"/>
+		<delete file="${src_dir}/gnu/testlet/java/lang/Thread/insecurity.java"/>
+		<delete file="${src_dir}/gnu/testlet/java/lang/Thread/security.java"/>
+		<delete file="${src_dir}/gnu/testlet/java/lang/Thread/security10.java"/>	
 		<delete dir="${src_dir}/gnu/testlet/org/omg/CORBA/ORB/RF11"/>
 		<delete dir="${src_dir}/gnu/testlet/org/omg/CORBA/ORB/communication"/>
 		<delete dir="${src_dir}/gnu/testlet/org/omg/DynamicAny/DynAny"/>
@@ -335,9 +344,6 @@ limitations under the License.
 		<delete dir="${src_dir}/gnu/testlet/org/omg/IOP/IOR"/>
 		<delete dir="${src_dir}/gnu/testlet/org/omg/PortableServer/POA"/>
 		<delete dir="${src_dir}/gnu/testlet/org/omg/PortableServer/POAOperations"/>
-							
-				
-			
 	</target>
 
 	<target name="get-source" depends="download-cvsclient, create-work-dir" unless="already_built">

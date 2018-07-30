@@ -255,10 +255,17 @@ public class Jck implements StfPluginInterface {
 			testHost2Ip = prop.getProperty("testhost2ip");
 			httpUrl = prop.getProperty("httpurl");
 			ftpUrl = prop.getProperty("ftpurl");
-			krb5ClientPassword = prop.getProperty("krb5ClientPassword");;
-			krb5ClientUsername = prop.getProperty("krb5ClientUsername");;
-			krb5ServerPassword = prop.getProperty("krb5ServerPassword");;
-			krb5ServerUsername = prop.getProperty("krb5ServerUsername");;
+			// Make sure username properties do not have trailing whitespace before adding server location data.
+			krb5ClientPassword = prop.getProperty("krb5ClientPassword");
+			krb5ClientUsername = prop.getProperty("krb5ClientUsername");
+			if ( krb5ClientUsername != null ) {
+				krb5ClientUsername = krb5ClientUsername.trim();
+			}
+			krb5ServerPassword = prop.getProperty("krb5ServerPassword");
+			krb5ServerUsername = prop.getProperty("krb5ServerUsername");
+			if ( krb5ServerUsername != null ) {
+				krb5ServerUsername = krb5ServerUsername.trim();
+			}
 		}
 		
 		// Some tests provoke out of memory exceptions.

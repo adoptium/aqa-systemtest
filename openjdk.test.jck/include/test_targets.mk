@@ -569,7 +569,7 @@ test.jck.runtime.api.java_io:
 	@echo Target $@ completed
 test.jck.runtime.api.java_util:
 	@echo Running target $@
-	$(STF_COMMAND) -test=Jck -test-args="tests=api/java_util,jckversion=$(JCKVERSION),testsuite=RUNTIME$(JCKCONCURRENCY_CPUS_ARG)" $(LOG)
+	$(STF_COMMAND) -test=Jck -test-args="tests=api/java_util,jckversion=$(JCKVERSION),testsuite=RUNTIME$(JCKCONCURRENCY_1_ARG)" $(LOG)
 	@echo Target $@ completed
 test.jck.runtime.api.javax_accessibility:
 	@echo Running target $@
@@ -605,11 +605,11 @@ test.jck.runtime.api.java_nio:
 	@echo Target $@ completed
 test.jck.runtime.api.java_rmi:
 	@echo Running target $@
-	$(STF_COMMAND) -test=Jck -test-args="tests=api/java_rmi,jckversion=$(JCKVERSION),testsuite=RUNTIME$(JCKCONCURRENCY_CPUS_ARG)" $(LOG)
+	$(STF_COMMAND) -test=Jck -test-args="tests=api/java_rmi,jckversion=$(JCKVERSION),testsuite=RUNTIME$(JCKCONCURRENCY_1_ARG)" $(LOG)
 	@echo Target $@ completed
 test.jck.runtime.api.javax_management:
 	@echo Running target $@
-	$(STF_COMMAND) -test=Jck -test-args="tests=api/javax_management,jckversion=$(JCKVERSION),testsuite=RUNTIME$(JCKCONCURRENCY_CPUS_ARG)" $(LOG)
+	$(STF_COMMAND) -test=Jck -test-args="tests=api/javax_management,jckversion=$(JCKVERSION),testsuite=RUNTIME$(JCKCONCURRENCY_1_ARG)" $(LOG)
 	@echo Target $@ completed
 test.jck.runtime.api.javax_rmi:
 	@echo Running target $@
@@ -617,15 +617,15 @@ test.jck.runtime.api.javax_rmi:
 	@echo Target $@ completed
 test.jck.runtime.api.javax_xml:
 	@echo Running target $@
-	$(STF_COMMAND) -test=Jck -test-args="tests=api/javax_xml,jckversion=$(JCKVERSION),testsuite=RUNTIME$(JCKCONCURRENCY_CPUS_ARG)" $(LOG)
+	$(STF_COMMAND) -test=Jck -test-args="tests=api/javax_xml,jckversion=$(JCKVERSION),testsuite=RUNTIME$(JCKCONCURRENCY_1_ARG)" $(LOG)
 	@echo Target $@ completed
 test.jck.runtime.api.org_omg:
 	@echo Running target $@
-	$(STF_COMMAND) -test=Jck -test-args="tests=api/org_omg,jckversion=$(JCKVERSION),testsuite=RUNTIME$(JCKCONCURRENCY_CPUS_ARG)" $(LOG)
+	$(STF_COMMAND) -test=Jck -test-args="tests=api/org_omg,jckversion=$(JCKVERSION),testsuite=RUNTIME$(JCKCONCURRENCY_1_ARG)" $(LOG)
 	@echo Target $@ completed
 test.jck.runtime.api.org_ietf:
 	@echo Running target $@
-	$(STF_COMMAND) -test=Jck -test-args="tests=api/org_ietf,jckversion=$(JCKVERSION),testsuite=RUNTIME,config=$(JCK_CONFIG)" $(LOG)
+	$(STF_COMMAND) -test=Jck -test-args="tests=api/org_ietf,jckversion=$(JCKVERSION),testsuite=RUNTIME$(JCKCONCURRENCY_1_ARG),config=$(JCK_CONFIG)" $(LOG)
 	@echo Target $@ completed
 test.jck.runtime.api.java_time:
 	@echo Running target $@
@@ -633,91 +633,91 @@ test.jck.runtime.api.java_time:
 	@echo Target $@ completed
 test.jck.runtime.vm.cldc:
 	@echo Running target $@
-	$(STF_COMMAND) -test=Jck -test-args="tests=vm/cldc,jckversion=$(JCKVERSION),testsuite=RUNTIME$(JCKCONCURRENCY_CPUS_ARG)" $(LOG)
+	$(STF_COMMAND) -test=Jck -test-args="tests=vm/cldc,jckversion=$(JCKVERSION),testsuite=RUNTIME$(JCKCONCURRENCY_1_ARG)" $(LOG)
 	@echo Target $@ completed
 test.jck.runtime.vm.concepts:
 	@echo Running target $@
-	$(STF_COMMAND) -test=Jck -test-args="tests=vm/concepts,jckversion=$(JCKVERSION),testsuite=RUNTIME$(JCKCONCURRENCY_CPUS_ARG)" $(LOG)
+	$(STF_COMMAND) -test=Jck -test-args="tests=vm/concepts,jckversion=$(JCKVERSION),testsuite=RUNTIME$(JCKCONCURRENCY_1_ARG)" $(LOG)
 	@echo Target $@ completed
 test.jck.runtime.vm.constantpool:
 	@echo Running target $@
-	$(STF_COMMAND) -test=Jck -test-args="tests=vm/constantpool,jckversion=$(JCKVERSION),testsuite=RUNTIME$(JCKCONCURRENCY_CPUS_ARG)" $(LOG)
+	$(STF_COMMAND) -test=Jck -test-args="tests=vm/constantpool,jckversion=$(JCKVERSION),testsuite=RUNTIME$(JCKCONCURRENCY_1_ARG)" $(LOG)
 	@echo Target $@ completed
 test.jck.runtime.vm.fp:
 	@echo Running target $@
-	$(STF_COMMAND) -test=Jck -test-args="tests=vm/fp,jckversion=$(JCKVERSION),testsuite=RUNTIME$(JCKCONCURRENCY_CPUS_ARG)" $(LOG)
+	$(STF_COMMAND) -test=Jck -test-args="tests=vm/fp,jckversion=$(JCKVERSION),testsuite=RUNTIME$(JCKCONCURRENCY_1_ARG)" $(LOG)
 	@echo Target $@ completed
 test.jck.runtime.vm.jvmti:
 	@echo Running target $@
-	$(STF_COMMAND) -test=Jck -test-args="tests=vm/jvmti,jckversion=$(JCKVERSION),testsuite=RUNTIME$(JCKCONCURRENCY_CPUS_ARG)" $(LOG)
+	$(STF_COMMAND) -test=Jck -test-args="tests=vm/jvmti,jckversion=$(JCKVERSION),testsuite=RUNTIME$(JCKCONCURRENCY_1_ARG)" $(LOG)
 	@echo Target $@ completed
 test.jck.runtime.vm.overview:
 	@echo Running target $@
-	$(STF_COMMAND) -test=Jck -test-args="tests=vm/overview,jckversion=$(JCKVERSION),testsuite=RUNTIME$(JCKCONCURRENCY_CPUS_ARG)" $(LOG)
+	$(STF_COMMAND) -test=Jck -test-args="tests=vm/overview,jckversion=$(JCKVERSION),testsuite=RUNTIME$(JCKCONCURRENCY_1_ARG)" $(LOG)
 	@echo Target $@ completed
 test.jck.runtime.vm.typechecker:
 	@echo Running target $@
-	$(STF_COMMAND) -test=Jck -test-args="tests=vm/typechecker,jckversion=$(JCKVERSION),testsuite=RUNTIME$(JCKCONCURRENCY_CPUS_ARG)" $(LOG)
+	$(STF_COMMAND) -test=Jck -test-args="tests=vm/typechecker,jckversion=$(JCKVERSION),testsuite=RUNTIME$(JCKCONCURRENCY_1_ARG)" $(LOG)
 	@echo Target $@ completed
 test.jck.runtime.vm.classfmt:
 	@echo Running target $@
-	$(STF_COMMAND) -test=Jck -test-args="tests=vm/classfmt,jckversion=$(JCKVERSION),testsuite=RUNTIME$(JCKCONCURRENCY_CPUS_ARG)" $(LOG)
+	$(STF_COMMAND) -test=Jck -test-args="tests=vm/classfmt,jckversion=$(JCKVERSION),testsuite=RUNTIME$(JCKCONCURRENCY_1_ARG)" $(LOG)
 	@echo Target $@ completed
 test.jck.runtime.vm.instr:
 	@echo Running target $@
-	$(STF_COMMAND) -test=Jck -test-args="tests=vm/instr,jckversion=$(JCKVERSION),testsuite=RUNTIME$(JCKCONCURRENCY_CPUS_ARG)" $(LOG)
+	$(STF_COMMAND) -test=Jck -test-args="tests=vm/instr,jckversion=$(JCKVERSION),testsuite=RUNTIME$(JCKCONCURRENCY_1_ARG)" $(LOG)
 	@echo Target $@ completed
 test.jck.runtime.vm.jni:
 	@echo Running target $@
-	$(STF_COMMAND) -test=Jck -test-args="tests=vm/jni,jckversion=$(JCKVERSION),testsuite=RUNTIME$(JCKCONCURRENCY_CPUS_ARG)" $(LOG)
+	$(STF_COMMAND) -test=Jck -test-args="tests=vm/jni,jckversion=$(JCKVERSION),testsuite=RUNTIME$(JCKCONCURRENCY_1_ARG)" $(LOG)
 	@echo Target $@ completed
 test.jck.runtime.vm.jdwp:
 	@echo Running target $@
-	$(STF_COMMAND) -test=Jck -test-args="tests=vm/jdwp,jckversion=$(JCKVERSION),testsuite=RUNTIME$(JCKCONCURRENCY_CPUS_ARG)" $(LOG)
+	$(STF_COMMAND) -test=Jck -test-args="tests=vm/jdwp,jckversion=$(JCKVERSION),testsuite=RUNTIME$(JCKCONCURRENCY_1_ARG)" $(LOG)
 	@echo Target $@ completed
 test.jck.runtime.xopts.vm.cldc:
 	@echo Running target $@
-	$(STF_COMMAND) -test=Jck -test-args="tests=vm/cldc,jckversion=$(JCKVERSION),testsuite=RUNTIME$(JCKCONCURRENCY_CPUS_ARG)" $(LOG)
+	$(STF_COMMAND) -test=Jck -test-args="tests=vm/cldc,jckversion=$(JCKVERSION),testsuite=RUNTIME$(JCKCONCURRENCY_1_ARG)" $(LOG)
 	@echo Target $@ completed
 test.jck.runtime.xopts.vm.concepts:
 	@echo Running target $@
-	$(STF_COMMAND) -test=Jck -test-args="tests=vm/concepts,jckversion=$(JCKVERSION),testsuite=RUNTIME$(JCKCONCURRENCY_CPUS_ARG)" $(LOG)
+	$(STF_COMMAND) -test=Jck -test-args="tests=vm/concepts,jckversion=$(JCKVERSION),testsuite=RUNTIME$(JCKCONCURRENCY_1_ARG)" $(LOG)
 	@echo Target $@ completed
 test.jck.runtime.xopts.vm.constantpool:
 	@echo Running target $@
-	$(STF_COMMAND) -test=Jck -test-args="tests=vm/constantpool,jckversion=$(JCKVERSION),testsuite=RUNTIME$(JCKCONCURRENCY_CPUS_ARG)" $(LOG)
+	$(STF_COMMAND) -test=Jck -test-args="tests=vm/constantpool,jckversion=$(JCKVERSION),testsuite=RUNTIME$(JCKCONCURRENCY_1_ARG)" $(LOG)
 	@echo Target $@ completed
 test.jck.runtime.xopts.vm.fp:
 	@echo Running target $@
-	$(STF_COMMAND) -test=Jck -test-args="tests=vm/fp,jckversion=$(JCKVERSION),testsuite=RUNTIME$(JCKCONCURRENCY_CPUS_ARG)" $(LOG)
+	$(STF_COMMAND) -test=Jck -test-args="tests=vm/fp,jckversion=$(JCKVERSION),testsuite=RUNTIME$(JCKCONCURRENCY_1_ARG)" $(LOG)
 	@echo Target $@ completed
 test.jck.runtime.xopts.vm.jvmti:
 	@echo Running target $@
-	$(STF_COMMAND) -test=Jck -test-args="tests=vm/jvmti,jckversion=$(JCKVERSION),testsuite=RUNTIME$(JCKCONCURRENCY_CPUS_ARG)" $(LOG)
+	$(STF_COMMAND) -test=Jck -test-args="tests=vm/jvmti,jckversion=$(JCKVERSION),testsuite=RUNTIME$(JCKCONCURRENCY_1_ARG)" $(LOG)
 	@echo Target $@ completed
 test.jck.runtime.xopts.vm.overview:
 	@echo Running target $@
-	$(STF_COMMAND) -test=Jck -test-args="tests=vm/overview,jckversion=$(JCKVERSION),testsuite=RUNTIME$(JCKCONCURRENCY_CPUS_ARG)" $(LOG)
+	$(STF_COMMAND) -test=Jck -test-args="tests=vm/overview,jckversion=$(JCKVERSION),testsuite=RUNTIME$(JCKCONCURRENCY_1_ARG)" $(LOG)
 	@echo Target $@ completed
 test.jck.runtime.xopts.vm.typechecker:
 	@echo Running target $@
-	$(STF_COMMAND) -test=Jck -test-args="tests=vm/typechecker,jckversion=$(JCKVERSION),testsuite=RUNTIME$(JCKCONCURRENCY_CPUS_ARG)" $(LOG)
+	$(STF_COMMAND) -test=Jck -test-args="tests=vm/typechecker,jckversion=$(JCKVERSION),testsuite=RUNTIME$(JCKCONCURRENCY_1_ARG)" $(LOG)
 	@echo Target $@ completed
 test.jck.runtime.xopts.vm.classfmt:
 	@echo Running target $@
-	$(STF_COMMAND) -test=Jck -test-args="tests=vm/classfmt,jckversion=$(JCKVERSION),testsuite=RUNTIME$(JCKCONCURRENCY_CPUS_ARG)" $(LOG)
+	$(STF_COMMAND) -test=Jck -test-args="tests=vm/classfmt,jckversion=$(JCKVERSION),testsuite=RUNTIME$(JCKCONCURRENCY_1_ARG)" $(LOG)
 	@echo Target $@ completed
 test.jck.runtime.xopts.vm.instr:
 	@echo Running target $@
-	$(STF_COMMAND) -test=Jck -test-args="tests=vm/instr,jckversion=$(JCKVERSION),testsuite=RUNTIME$(JCKCONCURRENCY_CPUS_ARG)" $(LOG)
+	$(STF_COMMAND) -test=Jck -test-args="tests=vm/instr,jckversion=$(JCKVERSION),testsuite=RUNTIME$(JCKCONCURRENCY_1_ARG)" $(LOG)
 	@echo Target $@ completed
 test.jck.runtime.xopts.vm.jni:
 	@echo Running target $@
-	$(STF_COMMAND) -test=Jck -test-args="tests=vm/jni,jckversion=$(JCKVERSION),testsuite=RUNTIME$(JCKCONCURRENCY_CPUS_ARG)" $(LOG)
+	$(STF_COMMAND) -test=Jck -test-args="tests=vm/jni,jckversion=$(JCKVERSION),testsuite=RUNTIME$(JCKCONCURRENCY_1_ARG)" $(LOG)
 	@echo Target $@ completed
 test.jck.runtime.xopts.vm.jdwp:
 	@echo Running target $@
-	$(STF_COMMAND) -test=Jck -test-args="tests=vm/jdwp,jckversion=$(JCKVERSION),testsuite=RUNTIME$(JCKCONCURRENCY_CPUS_ARG)" $(LOG)
+	$(STF_COMMAND) -test=Jck -test-args="tests=vm/jdwp,jckversion=$(JCKVERSION),testsuite=RUNTIME$(JCKCONCURRENCY_1_ARG)" $(LOG)
 	@echo Target $@ completed
 test.jck.runtime.lang.ANNOT:
 	@echo Running target $@
@@ -1919,7 +1919,7 @@ test.jck8b.runtime.api.java_io:
 	@echo Target $@ completed
 test.jck8b.runtime.api.java_util:
 	@echo Running target $@
-	$(STF_COMMAND) -test=Jck -test-args="tests=api/java_util,jckversion=jck8b,testsuite=RUNTIME$(JCKCONCURRENCY_CPUS_ARG)" $(LOG)
+	$(STF_COMMAND) -test=Jck -test-args="tests=api/java_util,jckversion=jck8b,testsuite=RUNTIME$(JCKCONCURRENCY_1_ARG)" $(LOG)
 	@echo Target $@ completed
 test.jck8b.runtime.api.javax_accessibility:
 	@echo Running target $@
@@ -1955,11 +1955,11 @@ test.jck8b.runtime.api.java_nio:
 	@echo Target $@ completed
 test.jck8b.runtime.api.java_rmi:
 	@echo Running target $@
-	$(STF_COMMAND) -test=Jck -test-args="tests=api/java_rmi,jckversion=jck8b,testsuite=RUNTIME$(JCKCONCURRENCY_CPUS_ARG)" $(LOG)
+	$(STF_COMMAND) -test=Jck -test-args="tests=api/java_rmi,jckversion=jck8b,testsuite=RUNTIME$(JCKCONCURRENCY_1_ARG)" $(LOG)
 	@echo Target $@ completed
 test.jck8b.runtime.api.javax_management:
 	@echo Running target $@
-	$(STF_COMMAND) -test=Jck -test-args="tests=api/javax_management,jckversion=jck8b,testsuite=RUNTIME$(JCKCONCURRENCY_CPUS_ARG)" $(LOG)
+	$(STF_COMMAND) -test=Jck -test-args="tests=api/javax_management,jckversion=jck8b,testsuite=RUNTIME$(JCKCONCURRENCY_1_ARG)" $(LOG)
 	@echo Target $@ completed
 test.jck8b.runtime.api.javax_rmi:
 	@echo Running target $@
@@ -1967,15 +1967,15 @@ test.jck8b.runtime.api.javax_rmi:
 	@echo Target $@ completed
 test.jck8b.runtime.api.javax_xml:
 	@echo Running target $@
-	$(STF_COMMAND) -test=Jck -test-args="tests=api/javax_xml,jckversion=jck8b,testsuite=RUNTIME$(JCKCONCURRENCY_CPUS_ARG)" $(LOG)
+	$(STF_COMMAND) -test=Jck -test-args="tests=api/javax_xml,jckversion=jck8b,testsuite=RUNTIME$(JCKCONCURRENCY_1_ARG)" $(LOG)
 	@echo Target $@ completed
 test.jck8b.runtime.api.org_omg:
 	@echo Running target $@
-	$(STF_COMMAND) -test=Jck -test-args="tests=api/org_omg,jckversion=jck8b,testsuite=RUNTIME$(JCKCONCURRENCY_CPUS_ARG)" $(LOG)
+	$(STF_COMMAND) -test=Jck -test-args="tests=api/org_omg,jckversion=jck8b,testsuite=RUNTIME$(JCKCONCURRENCY_1_ARG)" $(LOG)
 	@echo Target $@ completed
 test.jck8b.runtime.api.org_ietf:
 	@echo Running target $@
-	$(STF_COMMAND) -test=Jck -test-args="tests=api/org_ietf,jckversion=jck8b,testsuite=RUNTIME,config=$(JCK_CONFIG)" $(LOG)
+	$(STF_COMMAND) -test=Jck -test-args="tests=api/org_ietf,jckversion=jck8b,testsuite=RUNTIME$(JCKCONCURRENCY_1_ARG),config=$(JCK_CONFIG)" $(LOG)
 	@echo Target $@ completed
 test.jck8b.runtime.api.java_time:
 	@echo Running target $@
@@ -1983,91 +1983,91 @@ test.jck8b.runtime.api.java_time:
 	@echo Target $@ completed
 test.jck8b.runtime.vm.cldc:
 	@echo Running target $@
-	$(STF_COMMAND) -test=Jck -test-args="tests=vm/cldc,jckversion=jck8b,testsuite=RUNTIME$(JCKCONCURRENCY_CPUS_ARG)" $(LOG)
+	$(STF_COMMAND) -test=Jck -test-args="tests=vm/cldc,jckversion=jck8b,testsuite=RUNTIME$(JCKCONCURRENCY_1_ARG)" $(LOG)
 	@echo Target $@ completed
 test.jck8b.runtime.vm.concepts:
 	@echo Running target $@
-	$(STF_COMMAND) -test=Jck -test-args="tests=vm/concepts,jckversion=jck8b,testsuite=RUNTIME$(JCKCONCURRENCY_CPUS_ARG)" $(LOG)
+	$(STF_COMMAND) -test=Jck -test-args="tests=vm/concepts,jckversion=jck8b,testsuite=RUNTIME$(JCKCONCURRENCY_1_ARG)" $(LOG)
 	@echo Target $@ completed
 test.jck8b.runtime.vm.constantpool:
 	@echo Running target $@
-	$(STF_COMMAND) -test=Jck -test-args="tests=vm/constantpool,jckversion=jck8b,testsuite=RUNTIME$(JCKCONCURRENCY_CPUS_ARG)" $(LOG)
+	$(STF_COMMAND) -test=Jck -test-args="tests=vm/constantpool,jckversion=jck8b,testsuite=RUNTIME$(JCKCONCURRENCY_1_ARG)" $(LOG)
 	@echo Target $@ completed
 test.jck8b.runtime.vm.fp:
 	@echo Running target $@
-	$(STF_COMMAND) -test=Jck -test-args="tests=vm/fp,jckversion=jck8b,testsuite=RUNTIME$(JCKCONCURRENCY_CPUS_ARG)" $(LOG)
+	$(STF_COMMAND) -test=Jck -test-args="tests=vm/fp,jckversion=jck8b,testsuite=RUNTIME$(JCKCONCURRENCY_1_ARG)" $(LOG)
 	@echo Target $@ completed
 test.jck8b.runtime.vm.jvmti:
 	@echo Running target $@
-	$(STF_COMMAND) -test=Jck -test-args="tests=vm/jvmti,jckversion=jck8b,testsuite=RUNTIME$(JCKCONCURRENCY_CPUS_ARG)" $(LOG)
+	$(STF_COMMAND) -test=Jck -test-args="tests=vm/jvmti,jckversion=jck8b,testsuite=RUNTIME$(JCKCONCURRENCY_1_ARG)" $(LOG)
 	@echo Target $@ completed
 test.jck8b.runtime.vm.overview:
 	@echo Running target $@
-	$(STF_COMMAND) -test=Jck -test-args="tests=vm/overview,jckversion=jck8b,testsuite=RUNTIME$(JCKCONCURRENCY_CPUS_ARG)" $(LOG)
+	$(STF_COMMAND) -test=Jck -test-args="tests=vm/overview,jckversion=jck8b,testsuite=RUNTIME$(JCKCONCURRENCY_1_ARG)" $(LOG)
 	@echo Target $@ completed
 test.jck8b.runtime.vm.typechecker:
 	@echo Running target $@
-	$(STF_COMMAND) -test=Jck -test-args="tests=vm/typechecker,jckversion=jck8b,testsuite=RUNTIME$(JCKCONCURRENCY_CPUS_ARG)" $(LOG)
+	$(STF_COMMAND) -test=Jck -test-args="tests=vm/typechecker,jckversion=jck8b,testsuite=RUNTIME$(JCKCONCURRENCY_1_ARG)" $(LOG)
 	@echo Target $@ completed
 test.jck8b.runtime.vm.classfmt:
 	@echo Running target $@
-	$(STF_COMMAND) -test=Jck -test-args="tests=vm/classfmt,jckversion=jck8b,testsuite=RUNTIME$(JCKCONCURRENCY_CPUS_ARG)" $(LOG)
+	$(STF_COMMAND) -test=Jck -test-args="tests=vm/classfmt,jckversion=jck8b,testsuite=RUNTIME$(JCKCONCURRENCY_1_ARG)" $(LOG)
 	@echo Target $@ completed
 test.jck8b.runtime.vm.instr:
 	@echo Running target $@
-	$(STF_COMMAND) -test=Jck -test-args="tests=vm/instr,jckversion=jck8b,testsuite=RUNTIME$(JCKCONCURRENCY_CPUS_ARG)" $(LOG)
+	$(STF_COMMAND) -test=Jck -test-args="tests=vm/instr,jckversion=jck8b,testsuite=RUNTIME$(JCKCONCURRENCY_1_ARG)" $(LOG)
 	@echo Target $@ completed
 test.jck8b.runtime.vm.jni:
 	@echo Running target $@
-	$(STF_COMMAND) -test=Jck -test-args="tests=vm/jni,jckversion=jck8b,testsuite=RUNTIME$(JCKCONCURRENCY_CPUS_ARG)" $(LOG)
+	$(STF_COMMAND) -test=Jck -test-args="tests=vm/jni,jckversion=jck8b,testsuite=RUNTIME$(JCKCONCURRENCY_1_ARG)" $(LOG)
 	@echo Target $@ completed
 test.jck8b.runtime.vm.jdwp:
 	@echo Running target $@
-	$(STF_COMMAND) -test=Jck -test-args="tests=vm/jdwp,jckversion=jck8b,testsuite=RUNTIME$(JCKCONCURRENCY_CPUS_ARG)" $(LOG)
+	$(STF_COMMAND) -test=Jck -test-args="tests=vm/jdwp,jckversion=jck8b,testsuite=RUNTIME$(JCKCONCURRENCY_1_ARG)" $(LOG)
 	@echo Target $@ completed
 test.jck8b.runtime.xopts.vm.cldc:
 	@echo Running target $@
-	$(STF_COMMAND) -test=Jck -test-args="tests=vm/cldc,jckversion=jck8b,testsuite=RUNTIME$(JCKCONCURRENCY_CPUS_ARG)" $(LOG)
+	$(STF_COMMAND) -test=Jck -test-args="tests=vm/cldc,jckversion=jck8b,testsuite=RUNTIME$(JCKCONCURRENCY_1_ARG)" $(LOG)
 	@echo Target $@ completed
 test.jck8b.runtime.xopts.vm.concepts:
 	@echo Running target $@
-	$(STF_COMMAND) -test=Jck -test-args="tests=vm/concepts,jckversion=jck8b,testsuite=RUNTIME$(JCKCONCURRENCY_CPUS_ARG)" $(LOG)
+	$(STF_COMMAND) -test=Jck -test-args="tests=vm/concepts,jckversion=jck8b,testsuite=RUNTIME$(JCKCONCURRENCY_1_ARG)" $(LOG)
 	@echo Target $@ completed
 test.jck8b.runtime.xopts.vm.constantpool:
 	@echo Running target $@
-	$(STF_COMMAND) -test=Jck -test-args="tests=vm/constantpool,jckversion=jck8b,testsuite=RUNTIME$(JCKCONCURRENCY_CPUS_ARG)" $(LOG)
+	$(STF_COMMAND) -test=Jck -test-args="tests=vm/constantpool,jckversion=jck8b,testsuite=RUNTIME$(JCKCONCURRENCY_1_ARG)" $(LOG)
 	@echo Target $@ completed
 test.jck8b.runtime.xopts.vm.fp:
 	@echo Running target $@
-	$(STF_COMMAND) -test=Jck -test-args="tests=vm/fp,jckversion=jck8b,testsuite=RUNTIME$(JCKCONCURRENCY_CPUS_ARG)" $(LOG)
+	$(STF_COMMAND) -test=Jck -test-args="tests=vm/fp,jckversion=jck8b,testsuite=RUNTIME$(JCKCONCURRENCY_1_ARG)" $(LOG)
 	@echo Target $@ completed
 test.jck8b.runtime.xopts.vm.jvmti:
 	@echo Running target $@
-	$(STF_COMMAND) -test=Jck -test-args="tests=vm/jvmti,jckversion=jck8b,testsuite=RUNTIME$(JCKCONCURRENCY_CPUS_ARG)" $(LOG)
+	$(STF_COMMAND) -test=Jck -test-args="tests=vm/jvmti,jckversion=jck8b,testsuite=RUNTIME$(JCKCONCURRENCY_1_ARG)" $(LOG)
 	@echo Target $@ completed
 test.jck8b.runtime.xopts.vm.overview:
 	@echo Running target $@
-	$(STF_COMMAND) -test=Jck -test-args="tests=vm/overview,jckversion=jck8b,testsuite=RUNTIME$(JCKCONCURRENCY_CPUS_ARG)" $(LOG)
+	$(STF_COMMAND) -test=Jck -test-args="tests=vm/overview,jckversion=jck8b,testsuite=RUNTIME$(JCKCONCURRENCY_1_ARG)" $(LOG)
 	@echo Target $@ completed
 test.jck8b.runtime.xopts.vm.typechecker:
 	@echo Running target $@
-	$(STF_COMMAND) -test=Jck -test-args="tests=vm/typechecker,jckversion=jck8b,testsuite=RUNTIME$(JCKCONCURRENCY_CPUS_ARG)" $(LOG)
+	$(STF_COMMAND) -test=Jck -test-args="tests=vm/typechecker,jckversion=jck8b,testsuite=RUNTIME$(JCKCONCURRENCY_1_ARG)" $(LOG)
 	@echo Target $@ completed
 test.jck8b.runtime.xopts.vm.classfmt:
 	@echo Running target $@
-	$(STF_COMMAND) -test=Jck -test-args="tests=vm/classfmt,jckversion=jck8b,testsuite=RUNTIME$(JCKCONCURRENCY_CPUS_ARG)" $(LOG)
+	$(STF_COMMAND) -test=Jck -test-args="tests=vm/classfmt,jckversion=jck8b,testsuite=RUNTIME$(JCKCONCURRENCY_1_ARG)" $(LOG)
 	@echo Target $@ completed
 test.jck8b.runtime.xopts.vm.instr:
 	@echo Running target $@
-	$(STF_COMMAND) -test=Jck -test-args="tests=vm/instr,jckversion=jck8b,testsuite=RUNTIME$(JCKCONCURRENCY_CPUS_ARG)" $(LOG)
+	$(STF_COMMAND) -test=Jck -test-args="tests=vm/instr,jckversion=jck8b,testsuite=RUNTIME$(JCKCONCURRENCY_1_ARG)" $(LOG)
 	@echo Target $@ completed
 test.jck8b.runtime.xopts.vm.jni:
 	@echo Running target $@
-	$(STF_COMMAND) -test=Jck -test-args="tests=vm/jni,jckversion=jck8b,testsuite=RUNTIME$(JCKCONCURRENCY_CPUS_ARG)" $(LOG)
+	$(STF_COMMAND) -test=Jck -test-args="tests=vm/jni,jckversion=jck8b,testsuite=RUNTIME$(JCKCONCURRENCY_1_ARG)" $(LOG)
 	@echo Target $@ completed
 test.jck8b.runtime.xopts.vm.jdwp:
 	@echo Running target $@
-	$(STF_COMMAND) -test=Jck -test-args="tests=vm/jdwp,jckversion=jck8b,testsuite=RUNTIME$(JCKCONCURRENCY_CPUS_ARG)" $(LOG)
+	$(STF_COMMAND) -test=Jck -test-args="tests=vm/jdwp,jckversion=jck8b,testsuite=RUNTIME$(JCKCONCURRENCY_1_ARG)" $(LOG)
 	@echo Target $@ completed
 test.jck8b.runtime.lang.ANNOT:
 	@echo Running target $@
@@ -3313,11 +3313,11 @@ test.jck9.runtime.api.java_nio:
 	@echo Target $@ completed
 test.jck9.runtime.api.java_rmi:
 	@echo Running target $@
-	$(STF_COMMAND) -test=Jck -test-args="tests=api/java_rmi,jckversion=jck9,testsuite=RUNTIME$(JCKCONCURRENCY_CPUS_ARG)" $(LOG)
+	$(STF_COMMAND) -test=Jck -test-args="tests=api/java_rmi,jckversion=jck9,testsuite=RUNTIME$(JCKCONCURRENCY_1_ARG)" $(LOG)
 	@echo Target $@ completed
 test.jck9.runtime.api.javax_management:
 	@echo Running target $@
-	$(STF_COMMAND) -test=Jck -test-args="tests=api/javax_management,jckversion=jck9,testsuite=RUNTIME$(JCKCONCURRENCY_CPUS_ARG)" $(LOG)
+	$(STF_COMMAND) -test=Jck -test-args="tests=api/javax_management,jckversion=jck9,testsuite=RUNTIME$(JCKCONCURRENCY_1_ARG)" $(LOG)
 	@echo Target $@ completed
 test.jck9.runtime.api.javax_rmi:
 	@echo Running target $@
@@ -3325,7 +3325,7 @@ test.jck9.runtime.api.javax_rmi:
 	@echo Target $@ completed
 test.jck9.runtime.api.javax_xml:
 	@echo Running target $@
-	$(STF_COMMAND) -test=Jck -test-args="tests=api/javax_xml,jckversion=jck9,testsuite=RUNTIME$(JCKCONCURRENCY_CPUS_ARG)" $(LOG)
+	$(STF_COMMAND) -test=Jck -test-args="tests=api/javax_xml,jckversion=jck9,testsuite=RUNTIME$(JCKCONCURRENCY_1_ARG)" $(LOG)
 	@echo Target $@ completed
 test.jck9.runtime.api.modulegraph:
 	@echo Running target $@
@@ -3333,11 +3333,11 @@ test.jck9.runtime.api.modulegraph:
 	@echo Target $@ completed
 test.jck9.runtime.api.org_omg:
 	@echo Running target $@
-	$(STF_COMMAND) -test=Jck -test-args="tests=api/org_omg,jckversion=jck9,testsuite=RUNTIME$(JCKCONCURRENCY_CPUS_ARG)" $(LOG)
+	$(STF_COMMAND) -test=Jck -test-args="tests=api/org_omg,jckversion=jck9,testsuite=RUNTIME$(JCKCONCURRENCY_1_ARG)" $(LOG)
 	@echo Target $@ completed
 test.jck9.runtime.api.org_ietf:
 	@echo Running target $@
-	$(STF_COMMAND) -test=Jck -test-args="tests=api/org_ietf,jckversion=jck9,testsuite=RUNTIME,config=$(JCK_CONFIG)" $(LOG)
+	$(STF_COMMAND) -test=Jck -test-args="tests=api/org_ietf,jckversion=jck9,testsuite=RUNTIME$(JCKCONCURRENCY_1_ARG),config=$(JCK_CONFIG)" $(LOG)
 	@echo Target $@ completed
 test.jck9.runtime.api.java_time:
 	@echo Running target $@
@@ -3345,95 +3345,95 @@ test.jck9.runtime.api.java_time:
 	@echo Target $@ completed
 test.jck9.runtime.vm.cldc:
 	@echo Running target $@
-	$(STF_COMMAND) -test=Jck -test-args="tests=vm/cldc,jckversion=jck9,testsuite=RUNTIME$(JCKCONCURRENCY_CPUS_ARG)" $(LOG)
+	$(STF_COMMAND) -test=Jck -test-args="tests=vm/cldc,jckversion=jck9,testsuite=RUNTIME$(JCKCONCURRENCY_1_ARG)" $(LOG)
 	@echo Target $@ completed
 test.jck9.runtime.vm.concepts:
 	@echo Running target $@
-	$(STF_COMMAND) -test=Jck -test-args="tests=vm/concepts,jckversion=jck9,testsuite=RUNTIME$(JCKCONCURRENCY_CPUS_ARG)" $(LOG)
+	$(STF_COMMAND) -test=Jck -test-args="tests=vm/concepts,jckversion=jck9,testsuite=RUNTIME$(JCKCONCURRENCY_1_ARG)" $(LOG)
 	@echo Target $@ completed
 test.jck9.runtime.vm.constantpool:
 	@echo Running target $@
-	$(STF_COMMAND) -test=Jck -test-args="tests=vm/constantpool,jckversion=jck9,testsuite=RUNTIME$(JCKCONCURRENCY_CPUS_ARG)" $(LOG)
+	$(STF_COMMAND) -test=Jck -test-args="tests=vm/constantpool,jckversion=jck9,testsuite=RUNTIME$(JCKCONCURRENCY_1_ARG)" $(LOG)
 	@echo Target $@ completed
 test.jck9.runtime.vm.fp:
 	@echo Running target $@
-	$(STF_COMMAND) -test=Jck -test-args="tests=vm/fp,jckversion=jck9,testsuite=RUNTIME$(JCKCONCURRENCY_CPUS_ARG)" $(LOG)
+	$(STF_COMMAND) -test=Jck -test-args="tests=vm/fp,jckversion=jck9,testsuite=RUNTIME$(JCKCONCURRENCY_1_ARG)" $(LOG)
 	@echo Target $@ completed
 test.jck9.runtime.vm.jvmti:
 	@echo Running target $@
-	$(STF_COMMAND) -test=Jck -test-args="tests=vm/jvmti,jckversion=jck9,testsuite=RUNTIME$(JCKCONCURRENCY_CPUS_ARG)" $(LOG)
+	$(STF_COMMAND) -test=Jck -test-args="tests=vm/jvmti,jckversion=jck9,testsuite=RUNTIME$(JCKCONCURRENCY_1_ARG)" $(LOG)
 	@echo Target $@ completed
 test.jck9.runtime.vm.module:
 	@echo Running target $@
-	$(STF_COMMAND) -test=Jck -test-args="tests=vm/module,jckversion=jck9,testsuite=RUNTIME$(JCKCONCURRENCY_CPUS_ARG)" $(LOG)
+	$(STF_COMMAND) -test=Jck -test-args="tests=vm/module,jckversion=jck9,testsuite=RUNTIME$(JCKCONCURRENCY_1_ARG)" $(LOG)
 	@echo Target $@ completed
 test.jck9.runtime.vm.overview:
 	@echo Running target $@
-	$(STF_COMMAND) -test=Jck -test-args="tests=vm/overview,jckversion=jck9,testsuite=RUNTIME$(JCKCONCURRENCY_CPUS_ARG)" $(LOG)
+	$(STF_COMMAND) -test=Jck -test-args="tests=vm/overview,jckversion=jck9,testsuite=RUNTIME$(JCKCONCURRENCY_1_ARG)" $(LOG)
 	@echo Target $@ completed
 test.jck9.runtime.vm.typechecker:
 	@echo Running target $@
-	$(STF_COMMAND) -test=Jck -test-args="tests=vm/typechecker,jckversion=jck9,testsuite=RUNTIME$(JCKCONCURRENCY_CPUS_ARG)" $(LOG)
+	$(STF_COMMAND) -test=Jck -test-args="tests=vm/typechecker,jckversion=jck9,testsuite=RUNTIME$(JCKCONCURRENCY_1_ARG)" $(LOG)
 	@echo Target $@ completed
 test.jck9.runtime.vm.classfmt:
 	@echo Running target $@
-	$(STF_COMMAND) -test=Jck -test-args="tests=vm/classfmt,jckversion=jck9,testsuite=RUNTIME$(JCKCONCURRENCY_CPUS_ARG)" $(LOG)
+	$(STF_COMMAND) -test=Jck -test-args="tests=vm/classfmt,jckversion=jck9,testsuite=RUNTIME$(JCKCONCURRENCY_1_ARG)" $(LOG)
 	@echo Target $@ completed
 test.jck9.runtime.vm.instr:
 	@echo Running target $@
-	$(STF_COMMAND) -test=Jck -test-args="tests=vm/instr,jckversion=jck9,testsuite=RUNTIME$(JCKCONCURRENCY_CPUS_ARG)" $(LOG)
+	$(STF_COMMAND) -test=Jck -test-args="tests=vm/instr,jckversion=jck9,testsuite=RUNTIME$(JCKCONCURRENCY_1_ARG)" $(LOG)
 	@echo Target $@ completed
 test.jck9.runtime.vm.jni:
 	@echo Running target $@
-	$(STF_COMMAND) -test=Jck -test-args="tests=vm/jni,jckversion=jck9,testsuite=RUNTIME$(JCKCONCURRENCY_CPUS_ARG)" $(LOG)
+	$(STF_COMMAND) -test=Jck -test-args="tests=vm/jni,jckversion=jck9,testsuite=RUNTIME$(JCKCONCURRENCY_1_ARG)" $(LOG)
 	@echo Target $@ completed
 test.jck9.runtime.vm.jdwp:
 	@echo Running target $@
-	$(STF_COMMAND) -test=Jck -test-args="tests=vm/jdwp,jckversion=jck9,testsuite=RUNTIME$(JCKCONCURRENCY_CPUS_ARG)" $(LOG)
+	$(STF_COMMAND) -test=Jck -test-args="tests=vm/jdwp,jckversion=jck9,testsuite=RUNTIME$(JCKCONCURRENCY_1_ARG)" $(LOG)
 	@echo Target $@ completed
 test.jck9.runtime.xopts.vm.cldc:
 	@echo Running target $@
-	$(STF_COMMAND) -test=Jck -test-args="tests=vm/cldc,jckversion=jck9,testsuite=RUNTIME$(JCKCONCURRENCY_CPUS_ARG)" $(LOG)
+	$(STF_COMMAND) -test=Jck -test-args="tests=vm/cldc,jckversion=jck9,testsuite=RUNTIME$(JCKCONCURRENCY_1_ARG)" $(LOG)
 	@echo Target $@ completed
 test.jck9.runtime.xopts.vm.concepts:
 	@echo Running target $@
-	$(STF_COMMAND) -test=Jck -test-args="tests=vm/concepts,jckversion=jck9,testsuite=RUNTIME$(JCKCONCURRENCY_CPUS_ARG)" $(LOG)
+	$(STF_COMMAND) -test=Jck -test-args="tests=vm/concepts,jckversion=jck9,testsuite=RUNTIME$(JCKCONCURRENCY_1_ARG)" $(LOG)
 	@echo Target $@ completed
 test.jck9.runtime.xopts.vm.constantpool:
 	@echo Running target $@
-	$(STF_COMMAND) -test=Jck -test-args="tests=vm/constantpool,jckversion=jck9,testsuite=RUNTIME$(JCKCONCURRENCY_CPUS_ARG)" $(LOG)
+	$(STF_COMMAND) -test=Jck -test-args="tests=vm/constantpool,jckversion=jck9,testsuite=RUNTIME$(JCKCONCURRENCY_1_ARG)" $(LOG)
 	@echo Target $@ completed
 test.jck9.runtime.xopts.vm.fp:
 	@echo Running target $@
-	$(STF_COMMAND) -test=Jck -test-args="tests=vm/fp,jckversion=jck9,testsuite=RUNTIME$(JCKCONCURRENCY_CPUS_ARG)" $(LOG)
+	$(STF_COMMAND) -test=Jck -test-args="tests=vm/fp,jckversion=jck9,testsuite=RUNTIME$(JCKCONCURRENCY_1_ARG)" $(LOG)
 	@echo Target $@ completed
 test.jck9.runtime.xopts.vm.jvmti:
 	@echo Running target $@
-	$(STF_COMMAND) -test=Jck -test-args="tests=vm/jvmti,jckversion=jck9,testsuite=RUNTIME$(JCKCONCURRENCY_CPUS_ARG)" $(LOG)
+	$(STF_COMMAND) -test=Jck -test-args="tests=vm/jvmti,jckversion=jck9,testsuite=RUNTIME$(JCKCONCURRENCY_1_ARG)" $(LOG)
 	@echo Target $@ completed
 test.jck9.runtime.xopts.vm.overview:
 	@echo Running target $@
-	$(STF_COMMAND) -test=Jck -test-args="tests=vm/overview,jckversion=jck9,testsuite=RUNTIME$(JCKCONCURRENCY_CPUS_ARG)" $(LOG)
+	$(STF_COMMAND) -test=Jck -test-args="tests=vm/overview,jckversion=jck9,testsuite=RUNTIME$(JCKCONCURRENCY_1_ARG)" $(LOG)
 	@echo Target $@ completed
 test.jck9.runtime.xopts.vm.typechecker:
 	@echo Running target $@
-	$(STF_COMMAND) -test=Jck -test-args="tests=vm/typechecker,jckversion=jck9,testsuite=RUNTIME$(JCKCONCURRENCY_CPUS_ARG)" $(LOG)
+	$(STF_COMMAND) -test=Jck -test-args="tests=vm/typechecker,jckversion=jck9,testsuite=RUNTIME$(JCKCONCURRENCY_1_ARG)" $(LOG)
 	@echo Target $@ completed
 test.jck9.runtime.xopts.vm.classfmt:
 	@echo Running target $@
-	$(STF_COMMAND) -test=Jck -test-args="tests=vm/classfmt,jckversion=jck9,testsuite=RUNTIME$(JCKCONCURRENCY_CPUS_ARG)" $(LOG)
+	$(STF_COMMAND) -test=Jck -test-args="tests=vm/classfmt,jckversion=jck9,testsuite=RUNTIME$(JCKCONCURRENCY_1_ARG)" $(LOG)
 	@echo Target $@ completed
 test.jck9.runtime.xopts.vm.instr:
 	@echo Running target $@
-	$(STF_COMMAND) -test=Jck -test-args="tests=vm/instr,jckversion=jck9,testsuite=RUNTIME$(JCKCONCURRENCY_CPUS_ARG)" $(LOG)
+	$(STF_COMMAND) -test=Jck -test-args="tests=vm/instr,jckversion=jck9,testsuite=RUNTIME$(JCKCONCURRENCY_1_ARG)" $(LOG)
 	@echo Target $@ completed
 test.jck9.runtime.xopts.vm.jni:
 	@echo Running target $@
-	$(STF_COMMAND) -test=Jck -test-args="tests=vm/jni,jckversion=jck9,testsuite=RUNTIME$(JCKCONCURRENCY_CPUS_ARG)" $(LOG)
+	$(STF_COMMAND) -test=Jck -test-args="tests=vm/jni,jckversion=jck9,testsuite=RUNTIME$(JCKCONCURRENCY_1_ARG)" $(LOG)
 	@echo Target $@ completed
 test.jck9.runtime.xopts.vm.jdwp:
 	@echo Running target $@
-	$(STF_COMMAND) -test=Jck -test-args="tests=vm/jdwp,jckversion=jck9,testsuite=RUNTIME$(JCKCONCURRENCY_CPUS_ARG)" $(LOG)
+	$(STF_COMMAND) -test=Jck -test-args="tests=vm/jdwp,jckversion=jck9,testsuite=RUNTIME$(JCKCONCURRENCY_1_ARG)" $(LOG)
 	@echo Target $@ completed
 test.jck9.runtime.lang.ANNOT:
 	@echo Running target $@
@@ -4683,11 +4683,11 @@ test.jck10.runtime.api.java_nio:
 	@echo Target $@ completed
 test.jck10.runtime.api.java_rmi:
 	@echo Running target $@
-	$(STF_COMMAND) -test=Jck -test-args="tests=api/java_rmi,jckversion=jck10,testsuite=RUNTIME$(JCKCONCURRENCY_CPUS_ARG)" $(LOG)
+	$(STF_COMMAND) -test=Jck -test-args="tests=api/java_rmi,jckversion=jck10,testsuite=RUNTIME$(JCKCONCURRENCY_1_ARG)" $(LOG)
 	@echo Target $@ completed
 test.jck10.runtime.api.javax_management:
 	@echo Running target $@
-	$(STF_COMMAND) -test=Jck -test-args="tests=api/javax_management,jckversion=jck10,testsuite=RUNTIME$(JCKCONCURRENCY_CPUS_ARG)" $(LOG)
+	$(STF_COMMAND) -test=Jck -test-args="tests=api/javax_management,jckversion=jck10,testsuite=RUNTIME$(JCKCONCURRENCY_1_ARG)" $(LOG)
 	@echo Target $@ completed
 test.jck10.runtime.api.javax_rmi:
 	@echo Running target $@
@@ -4695,7 +4695,7 @@ test.jck10.runtime.api.javax_rmi:
 	@echo Target $@ completed
 test.jck10.runtime.api.javax_xml:
 	@echo Running target $@
-	$(STF_COMMAND) -test=Jck -test-args="tests=api/javax_xml,jckversion=jck10,testsuite=RUNTIME$(JCKCONCURRENCY_CPUS_ARG)" $(LOG)
+	$(STF_COMMAND) -test=Jck -test-args="tests=api/javax_xml,jckversion=jck10,testsuite=RUNTIME$(JCKCONCURRENCY_1_ARG)" $(LOG)
 	@echo Target $@ completed
 test.jck10.runtime.api.modulegraph:
 	@echo Running target $@
@@ -4703,11 +4703,11 @@ test.jck10.runtime.api.modulegraph:
 	@echo Target $@ completed
 test.jck10.runtime.api.org_omg:
 	@echo Running target $@
-	$(STF_COMMAND) -test=Jck -test-args="tests=api/org_omg,jckversion=jck10,testsuite=RUNTIME$(JCKCONCURRENCY_CPUS_ARG)" $(LOG)
+	$(STF_COMMAND) -test=Jck -test-args="tests=api/org_omg,jckversion=jck10,testsuite=RUNTIME$(JCKCONCURRENCY_1_ARG)" $(LOG)
 	@echo Target $@ completed
 test.jck10.runtime.api.org_ietf:
 	@echo Running target $@
-	$(STF_COMMAND) -test=Jck -test-args="tests=api/org_ietf,jckversion=jck10,testsuite=RUNTIME,config=$(JCK_CONFIG)" $(LOG)
+	$(STF_COMMAND) -test=Jck -test-args="tests=api/org_ietf,jckversion=jck10,testsuite=RUNTIME$(JCKCONCURRENCY_1_ARG),config=$(JCK_CONFIG)" $(LOG)
 	@echo Target $@ completed
 test.jck10.runtime.api.java_time:
 	@echo Running target $@
@@ -4715,95 +4715,95 @@ test.jck10.runtime.api.java_time:
 	@echo Target $@ completed
 test.jck10.runtime.vm.cldc:
 	@echo Running target $@
-	$(STF_COMMAND) -test=Jck -test-args="tests=vm/cldc,jckversion=jck10,testsuite=RUNTIME$(JCKCONCURRENCY_CPUS_ARG)" $(LOG)
+	$(STF_COMMAND) -test=Jck -test-args="tests=vm/cldc,jckversion=jck10,testsuite=RUNTIME$(JCKCONCURRENCY_1_ARG)" $(LOG)
 	@echo Target $@ completed
 test.jck10.runtime.vm.concepts:
 	@echo Running target $@
-	$(STF_COMMAND) -test=Jck -test-args="tests=vm/concepts,jckversion=jck10,testsuite=RUNTIME$(JCKCONCURRENCY_CPUS_ARG)" $(LOG)
+	$(STF_COMMAND) -test=Jck -test-args="tests=vm/concepts,jckversion=jck10,testsuite=RUNTIME$(JCKCONCURRENCY_1_ARG)" $(LOG)
 	@echo Target $@ completed
 test.jck10.runtime.vm.constantpool:
 	@echo Running target $@
-	$(STF_COMMAND) -test=Jck -test-args="tests=vm/constantpool,jckversion=jck10,testsuite=RUNTIME$(JCKCONCURRENCY_CPUS_ARG)" $(LOG)
+	$(STF_COMMAND) -test=Jck -test-args="tests=vm/constantpool,jckversion=jck10,testsuite=RUNTIME$(JCKCONCURRENCY_1_ARG)" $(LOG)
 	@echo Target $@ completed
 test.jck10.runtime.vm.fp:
 	@echo Running target $@
-	$(STF_COMMAND) -test=Jck -test-args="tests=vm/fp,jckversion=jck10,testsuite=RUNTIME$(JCKCONCURRENCY_CPUS_ARG)" $(LOG)
+	$(STF_COMMAND) -test=Jck -test-args="tests=vm/fp,jckversion=jck10,testsuite=RUNTIME$(JCKCONCURRENCY_1_ARG)" $(LOG)
 	@echo Target $@ completed
 test.jck10.runtime.vm.jvmti:
 	@echo Running target $@
-	$(STF_COMMAND) -test=Jck -test-args="tests=vm/jvmti,jckversion=jck10,testsuite=RUNTIME$(JCKCONCURRENCY_CPUS_ARG)" $(LOG)
+	$(STF_COMMAND) -test=Jck -test-args="tests=vm/jvmti,jckversion=jck10,testsuite=RUNTIME$(JCKCONCURRENCY_1_ARG)" $(LOG)
 	@echo Target $@ completed
 test.jck10.runtime.vm.module:
 	@echo Running target $@
-	$(STF_COMMAND) -test=Jck -test-args="tests=vm/module,jckversion=jck10,testsuite=RUNTIME$(JCKCONCURRENCY_CPUS_ARG)" $(LOG)
+	$(STF_COMMAND) -test=Jck -test-args="tests=vm/module,jckversion=jck10,testsuite=RUNTIME$(JCKCONCURRENCY_1_ARG)" $(LOG)
 	@echo Target $@ completed
 test.jck10.runtime.vm.overview:
 	@echo Running target $@
-	$(STF_COMMAND) -test=Jck -test-args="tests=vm/overview,jckversion=jck10,testsuite=RUNTIME$(JCKCONCURRENCY_CPUS_ARG)" $(LOG)
+	$(STF_COMMAND) -test=Jck -test-args="tests=vm/overview,jckversion=jck10,testsuite=RUNTIME$(JCKCONCURRENCY_1_ARG)" $(LOG)
 	@echo Target $@ completed
 test.jck10.runtime.vm.typechecker:
 	@echo Running target $@
-	$(STF_COMMAND) -test=Jck -test-args="tests=vm/typechecker,jckversion=jck10,testsuite=RUNTIME$(JCKCONCURRENCY_CPUS_ARG)" $(LOG)
+	$(STF_COMMAND) -test=Jck -test-args="tests=vm/typechecker,jckversion=jck10,testsuite=RUNTIME$(JCKCONCURRENCY_1_ARG)" $(LOG)
 	@echo Target $@ completed
 test.jck10.runtime.vm.classfmt:
 	@echo Running target $@
-	$(STF_COMMAND) -test=Jck -test-args="tests=vm/classfmt,jckversion=jck10,testsuite=RUNTIME$(JCKCONCURRENCY_CPUS_ARG)" $(LOG)
+	$(STF_COMMAND) -test=Jck -test-args="tests=vm/classfmt,jckversion=jck10,testsuite=RUNTIME$(JCKCONCURRENCY_1_ARG)" $(LOG)
 	@echo Target $@ completed
 test.jck10.runtime.vm.instr:
 	@echo Running target $@
-	$(STF_COMMAND) -test=Jck -test-args="tests=vm/instr,jckversion=jck10,testsuite=RUNTIME$(JCKCONCURRENCY_CPUS_ARG)" $(LOG)
+	$(STF_COMMAND) -test=Jck -test-args="tests=vm/instr,jckversion=jck10,testsuite=RUNTIME$(JCKCONCURRENCY_1_ARG)" $(LOG)
 	@echo Target $@ completed
 test.jck10.runtime.vm.jni:
 	@echo Running target $@
-	$(STF_COMMAND) -test=Jck -test-args="tests=vm/jni,jckversion=jck10,testsuite=RUNTIME$(JCKCONCURRENCY_CPUS_ARG)" $(LOG)
+	$(STF_COMMAND) -test=Jck -test-args="tests=vm/jni,jckversion=jck10,testsuite=RUNTIME$(JCKCONCURRENCY_1_ARG)" $(LOG)
 	@echo Target $@ completed
 test.jck10.runtime.vm.jdwp:
 	@echo Running target $@
-	$(STF_COMMAND) -test=Jck -test-args="tests=vm/jdwp,jckversion=jck10,testsuite=RUNTIME$(JCKCONCURRENCY_CPUS_ARG)" $(LOG)
+	$(STF_COMMAND) -test=Jck -test-args="tests=vm/jdwp,jckversion=jck10,testsuite=RUNTIME$(JCKCONCURRENCY_1_ARG)" $(LOG)
 	@echo Target $@ completed
 test.jck10.runtime.xopts.vm.cldc:
 	@echo Running target $@
-	$(STF_COMMAND) -test=Jck -test-args="tests=vm/cldc,jckversion=jck10,testsuite=RUNTIME$(JCKCONCURRENCY_CPUS_ARG)" $(LOG)
+	$(STF_COMMAND) -test=Jck -test-args="tests=vm/cldc,jckversion=jck10,testsuite=RUNTIME$(JCKCONCURRENCY_1_ARG)" $(LOG)
 	@echo Target $@ completed
 test.jck10.runtime.xopts.vm.concepts:
 	@echo Running target $@
-	$(STF_COMMAND) -test=Jck -test-args="tests=vm/concepts,jckversion=jck10,testsuite=RUNTIME$(JCKCONCURRENCY_CPUS_ARG)" $(LOG)
+	$(STF_COMMAND) -test=Jck -test-args="tests=vm/concepts,jckversion=jck10,testsuite=RUNTIME$(JCKCONCURRENCY_1_ARG)" $(LOG)
 	@echo Target $@ completed
 test.jck10.runtime.xopts.vm.constantpool:
 	@echo Running target $@
-	$(STF_COMMAND) -test=Jck -test-args="tests=vm/constantpool,jckversion=jck10,testsuite=RUNTIME$(JCKCONCURRENCY_CPUS_ARG)" $(LOG)
+	$(STF_COMMAND) -test=Jck -test-args="tests=vm/constantpool,jckversion=jck10,testsuite=RUNTIME$(JCKCONCURRENCY_1_ARG)" $(LOG)
 	@echo Target $@ completed
 test.jck10.runtime.xopts.vm.fp:
 	@echo Running target $@
-	$(STF_COMMAND) -test=Jck -test-args="tests=vm/fp,jckversion=jck10,testsuite=RUNTIME$(JCKCONCURRENCY_CPUS_ARG)" $(LOG)
+	$(STF_COMMAND) -test=Jck -test-args="tests=vm/fp,jckversion=jck10,testsuite=RUNTIME$(JCKCONCURRENCY_1_ARG)" $(LOG)
 	@echo Target $@ completed
 test.jck10.runtime.xopts.vm.jvmti:
 	@echo Running target $@
-	$(STF_COMMAND) -test=Jck -test-args="tests=vm/jvmti,jckversion=jck10,testsuite=RUNTIME$(JCKCONCURRENCY_CPUS_ARG)" $(LOG)
+	$(STF_COMMAND) -test=Jck -test-args="tests=vm/jvmti,jckversion=jck10,testsuite=RUNTIME$(JCKCONCURRENCY_1_ARG)" $(LOG)
 	@echo Target $@ completed
 test.jck10.runtime.xopts.vm.overview:
 	@echo Running target $@
-	$(STF_COMMAND) -test=Jck -test-args="tests=vm/overview,jckversion=jck10,testsuite=RUNTIME$(JCKCONCURRENCY_CPUS_ARG)" $(LOG)
+	$(STF_COMMAND) -test=Jck -test-args="tests=vm/overview,jckversion=jck10,testsuite=RUNTIME$(JCKCONCURRENCY_1_ARG)" $(LOG)
 	@echo Target $@ completed
 test.jck10.runtime.xopts.vm.typechecker:
 	@echo Running target $@
-	$(STF_COMMAND) -test=Jck -test-args="tests=vm/typechecker,jckversion=jck10,testsuite=RUNTIME$(JCKCONCURRENCY_CPUS_ARG)" $(LOG)
+	$(STF_COMMAND) -test=Jck -test-args="tests=vm/typechecker,jckversion=jck10,testsuite=RUNTIME$(JCKCONCURRENCY_1_ARG)" $(LOG)
 	@echo Target $@ completed
 test.jck10.runtime.xopts.vm.classfmt:
 	@echo Running target $@
-	$(STF_COMMAND) -test=Jck -test-args="tests=vm/classfmt,jckversion=jck10,testsuite=RUNTIME$(JCKCONCURRENCY_CPUS_ARG)" $(LOG)
+	$(STF_COMMAND) -test=Jck -test-args="tests=vm/classfmt,jckversion=jck10,testsuite=RUNTIME$(JCKCONCURRENCY_1_ARG)" $(LOG)
 	@echo Target $@ completed
 test.jck10.runtime.xopts.vm.instr:
 	@echo Running target $@
-	$(STF_COMMAND) -test=Jck -test-args="tests=vm/instr,jckversion=jck10,testsuite=RUNTIME$(JCKCONCURRENCY_CPUS_ARG)" $(LOG)
+	$(STF_COMMAND) -test=Jck -test-args="tests=vm/instr,jckversion=jck10,testsuite=RUNTIME$(JCKCONCURRENCY_1_ARG)" $(LOG)
 	@echo Target $@ completed
 test.jck10.runtime.xopts.vm.jni:
 	@echo Running target $@
-	$(STF_COMMAND) -test=Jck -test-args="tests=vm/jni,jckversion=jck10,testsuite=RUNTIME$(JCKCONCURRENCY_CPUS_ARG)" $(LOG)
+	$(STF_COMMAND) -test=Jck -test-args="tests=vm/jni,jckversion=jck10,testsuite=RUNTIME$(JCKCONCURRENCY_1_ARG)" $(LOG)
 	@echo Target $@ completed
 test.jck10.runtime.xopts.vm.jdwp:
 	@echo Running target $@
-	$(STF_COMMAND) -test=Jck -test-args="tests=vm/jdwp,jckversion=jck10,testsuite=RUNTIME$(JCKCONCURRENCY_CPUS_ARG)" $(LOG)
+	$(STF_COMMAND) -test=Jck -test-args="tests=vm/jdwp,jckversion=jck10,testsuite=RUNTIME$(JCKCONCURRENCY_1_ARG)" $(LOG)
 	@echo Target $@ completed
 test.jck10.runtime.lang.ANNOT:
 	@echo Running target $@
@@ -5525,31 +5525,16 @@ help.jck:
 	@echo Help for JCK tests
 	@echo -------------------------------------------------------------------------------
 	@echo To run any JCK test
-	@echo make test.jck.custom JCKVERSION=jckVersion JCKTESTSUITE=testsuite JCKTEST=testDirectory
+	@echo make test.jck.custom JCKVERSION=jckVersion JCKTESTSUITE=testsuite JCKTEST=testDirectory JCKCONCURRENCY=cpus/nn
 	@echo JCKVERSION - jck8b, jck9, jck10, jck11, etc.
 	@echo JCKTESTSUITE - COMPILER, DEVTOOLS or RUNTIME
 	@echo JCKTEST - A JCK directory, e.g. api, api/javax_management, schema_bind, schema_bind/bind_javaType
+	@echo JCKCONCURRENCY - A number or the value cpus
 	@echo Refer to the JCK documentation, directory structure or test output for valid JCKTEST values
 	@echo -------------------------------------------------------------------------------
 	@echo New help text:
 	@echo -------------------------------------------------------------------------------
-	@echo Targets are provided for running the JCK in more manageable pieces (running all
-	@echo the JCK may take over 24 hours.
-	@echo These are equivalent to running takes oPreset targets are provided for runningAll other targets are either variants of the test.jck.custom target with preset
-	@echo make test.jck.custom JCKTESTSUITE=testsuite JCKTEST=testDirectory
-	@echo with hard coded values for JCKTESTSUITE and JCKTEST. For example
-	@echo make test.jck.devtools.schema_bind.bind_javaType JCKVERSION=jck10
-	@echo with predetermined values for JCKTESTSUITE and JCKTEST. For example
-	@echo is equivalent to running
-	@echo make test.jck.custom JCKTESTSUITE=DEVTOOLS JCKTEST=schema_bind/bind_javaType JCKVERSION=jck10
-	@echo -------------------------------------------------------------------------------
-	@echo Run make help.jcktests to see the targets for individual tests.
-	@echo -------------------------------------------------------------------------------
-	@echo There are also high level targets created for ease of executing all the JCK
-	@echo tests in a particular JCK version. These are targets with dependencies on the
-	@echo individual test targets appropriate for that JCK version.
-	@echo -------------------------------------------------------------------------------
-	@echo These targets together run all the JCK tests.
+	@echo These targets together run all the non-interactive JCK tests.
 	@echo Each target specifies a different top level JCK test node as the testDirectory
 	@echo - consequently all the tests are run with a single invocation of the JCK
 	@echo javatest harness and the resutls for all tests will be included in a single
@@ -5567,12 +5552,12 @@ help.jck:
 	@echo make test.jck.devtools.schema2java: Runs all jck devtools schema2java tests
 	@echo make test.jck.devtools.xml_schema: Runs all jck devtools xml_schema tests
 	@echo -------------------------------------------------------------------------------
-	@echo These targets together also run all the JCK tests.
+	@echo These targets together also run all the non-interactive JCK tests.
 	@echo Each target is dependent on a number of the individual test node targets, so the
 	@echo tests are run with multiple invocations of the JCK javatest harness with the results
 	@echo for each test node isolated into its own directory.
 	@echo When tests are run in this way, individual test targets can be excluded - e.g.
-	@echo make test.jck.runtime EXCLUDE="api/javax_management api/java_awt"
+	@echo make test.jck.runtime EXCLUDE="test.jck.runtime.api.javax_management test.jck.runtime.api.java_awt"
 	@echo -------------------------------------------------------------------------------
 	@echo make test.jck: Runs all non-interactive jck tests
 	@echo make test.jck.noconfig: Runs all non-interactive jck tests except those which require Kerberos and http server setup

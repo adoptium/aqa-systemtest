@@ -40,8 +40,7 @@ limitations under the License.
 		<equals arg1="${JAVA_VERSION}" arg2="SE110"/>
 	</condition>
 
-	<target name="build-dependencies" depends="build-modularity">
-		<ant antfile="${stf_root}/stf.build/build.xml" dir="${stf_root}/stf.build" inheritAll="false"/>
+	<target name="build-dependencies" depends="build-stf, build-modularity">
 		<ant antfile="${source_root}/openjdk.test.concurrent/build.xml" dir="${source_root}/openjdk.test.concurrent" inheritAll="false"/>
 		<ant antfile="${source_root}/openjdk.test.classloading/build.xml" dir="${source_root}/openjdk.test.classloading" inheritAll="false"/>
 		<ant antfile="${source_root}/openjdk.test.debugging/build.xml" dir="${source_root}/openjdk.test.debugging" inheritAll="false"/>
@@ -58,6 +57,10 @@ limitations under the License.
 		<ant antfile="${source_root}/openjdk.test.jlm/build.xml" dir="${source_root}/openjdk.test.jlm" inheritAll="false"/>
 	</target>
 	
+	<target name="build-stf">
+		<ant antfile="${stf_root}/stf.build/build.xml" dir="${stf_root}/stf.build" inheritAll="false"/>
+	</target>
+
 	<!--Temporarily exclude compilation/running of test.modularity on Java11 due to 
 				https://github.com/AdoptOpenJDK/openjdk-systemtest/issues/150
 	-->

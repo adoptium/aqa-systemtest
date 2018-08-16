@@ -317,7 +317,8 @@ public class Jck implements StfPluginInterface {
 			StfProcess tnameserv = null;
 			
 			String executeJar;
-			if ((jckVersion.contains("jck10") ||
+			if ((jckVersion.contains("jck11") ||
+				 jckVersion.contains("jck10") ||
 				 jckVersion.contains("jck9") ||
 				 jckVersion.contains("jck8")) &&
 				 (testSuite == TestSuite.RUNTIME) ) {
@@ -886,7 +887,7 @@ public class Jck implements StfPluginInterface {
 	private String getTestSpecificJvmOptions (String jckVersion, String tests) {
 		String testSpecificJvmOptions = "";
 		// --add-modules options are required to make some modules visible for Java 9 onwards.
-		if (jckVersion.contains("jck9") || jckVersion.contains("jck10")) {
+		if (jckVersion.contains("jck9") || jckVersion.contains("jck10") || jckVersion.contains("jck11")) {
 			// If the top level api node is being run, add all modules required by the api tests
 			if (tests.equals("api")) {
 				testSpecificJvmOptions = " --add-modules java.activation,java.corba,java.xml.crypto,java.xml.ws.annotation,java.se.ee,java.sql,java.transaction,java.xml.bind,java.xml.ws";

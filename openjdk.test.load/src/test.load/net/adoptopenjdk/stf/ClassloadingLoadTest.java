@@ -57,10 +57,16 @@ public class ClassloadingLoadTest implements StfPluginInterface {
 		// For example, if openjdk-systemtest was cloned into the default location of $HOME/git then this will be set to /home/user/git/openjdk-systemtest
 		DirectoryRef notonclasspathDirRoot = DirectoryRef.findDirectoryRoot("openjdk.test.classloading/bin_notonclasspath/url1/net/adoptopenjdk/test/classloading/deadlock/package1/",
 													 testRoots);
-		
+		String modulesAdd = "";
+		if (javaVersion >= 9) {
+			modulesAdd = "java.rmi";
+			if (javaVersion < 11) {
+				modulesAdd += ",java.transaction,java.corba";
+			}
+		}
 		LoadTestProcessDefinition loadTestInvocation = test.createLoadTestSpecification()
 				.addJvmOption("-Djava.classloading.dir=" + notonclasspathDirRoot)  // Expose the bin_notonclasspath root directory to the deadlock test
-				.addModules(javaVersion >= 9 ? "java.rmi,java.transaction,java.corba" : "")
+				.addModules(modulesAdd)
 				.addPrereqJarToClasspath(JavaProcessDefinition.JarId.JUNIT)
 				.addPrereqJarToClasspath(JavaProcessDefinition.JarId.HAMCREST)
 				.addProjectToClasspath("openjdk.test.classloading")

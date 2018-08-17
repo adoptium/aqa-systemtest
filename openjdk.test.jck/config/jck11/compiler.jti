@@ -56,7 +56,7 @@ jck.env.envName=jck_compiler
 jck.env.moduleSystem.compilerOptions=compilerAddModsOptionTemplate\=--add-modules \#[,\#]\ncompilerModulePathOptionTemplate\=--module-path \#\ncompilerModuleSourcePathOptionTemplate\=--module-source-path \#\n
 jck.env.moduleSystem.vmOptions=vmModuleEntryOptionTemplate\=\nvmModulePathOptionTemplate\=\nvmAddModsOptionTemplate\=\n
 jck.env.platform=jre
-jck.env.platformModules=java.activation java.base java.compiler java.corba java.datatransfer java.desktop java.instrument java.logging java.management java.management.rmi java.naming java.prefs java.rmi java.scripting java.se java.security.jgss java.security.sasl java.se.ee java.sql java.sql.rowset java.transaction java.xml java.xml.bind java.xml.crypto java.xml.ws java.xml.ws.annotation
+jck.env.platformModules=java.base java.compiler java.datatransfer java.desktop java.instrument java.logging java.management java.management.rmi java.naming java.prefs java.rmi java.scripting java.se java.security.jgss java.security.sasl java.sql java.sql.rowset java.xml java.xml.crypto
 jck.env.product=compiler
 jck.env.simpleOrAdvanced=advanced
 # jck.env.testPlatform.display example: :1 or xxxx.xxxx.xxxx.com\:0.0

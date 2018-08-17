@@ -25,6 +25,8 @@ import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.util.ArrayList;
 import java.util.Properties;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -886,64 +888,77 @@ public class Jck implements StfPluginInterface {
 	
 	private String getTestSpecificJvmOptions (String jckVersion, String tests) {
 		String testSpecificJvmOptions = "";
-		// --add-modules options are required to make some modules visible for Java 9 onwards.
-		if (jckVersion.contains("jck9") || jckVersion.contains("jck10") || jckVersion.contains("jck11")) {
-			// If the top level api node is being run, add all modules required by the api tests
-			if (tests.equals("api")) {
-				testSpecificJvmOptions = " --add-modules java.activation,java.corba,java.xml.crypto,java.xml.ws.annotation,java.se.ee,java.sql,java.transaction,java.xml.bind,java.xml.ws";
+		Matcher matcher = Pattern.compile("jck(\\d+)b?").matcher(jckVersion);
+		if (matcher.matches()) {
+			// first group is going to be 8, 9, 10, 11, etc.
+			int jckVerNum = Integer.parseInt(matcher.group(1));
+			// --add-modules options are required to make some modules visible for Java 9 onwards.
+			if (jckVerNum >= 9) {
+				// If the top level api node is being run, add all modules required by the api tests
+				if (tests.equals("api")) {
+					testSpecificJvmOptions = " --add-modules java.xml.crypto,java.sql";
+					if (jckVerNum < 11) {
+						// following modules have been removed from Java 11 and onwards
+						testSpecificJvmOptions += ",java.activation,java.corba,java.xml.ws.annotation,java.se.ee,java.transaction,java.xml.bind,java.xml.ws";
+					}
+				}
+				if (tests.contains("api/javax_crypto") ) {
+					testSpecificJvmOptions = " --add-modules java.xml.crypto";
+				}
+				if (tests.contains("api/javax_sql") ) {
+					testSpecificJvmOptions = " --add-modules java.sql";
+				}
+				if (jckVerNum < 11) {
+					if (tests.contains("api/javax_activation")) {
+						testSpecificJvmOptions = " --add-modules java.activation";
+					}
+					if (tests.contains("api/javax_activity")) {
+						testSpecificJvmOptions = " --add-modules java.corba";
+					}
+					if (tests.contains("api/javax_rmi")) {
+						testSpecificJvmOptions = " --add-modules java.corba";
+					}
+					if (tests.contains("api/org_omg")) {
+						testSpecificJvmOptions = " --add-modules java.corba";
+					}
+					if (tests.contains("api/javax_annotation")) {
+						testSpecificJvmOptions = "--add-modules java.xml.ws.annotation";
+					}
+					if (tests.contains("api/java_lang")) {
+						testSpecificJvmOptions = "--add-modules java.xml.ws.annotation,java.xml.bind,java.xml.ws,java.activation,java.corba";
+					}
+					if (tests.contains("api/javax_transaction") ) {
+						testSpecificJvmOptions = " --add-modules java.transaction";
+					}
+					if (tests.contains("api/javax_xml") ) {
+						testSpecificJvmOptions = " --add-modules java.xml.bind,java.xml.ws";
+					}
+					if (tests.contains("api/modulegraph")) {
+						testSpecificJvmOptions = "--add-modules java.activation,java.corba,java.transaction,java.se.ee,java.xml.bind,java.xml.ws,java.xml.ws.annotation";
+					}
+					if (tests.contains("api/signaturetest")) {
+						testSpecificJvmOptions = "--add-modules java.activation,java.corba,java.transaction,java.xml.bind,java.xml.ws,java.xml.ws.annotation";
+					}
+					if (tests.contains("java2schema") ) {
+						testSpecificJvmOptions = " --add-modules java.xml.bind";
+					}
+					if (tests.contains("xml_schema") ) {
+						testSpecificJvmOptions = " --add-modules java.xml.bind";
+					}
+					if (tests.contains("jaxws") ) {
+						testSpecificJvmOptions = " --add-modules java.xml.bind,java.xml.ws";
+					}
+					if (tests.contains("schema2java") ) {
+						testSpecificJvmOptions = " --add-modules java.xml.bind";
+					}
+					if (tests.contains("schema_bind") ) {
+						testSpecificJvmOptions = " --add-modules java.xml.bind";
+					}
+				}
+				testSpecificJvmOptions += " -Djdk.attach.allowAttachSelf=true";
 			}
-			if (tests.contains("api/javax_activation")) {
-				testSpecificJvmOptions = " --add-modules java.activation";
-			}
-			if (tests.contains("api/javax_activity")) {
-				testSpecificJvmOptions = " --add-modules java.corba";
-			}
-			if (tests.contains("api/javax_rmi")) {
-				testSpecificJvmOptions = " --add-modules java.corba";
-			}
-			if (tests.contains("api/org_omg")) {
-				testSpecificJvmOptions = " --add-modules java.corba";
-			}
-			if (tests.contains("api/javax_annotation")) {
-				testSpecificJvmOptions = "--add-modules java.xml.ws.annotation";
-			}
-			if (tests.contains("api/java_lang")) {
-				testSpecificJvmOptions = "--add-modules java.xml.ws.annotation,java.xml.bind,java.xml.ws,java.activation,java.corba";
-			}
-			if (tests.contains("api/javax_crypto") ) {
-				testSpecificJvmOptions = " --add-modules java.xml.crypto";
-			}
-			if (tests.contains("api/javax_sql") ) {
-				testSpecificJvmOptions = " --add-modules java.sql";
-			}
-			if (tests.contains("api/javax_transaction") ) {
-				testSpecificJvmOptions = " --add-modules java.transaction";
-			}
-			if (tests.contains("api/javax_xml") ) {
-				testSpecificJvmOptions = " --add-modules java.xml.bind,java.xml.ws";
-			}
-			if (tests.contains("api/modulegraph")) {
-				testSpecificJvmOptions = "--add-modules java.activation,java.corba,java.transaction,java.se.ee,java.xml.bind,java.xml.ws,java.xml.ws.annotation";
-			}
-			if (tests.contains("api/signaturetest")) {
-				testSpecificJvmOptions = "--add-modules java.activation,java.corba,java.transaction,java.xml.bind,java.xml.ws,java.xml.ws.annotation";
-			}
-			if (tests.contains("java2schema") ) {
-				testSpecificJvmOptions = " --add-modules java.xml.bind";
-			}
-			if (tests.contains("xml_schema") ) {
-				testSpecificJvmOptions = " --add-modules java.xml.bind";
-			}
-			if (tests.contains("jaxws") ) {
-				testSpecificJvmOptions = " --add-modules java.xml.bind,java.xml.ws";
-			}
-			if (tests.contains("schema2java") ) {
-				testSpecificJvmOptions = " --add-modules java.xml.bind";
-			}
-			if (tests.contains("schema_bind") ) {
-				testSpecificJvmOptions = " --add-modules java.xml.bind";
-			}
-			testSpecificJvmOptions += " -Djdk.attach.allowAttachSelf=true";
+		} else {
+			throw new Error("Unexpected jck version : " + jckVersion);
 		}
 		return testSpecificJvmOptions;
 	}

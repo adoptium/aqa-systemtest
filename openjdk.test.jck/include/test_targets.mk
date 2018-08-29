@@ -22,15 +22,21 @@
 # The default is to look for a directory called 'default'.
 JCK_CONFIG=default
 
-# JCKVERSION is mandatory
-ifeq (,$(JCKVERSION))
-  $(error JCKVERSION must be specified: example make test.jck JCKVERSION=jck8b)
+# Make sure that if a test.jck target is being executed JCKVERSION has been specified
+# and is set to a supported version.
+ifneq (,$(findstring test.jck,$(MAKECMDGOALS)))
+  ifeq (,$(JCKVERSION))
+    $(error JCKVERSION must be specified: example make test.jck JCKVERSION=jck8b)
+  endif
 endif
-ifneq (jck8b,$(JCKVERSION))
-  ifneq (jck9,$(JCKVERSION))
-    ifneq (jck10,$(JCKVERSION))
-      ifneq (jck11,$(JCKVERSION))
-        $(error JCKVERSION $(JCKVERSION) not supported.  Specify one of jck8b, jck9, jck10 or jck11)
+
+ifneq (,$(findstring test.jck,$(MAKECMDGOALS)))
+  ifneq (jck8b,$(JCKVERSION))
+    ifneq (jck9,$(JCKVERSION))
+      ifneq (jck10,$(JCKVERSION))
+        ifneq (jck11,$(JCKVERSION))
+          $(error JCKVERSION $(JCKVERSION) not supported.  Specify one of jck8b, jck9, jck10 or jck11)
+        endif
       endif
     endif
   endif

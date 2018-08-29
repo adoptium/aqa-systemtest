@@ -22,15 +22,16 @@
 # The default is to look for a directory called 'default'.
 JCK_CONFIG=default
 
-# JCKVERSION is mandatory
-ifeq (,$(JCKVERSION))
-  $(error JCKVERSION must be specified: example make test.jck JCKVERSION=jck8b)
-endif
-ifneq (jck8b,$(JCKVERSION))
-  ifneq (jck9,$(JCKVERSION))
-    ifneq (jck10,$(JCKVERSION))
-      ifneq (jck11,$(JCKVERSION))
-        $(error JCKVERSION $(JCKVERSION) not supported.  Specify one of jck8b, jck9, jck10 or jck11)
+# JCKVERSION cannot be mandated otherwise make build for the openjdk-systemtest repository
+# would fail if JCKVERSION were not specified. So default it to something meaningless.
+JCKVERSION?=not_specified
+ifneq (notspecified,$(JCKVERSION))
+  ifneq (jck8b,$(JCKVERSION))
+    ifneq (jck9,$(JCKVERSION))
+      ifneq (jck10,$(JCKVERSION))
+        ifneq (jck11,$(JCKVERSION))
+          $(error JCKVERSION $(JCKVERSION) not supported.  Specify one of jck8b, jck9, jck10 or jck11)
+        endif
       endif
     endif
   endif

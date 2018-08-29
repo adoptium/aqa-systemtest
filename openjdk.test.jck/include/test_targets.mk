@@ -58,8 +58,8 @@ JCKCONCURRENCY_1_ARG:=,concurrency=$(JCKCONCURRENCY_1)
 # Target to run tests from any JCK test directory for any JCK version
 .PHONY: test.jck.custom
 test.jck.custom:
-	echo Running target $@ with custom jck test $(JCKTEST), jckversion $(JCKVERSION), testsuite $(JCKTESTSUITE)$(JCKCONCURRENCY_ARG)
-	$(STF_COMMAND) -test=Jck -test-args="tests=$(JCKTEST),jckversion=$(JCKVERSION),testsuite $(JCKTESTSUITE)$(JCKCONCURRENCY_ARG)" $(LOG)
+	echo Running target $@ with custom jck test $(JCKTEST), jckversion $(JCKVERSION), testsuite=$(JCKTESTSUITE)$(JCKCONCURRENCY_ARG)
+	$(STF_COMMAND) -test=Jck -test-args="tests=$(JCKTEST),jckversion=$(JCKVERSION),testsuite=$(JCKTESTSUITE)$(JCKCONCURRENCY_ARG)" $(LOG)
 	echo Target $@ completed
 
 # Targets for the JCK runtime test suite

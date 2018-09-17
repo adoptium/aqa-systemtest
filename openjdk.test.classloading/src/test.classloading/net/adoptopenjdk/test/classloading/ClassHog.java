@@ -41,7 +41,8 @@ public class ClassHog
 
 			ClassLoader classLoader = getClass().getClassLoader();
 			FileReader dictFileReader = new FileReader(classLoader.getResource("net/adoptopenjdk/test/classloading/" +  dictFileName).getFile());
-
+			int javaVersion = Integer.parseInt(System.getProperty("java.version.number"));
+			
 			// open the dictionary file
 			BufferedReader br = new BufferedReader(dictFileReader);
 			// get a line at a time
@@ -49,6 +50,12 @@ public class ClassHog
 			{
 				try
 				{
+					if (javaVersion >= 11) {
+						// javax.transaction and CORBA has been removed from Java 11
+						if ( s.startsWith("javax.transaction") || s.startsWith("org.omg") ) {
+							continue;
+						}
+					}
 					// use the class loader to get the Class class that represents the class on the current line
 					c = Class.forName (s);
 					cnt++;

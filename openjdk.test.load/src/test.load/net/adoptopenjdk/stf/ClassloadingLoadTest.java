@@ -66,6 +66,7 @@ public class ClassloadingLoadTest implements StfPluginInterface {
 		}
 		LoadTestProcessDefinition loadTestInvocation = test.createLoadTestSpecification()
 				.addJvmOption("-Djava.classloading.dir=" + notonclasspathDirRoot)  // Expose the bin_notonclasspath root directory to the deadlock test
+				.addJvmOption("-Djava.version.number=" + javaVersion)
 				.addModules(modulesAdd)
 				.addPrereqJarToClasspath(JavaProcessDefinition.JarId.JUNIT)
 				.addPrereqJarToClasspath(JavaProcessDefinition.JarId.HAMCREST)

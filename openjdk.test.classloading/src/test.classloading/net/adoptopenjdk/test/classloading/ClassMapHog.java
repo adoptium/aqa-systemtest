@@ -84,14 +84,23 @@ public class ClassMapHog
 				
 				ClassLoader classLoader = getClass().getClassLoader();
 				FileReader dictFileReader = new FileReader(classLoader.getResource("net/adoptopenjdk/test/classloading/" + dictFileName).getFile());
+				int javaVersion = Integer.parseInt(System.getProperty("java.version.number"));
 
 				// open the dictionary
 				BufferedReader br = new BufferedReader (dictFileReader);
+
 				// read a class line at a time
 				while ((s=br.readLine())!=null)
 				{
 					try
 					{
+						if (javaVersion >= 11) {
+							// javax.transaction and CORBA has been removed from Java 11
+							if ( s.startsWith("javax.transaction") || s.startsWith("org.omg") ) {
+								continue;
+							}
+						}
+					
 						// get the class loader to load the current class
 						// Class is the class that represents a classes 'blueprint'
 						c = Class.forName (s);

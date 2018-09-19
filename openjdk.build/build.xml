@@ -37,7 +37,7 @@ limitations under the License.
 	<!-- Also make sure stf is built -->
 	
 	<condition property="isJava11" value="true">
-		<equals arg1="${JAVA_VERSION}" arg2="SE110"/>
+		<equals arg1="${JDK_VERSION}" arg2="11"/>
 	</condition>
 
 	<target name="build-dependencies" depends="build-stf, build-modularity">

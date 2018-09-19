@@ -152,7 +152,7 @@ limitations under the License.
 	</target>
 
 	<condition property="corbaSupported" value="true">
-		<matches string="${JAVA_VERSION}" pattern="^SE(8|9|10)0$$" />
+		<matches string="${JDK_VERSION}" pattern="^(8|9|10)$$" />
 	</condition>
 
 	<target name="mauve-configure" if="mauve_source_available" depends="delete-corba-files">

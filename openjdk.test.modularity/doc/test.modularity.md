@@ -12,7 +12,7 @@ Contents
 
 ###What does it test?
 
-Modularity SVT test suite provides system verification for [Modular JDK](http://openjdk.java.net/jeps/200), new from Java 9.0. 
+Modularity SVT test suite provides system verification for [Modular JDK](https://openjdk.java.net/jeps/200), new from Java 9.0. 
 It breaks down testing into various user scenarios and provides implementation for each one of them.
 
 Testing areas covered in Modularity test suite at a very high level:
@@ -107,9 +107,9 @@ Note:
 - test_arguments: Any argument that a test might take (should be in [name]=[value] format). 
 
 ###Are there any references?
-- [Modularity JEP 200](http://openjdk.java.net/jeps/200)
-- [Modularity JEP 201](http://openjdk.java.net/jeps/201) 
-- [Modularity JEP 260](http://openjdk.java.net/jeps/260)
-- [Modularity JEP 261](http://openjdk.java.net/jeps/261) 
-- [Jigsaw Quick Start](http://openjdk.java.net/projects/jigsaw/quick-start)
-- [Jigsaw Talks](http://openjdk.java.net/projects/jigsaw/talks) 
+- [Modularity JEP 200](https://openjdk.java.net/jeps/200)
+- [Modularity JEP 201](https://openjdk.java.net/jeps/201) 
+- [Modularity JEP 260](https://openjdk.java.net/jeps/260)
+- [Modularity JEP 261](https://openjdk.java.net/jeps/261) 
+- [Jigsaw Quick Start](https://openjdk.java.net/projects/jigsaw/quick-start)
+- [Jigsaw Talks](https://openjdk.java.net/projects/jigsaw/talks) 

@@ -4408,7 +4408,10 @@
 	<mauve class="gnu.testlet.java.text.SimpleDateFormat.toPattern"/>
 	<mauve class="gnu.testlet.java.text.StringCharacterIterator.constructor"/>
 	<mauve class="gnu.testlet.java.text.StringCharacterIterator.iter"/>
+	<!-- CORBA tests are no longer run 
 	<mauve class="gnu.testlet.java.util.AbstractCollection.AcuniaAbstractCollectionTest"/>
+	-->
+	
 	<mauve class="gnu.testlet.java.util.AbstractCollection.AcuniaAddCollectionTest"/>
 	<mauve class="gnu.testlet.java.util.AbstractCollection.toString"/>
 	<mauve class="gnu.testlet.java.util.AbstractList.AcuniaAbstractListTest"/>

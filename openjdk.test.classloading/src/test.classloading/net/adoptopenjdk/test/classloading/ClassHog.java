@@ -29,7 +29,7 @@ public class ClassHog
 		String dictFileName = "class.dict";
 		for (int i=0;i<loopCount;i++)
 		{
-			String s=null;
+			String classToLoad=null;
 			Class<?> c=null;
 			
 			int indx = parmlist.toLowerCase().indexOf("dict:");
@@ -46,26 +46,31 @@ public class ClassHog
 			// open the dictionary file
 			BufferedReader br = new BufferedReader(dictFileReader);
 			// get a line at a time
-			while ((s=br.readLine())!=null)
+			while ((classToLoad=br.readLine())!=null)
 			{
 				try
 				{
+					// Mauve CORBA related tests have been removed from all Java releases 
+					if ( classToLoad.startsWith("org.omg") ) {
+						continue; 
+					}
+					
 					if (javaVersion >= 11) {
-						// javax.transaction and CORBA has been removed from Java 11
-						if ( s.startsWith("javax.transaction") || s.startsWith("org.omg") ) {
+						// javax.transaction has been removed from Java 11
+						if ( classToLoad.startsWith("javax.transaction") ) {
 							continue;
 						}
 					}
 					// use the class loader to get the Class class that represents the class on the current line
-					c = Class.forName (s);
+					c = Class.forName (classToLoad);
 					cnt++;
-					System.out.println("Loaded Class: "+s);
+					System.out.println("Loaded Class: "+classToLoad);
 
 				}
 				catch (ClassNotFoundException cnfe)
 				{
 					br.close();
-					throw new ClassNotFoundException("Failed to find Class: " + s + cnfe);
+					throw new ClassNotFoundException("Failed to find Class: " + classToLoad + cnfe);
 				}
 
 				try
@@ -76,7 +81,7 @@ public class ClassHog
 				catch (SecurityException se)
 				{
 					br.close();
-					throw new SecurityException("Failed to load methods for class. SecurityException Occurred: " + s + se);
+					throw new SecurityException("Failed to load methods for class. SecurityException Occurred: " + classToLoad + se);
 				}
 
 				try
@@ -87,7 +92,7 @@ public class ClassHog
 				catch (SecurityException se)
 				{
 					br.close();
-					throw new SecurityException("Failed to load fields for class: " + s + se);
+					throw new SecurityException("Failed to load fields for class: " + classToLoad + se);
 				}
 			}
 			br.close();

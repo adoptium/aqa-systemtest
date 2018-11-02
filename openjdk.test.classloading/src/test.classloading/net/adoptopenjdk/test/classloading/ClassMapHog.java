@@ -70,7 +70,7 @@ public class ClassMapHog
 				// We don't want to run out of memory and do want the garbage collector to get some exercise!
 				hmap.clear();
 
-				String s=null;
+				String classToLoad = null;
 				Class<?> c=null;
 				Map<Object, Object> cmapentry=null;
 
@@ -90,29 +90,33 @@ public class ClassMapHog
 				BufferedReader br = new BufferedReader (dictFileReader);
 
 				// read a class line at a time
-				while ((s=br.readLine())!=null)
+				while ((classToLoad=br.readLine())!=null)
 				{
 					try
 					{
+						// Mauve CORBA related tests have been removed from all Java releases 
+						if ( classToLoad.startsWith("org.omg") ) {
+							continue; 
+						}
 						if (javaVersion >= 11) {
 							// javax.transaction and CORBA has been removed from Java 11
-							if ( s.startsWith("javax.transaction") || s.startsWith("org.omg") ) {
+							if ( classToLoad.startsWith("javax.transaction") ) {
 								continue;
 							}
 						}
 					
 						// get the class loader to load the current class
 						// Class is the class that represents a classes 'blueprint'
-						c = Class.forName (s);
+						c = Class.forName (classToLoad);
 						// put the Class object into the current map
-						cmapentry = addClass (s, c);
+						cmapentry = addClass (classToLoad, c);
 						ccnt++;
-						System.out.println("Loaded Class: "+s);
+						System.out.println("Loaded Class: "+classToLoad);
 					}
 					catch (ClassNotFoundException cnfe)
 					{
 						br.close();
-						throw new ClassNotFoundException("Failed to load Class: " + s + cnfe);
+						throw new ClassNotFoundException("Failed to load Class: " + classToLoad + cnfe);
 					}
 
 					try
@@ -137,7 +141,7 @@ public class ClassMapHog
 					catch (SecurityException se)
 					{
 						br.close();
-						throw new SecurityException("Failed to load methods for class: " + s + se);
+						throw new SecurityException("Failed to load methods for class: " + classToLoad + se);
 					}
 
 					try
@@ -152,7 +156,7 @@ public class ClassMapHog
 					catch (java.lang.SecurityException se)
 					{
 						br.close();
-						throw new SecurityException("Failed to load fields for class: " + s + se);
+						throw new SecurityException("Failed to load fields for class: " + classToLoad + se);
 					}
 				}
 				//dump(hmap,"");

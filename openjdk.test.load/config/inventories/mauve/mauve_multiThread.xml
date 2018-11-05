@@ -4416,7 +4416,9 @@
 	<mauve class="gnu.testlet.java.util.AbstractCollection.toString"/>
 	<mauve class="gnu.testlet.java.util.AbstractList.AcuniaAbstractListTest"/>
 	<mauve class="gnu.testlet.java.util.AbstractMap.AcuniaAbstractMapTest"/>
+	<!-- CORBA tests are not longer run
 	<mauve class="gnu.testlet.java.util.AbstractSequentialList.AcuniaAbstractSequentialListTest"/>
+	-->
 	<mauve class="gnu.testlet.java.util.AbstractSet.AcuniaAbstractSetTest"/>
 	<mauve class="gnu.testlet.java.util.ArrayList.subList"/>
 	<mauve class="gnu.testlet.java.util.Arrays.asList"/>
@@ -4760,7 +4762,9 @@
 	<mauve class="gnu.testlet.java.util.jar.JarInputStream.getNextEntry"/>
 	<mauve class="gnu.testlet.java.util.LinkedHashMap.LinkedHashMapTest"/>
 	<mauve class="gnu.testlet.java.util.LinkedHashMap.Regress"/>
+	<!-- Mauve related tests are removed from all Java versions 
 	<mauve class="gnu.testlet.java.util.LinkedList.AcuniaLinkedListTest"/>
+	-->
 	<mauve class="gnu.testlet.java.util.LinkedList.subList"/>
 	<mauve class="gnu.testlet.java.util.LinkedList.SubListTest"/>
 	<mauve class="gnu.testlet.java.util.logging.Handler.isLoggable"/>

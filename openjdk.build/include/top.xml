@@ -191,10 +191,14 @@ limitations under the License.
 	</target>
 
 	<!-- Make sure mauve.jar is built. -->
-	<target name="run-mauve-configure">
+	<target name="run-mauve-configure" depends="fetch-prestaged-mauve-jar" unless="isAutomatedBuild">
 		<ant antfile="${source_root}/openjdk.test.mauve/build.xml" target="configure" dir="${source_root}/openjdk.test.mauve" inheritAll="false"/>
 	</target>
-
+	
+	<target name="fetch-prestaged-mauve-jar" if="isAutomatedBuild">
+		<copy file="${prereqs_root}/../TestConfig/lib/systemtest_prereqs/mauve/mauve.jar" todir="${prereqs_root}/mauve"/>
+	</target>
+	
 	<!-- Target to check if junit 4.12 is available. -->
 	<target name="check-for-junit-4.12">
 		<property name="junit_4.12_dir" location="${prereqs_root}/junit-4.12"/>

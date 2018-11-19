@@ -107,11 +107,11 @@ public class PatchModuleImageTest implements StfPluginInterface {
 		DirectoryRef overridingAppModuleExpDir_HelloModule = test.env()
 				.findTestDirectory("openjdk.test.modularity/bin/common-override/com.hello");
 
-		DirectoryRef overridingPlatformModuleExpDir_JavaTransaction = test.env()
-				.findTestDirectory("openjdk.test.modularity/bin/common-override/java.transaction");
+		DirectoryRef overridingPlatformModuleExpDir_JavaXml = test.env()
+				.findTestDirectory("openjdk.test.modularity/bin/common-override/java.xml");
 
-		ModuleRef overridingPlatformModuleJar_JavaTransaction = test.doCreateModularJar("create java.transaction.jar",
-				"openjdk.test.modularity/bin/common-override/java.transaction");
+		ModuleRef overridingPlatformModuleJar_JavaTransaction = test.doCreateModularJar("create java.xml.jar",
+				"openjdk.test.modularity/bin/common-override/java.xml");
 
 		StfTestArguments testArgs = test.env().getTestProperties("variant");
 		Variant variant = testArgs.decodeEnum("variant", Variant.class);
@@ -127,7 +127,7 @@ public class PatchModuleImageTest implements StfPluginInterface {
 					ECHO_ON, ExpectedOutcome.cleanRun().within("1m"),
 					test.createJavaProcessDefinition().addRunImage(runtimeImage)
 							.addModuleAddReads("com.test=ALL-UNNAMED")
-							.addPatchModule("java.transaction", overridingPlatformModuleExpDir_JavaTransaction)
+							.addPatchModule("java.xml", overridingPlatformModuleExpDir_JavaXml)
 							.addPrereqJarToClasspath(JavaProcessDefinition.JarId.JUNIT)
 							.addPrereqJarToClasspath(JavaProcessDefinition.JarId.HAMCREST)
 							.runClass(org.junit.runner.JUnitCore.class)
@@ -141,7 +141,7 @@ public class PatchModuleImageTest implements StfPluginInterface {
 					"OT12", ECHO_ON, ExpectedOutcome.cleanRun().within("1m"),
 					test.createJavaProcessDefinition().addRunImage(runtimeImage)
 							.addModuleAddReads("com.test=ALL-UNNAMED")
-							.addPatchModule("java.transaction", overridingPlatformModuleJar_JavaTransaction)
+							.addPatchModule("java.xml", overridingPlatformModuleJar_JavaTransaction)
 							.addPrereqJarToClasspath(JavaProcessDefinition.JarId.JUNIT)
 							.addPrereqJarToClasspath(JavaProcessDefinition.JarId.HAMCREST)
 							.runClass(org.junit.runner.JUnitCore.class)

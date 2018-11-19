@@ -42,11 +42,9 @@ import net.adoptopenjdk.test.modularity.*;
  * ---------
  * 1) Using an exploded module folder: 
  * 		1.1) Override an application module
- * 		1.2) Override an upgradable platform module. 
- * 		1.3) Override a non-upgradable platform module(Negative test) 
- * 		1.4) Override an application module using a custom runtime image
- * 		1.5) Override an upgradable platform module using a custom runtime image
- * 		1.6) Override a non-upgradable platform module using a custom runtime image(Negative test)
+ * 		1.2) Override a non-upgradable platform module(Negative test) 
+ * 		1.3) Override an application module using a custom runtime image
+ * 		1.4) Override a non-upgradable platform module using a custom runtime image(Negative test)
  * 
  * 2) Repeat above using modularized jar.
  * 		Note: Test (2.3) is specific to jarred tests -
@@ -74,7 +72,6 @@ public class UpgradeModPathTest implements StfPluginInterface {
 	};
 	
 	ModuleRef helloOverrideModule = null;
-	ModuleRef txnOverrideModule = null;
 	ModuleRef loggingOverrideModule = null;
 	
 	public void help(HelpTextGenerator help) {
@@ -97,8 +94,6 @@ public class UpgradeModPathTest implements StfPluginInterface {
 		ModuleRef helperModule = test.doCreateModularJar("Create com.helper jar", "openjdk.test.modularity/bin/common-mods/com.helper");
 	    ModuleRef discreetModule = test.doCreateModularJar("Create com.discreet jar", "openjdk.test.modularity/bin/common-mods/com.discreet");
 		ModuleRef testModule = test.doCreateModularJar("Create tests jar", "openjdk.test.modularity/bin/tests/com.test");
-		FileRef javaTransactionNonModJar = test.doCreateProjectJar("create non-modularized java.transaction.jar",   
-												"openjdk.test.modularity/bin/common-override/java.transaction", "javax");
 		
 		DirectoryRef runtimeImage = test.doRunJlink("Create runtime image for "
 				+ "upgrademodulepath test", 
@@ -132,22 +127,7 @@ public class UpgradeModPathTest implements StfPluginInterface {
 							.addArg("net.adoptopenjdk.test.modularity.junit.TestOverrideUsingAppModule")
 						);
 				
-				/*1.2) Override an upgradable platform module*/
-				test.doRunForegroundProcess("Override an upgradable platform module", "OT12", 
-						ECHO_ON, ExpectedOutcome.cleanRun().within("1m"), 
-							test.createJavaProcessDefinition()
-							.addModuleAddReads("com.test=ALL-UNNAMED")
-						    .addModuleToModulepath("openjdk.test.modularity/bin/common-mods")
-						    .addModuleToModulepath("openjdk.test.modularity/bin/tests")
-						    .addRootModule("com.test")
-						    .addModuleToUpgradeModulepath("openjdk.test.modularity/bin/common-override/java.transaction")
-							.addPrereqJarToClasspath(JavaProcessDefinition.JarId.JUNIT)
-						    .addPrereqJarToClasspath(JavaProcessDefinition.JarId.HAMCREST)
-							.runClass(org.junit.runner.JUnitCore.class)
-							.addArg("net.adoptopenjdk.test.modularity.junit.TestOverrideUsingUpgradablePlatformModule")
-						);
-				
-				/*1.3) (Negative test) Override a non-upgradable platform module */
+				/*1.2) (Negative test) Override a non-upgradable platform module */
 				StfProcess ot13 = test.doRunForegroundProcess("(Negative test) Override a non-upgradable platform "
 						+ "module", "OT13", 
 						ECHO_ON, ExpectedOutcome.exitValue(1).within("1m"), 
@@ -188,7 +168,7 @@ public class UpgradeModPathTest implements StfPluginInterface {
 				
 			case ExpDirModUpgradeCRImage : 
 				
-				/*1.4) Override an application module using a custom runtime image*/
+				/*1.3) Override an application module using a custom runtime image*/
 				test.doRunForegroundProcess("Override an application module "
 						+ "using a custom runtime image", "OT14", 
 						ECHO_ON, ExpectedOutcome.cleanRun().within("1m"), 
@@ -201,22 +181,9 @@ public class UpgradeModPathTest implements StfPluginInterface {
 						.runClass(org.junit.runner.JUnitCore.class)
 						.addArg("net.adoptopenjdk.test.modularity.junit.TestOverrideUsingAppModule")
 					);
-
-				/*1.5) Override an upgradable platform module using a custom runtime image*/
-				test.doRunForegroundProcess("Override an upgradable platform module "
-						+ "using a custom runtime image", "OT15", 
-						ECHO_ON, ExpectedOutcome.cleanRun().within("1m"), 
-							test.createJavaProcessDefinition()
-							.addRunImage(runtimeImage) 
-							.addModuleAddReads("com.test=ALL-UNNAMED")
-						    .addModuleToUpgradeModulepath("openjdk.test.modularity/bin/common-override/java.transaction")
-							.addPrereqJarToClasspath(JavaProcessDefinition.JarId.JUNIT)
-						    .addPrereqJarToClasspath(JavaProcessDefinition.JarId.HAMCREST)
-							.runClass(org.junit.runner.JUnitCore.class)
-							.addArg("net.adoptopenjdk.test.modularity.junit.TestOverrideUsingUpgradablePlatformModule")
-						);
 				
-				/*1.6) (Negative test) Override a non-upgradable platform module using a custom runtime image*/ 
+				
+				/*1.4) (Negative test) Override a non-upgradable platform module using a custom runtime image*/ 
 				StfProcess ot16 = test.doRunForegroundProcess("(Negative test) Override a non-upgradable platform "
 						+ "module using a custom runtime image", "OT16", 
 						ECHO_ON, ExpectedOutcome.exitValue(1).within("1m"), 
@@ -275,43 +242,8 @@ public class UpgradeModPathTest implements StfPluginInterface {
 							.runClass(org.junit.runner.JUnitCore.class)
 							.addArg("net.adoptopenjdk.test.modularity.junit.TestOverrideUsingAppModule")
 						);
-				
-				/*2.2) Override an upgradable platform module*/
-				intializeOverrideModuleJars(test);
-				test.doRunForegroundProcess("Override an upgradable platform module"
-						+ "where the overriding module is in a modularized jar", "OT22", 
-						ECHO_ON, ExpectedOutcome.cleanRun().within("1m"), 
-							test.createJavaProcessDefinition()
-							.addModuleAddReads("com.test=ALL-UNNAMED")
-						    .addModuleToModulepath("openjdk.test.modularity/bin/common-mods")
-						    .addModuleToModulepath("openjdk.test.modularity/bin/tests")
-						    .addRootModule("com.test")
-						    .addFileToUpgradeModulepath(txnOverrideModule.getJarFileRef())
-							.addPrereqJarToClasspath(JavaProcessDefinition.JarId.JUNIT)
-						    .addPrereqJarToClasspath(JavaProcessDefinition.JarId.HAMCREST)
-							.runClass(org.junit.runner.JUnitCore.class)
-							.addArg("net.adoptopenjdk.test.modularity.junit."
-									+ "TestOverrideUsingUpgradablePlatformModule")
-						);
-				
-				/*2.3) Override an upgradable platform module using a non-modularized jar*/
-				test.doRunForegroundProcess("Override an upgradable platform module"
-						+ "using a non-modularized jar", "OT23", 
-						ECHO_ON, ExpectedOutcome.cleanRun().within("1m"), 
-							test.createJavaProcessDefinition()
-							.addModuleAddReads("com.test=ALL-UNNAMED")
-							.addModuleToModulepath("openjdk.test.modularity/bin/common-mods")
-						    .addModuleToModulepath("openjdk.test.modularity/bin/tests")
-						    .addRootModule("com.test")
-						    .addFileToUpgradeModulepath(javaTransactionNonModJar)
-						    .addPrereqJarToClasspath(JavaProcessDefinition.JarId.JUNIT)
-						    .addPrereqJarToClasspath(JavaProcessDefinition.JarId.HAMCREST)
-							.runClass(org.junit.runner.JUnitCore.class)
-							.addArg("net.adoptopenjdk.test.modularity.junit."
-									+ "TestOverrideUsingPlatformModuleInRegularJar")
-						);
 					
-				/*2.4) (Negative test) Override a non-upgradable platform module */
+				/*2.2) (Negative test) Override a non-upgradable platform module */
 				intializeOverrideModuleJars(test);
 				StfProcess ot24 = test.doRunForegroundProcess("(Negative test) Override a "
 						+ "non-upgradable platform module where the overriding module "
@@ -354,7 +286,7 @@ public class UpgradeModPathTest implements StfPluginInterface {
 				
 			case JarredModUpgradeCRImage :
 				
-				/*2.5) Override an application module using a custom runtime image*/
+				/*2.3) Override an application module using a custom runtime image*/
 				intializeOverrideModuleJars(test);
 				test.doRunForegroundProcess("Override an application module using a "
 						+ "custom runtime image where the overriding module is "
@@ -370,24 +302,7 @@ public class UpgradeModPathTest implements StfPluginInterface {
 						.addArg("net.adoptopenjdk.test.modularity.junit.TestOverrideUsingAppModule")
 					);
 
-				/*2.6) Override an upgradable platform module using a custom runtime image*/
-				intializeOverrideModuleJars(test);
-				test.doRunForegroundProcess("Override an upgradable platform module "
-						+ "using a custom runtime image "
-						+ "where the overriding module is in a modularized jar", "OT26", 
-						ECHO_ON, ExpectedOutcome.cleanRun().within("1m"), 
-							test.createJavaProcessDefinition()
-							.addRunImage(runtimeImage) 
-							.addModuleAddReads("com.test=ALL-UNNAMED")
-						    .addFileToUpgradeModulepath(txnOverrideModule.getJarFileRef())
-							.addPrereqJarToClasspath(JavaProcessDefinition.JarId.JUNIT)
-						    .addPrereqJarToClasspath(JavaProcessDefinition.JarId.HAMCREST)
-							.runClass(org.junit.runner.JUnitCore.class)
-							.addArg("net.adoptopenjdk.test.modularity.junit."
-									+ "TestOverrideUsingUpgradablePlatformModule")
-						);
-
-				/*2.7) (Negative test) Override a non-upgradable platform module using a 
+				/*2.4) (Negative test) Override a non-upgradable platform module using a 
 				 * custom runtime image*/ 
 				intializeOverrideModuleJars(test);
 				StfProcess ot27 = test.doRunForegroundProcess("(Negative test) Override a "
@@ -442,11 +357,6 @@ public class UpgradeModPathTest implements StfPluginInterface {
 			helloOverrideModule = test.doCreateModularJar("Create com.hello override jar", 
 					"openjdk.test.modularity/bin/common-override/com.hello");
 			}
-
-		if (txnOverrideModule == null) {
-			txnOverrideModule = test.doCreateModularJar("Create java.transaction override jar", 
-					"openjdk.test.modularity/bin/common-override/java.transaction");
-		}
 				
 		if (loggingOverrideModule == null) {	
 			loggingOverrideModule = test.doCreateModularJar("Create com.hello override jar", 

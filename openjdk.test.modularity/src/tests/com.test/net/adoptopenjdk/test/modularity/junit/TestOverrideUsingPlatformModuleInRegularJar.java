@@ -16,15 +16,15 @@ package net.adoptopenjdk.test.modularity.junit;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
-import javax.transaction.InvalidTransactionException;
+import javax.xml.namespace.QName;
 import org.junit.Test;
 
 public class TestOverrideUsingPlatformModuleInRegularJar {
 	
 	@Test
 	public void testOverrideUsingPlatformModuleInRegularJar () {
-		InvalidTransactionException ite = new InvalidTransactionException();
-		String name = ite.getMessage();
+		QName ite = new QName("1234");
+		String name = ite.getLocalPart​();
 		assertEquals("Overridden", name);
 	}	
 }

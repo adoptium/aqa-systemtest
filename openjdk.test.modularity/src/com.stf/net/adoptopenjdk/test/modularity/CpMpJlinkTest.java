@@ -86,7 +86,6 @@ public class CpMpJlinkTest implements StfPluginInterface {
 	    			.addModuleToAddmods(hiModule)
 	    			.setOutput("HiJVM")						 // This is last of standard options. Now add a bunch of optional ones, but just to test the JlinkDefinition class.
 	    			.setCompress(2, "*Exception.class,*Error.class,^/java.base/java/lang/*")
-	    			.enableClassForName()                    // Turn on Class.forName optimisation
 	    			.addToExcludeFiles("/bin/keytool")
 	    			.addToExcludeResources("**.idl")         // Don't ship with idl files
 	    			.addToOrderResources("**/module-info.class")

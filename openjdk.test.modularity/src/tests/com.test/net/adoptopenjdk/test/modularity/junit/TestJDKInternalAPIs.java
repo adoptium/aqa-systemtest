@@ -54,7 +54,7 @@ public class TestJDKInternalAPIs{
 	@Test
 	public void testExportedCriticalAPIs() {
 		String[] criticalAPIs = {"sun.misc.Unsafe", "sun.misc.Signal", 
-				"sun.misc.SignalHandler", "sun.reflect.Reflection", "sun.reflect.ReflectionFactory"};
+				"sun.misc.SignalHandler", "sun.reflect.ReflectionFactory"};
 		for (String name : criticalAPIs) {
 			try {
 				Module mod = Class.forName(name).getModule();
@@ -77,9 +77,6 @@ public class TestJDKInternalAPIs{
 				} else if (name.equals("sun.misc.SignalHandler")) {
 					SignalHandler handler = new SignalHandler();
 					handler.handle(new Signal("INT"));
-					
-				} else if (name.equals("sun.reflect.Reflection")) {
-					Class<?> c = Reflection.getCallerClass(3);
 					
 				} else if (name.equals("sun.reflect.ReflectionFactory")) {
 					ReflectionFactory factory = ReflectionFactory.getReflectionFactory();

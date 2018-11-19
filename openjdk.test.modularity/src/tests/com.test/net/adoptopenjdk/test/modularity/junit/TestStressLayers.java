@@ -50,7 +50,7 @@ import java.util.concurrent.Future;
  * 
  * Test case (2) 
  * Implement a test that's similar to Test case (1) above 
- * but use classes from platform modules in jimage (e.g. java.transaction).
+ * but use classes from platform modules in jimage (e.g. java.xml).
  * 
  * Test case (3) 
  * (Negative test) Implement a test that's similar to Test case 1 
@@ -158,7 +158,7 @@ public class TestStressLayers {
 	}
 	
 	/*
-	 * Worker thread for Layers stress test with platform module(java.transaction) 
+	 * Worker thread for Layers stress test with platform module(java.xml) 
 	 * */
 	class LayerWorkerThread_With_PlatformModules implements Callable<String> {		
 		@Override
@@ -173,13 +173,13 @@ public class TestStressLayers {
 				ClassLoader systemClassLoader = ClassLoader.getSystemClassLoader();
 	
 				Configuration cf1 = parentLayer.configuration()
-						.resolve(moduleFinder, ModuleFinder.of(), Set.of("java.transaction"));
+						.resolve(moduleFinder, ModuleFinder.of(), Set.of("java.xml"));
 				
 				ModuleLayer layer1 = parentLayer.defineModulesWithManyLoaders(cf1, systemClassLoader);
-				Class<?> c1 = layer1.findLoader("java.transaction").loadClass("javax.transaction.InvalidTransactionException");
-				String returnValue = (String) c1.getMethod("getMessage").invoke(c1.newInstance());
+				Class<?> c1 = layer1.findLoader("java.xml").loadClass("javax.xml.namespace.QName");
+				String returnValue = (String) c1.getMethod("getLocalPart​").invoke(c1.newInstance());
 			
-				assertNull("Access to java.transaction.InvalidTransaction.getMessage() "
+				assertNull("Access to javax.xml.namespace.QName.getLocalPart​() "
 						+ "returned unexpected value", returnValue);
 			}
 			

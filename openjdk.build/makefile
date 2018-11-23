@@ -19,12 +19,12 @@ define NEWLINE
 endef
 
 # Environment variable OSTYPE is set to cygwin if running under cygwin.
-# When the shell is switched to cmd.exe OSTYPE is no longer set, so set a make
-# macro if running under cygwin.
-ifndef CYGWIN
+# Set our own macro to indicate we're running under cygwin.
+# Also Windows commands will need to be prefixed with cmd /c to run them in a Windows shell.ifndef CYGWIN
   OSTYPE?=$(shell echo $$OSTYPE)
   ifeq ($(OSTYPE),cygwin)
     CYGWIN:=1
+    CMD_PREFIX:=cmd /c
   else
     CYGWIN:=0
   endif
@@ -39,7 +39,6 @@ endif
 ifeq ($(OS),Windows_NT)
   ifneq ($(CYGWIN),1)
     WINDOWS:=1
-    SHELL=cmd.exe
   endif
 else
   UNIX:=1
@@ -89,14 +88,14 @@ else
   ifneq ($(WINDOWS),1)
     OPENJDK_SYSTEMTEST_ROOT:=$(shell cd "$(MAKEFILE_ROOT_DIR)"; pwd)
   else
-    OPENJDK_SYSTEMTEST_ROOT:=$(strip $(subst Directory of,,$(shell dir "$(subst $(D),\,$(MAKEFILE_ROOT_DIR))" | findstr $(D)C:"Directory of")))
+    OPENJDK_SYSTEMTEST_ROOT:=$(strip $(subst Directory of,,$(shell $(CMD_PREFIX) dir "$(subst $(D),\,$(MAKEFILE_ROOT_DIR))" | findstr $(D)C:"Directory of")))
   endif
   # If we are running under cygwin, turn a /cygdrive/c style path into the real Windows path and then set the shell to cmd.exe.
   # The tests all expect to be running under real Windows.
   ifeq ($(CYGWIN),1)
     #$(warning Running under cygwin)
     #$(warning Before cygpath OPENJDK_SYSTEMTEST_ROOT set to $(OPENJDK_SYSTEMTEST_ROOT))
-    OPENJDK_SYSTEMTEST_ROOT:=$(shell cygpath -m '$(OPENJDK_SYSTEMTEST_ROOT)')
+    OPENJDK_SYSTEMTEST_ROOT:=$(shell $(CMD_PREFIX) cygpath -m '$(OPENJDK_SYSTEMTEST_ROOT)')
   endif
 endif
 ifeq (,$(wildcard $(OPENJDK_SYSTEMTEST_ROOT)))
@@ -109,7 +108,7 @@ ifeq (,$(JAVA_HOME))
 endif
 ifeq ($(CYGWIN),1)
   #$(warning Running cygpath -m '$(JAVA_HOME)')
-  JAVA_HOME:=$(shell cygpath -m '$(JAVA_HOME)')
+  JAVA_HOME:=$(shell $(CMD_PREFIX) cygpath -m '$(JAVA_HOME)')
   #$(warning JAVA_HOME is $(JAVA_HOME))
 endif
 ifeq (,$(wildcard $(JAVA_HOME)))
@@ -121,7 +120,7 @@ TEST_STF_ROOT:=$(STF_ROOT)
 #$(warning TEST_STF_ROOT is $(TEST_STF_ROOT))
 ifeq ($(CYGWIN),1)
   #$(warning Running cygpath -m '$(TEST_STF_ROOT)')
-  TEST_STF_ROOT:=$(shell cygpath -m '$(TEST_STF_ROOT)')
+  TEST_STF_ROOT:=$(shell $(CMD_PREFIX) cygpath -m '$(TEST_STF_ROOT)')
   #$(warning TEST_STF_ROOT is $(TEST_STF_ROOT))
 else
   ifneq ($(WINDOWS),1)
@@ -130,8 +129,8 @@ else
   else
     # On Windows 'dir' won't work with double back slashes
     TEST_STF_ROOT:=$(subst $(D),\,$(TEST_STF_ROOT))
-    #$(warning Running dir "$(TEST_STF_ROOT)")
-    TEST_STF_ROOT:=$(subst \,$(D),$(strip $(subst Directory of,,$(shell dir "$(subst $(D),\,$(TEST_STF_ROOT))" | findstr $(D)C:"Directory of"))))
+    #$(warning Running $(CMD_PREFIX) dir "$(TEST_STF_ROOT)")
+    TEST_STF_ROOT:=$(subst \,$(D),$(strip $(subst Directory of,,$(shell $(CMD_PREFIX) dir "$(subst $(D),\,$(TEST_STF_ROOT))" | findstr $(D)C:"Directory of"))))
     #$(warning TEST_STF_ROOT is $(TEST_STF_ROOT))
   endif
 endif
@@ -163,7 +162,7 @@ ABSOLUTE_PREREQS_ROOT_LIST:=$(subst ;, ,$(PREREQS_ROOT))
 
 # On cygwin convert the PREREQS_ROOT paths to windows style path names
 ifeq ($(CYGWIN),1)
-  ABSOLUTE_PREREQS_ROOT_LIST:=$(foreach PREREQS_ROOT,$(ABSOLUTE_PREREQS_ROOT_LIST),$(shell cygpath -m '$(PREREQS_ROOT)'))
+  ABSOLUTE_PREREQS_ROOT_LIST:=$(foreach PREREQS_ROOT,$(ABSOLUTE_PREREQS_ROOT_LIST),$(shell $(CMD_PREFIX) cygpath -m '$(PREREQS_ROOT)'))
 endif
 
 # If make configure is being run, only one prereq directory can be supplied (or none when the default location will be used).
@@ -196,7 +195,6 @@ $(warning RESOLVED_PREREQS_ROOT is $(RESOLVED_PREREQS_ROOT))
 ifeq ($(CYGWIN),1)
   UNIX:=0
   WINDOWS:=1
-  SHELL:=cmd.exe
 endif
 
 # If we are running under cygwin we have resolved ant unix style paths and set the shell to cmd.exe.
@@ -210,15 +208,27 @@ ifeq ($(WINDOWS),1)
   BAT:=.bat
   TEMP?=C:\\TEMP
   CAT:=type
-  WHICH=where
+  WHICH:=where
   NULL=nul
-  EXPORT=set
+  EXPORT:=set
   OS_DATE_WITH_SLASHES = $(strip $(shell cmd.exe /C DATE /T))
   OS_DATE_WITHOUT_SLASHES = $(subst /,-,$(OS_DATE_WITH_SLASHES))
   OS_DATE = $(subst $(space),,$(OS_DATE_WITHOUT_SLASHES))
   OS_TIME_WITH_COLONS = $(strip $(shell cmd.exe /C TIME /T))
   OS_TIME_WITHOUT_COLONS = $(subst :,-,$(OS_TIME_WITH_COLONS))
   OS_TIME = $(subst $(space),,$(OS_TIME_WITHOUT_COLONS))
+  ifeq ($(CYGWIN),1)
+    EXPORT:=export
+    # If we are running under cygwin, the tests need to run with a Windows perl port (e.g. Strawberry perl) rather
+    # than the cygwin perl port. This assumes that version will be in a directory ending /perl/bin directory
+    # and the cygwin version will not. Once found, that version of perl is added ahead of cygwin perl in the PATH.
+    PERL:=$(shell which -a perl.exe | grep /perl/bin | sort | uniq)
+    ifeq (,$(PERL))
+      $(error Unable to find Windows perl e.g. Strawberry perl in a /perl/bin subdirectory on PATH.  Install perl or add to PATH and retry)
+    endif
+    PERL:=$(dir $(PERL))
+    export PATH:=$(PERL):$(PATH)
+  endif
 else
   ESC:=\$(EMPTY)
   ESC_DQ:=\"
@@ -287,8 +297,8 @@ ifndef ANT_HOME
     # On Windows run where ant.bat
     # On Unix run which ant, and use realpath to resolve symlinks (ant is likely to be symlinked e.g. to usr$(D)bin$(D)ant).
     ifeq ($(WINDOWS),1)
-      ANT_BINDIR:=$(dir $(firstword $(shell $(WHICH) ant$(BAT) 2>$(NULL))))
-      $(warning $(WHICH) ant$(BAT) 2>$(NULL) returned)
+      ANT_BINDIR:=$(dir $(firstword $(shell $(CMD_PREFIX) $(WHICH) ant$(BAT) 2>$(NULL))))
+      $(warning $(CMD_PREFIX) $(WHICH) ant$(BAT) 2>$(NULL) returned)
       $(warning $(ANT_BINDIR))
       ifneq (,$(ANT_BINDIR))
         ANT_HOME:=$(ANT_BINDIR)$(D)..
@@ -328,7 +338,7 @@ endif
 
 $(warning JAVA_HOME is $(JAVA_HOME))
 JAVA:=$(JAVA_HOME)$(D)bin$(D)java$(EXE)
-JAVA_OUTPUT:=$(shell $(JAVA) -fullversion 2>&1)
+JAVA_OUTPUT:=$(shell $(CMD_PREFIX) $(JAVA) -fullversion 2>&1)
 $(warning $(JAVA) -fullversion returned)
 $(warning $(JAVA_OUTPUT))
 
@@ -336,7 +346,7 @@ ifneq (,$(JAVA8_HOME))
   $(warning JAVA8_HOME is $(JAVA8_HOME))
   JAVA8:=$(JAVA8_HOME)$(D)bin$(D)java$(EXE)
   JAVAC8:=$(JAVA8_HOME)$(D)bin$(D)javac$(EXE)
-  JAVA8_OUTPUT:=$(shell $(JAVA8) -fullversion 2>&1)
+  JAVA8_OUTPUT:=$(shell $(CMD_PREFIX) $(JAVA8) -fullversion 2>&1)
   $(warning $(JAVA8) -fullversion returned)
   $(warning $(JAVA8_OUTPUT))
 else
@@ -348,7 +358,7 @@ ifneq (,$(JAVA9_HOME))
   $(warning JAVA9_HOME is $(JAVA9_HOME))
   JAVA9:=$(JAVA9_HOME)$(D)bin$(D)java$(EXE)
   JAVAC9:=$(JAVA9_HOME)$(D)bin$(D)javac$(EXE)
-  JAVA9_OUTPUT:=$(shell $(JAVA9) -fullversion 2>&1)
+  JAVA9_OUTPUT:=$(shell $(CMD_PREFIX) $(JAVA9) -fullversion 2>&1)
   $(warning $(JAVA9) -fullversion returned)
   $(warning $(JAVA9_OUTPUT))
 else
@@ -356,7 +366,7 @@ else
   JAVA9_HOME:=$(JAVA_HOME)
 endif
 
-BUILD_COMMAND:=$(ANT_JAVA_HOME)$(D)bin$(D)java$(EXE) -classpath $(ANT_LAUNCHER) org.apache.tools.ant.launch.Launcher -buildfile $(OPENJDK_SYSTEMTEST_TARGET_ROOT)$(D)openjdk.build$(D)build.xml -Dprereqs_root="$(RESOLVED_PREREQS_ROOT)" -Dstf_root=$(STF_ROOT)
+BUILD_COMMAND:=$(CMD_PREFIX) $(ANT_JAVA_HOME)$(D)bin$(D)java$(EXE) -classpath $(ANT_LAUNCHER) org.apache.tools.ant.launch.Launcher -buildfile $(OPENJDK_SYSTEMTEST_TARGET_ROOT)$(D)openjdk.build$(D)build.xml -Dprereqs_root="$(RESOLVED_PREREQS_ROOT)" -Dstf_root=$(STF_ROOT)
 BUILD_COMMAND:=$(BUILD_COMMAND) -Djava8_home=$(JAVA8_HOME)
 BUILD_COMMAND:=$(BUILD_COMMAND) -Djava9_home=$(JAVA9_HOME)
 
@@ -403,7 +413,7 @@ ifneq (,$(RETAIN_LIMIT))
 	RETAIN_LIMIT_ARG:=-retain-limit="$(RETAIN_LIMIT)"
 endif
 
-STF_COMMAND:=perl $(STF_ROOT)$(D)stf.core$(D)scripts$(D)stf.pl $(JAVA_ARGS_ARG) -test-root="$(STF_ROOT);$(OPENJDK_SYSTEMTEST_TARGET_ROOT)" -systemtest-prereqs="$(RESOLVED_PREREQS_ROOT)" $(REPEAT_ARG_ARG) $(RESULTS_ROOT_ARG) $(RETAIN_ARG) $(RETAIN_LIMIT_ARG) $(RM_PASS_ARG)
+STF_COMMAND:=$(CMD_PREFIX) perl $(STF_ROOT)$(D)stf.core$(D)scripts$(D)stf.pl $(JAVA_ARGS_ARG) -test-root="$(STF_ROOT);$(OPENJDK_SYSTEMTEST_TARGET_ROOT)" -systemtest-prereqs="$(RESOLVED_PREREQS_ROOT)" $(REPEAT_ARG_ARG) $(RESULTS_ROOT_ARG) $(RETAIN_ARG) $(RETAIN_LIMIT_ARG) $(RM_PASS_ARG)
 
 # Macros to allow the tests to run to completion with a log of what passed and failed.
 # To turn on run 
@@ -487,6 +497,47 @@ test.TestJlmRemoteMemoryNoAuth \
 test.TestJlmRemoteNotifierProxyAuth \
 test.TestJlmRemoteThreadNoAuth 
 
+# Tests which won't run on Java 8
+NOT_JAVA8_TESTS:=\
+test.CpMpTest_CpMp \
+test.CpMpTest_MP \
+test.CpMpTest2 \
+test.CpMpTest3 \
+test.CpMpModularJarTest \
+test.CpMpModularJarTest2 \
+test.CpMpModularJarTest3 \
+test.JDKInternalAPIsTest \
+test.AutomaticModulesTest1 \
+test.AutomaticModulesTest2 \
+test.AutomaticModulesTest_ImpliedReadabilityTest1 \
+test.AutomaticModulesTest_ImpliedReadabilityTest2 \
+test.AutomaticModulesTest_ImpliedReadabilityTest3 \
+test.ExplicitModulesTest \
+test.JDKInternalAPIsTest \
+test.ServiceLoadersTest \
+test.PatchModuleTest_PlatformModPatchModule \
+test.PatchModuleTest_AppModPatchModule \
+test.PatchModuleTest_UnexportedTypePatchModule \
+test.PatchModuleTest_AdvancedPatchModule \
+test.PatchModuleImageTest_PlatformModPatchModule \
+test.PatchModuleImageTest_AppModPatchModule \
+test.PatchModuleImageTest_UnexportedTypePatchModule \
+test.PatchModuleImageTest_AdvancedPatchModule \
+test.UpgradeModPathTest_ExpDirModUpgrade \
+test.UpgradeModPathTest_ExpDirModUpgradeCRImage \
+test.UpgradeModPathTest_JarredModUpgrade \
+test.UpgradeModPathTest_JarredModUpgradeCRImage \
+test.JlinkTest_RequiredMod \
+test.JlinkTest_AddModLimitMod \
+test.CpMpJlinkTest \
+test.JlinkPluginOptionsTest_GeneralOptionsTest \
+test.LayersTest \
+test.CLTest \
+test.CLTestImage \
+test.CLLoadTest \
+test.CLStressWithLayers \
+test.CLStressWithLayersCRI \
+
 TEST_TARGETS:= \
 $(LOAD_TESTS)
 
@@ -513,12 +564,13 @@ refresh_source:
 ifneq ($(OPENJDK_SYSTEMTEST_ROOT),$(OPENJDK_SYSTEMTEST_TARGET_ROOT))
 	echo Running target $@
 ifeq ($(WINDOWS),1)
-	xcopy /D /E /Y /I $(OPENJDK_SYSTEMTEST_ROOT) $(OPENJDK_SYSTEMTEST_TARGET_ROOT)
+	$(CMD_PREFIX) xcopy /D /E /Y /I $(OPENJDK_SYSTEMTEST_ROOT) $(OPENJDK_SYSTEMTEST_TARGET_ROOT)
 endif
 endif
 
 test: $(TEST_TARGETS)
 test.load: $(LOAD_TESTS)
+test.java8: $(filter-out $(NOT_JAVA8_TESTS),$(TEST_TARGETS))
 
 test.list:
 	echo Running target $@

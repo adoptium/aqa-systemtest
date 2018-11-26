@@ -21,6 +21,7 @@ endef
 # Environment variable OSTYPE is set to cygwin if running under cygwin.
 # Set our own macro to indicate we're running under cygwin.
 # Also Windows commands will need to be prefixed with cmd /c to run them in a Windows shell.ifndef CYGWIN
+ifndef CYGWIN
   OSTYPE?=$(shell echo $$OSTYPE)
   ifeq ($(OSTYPE),cygwin)
     CYGWIN:=1

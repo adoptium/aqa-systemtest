@@ -12,24 +12,17 @@
 * limitations under the License.
 *******************************************************************************/
 
-package javax.transaction;
+package javax.xml.namespace;
 
-public class InvalidTransactionException extends java.rmi.RemoteException {
-
-    /**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
-	public InvalidTransactionException() {
-        super();
-    }
-
-    public InvalidTransactionException(String msg) {
-        super(msg);
-    }
-    
-    public String getMessage() {
-    	return "Overridden";
-    }
+public class QName {
+	private String name; 
+	
+	public QName (String name) {
+		this.name = name; 
+	}
+	
+	public String getLocalPart​() {
+		return "Overridden";
+	}
 }
+

@@ -22,15 +22,15 @@ import org.junit.Test;
 
 import adoptopenjdk.test.modularity.hello.*;
 
-import javax.transaction.InvalidTransactionException;
+import javax.xml.namespace.QName;
 
 public class TestOverrideUsingUpgradablePlatformModule {	
 	
 	@Test
 	public void testOverrideUsingUpgradablePlatformModule () {
-		InvalidTransactionException ite = new InvalidTransactionException();
+		QName ite = new QName("1234");
 		
-		String name = ite.getMessage();
+		String name = ite.getLocalPart​();
 		
 		assertEquals("Overridden", name);
 	}

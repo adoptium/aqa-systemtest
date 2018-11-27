@@ -19,5 +19,5 @@ module com.test {
 	exports net.adoptopenjdk.test.modularity.junit;	
 	requires jdk.unsupported; 
 	requires java.logging;
-	requires java.transaction;
+	requires java.xml;
 }

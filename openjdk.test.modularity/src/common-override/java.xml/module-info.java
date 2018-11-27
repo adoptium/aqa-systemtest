@@ -12,20 +12,6 @@
 * limitations under the License.
 *******************************************************************************/
 
-package javax.transaction;
-
-public class TransactionRolledbackException extends java.rmi.RemoteException {
-
-    /**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
-	public TransactionRolledbackException() {
-        super();
-    }
-
-    public TransactionRolledbackException(String msg) {
-        super(msg);
-    }
+module java.xml {
+	exports javax.xml.namespace;
 }

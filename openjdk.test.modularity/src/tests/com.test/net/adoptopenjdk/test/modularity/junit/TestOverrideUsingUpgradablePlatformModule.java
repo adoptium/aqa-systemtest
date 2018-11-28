@@ -24,14 +24,12 @@ import adoptopenjdk.test.modularity.hello.*;
 
 import javax.xml.namespace.QName;
 
-public class TestOverrideUsingUpgradablePlatformModule {	
+public class TestOverrideUsingUpgradablePlatformModule {
 	
 	@Test
 	public void testOverrideUsingUpgradablePlatformModule () {
 		QName ite = new QName("1234");
-		
-		String name = ite.getLocalPart​();
-		
+		String name = ite.getLocalPart();
 		assertEquals("Overridden", name);
 	}
 }

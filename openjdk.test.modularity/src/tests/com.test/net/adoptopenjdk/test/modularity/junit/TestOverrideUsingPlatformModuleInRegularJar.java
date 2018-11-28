@@ -24,7 +24,7 @@ public class TestOverrideUsingPlatformModuleInRegularJar {
 	@Test
 	public void testOverrideUsingPlatformModuleInRegularJar () {
 		QName ite = new QName("1234");
-		String name = ite.getLocalPart​();
+		String name = ite.getLocalPart();
 		assertEquals("Overridden", name);
 	}	
 }

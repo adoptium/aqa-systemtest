@@ -15,14 +15,13 @@
 package javax.xml.namespace;
 
 public class QName {
-	private String name; 
-	
+	private String name;
+
 	public QName (String name) {
-		this.name = name; 
+		this.name = name;
 	}
-	
-	public String getLocalPart​() {
+
+	public String getLocalPart() {
 		return "Overridden";
 	}
 }
-

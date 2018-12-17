@@ -458,7 +458,7 @@ public class Jck implements StfPluginInterface {
 		
 		sb.append(locateFileOrFolder(root,".jar"));
 		
-		String newRoot = root.replaceAll("lib", "bin");
+		String newRoot = new File(root).getParent() + File.separator + "bin";
 		logger.info("Looking for vm.jar in " + newRoot + " for signaturetest.");
 		sb.append(locateFileOrFolder(newRoot,"vm.jar"));
 		

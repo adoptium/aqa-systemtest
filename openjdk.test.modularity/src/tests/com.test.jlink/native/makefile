@@ -211,7 +211,7 @@ jni: $(DESTDIR) $(OBJDIR) $(DESTDIR)/$(PREFIX)$(SRC)$(SUFFIX)
 
 $(DESTDIR)/$(PREFIX)$(SRC)$(SUFFIX): $(OBJDIR)/$(SRC)$(OSUFFIX)
 # Build the shared library
-	$(LD) $(LFLAGS)$(DESTDIR)/$(PREFIX)$(SRC)$(SUFFIX) $(OBJDIR)/$(SRC)$(OSUFFIX)
+	$(LD) $(LFLAGS) $(DESTDIR)/$(PREFIX)$(SRC)$(SUFFIX) $(OBJDIR)/$(SRC)$(OSUFFIX)
 # chmod might return non zero if there is a file or directory the current user doesn't own,
 # so tell make to ignore failures
 ifneq ($(WIN),1)

@@ -49,7 +49,7 @@ public class LambdaLoadTest implements StfPluginInterface {
 				.setSuiteRandomSelection();		  			// Randomly pick the next test each time
 		
 		test.doRunForegroundProcess("Run lambda and stream load test", "LT", Echo.ECHO_ON,
-				ExpectedOutcome.cleanRun().within("30m"), 
+				ExpectedOutcome.cleanRun().within("60m"), 
 				loadTestInvocation);
 	}
 

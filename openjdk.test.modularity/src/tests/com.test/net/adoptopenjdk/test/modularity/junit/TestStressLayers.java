@@ -177,10 +177,8 @@ public class TestStressLayers {
 				
 				ModuleLayer layer1 = parentLayer.defineModulesWithManyLoaders(cf1, systemClassLoader);
 				Class<?> c1 = layer1.findLoader("java.xml").loadClass("javax.xml.namespace.QName");
-				String returnValue = (String) c1.getMethod("getLocalPart​").invoke(c1.newInstance());
-			
-				assertNull("Access to javax.xml.namespace.QName.getLocalPart​() "
-						+ "returned unexpected value", returnValue);
+				String returnValue = (String)c1.getMethod("getLocalPart").invoke(c1.newInstance());
+				assertNull("Access to QName.getLocalPart() returned unexpected value", returnValue);
 			}
 			
 			System.out.println("Thread : " + Thread.currentThread().getName() + " done!");

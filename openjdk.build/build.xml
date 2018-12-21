@@ -40,6 +40,14 @@ limitations under the License.
 		<equals arg1="${JDK_VERSION}" arg2="8"/>
 	</condition>
 
+	<!--Temporarily stop building modulariry tests on Windows due to : https://github.com/eclipse/openj9-systemtest/issues/61-->
+	<condition property="can_build_modularity" value="true">
+		<and>
+			<equals arg1="${isJava8}" arg2="false"/>
+			<equals arg1="${is_windows}" arg2="false"/>
+		</and>
+	</condition>
+	
 	<target name="build-dependencies" depends="build-stf, build-modularity">
 		<ant antfile="${source_root}/openjdk.test.concurrent/build.xml" dir="${source_root}/openjdk.test.concurrent" inheritAll="false"/>
 		<ant antfile="${source_root}/openjdk.test.classloading/build.xml" dir="${source_root}/openjdk.test.classloading" inheritAll="false"/>
@@ -62,7 +70,7 @@ limitations under the License.
 	</target>
 
 	<!--Do not build modularity if we are on Java 8, build otherwise-->
-	<target name="build-modularity" unless="isJava8">
+	<target name="build-modularity" if="can_build_modularity">
 		<ant antfile="${source_root}/openjdk.test.modularity/build.xml" dir="${source_root}/openjdk.test.modularity" inheritAll="false"/>
 	</target>
 

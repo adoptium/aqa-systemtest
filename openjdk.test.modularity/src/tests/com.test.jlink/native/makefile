@@ -1,3 +1,14 @@
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      https://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
 # 
 # Usage: gmake [target] [SRC=basename] [PLATFORM=platform] [OUTDIR=destdir] [JAVA_HOME=javadir] [HEADERDIR=headerdir]
 #		 basename - The name of the C file to compile without the .c extension
@@ -107,17 +118,39 @@ endif
  
 ifeq ($(WIN),1)
 
-    # It is important that make runs cmd.exe on Windows rather than /usr/bin/sh
-    # which would be selected by make instead if we are running under cygwin
-    SHELL=cmd.exe
+    # Environment variable OSTYPE is set to cygwin if running under cygwin.
+    # Set our own macro to indicate we're running under cygwin.
+    # Also Windows commands will need to be prefixed with cmd /c to run them in a Windows shell
+    ifndef CYGWIN
+      OSTYPE?=$(shell echo $$OSTYPE)
+      ifeq ($(OSTYPE),cygwin)
+        CYGWIN:=1
+      else
+        CYGWIN:=0
+      endif
+    endif
 
-    # mkdir in Windows won't work if the path contains forward slashes
-    DESTDIR := $(subst /,\,$(DESTDIR))
-    OBJDIR := $(subst /,\,$(OBJDIR))
-    # and let's escape backslashes in case one is stripped by the shell
-    DESTDIR := $(subst \,\\,$(DESTDIR))
-    OBJDIR := $(subst \,\\,$(OBJDIR))
-
+    ifeq (0,$(CYGWIN))
+      # mkdir in Windows won't work if the path contains forward slashes
+      DESTDIR := $(subst /,\,$(DESTDIR))
+      OBJDIR := $(subst /,\,$(OBJDIR))
+      # and let's escape backslashes in case one is stripped by the shell
+      DESTDIR := $(subst \,\\,$(DESTDIR))
+      OBJDIR := $(subst \,\\,$(OBJDIR))
+      MV=move
+      MKDIR=mkdir
+      RMDIR=rmdir
+      RM=del /Q
+      D=\\
+      P=;
+    else
+      # cygwin works with forward slashes
+      DESTDIR := $(subst \,/,$(DESTDIR))
+      OBJDIR := $(subst \,/,$(OBJDIR))
+      # Prefix Windows commands with cmd /c to run them in a Windows shell
+      CMD_PREFIX:=cmd /c
+    endif
+    
     CC=cl
     LD=link
     
@@ -125,14 +158,6 @@ ifeq ($(WIN),1)
     SUFFIX=.dll
     OSUFFIX=.obj
     ESUFFIX=.exe
-
-    MV=move
-    MKDIR=mkdir
-    RMDIR=rmdir
-    RM=del /Q
-    
-    D=\\
-    P=;
 
     CFLAGS=/DWIN32 /D_WINDOWS -Gy /LD /Zi /Odi /c /RTC1 /Fo"$(OBJDIR)/$(SRC)$(OSUFFIX)" /Fd"$(OBJDIR)/$(PLATFORM)"
     LFLAGS=/NOLOGO /DLL /INCREMENTAL:NO /NODEFAULTLIB:LIBCMTD /OUT:
@@ -147,7 +172,7 @@ ifeq ($(PLATFORM),zos_390-64)
     LD=c89
 
     CFLAGS=-Wc,lp64,warn64 -W c,exportall -W c,exportall -D_JNI_IMPLEMENTATION -D_TRIVIAL_AGENT -W "c,langlvl(extended)" -W "c,float(ieee)" -W "c,c,convlit(ISO8859-1)" -DZOS -c -o $(OBJDIR)/$(SRC)$(OSUFFIX)
-    LFLAGS=-Wl,lp64,amode=64 -W l,XPLINK,dll -o
+    LFLAGS=-Wl,lp64,amode=64 -W l,XPLINK,dll -o 
     #IFLAGS=-I. -I$(HEADERDIR) -I$(JAVA_HOME)/include -I/usr/include
     RMLIST=*.o *.x
 endif
@@ -167,7 +192,7 @@ ifeq ($(PLATFORM),aix_ppc-64)
     LD=xlC
 
     CFLAGS=-D_JNI_IMPLEMENTATION -D_TRIVIAL_AGENT -qnooptimize -g -qlanglvl=stdc99 -q64 -c -o $(OBJDIR)/$(SRC)$(OSUFFIX)
-    LFLAGS=-G -q64 -o	
+    LFLAGS=-G -q64 -o 
 endif
 
 ifeq ($(PLATFORM),aix_ppc-32)
@@ -175,7 +200,7 @@ ifeq ($(PLATFORM),aix_ppc-32)
     LD=xlC
 
     CFLAGS=-D_JNI_IMPLEMENTATION -D_TRIVIAL_AGENT -qnooptimize -g -qlanglvl=stdc99 -q32 -c -o $(OBJDIR)/$(SRC)$(OSUFFIX)
-    LFLAGS=-G -q32 -o
+    LFLAGS=-G -q32 -o 
 endif
 
 ##########################################
@@ -183,7 +208,7 @@ endif
 ##########################################
 
 ifeq ($(WIN),1)
-  file_exists = $(shell if exist $(1) echo file exists)
+  file_exists = $(shell $(CMD_PREFIX) if exist $(1) echo file exists)
 else
   file_exists = $(shell if [ -f  $(1) ] ; then echo file exists; fi;)
 endif
@@ -211,7 +236,7 @@ jni: $(DESTDIR) $(OBJDIR) $(DESTDIR)/$(PREFIX)$(SRC)$(SUFFIX)
 
 $(DESTDIR)/$(PREFIX)$(SRC)$(SUFFIX): $(OBJDIR)/$(SRC)$(OSUFFIX)
 # Build the shared library
-	$(LD) $(LFLAGS) $(DESTDIR)/$(PREFIX)$(SRC)$(SUFFIX) $(OBJDIR)/$(SRC)$(OSUFFIX)
+	$(CMD_PREFIX) $(LD) $(LFLAGS)$(DESTDIR)/$(PREFIX)$(SRC)$(SUFFIX) $(OBJDIR)/$(SRC)$(OSUFFIX)
 # chmod might return non zero if there is a file or directory the current user doesn't own,
 # so tell make to ignore failures
 ifneq ($(WIN),1)
@@ -223,7 +248,7 @@ endif
 ########################################################################################
 
 $(OBJDIR)/$(SRC)$(OSUFFIX): $(SRC).c $(HEADERDIR)/adoptopenjdk_test_modularity_jlink_$(SRC).h
-	$(CC) $(CFLAGS) $(IFLAGS) $(SRC).c
+	$(CMD_PREFIX) $(CC) $(CFLAGS) $(IFLAGS) $(SRC).c
 ifneq ($(WIN),1)
 	$(CHMOD) 755 $@
 endif

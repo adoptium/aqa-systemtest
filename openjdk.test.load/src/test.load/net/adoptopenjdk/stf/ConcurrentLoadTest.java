@@ -44,6 +44,7 @@ public class ConcurrentLoadTest implements StfPluginInterface {
 				.addPrereqJarToClasspath(JavaProcessDefinition.JarId.JUNIT)
 				.addPrereqJarToClasspath(JavaProcessDefinition.JarId.HAMCREST)
 				.addProjectToClasspath("openjdk.test.concurrent")
+				.generateCoreDumpAtFirstLoadTestFailure(false)
 				.setAbortIfOutOfMemory(false)
 				.addSuite("concurrent")
 				.setSuiteThreadCount(cpuCount - 2, 20)	  	// Leave 1 cpu for the JIT. i for GC and set min 20

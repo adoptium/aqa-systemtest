@@ -44,6 +44,7 @@ public class UtilLoadTest implements StfPluginInterface {
 				.addPrereqJarToClasspath(JavaProcessDefinition.JarId.JUNIT)
 				.addPrereqJarToClasspath(JavaProcessDefinition.JarId.HAMCREST)
 				.addProjectToClasspath("openjdk.test.util")
+				.generateCoreDumpAtFirstLoadTestFailure(false)
 				.setAbortIfOutOfMemory(false)
 				.addSuite("util")
 				.setSuiteThreadCount(cpuCount - 1, 2)	  	// Leave 1 cpu for the JIT and set min 2

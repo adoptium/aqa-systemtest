@@ -58,6 +58,7 @@ public class DirectByteBufferLoadTest implements StfPluginInterface {
 				.addJarToClasspath(filesystemJar)
 				.addProjectToClasspath("openjdk.test.gc")
 				.addProjectToClasspath("openjdk.test.nio")
+				.generateCoreDumpAtFirstLoadTestFailure(false)
 				.addSuite("DirectByteBuffer")
 				.setSuiteThreadCount(cpuCount - 1, 2) 
 				.setSuiteNumTests(numTests)

@@ -67,6 +67,7 @@ public class NioLoadTest implements StfPluginInterface {
 				.addPrereqJarToClasspath(JavaProcessDefinition.JarId.HAMCREST)
 				.addJarToClasspath(fileSystemJar)
 				.addProjectToClasspath("openjdk.test.nio")
+				.generateCoreDumpAtFirstLoadTestFailure(false)
 				.addSuite("nio")
 				.setSuiteThreadCount(cpuCount - 2, 2)		// Leave 1 cpu for the JIT, 1 cpu for GC and set min 2
 				.setSuiteNumTests(numNioTests * 10)

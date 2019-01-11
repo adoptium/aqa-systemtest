@@ -67,6 +67,7 @@ public class MauveSingleInvocationLoadTest implements StfPluginInterface {
 		LoadTestProcessDefinition loadTestInvocation = test.createLoadTestSpecification()
 				.addJvmOption(modularityOptions)
 				.addJarToClasspath(mauveJar)
+				.generateCoreDumpAtFirstLoadTestFailure(false)
 				.addSuite("mauve")
 				.setSuiteInventory(inventoryFile)
 				.setSuiteThreadCount(1)

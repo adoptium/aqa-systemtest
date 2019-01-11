@@ -71,6 +71,7 @@ public class ClassloadingLoadTest implements StfPluginInterface {
 				.addPrereqJarToClasspath(JavaProcessDefinition.JarId.JUNIT)
 				.addPrereqJarToClasspath(JavaProcessDefinition.JarId.HAMCREST)
 				.addProjectToClasspath("openjdk.test.classloading")
+				.generateCoreDumpAtFirstLoadTestFailure(false)
 				.setAbortIfOutOfMemory(false)
 				.addSuite("classloading")
 				.setSuiteThreadCount(cpuCount - 1, 10)

@@ -48,6 +48,7 @@ public class LangLoadTest implements StfPluginInterface {
 				.addPrereqJarToClasspath(JavaProcessDefinition.JarId.JUNIT)
 				.addPrereqJarToClasspath(JavaProcessDefinition.JarId.HAMCREST)
 				.addProjectToClasspath("openjdk.test.lang")
+				.generateCoreDumpAtFirstLoadTestFailure(false)
 				.addSuite("lang")
 				.setSuiteThreadCount(cpuCount - 1, 2)
 				.setSuiteNumTests(numlangTests * 100)

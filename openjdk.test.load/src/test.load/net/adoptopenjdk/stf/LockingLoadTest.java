@@ -50,6 +50,7 @@ public class LockingLoadTest implements StfPluginInterface {
 				.addProjectToClasspath("openjdk.test.lang")  // For mini-mix inventory
 				.addProjectToClasspath("openjdk.test.util")  // For mini-mix inventory
 				.addProjectToClasspath("openjdk.test.math")  // For mini-mix inventory
+				.generateCoreDumpAtFirstLoadTestFailure(false)
 				.setTimeLimit("30s")
 				.addSuite("mini-mix")
 				.setSuiteThreadCount(2)

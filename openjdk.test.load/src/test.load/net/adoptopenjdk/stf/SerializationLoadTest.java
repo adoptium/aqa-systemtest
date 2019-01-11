@@ -44,6 +44,7 @@ public class SerializationLoadTest implements StfPluginInterface {
 				.addPrereqJarToClasspath(JavaProcessDefinition.JarId.JUNIT)
 				.addPrereqJarToClasspath(JavaProcessDefinition.JarId.HAMCREST)
 				.addProjectToClasspath("openjdk.test.serialization")
+				.generateCoreDumpAtFirstLoadTestFailure(false)
 				.setAbortIfOutOfMemory(false)
 				.addSuite("serialization")
 				.setSuiteThreadCount(cpuCount - 1, 2)	  	// Leave 1 cpu for the JIT and set min 2

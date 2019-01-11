@@ -77,6 +77,7 @@ public class MathLoadTest implements StfPluginInterface {
 				.addPrereqJarToClasspath(JavaProcessDefinition.JarId.JUNIT)
 				.addPrereqJarToClasspath(JavaProcessDefinition.JarId.HAMCREST)
 				.addProjectToClasspath("openjdk.test.math")
+				.generateCoreDumpAtFirstLoadTestFailure(false)
 				.addSuite("math")
 				.setSuiteThreadCount(cpuCount - 1, 2)
 				.setSuiteNumTests(numMathTests * workload.multiplier)

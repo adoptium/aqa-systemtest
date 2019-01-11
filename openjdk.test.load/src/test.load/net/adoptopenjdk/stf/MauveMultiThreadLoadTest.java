@@ -67,6 +67,7 @@ public class MauveMultiThreadLoadTest implements StfPluginInterface {
 		LoadTestProcessDefinition loadTestInvocation = test.createLoadTestSpecification()
 				.addJvmOption(modularityOptions)
 				.addJarToClasspath(mauveJar)
+				.generateCoreDumpAtFirstLoadTestFailure(false)
 				.addSuite("mauve")
 				.setSuiteInventory(inventoryFile)
 				.setSuiteThreadCount(cpuCount - 1, 3)   // Leave 1 cpu for the JIT and one for GC, but min 2

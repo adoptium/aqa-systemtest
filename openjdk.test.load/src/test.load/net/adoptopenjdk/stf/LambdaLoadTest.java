@@ -42,6 +42,7 @@ public class LambdaLoadTest implements StfPluginInterface {
 				.addPrereqJarToClasspath(JavaProcessDefinition.JarId.JUNIT)
 				.addPrereqJarToClasspath(JavaProcessDefinition.JarId.HAMCREST)
 				.addProjectToClasspath("openjdk.test.lambdasAndStreams")
+				.generateCoreDumpAtFirstLoadTestFailure(false)
 				.setInactivityLimit("60m")                  // Since this test is run using -Xint as well, set a larger inactivity limit than default 
 				.addSuite("lambda")				  			// Start args for the first suite
 				.setSuiteThreadCount(cpuCount - 2, 2)		// Leave 1 cpu for the JIT, 1 cpu for GC and set min 2

@@ -101,13 +101,13 @@ ifeq ($(PLATFORM),linux_390-31)
 endif
 
 ifeq ($(PLATFORM),linux_arm-32)
-	CFLAGS=-D_JNI_IMPLEMENTATION_ -D_TRIVIAL_AGENT -O0 -g3 -pedantic -c -Wall -std=c99 -fPIC -fno-omit-frame-pointer -static-libgcc -m32 -o $(OBJDIR)/$(SRC)$(OSUFFIX)
-	LFLAGS=-shared -m32 -o 
+	CFLAGS=-D_JNI_IMPLEMENTATION_ -D_TRIVIAL_AGENT -O0 -g3 -pedantic -c -Wall -std=c99 -fPIC -fno-omit-frame-pointer -static-libgcc -o $(OBJDIR)/$(SRC)$(OSUFFIX)
+	LFLAGS=-shared -o 
 endif
 
 ifeq ($(PLATFORM),linux_arm-64)
-	CFLAGS=-D_JNI_IMPLEMENTATION_ -D_TRIVIAL_AGENT -O0 -g3 -pedantic -c -Wall -std=c99 -fPIC -fno-omit-frame-pointer -static-libgcc -m64 -o $(OBJDIR)/$(SRC)$(OSUFFIX)
-	LFLAGS=-shared -m64 -o 
+	CFLAGS=-D_JNI_IMPLEMENTATION_ -D_TRIVIAL_AGENT -O0 -g3 -pedantic -c -Wall -std=c99 -fPIC -fno-omit-frame-pointer -static-libgcc -o $(OBJDIR)/$(SRC)$(OSUFFIX)
+	LFLAGS=-shared -o 
 endif
 
 ifeq ($(PLATFORM),osx_x86-64)

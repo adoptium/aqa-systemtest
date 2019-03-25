@@ -39,6 +39,31 @@
 		 got d-MMM-yyyy but expected j-nnn-aaaa
 	-->
 	<mauve class="gnu.testlet.java.text.SimpleDateFormat.toLocalizedPattern"/>
+	
+	<!-- Fails on Hotspot and OpenJ9 Java 11 and 12 with 
+		 FAIL: gnu.testlet.javax.swing.DefaultListSelectionModel.setSelectionInterval: SINGLE_SELECTION_X (number 7)
+		 got 2 but expected 4
+	-->
+	<mauve class="gnu.testlet.javax.swing.DefaultListSelectionModel.setSelectionInterval"/>
+	<!-- Fails on OpenJ9 Java 11 with 
+		 FAIL: gnu.testlet.javax.swing.DefaultListSelectionModel.setSelectionMode: testIntervalToSingle() (number 2)
+		 LT  got false but expected true
+	-->
+	<mauve class="gnu.testlet.javax.swing.DefaultListSelectionModel.setSelectionMode"/>
+	<!-- Fails on OpenJ9 Java 8 with 
+		 FAIL: gnu.testlet.java.text.MessageFormat.format14: date (number 0)
+			   got 18-Dec-2018 but expected Dec 18, 2018
+	-->
+	<mauve class="gnu.testlet.java.text.MessageFormat.format14"/>
+	
+	<!-- Fails on OpenJ9 Java 8 with 
+		 PASS: gnu.testlet.java.math.BigInteger.multiply (number 7)
+         FAIL: gnu.testlet.java.math.BigInteger.multiply (number 8)
+	-->
+	<mauve class="gnu.testlet.java.math.BigInteger.multiply"/>
+	<!-- Fails on OpenJ9 Java 8 -->
+	<mauve class="gnu.testlet.java.awt.color.ColorSpace.getInstance"/>
+	
 	<!-- Fails on Oracle Java 9 with
 		 Suite number  = 0
 		 Thread number = 0

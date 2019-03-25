@@ -1,4 +1,9 @@
 <inventory>
+<!-- Fails on OpenJ9 Java 11 and Java 12 with
+		FAIL: gnu.testlet.java.text.DateFormat.hashCode (number 0)
+		PASS: gnu.testlet.java.text.DateFormat.hashCode (number 1)
+	-->
+	<mauve class="gnu.testlet.java.text.DateFormat.hashCode"/>
 	<!-- Fails with
 		 PASS: gnu.testlet.java.util.zip.ZipFile.DirEntryTest: getEntry("dir/") (number 0)
 		 FAIL: gnu.testlet.java.util.zip.ZipFile.DirEntryTest: getEntry("dir") (number 0)

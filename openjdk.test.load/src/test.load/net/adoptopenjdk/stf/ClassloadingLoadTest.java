@@ -79,7 +79,7 @@ public class ClassloadingLoadTest implements StfPluginInterface {
 				.setSuiteRandomSelection();
 		
 		test.doRunForegroundProcess("Run classloading tests", "CLT", Echo.ECHO_ON,
-				ExpectedOutcome.cleanRun().within("30m"), 
+				ExpectedOutcome.cleanRun().within("2h"), 
 				loadTestInvocation);
 	}
 

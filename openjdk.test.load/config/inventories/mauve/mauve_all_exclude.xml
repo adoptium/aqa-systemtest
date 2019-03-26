@@ -24,6 +24,11 @@
 		 java.lang.IllegalArgumentException: Illegal pattern  character 'j'
 	-->
 	<mauve class="gnu.testlet.java.text.SimpleDateFormat.applyLocalizedPattern"/>
+	<!-- The following tests fail on Hotspot Java 11 on aarch64 with 
+		 FAIL: gnu.testlet.java.lang.System.arraycopy: Object casting (number 0)
+		 Permanently excluded, ref: https://github.com/AdoptOpenJDK/openjdk-systemtest/issues/237
+	-->
+	<mauve class="gnu.testlet.java.lang.System.arraycopy"/>
 	<!-- Fails on Oracle Java 9 with
 		 Suite number  = 0
 		 Thread number = 1

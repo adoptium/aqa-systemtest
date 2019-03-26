@@ -10,6 +10,11 @@
 		 got dir/ but expected dir
 	-->
 	<mauve class="gnu.testlet.java.util.zip.ZipFile.DirEntryTest"/>
+	<!-- Fails on AIX on OpenJ9 Java 12 with
+		 FAIL: gnu.testlet.java.text.MessageFormat.format14: time (number 3)
+		 Permanently excluded, ref: https://github.com/AdoptOpenJDK/openjdk-systemtest/issues/237
+	-->
+	<mauve class="gnu.testlet.java.text.MessageFormat.format14"/>
 	<!-- Fails on IBM and Oracle Java 9 with 
 		 Exception in thread "main" java.lang.IllegalArgumentException: gnu.testlet.javax.imageio.spi.ServiceRegistry.registerServiceProvider$SomeService is not an ImageIO SPI class
 	-->

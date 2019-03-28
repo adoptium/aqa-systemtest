@@ -1,5 +1,25 @@
 <inventory>
-<!-- Fails on OpenJ9 Java 11 and Java 12 with
+	<!--Fails on multi-threaded scenario with 
+		java.security.AccessControlException: access denied
+		Excluded due to https://github.com/eclipse/openj9/issues/4681
+	-->
+	<mauve class="gnu.testlet.java.net.HttpURLConnection.requestPropertiesTest"/>
+	<!--Fails on multi-threaded scenario with 
+		java.security.AccessControlException: access denied
+		Excluded due to https://github.com/eclipse/openj9/issues/4681
+	-->
+	<mauve class="gnu.testlet.java.net.HttpURLConnection.requestPropertiesTest"/>
+	<!--Fails on multi-threaded scenario with 
+		java.security.AccessControlException: access denied
+		Excluded due to https://github.com/eclipse/openj9/issues/4681
+	-->
+	<mauve class="gnu.testlet.java.net.HttpURLConnection.responseHeadersTest"/>
+	<!--Fails on multi-threaded scenario with 
+		java.security.AccessControlException: access denied
+		Excluded due to https://github.com/eclipse/openj9/issues/4681
+	-->
+	<mauve class="gnu.testlet.javax.imageio.spi.IIORegistry.getDefaultInstance"/>
+	<!-- Fails on OpenJ9 Java 11 and Java 12 with
 		FAIL: gnu.testlet.java.text.DateFormat.hashCode (number 0)
 		PASS: gnu.testlet.java.text.DateFormat.hashCode (number 1)
 	-->

@@ -1,4 +1,8 @@
 <inventory>
+	<!-- Fails on jdk11 and jdk12 openj9 with: 
+	java.net.SocketException: maximum number of DatagramSockets reached binding to null address (number 0) 
+	Issue reference: https://github.com/AdoptOpenJDK/openjdk-systemtest/issues/237-->
+	<mauve class="gnu.testlet.java.net.DatagramSocket.bind"/>
 	<!--Fails on multi-threaded scenario with 
 		java.security.AccessControlException: access denied
 		Excluded due to https://github.com/eclipse/openj9/issues/4681

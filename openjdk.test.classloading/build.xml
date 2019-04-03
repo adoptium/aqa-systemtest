@@ -16,6 +16,8 @@ limitations under the License.
 
 <project name="openjdk.test.classloading" default="build">
 
+	<echo message="Executing openjdk.test.classloading/build.xml"/>
+
 	<!-- Set default for source_root.  -->
 	<property name="source_root" location="../"/>
 
@@ -30,16 +32,16 @@ limitations under the License.
 	<property name="stf_root" location="${source_root}/../stf"/>
 
 	<!-- Import settings used by multiple projects.  -->
-	<import file="${source_root}/openjdk.build/include/top.xml"/>
+	<import file="${stf_root}/stf.build/include/top.xml"/>
 
 	<!-- For modularity you need a directory above the package structure to hold the module.java file -->
-	<property name="module" value="test.classloading" />
-	<property name="src_dir" value="src/${module}" />
-	<property name="bin_dir" value="bin" />
-	<property name="notonclasspath_url1_bin_dir" value="bin_notonclasspath/url1" />
-	<property name="notonclasspath_url2_bin_dir" value="bin_notonclasspath/url2" />
+	<property name="openjdk_test_classloading_module" value="test.classloading" />
+	<property name="openjdk_test_classloading_src_dir" value="src/${openjdk_test_classloading_module}" />
+	<property name="openjdk_test_classloading_bin_dir" value="bin" />
+	<property name="openjdk_test_classloading_notonclasspath_url1_bin_dir" value="bin_notonclasspath/url1" />
+	<property name="openjdk_test_classloading_notonclasspath_url2_bin_dir" value="bin_notonclasspath/url2" />
 
-	<property name="jar_file" value="${bin_dir}/${module}.jar" />
+	<property name="openjdk_test_classloading_jar_file" value="${openjdk_test_classloading_bin_dir}/${openjdk_test_classloading_module}.jar" />
 
 	<!-- We need junit and stf to compile this project. -->
 	<path id="project.class.path">
@@ -50,13 +52,12 @@ limitations under the License.
 	<!-- Projects which need to be built before this one. -->
 	<!-- dir must be set on the ant task otherwise the basedir property is not set to a new value in the subant task. -->
 	<target name="build-dependencies">
-		<!-- <ant antfile="${stf_root}/stf.build/build.xml" dir="${stf_root}/stf.build" inheritAll="false"/> -->
 	</target>
 
-	<target name="build" depends="build-no-natives, build-natives, copy-dict-file">
+	<target name="build" depends="check-prereqs, build-no-natives, build-natives, copy-dict-file">
 	</target>
 
-	<target name="build-no-natives" depends="build-dependencies, check-prereqs, build-archives">
+	<target name="build-no-natives" depends="check-prereqs, build-dependencies, build-archives">
 	</target>
 
 	<target name="build-natives">
@@ -66,28 +67,31 @@ limitations under the License.
 	</target>
 
 	<target name="build-jar" depends="build-java, create-bin-dir">
-		<jar destfile="${jar_file}">
-			<fileset dir="${bin_dir}" includes="**/*.class" />
+		<jar destfile="${openjdk_test_classloading_jar_file}">
+			<fileset dir="${openjdk_test_classloading_bin_dir}" includes="**/*.class" />
 			<!-- Note, this may need reworking in the world of Java 9 modules to ensure that the classes below do not end up on the classpath -->
-			<fileset dir="${notonclasspath_url1_bin_dir}" includes="**/*.class" />
-			<fileset dir="${notonclasspath_url2_bin_dir}" includes="**/*.class" />
+			<fileset dir="${openjdk_test_classloading_notonclasspath_url1_bin_dir}" includes="**/*.class" />
+			<fileset dir="${openjdk_test_classloading_notonclasspath_url2_bin_dir}" includes="**/*.class" />
 		</jar>
 	</target>
 
-	<target name="build-java" depends="check-prereqs, create-bin-dir">
+	<target name="build-java" depends="create-bin-dir">
 		 <!--
 		 	The Ant javac task only checks time dependencies between .java files and their .class files,
 			so fails to recompile in situations such as the signatures of a dependent method changing.
 			The depend target checks the dependencies and deletes any .class files older than the files
 			which depend on them, thereby ensuring recompilation.
 		-->
-		<depend srcdir="${src_dir}" destdir="${bin_dir}" classpathref="project.class.path">
+		<!--
+		Commented out because depend appears to be evaluating class files as always out of date with jdk11 (at 28/03/2019)
+		<depend srcdir="${openjdk_test_classloading_src_dir}" destdir="${openjdk_test_classloading_bin_dir}" classpathref="project.class.path">
 			<include name="**/*.java"/>
 		</depend>
-		<javac srcdir="${src_dir}"
-			   destdir="${bin_dir}"
+		-->
+		<javac srcdir="${openjdk_test_classloading_src_dir}"
+			   destdir="${openjdk_test_classloading_bin_dir}"
 			   fork="true"
-			   executable="${java8_compiler}"
+			   executable="${java_compiler}"
 			   debug="true"
 			   classpathref="project.class.path"
 			   encoding="${src-encoding}"
@@ -103,24 +107,24 @@ limitations under the License.
 			/bin_notonclasspath/url1 and /bin_notonclasspath/url2. The deletes are required because javac puts all of the class
 			files under both the url1 and url2 directories which the tests do not want.
 		-->
-		<javac srcdir="${src_dir}/notonclasspath"
-					   destdir="${notonclasspath_url1_bin_dir}"
+		<javac srcdir="${openjdk_test_classloading_src_dir}/notonclasspath"
+					   destdir="${openjdk_test_classloading_notonclasspath_url1_bin_dir}"
 					   fork="true"
-					   executable="${java8_compiler}"
+					   executable="${java_compiler}"
 					   debug="true"
-					   classpath="${src_dir}/notonclasspath/url2"
+					   classpath="${openjdk_test_classloading_src_dir}/notonclasspath/url2"
 			           encoding="${src-encoding}"
 					   includeantruntime="false"
 					   failonerror="true">
 					   <compilerarg value="-Xlint:deprecation,unchecked" />
 					   <exclude name="**/notonclasspath/url2/**"/>
 		</javac>
-		<javac srcdir="${src_dir}/notonclasspath"
-					   destdir="${notonclasspath_url2_bin_dir}"
+		<javac srcdir="${openjdk_test_classloading_src_dir}/notonclasspath"
+					   destdir="${openjdk_test_classloading_notonclasspath_url2_bin_dir}"
 					   fork="true"
-					   executable="${java8_compiler}"
+					   executable="${java_compiler}"
 					   debug="true"
-					   classpath="${src_dir}/notonclasspath/url1"
+					   classpath="${openjdk_test_classloading_src_dir}/notonclasspath/url1"
 					   encoding="${src-encoding}"
 					   includeantruntime="false"
 					   failonerror="true">
@@ -128,26 +132,26 @@ limitations under the License.
 					   <exclude name="**/notonclasspath/url1/**"/>
 		</javac>
 		
-		<delete verbose="true" dir="${notonclasspath_url1_bin_dir}/net/adoptopenjdk/test/classloading/deadlock/package2"/>
-		<delete dir="${notonclasspath_url2_bin_dir}/net/adoptopenjdk/test/classloading/deadlock/package1"/>
+		<delete verbose="true" dir="${openjdk_test_classloading_notonclasspath_url1_bin_dir}/net/adoptopenjdk/test/classloading/deadlock/package2"/>
+		<delete dir="${openjdk_test_classloading_notonclasspath_url2_bin_dir}/net/adoptopenjdk/test/classloading/deadlock/package1"/>
 	</target>
 
 	<target name="create-bin-dir">
-			<mkdir dir="${bin_dir}"/>
-			<mkdir dir="${notonclasspath_url1_bin_dir}"/>
-			<mkdir dir="${notonclasspath_url2_bin_dir}"/>
+			<mkdir dir="${openjdk_test_classloading_bin_dir}"/>
+			<mkdir dir="${openjdk_test_classloading_notonclasspath_url1_bin_dir}"/>
+			<mkdir dir="${openjdk_test_classloading_notonclasspath_url2_bin_dir}"/>
 	</target>
 	
 	<!-- Copy the dictionary file required by the ClassHog test -->
 	<target name="copy-dict-file">
-		<mkdir dir="${bin_dir}/net/adoptopenjdk/test/classloading"/>
-		<copy file="${src_dir}/net/adoptopenjdk/test/classloading/class.dict" todir="${bin_dir}/net/adoptopenjdk/test/classloading"/>
+		<mkdir dir="${openjdk_test_classloading_bin_dir}/net/adoptopenjdk/test/classloading"/>
+		<copy file="${openjdk_test_classloading_src_dir}/net/adoptopenjdk/test/classloading/class.dict" todir="${openjdk_test_classloading_bin_dir}/net/adoptopenjdk/test/classloading"/>
 	</target>
 		
 	<target name="clean">
-		<delete dir="${bin_dir}"/>
-		<delete dir="${notonclasspath_url1_bin_dir}"/>
-		<delete dir="${notonclasspath_url2_bin_dir}"/>
+		<delete dir="${openjdk_test_classloading_bin_dir}"/>
+		<delete dir="${openjdk_test_classloading_notonclasspath_url1_bin_dir}"/>
+		<delete dir="${openjdk_test_classloading_notonclasspath_url2_bin_dir}"/>
 	</target>
 
 </project>

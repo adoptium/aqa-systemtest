@@ -16,6 +16,8 @@ limitations under the License.
 
 <project name="openjdk.build" default="build">
 
+	<echo message="Executing openjdk.build/build.xml"/>
+
 	<!-- Set default for source_root.  -->
 	<property name="source_root" location=".."/>
 
@@ -28,63 +30,61 @@ limitations under the License.
 		must be set on the command line - e.g. -Dstf_root=/my_stf_build_dir
 	-->
 	<property name="stf_root" location="${source_root}/../stf"/>
+    <property name="openjdk_systemtest_root" location="${source_root}/../openjdk-systemtest"/>
 
-	<!-- Import settings used by multiple projects.  -->
-	<import file="${source_root}/openjdk.build/include/top.xml"/>
+	<!-- Import stf settings. -->
+	<import file="${stf_root}/stf.build/include/top.xml"/>
 
 	<!-- target to build all projects in the repository.  -->
 	<!-- dir must be set on the ant task otherwise the basedir property is not set to a new value in the subant task. -->
 	<!-- Also make sure stf is built -->
 	
 	<condition property="isJava8" value="true">
-		<equals arg1="${JDK_VERSION}" arg2="8"/>
+		<equals arg1="${java.specification.version}" arg2="1.8"/>
 	</condition>
 	
-	<target name="build-dependencies" depends="build-stf">
-		<ant antfile="${source_root}/openjdk.test.concurrent/build.xml" dir="${source_root}/openjdk.test.concurrent" inheritAll="false"/>
-		<ant antfile="${source_root}/openjdk.test.classloading/build.xml" dir="${source_root}/openjdk.test.classloading" inheritAll="false"/>
-		<ant antfile="${source_root}/openjdk.test.debugging/build.xml" dir="${source_root}/openjdk.test.debugging" inheritAll="false"/>
-		<ant antfile="${source_root}/openjdk.test.gc/build.xml" dir="${source_root}/openjdk.test.gc" inheritAll="false"/>
-		<ant antfile="${source_root}/openjdk.test.jck/build.xml" dir="${source_root}/openjdk.test.jck" inheritAll="false"/>
-		<ant antfile="${source_root}/openjdk.test.lambdasAndStreams/build.xml" dir="${source_root}/openjdk.test.lambdasAndStreams" inheritAll="false"/>
-		<ant antfile="${source_root}/openjdk.test.lang/build.xml" dir="${source_root}/openjdk.test.lang" inheritAll="false"/>
-		<ant antfile="${source_root}/openjdk.test.load/build.xml" dir="${source_root}/openjdk.test.load" inheritAll="false"/>
-		<ant antfile="${source_root}/openjdk.test.locking/build.xml" dir="${source_root}/openjdk.test.locking" inheritAll="false"/>
-		<ant antfile="${source_root}/openjdk.test.math/build.xml" dir="${source_root}/openjdk.test.math" inheritAll="false"/>
-		<ant antfile="${source_root}/openjdk.test.nio/build.xml" dir="${source_root}/openjdk.test.nio" inheritAll="false"/>
-		<ant antfile="${source_root}/openjdk.test.serialization/build.xml" dir="${source_root}/openjdk.test.serialization" inheritAll="false"/>
-		<ant antfile="${source_root}/openjdk.test.util/build.xml" dir="${source_root}/openjdk.test.util" inheritAll="false"/>
-		<ant antfile="${source_root}/openjdk.test.jlm/build.xml" dir="${source_root}/openjdk.test.jlm" inheritAll="false"/>
-		<ant antfile="${source_root}/openjdk.test.modularity/build.xml" dir="${source_root}/openjdk.test.modularity" inheritAll="false"/>
-	</target>
-	
-	<target name="build-stf">
-		<ant antfile="${stf_root}/stf.build/build.xml" dir="${stf_root}/stf.build" inheritAll="false"/>
+	<target name="build-dependencies" depends="check-prereqs">
+		<ant antfile="${stf_root}/stf.build/build.xml" dir="${stf_root}/stf.build" inheritAll="true"/>
+		<ant antfile="${openjdk_systemtest_root}/openjdk.test.concurrent/build.xml" dir="${openjdk_systemtest_root}/openjdk.test.concurrent" inheritAll="true"/>
+		<ant antfile="${openjdk_systemtest_root}/openjdk.test.classloading/build.xml" dir="${openjdk_systemtest_root}/openjdk.test.classloading" inheritAll="true"/>
+		<ant antfile="${openjdk_systemtest_root}/openjdk.test.debugging/build.xml" dir="${openjdk_systemtest_root}/openjdk.test.debugging" inheritAll="true"/>
+		<ant antfile="${openjdk_systemtest_root}/openjdk.test.gc/build.xml" dir="${openjdk_systemtest_root}/openjdk.test.gc" inheritAll="true"/>
+		<ant antfile="${openjdk_systemtest_root}/openjdk.test.jck/build.xml" dir="${openjdk_systemtest_root}/openjdk.test.jck" inheritAll="true"/>
+		<ant antfile="${openjdk_systemtest_root}/openjdk.test.lambdasAndStreams/build.xml" dir="${openjdk_systemtest_root}/openjdk.test.lambdasAndStreams" inheritAll="true"/>
+		<ant antfile="${openjdk_systemtest_root}/openjdk.test.lang/build.xml" dir="${openjdk_systemtest_root}/openjdk.test.lang" inheritAll="true"/>
+		<ant antfile="${openjdk_systemtest_root}/openjdk.test.load/build.xml" dir="${openjdk_systemtest_root}/openjdk.test.load" inheritAll="true"/>
+		<ant antfile="${openjdk_systemtest_root}/openjdk.test.locking/build.xml" dir="${openjdk_systemtest_root}/openjdk.test.locking" inheritAll="true"/>
+		<ant antfile="${openjdk_systemtest_root}/openjdk.test.math/build.xml" dir="${openjdk_systemtest_root}/openjdk.test.math" inheritAll="true"/>
+		<ant antfile="${openjdk_systemtest_root}/openjdk.test.nio/build.xml" dir="${openjdk_systemtest_root}/openjdk.test.nio" inheritAll="true"/>
+		<ant antfile="${openjdk_systemtest_root}/openjdk.test.serialization/build.xml" dir="${openjdk_systemtest_root}/openjdk.test.serialization" inheritAll="true"/>
+		<ant antfile="${openjdk_systemtest_root}/openjdk.test.util/build.xml" dir="${openjdk_systemtest_root}/openjdk.test.util" inheritAll="true"/>
+		<ant antfile="${openjdk_systemtest_root}/openjdk.test.jlm/build.xml" dir="${openjdk_systemtest_root}/openjdk.test.jlm" inheritAll="true"/>
+		<ant antfile="${openjdk_systemtest_root}/openjdk.test.modularity/build.xml" dir="${openjdk_systemtest_root}/openjdk.test.modularity" inheritAll="true"/>
 	</target>
 
 	<target name="build" depends="build-dependencies">
 	</target>
 
 	<target name="clean">
-		<ant antfile="${source_root}/openjdk.test.concurrent/build.xml" target="clean" dir="${source_root}/openjdk.test.concurrent" inheritAll="false"/>
-		<ant antfile="${source_root}/openjdk.test.classloading/build.xml" target="clean" dir="${source_root}/openjdk.test.classloading" inheritAll="false"/>
-		<ant antfile="${source_root}/openjdk.test.debugging/build.xml" target="clean" dir="${source_root}/openjdk.test.debugging" inheritAll="false"/>
-		<ant antfile="${source_root}/openjdk.test.gc/build.xml" target="clean" dir="${source_root}/openjdk.test.gc" inheritAll="false"/>
-		<ant antfile="${source_root}/openjdk.test.jck/build.xml" target="clean" dir="${source_root}/openjdk.test.jck" inheritAll="false"/>
-		<ant antfile="${source_root}/openjdk.test.lambdasAndStreams/build.xml" target="clean" dir="${source_root}/openjdk.test.lambdasAndStreams" inheritAll="false"/>
-		<ant antfile="${source_root}/openjdk.test.lang/build.xml" target="clean" dir="${source_root}/openjdk.test.lang" inheritAll="false"/>
-		<ant antfile="${source_root}/openjdk.test.load/build.xml" target="clean" dir="${source_root}/openjdk.test.load" inheritAll="false"/>
-		<ant antfile="${source_root}/openjdk.test.locking/build.xml" target="clean" dir="${source_root}/openjdk.test.locking" inheritAll="false"/>
-		<ant antfile="${source_root}/openjdk.test.math/build.xml" target="clean" dir="${source_root}/openjdk.test.math" inheritAll="false"/>
-		<ant antfile="${source_root}/openjdk.test.nio/build.xml" target="clean" dir="${source_root}/openjdk.test.nio" inheritAll="false"/>
-		<ant antfile="${source_root}/openjdk.test.serialization/build.xml" target="clean" dir="${source_root}/openjdk.test.serialization" inheritAll="false"/>
-		<ant antfile="${source_root}/openjdk.test.util/build.xml" target="clean" dir="${source_root}/openjdk.test.util" inheritAll="false"/>
-		<ant antfile="${source_root}/openjdk.test.jlm/build.xml" target="clean" dir="${source_root}/openjdk.test.jlm" inheritAll="false"/>
-		<ant antfile="${source_root}/openjdk.test.modularity/build.xml" target="clean" dir="${source_root}/openjdk.test.modularity" inheritAll="false"/>
+		<ant antfile="${openjdk_systemtest_root}/openjdk.test.concurrent/build.xml" target="clean" dir="${openjdk_systemtest_root}/openjdk.test.concurrent" inheritAll="true"/>
+		<ant antfile="${openjdk_systemtest_root}/openjdk.test.classloading/build.xml" target="clean" dir="${openjdk_systemtest_root}/openjdk.test.classloading" inheritAll="true"/>
+		<ant antfile="${openjdk_systemtest_root}/openjdk.test.debugging/build.xml" target="clean" dir="${openjdk_systemtest_root}/openjdk.test.debugging" inheritAll="true"/>
+		<ant antfile="${openjdk_systemtest_root}/openjdk.test.gc/build.xml" target="clean" dir="${openjdk_systemtest_root}/openjdk.test.gc" inheritAll="true"/>
+		<ant antfile="${openjdk_systemtest_root}/openjdk.test.jck/build.xml" target="clean" dir="${openjdk_systemtest_root}/openjdk.test.jck" inheritAll="true"/>
+		<ant antfile="${openjdk_systemtest_root}/openjdk.test.lambdasAndStreams/build.xml" target="clean" dir="${openjdk_systemtest_root}/openjdk.test.lambdasAndStreams" inheritAll="true"/>
+		<ant antfile="${openjdk_systemtest_root}/openjdk.test.lang/build.xml" target="clean" dir="${openjdk_systemtest_root}/openjdk.test.lang" inheritAll="true"/>
+		<ant antfile="${openjdk_systemtest_root}/openjdk.test.load/build.xml" target="clean" dir="${openjdk_systemtest_root}/openjdk.test.load" inheritAll="true"/>
+		<ant antfile="${openjdk_systemtest_root}/openjdk.test.locking/build.xml" target="clean" dir="${openjdk_systemtest_root}/openjdk.test.locking" inheritAll="true"/>
+		<ant antfile="${openjdk_systemtest_root}/openjdk.test.math/build.xml" target="clean" dir="${openjdk_systemtest_root}/openjdk.test.math" inheritAll="true"/>
+		<ant antfile="${openjdk_systemtest_root}/openjdk.test.nio/build.xml" target="clean" dir="${openjdk_systemtest_root}/openjdk.test.nio" inheritAll="true"/>
+		<ant antfile="${openjdk_systemtest_root}/openjdk.test.serialization/build.xml" target="clean" dir="${openjdk_systemtest_root}/openjdk.test.serialization" inheritAll="true"/>
+		<ant antfile="${openjdk_systemtest_root}/openjdk.test.util/build.xml" target="clean" dir="${openjdk_systemtest_root}/openjdk.test.util" inheritAll="true"/>
+		<ant antfile="${openjdk_systemtest_root}/openjdk.test.jlm/build.xml" target="clean" dir="${openjdk_systemtest_root}/openjdk.test.jlm" inheritAll="true"/>
+		<ant antfile="${openjdk_systemtest_root}/openjdk.test.modularity/build.xml" target="clean" dir="${openjdk_systemtest_root}/openjdk.test.modularity" inheritAll="true"/>
 	</target>
 
 	<target name="clean-prereqs">
-		<ant antfile="${source_root}/openjdk.test.mauve/build.xml" target="clean" dir="${source_root}/openjdk.test.mauve" inheritAll="false"/>
+		<ant antfile="${openjdk_systemtest_root}/openjdk.test.mauve/build.xml" target="clean" dir="${openjdk_systemtest_root}/openjdk.test.mauve" inheritAll="true"/>
 	</target>
 
 </project>

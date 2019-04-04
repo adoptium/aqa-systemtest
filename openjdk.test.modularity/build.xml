@@ -43,9 +43,8 @@ limitations under the License.
 
 	<property name="openjdk_test_modularity_jlink_testcase_src" value="${openjdk_systemtest_root}/${openjdk_test_modularity_module}/${openjdk_test_modularity_src_dir}/tests/com.test.jlink"/>
 	<property name="openjdk_test_modularity_jlink_testcase_bin" value="${openjdk_systemtest_root}/${openjdk_test_modularity_module}/${openjdk_test_modularity_bin_dir}/tests/com.test.jlink"/>
-	<property name="openjdk_test_modularity_jlink_nativedir" value="${openjdk_test_modularity_bin_dir}/tests/com.test.jlink/native"/>
+	<property name="openjdk_test_modularity_jlink_nativedir" value="${openjdk_systemtest_root}/${openjdk_test_modularity_bin_dir}/tests/com.test.jlink/native"/>
 	<property name="openjdk_test_modularity_jlink_outdir" value="${openjdk_test_modularity_jlink_nativedir}/bin"/>
-	<property name="openjdk_test_modularity_jlink_headerdir" value="${openjdk_test_modularity_jlink_nativedir}/lib"/>
 	<property name="openjdk_test_modularity_jlink_headerdir" value="${openjdk_test_modularity_jlink_nativedir}/lib"/>
 
 	<!--List of JNI testcases-->
@@ -65,7 +64,7 @@ limitations under the License.
 	<path id="jlink.project.class.path">
 		<path refid="junit.class.path" />	
 		<path refid="stf.class.path" />
-		<path path="${openjdk_test_modularity_jlink_testcase_bin}" />
+		<path path="${openjdk_test_modularity_jlink_testcase_bin}"/>
 	</path>	
 	
 	<path id="module.path">

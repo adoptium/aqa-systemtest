@@ -42,7 +42,7 @@ public class MyClassVisitor extends ClassVisitor {
 	 * @param  percentage The average percentage of public methods we want to transform.
 	 */
 	public MyClassVisitor(ClassVisitor cv, int percentage, long seed, int threadNumber) {
-		super(Opcodes.ASM5, cv);
+		super(Opcodes.ASM7, cv);
 		this.percentage = percentage;
 		randomNumberGenerator = new Random(seed);
 		this.threadNumber = threadNumber;

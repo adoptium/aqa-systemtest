@@ -26,8 +26,8 @@ If you attach this agent via the -javaagent argument, then this agent will run t
 
 Note: This agent is normally built by test.debugging's ant build file (build.xml), which does all these things automatically.
 
-- Step 1: Javac the following classes, in the following order, with the ASM asm-5.x.jar on the classpath.
-(Note: see section 5 for where you can get that jar. Should be version 5 or later.)
+- Step 1: Javac the following classes, in the following order, with the ASM asm-7.x.jar on the classpath.
+(Note: see section 5 for where you can get that jar. Should be version 7 or later.)
 AgentLogger.java
 MyMethodVisitor.java
 MyClassVisitor.java

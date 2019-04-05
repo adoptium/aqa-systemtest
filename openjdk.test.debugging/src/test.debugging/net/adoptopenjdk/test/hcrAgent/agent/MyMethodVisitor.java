@@ -36,7 +36,7 @@ public class MyMethodVisitor extends MethodVisitor {
 	 * @param threadNumber Used to generate thread-specific log messages, as many of these may be running at once.
 	 */
 	public MyMethodVisitor(MethodVisitor mv, String methodName, int randomNumber, int threadNumber) {
-		super(Opcodes.ASM5, mv);
+		super(Opcodes.ASM7, mv);
 		methodNameLocal = methodName;
 		this.randomNumber = randomNumber;
 		this.threadNumber = threadNumber;

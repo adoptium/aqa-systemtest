@@ -79,9 +79,9 @@ public class TestJlmRemoteClassNoAuth implements StfPluginInterface {
 			.setTimeLimit("30m")
 			.setAbortAtFailureLimit(-1)
 			.addSuite("mini-mix")
-			.setSuiteNumTests(300000)
+			.setSuiteNumTests(900000)
 			.setSuiteInventory(inventoryFile)
-			.setSuiteThreadCount(30)
+			.setSuiteThreadCount(200)
 		   	.setSuiteRandomSelection();
 		
 		// Process definition for the client JVM using proxy connection

@@ -76,6 +76,7 @@ public class TestJlmRemoteClassAuth implements StfPluginInterface {
 		String inventoryFile = "/openjdk.test.load/config/inventories/mix/mini-mix.xml";
 		
 		LoadTestProcessDefinition serverLoadTestInvocation = test.createLoadTestSpecification()
+			.addJvmOption("-Xmx256m")
 			.addJvmOption("-Dcom.sun.management.jmxremote.port=1234")
 			.addJvmOption("-Dcom.sun.management.jmxremote.ssl.need.client.auth=true")
 			.addJvmOption("-Djavax.net.ssl.keyStore=" + keyStoreFile.getSpec())
@@ -95,7 +96,7 @@ public class TestJlmRemoteClassAuth implements StfPluginInterface {
 			.addSuite("mini-mix")
 			.setSuiteNumTests(900000)
 			.setSuiteInventory(inventoryFile)
-			.setSuiteThreadCount(200)
+			.setSuiteThreadCount(30)
 		   	.setSuiteRandomSelection();
 		
 		// Process definition for the client JVM that will monitor the server using proxy connection
@@ -105,6 +106,7 @@ public class TestJlmRemoteClassAuth implements StfPluginInterface {
 		FileRef dumpFile = resultsDir.childFile("javacore_scls_proxy.%Y%m%d.%H%M%S.%pid.%seq.txt,filter=java.lang.IllegalArgumentException");
 		
 		JavaProcessDefinition clientJavaInvocationProxy =  test.createJavaProcessDefinition()
+			.addJvmOption("-Xmx256m")
 			.addJvmOptionIfIBMJava("-Xdump:java:events=throw,file=" + dumpFile.getSpec())
 	 		.addJvmOption("-Djavax.net.ssl.keyStore=" + keyStoreFile.getSpec())
 			.addJvmOption("-Djavax.net.ssl.trustStore=" + keyStoreFile.getSpec())
@@ -134,7 +136,7 @@ public class TestJlmRemoteClassAuth implements StfPluginInterface {
 		StfProcess clientProxy = test.doRunBackgroundProcess("Running Monitoring "
 				+ "Client with proxy connection(with security)", 
 				"CL1", ECHO_ON,  
-				ExpectedOutcome.cleanRun().within("10m"), 
+				ExpectedOutcome.cleanRun().within("30m"), 
 				clientJavaInvocationProxy);
 		
 		// Wait for the processes to complete
@@ -150,6 +152,7 @@ public class TestJlmRemoteClassAuth implements StfPluginInterface {
 		statsFile = resultsDir.childFile("scls_server.csv");
 		dumpFile = resultsDir.childFile("javacore_scls_server.%Y%m%d.%H%M%S.%pid.%seq.txt,filter=java.lang.IllegalArgumentException");
 		JavaProcessDefinition clientJavaInvocationS = test.createJavaProcessDefinition()
+			.addJvmOption("-Xmx256m")
 			.addJvmOptionIfIBMJava("-Xdump:java:events=throw,file=" + dumpFile.getSpec())
 			.addJvmOption("-Djavax.net.ssl.keyStore=" + keyStoreFile.getSpec())
 			.addJvmOption("-Djavax.net.ssl.trustStore=" + keyStoreFile.getSpec())
@@ -177,7 +180,7 @@ public class TestJlmRemoteClassAuth implements StfPluginInterface {
 		// Start the background client process
 		StfProcess clientS = test.doRunBackgroundProcess("Run the Monitoring Client with server-connection(with security)", 
 				"CL2", ECHO_ON,  
-				ExpectedOutcome.cleanRun().within("10m"), 
+				ExpectedOutcome.cleanRun().within("30m"), 
 				clientJavaInvocationS);
 		
 		// Wait for background processes to complete 

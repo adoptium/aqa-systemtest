@@ -68,6 +68,7 @@ public class TestJlmRemoteClassNoAuth implements StfPluginInterface {
 		String inventoryFile = "/openjdk.test.load/config/inventories/mix/mini-mix.xml";
 		
 		LoadTestProcessDefinition serverLoadTestInvocation = test.createLoadTestSpecification()
+			.addJvmOption("-Xmx256m")
 			.addJvmOption("-Dcom.sun.management.jmxremote.port=1234")
 			.addJvmOption("-Dcom.sun.management.jmxremote.authenticate=false")
 			.addJvmOption("-Dcom.sun.management.jmxremote.ssl=false")
@@ -81,11 +82,12 @@ public class TestJlmRemoteClassNoAuth implements StfPluginInterface {
 			.addSuite("mini-mix")
 			.setSuiteNumTests(900000)
 			.setSuiteInventory(inventoryFile)
-			.setSuiteThreadCount(200)
+			.setSuiteThreadCount(30)
 		   	.setSuiteRandomSelection();
 		
 		// Process definition for the client JVM using proxy connection
 		JavaProcessDefinition clientJavaInvocationProxy = test.createJavaProcessDefinition()
+			.addJvmOption("-Xmx256m")
 			.addJvmOptionIfIBMJava("-Xdump:java:events=throw,file=" + dumpFile.getSpec())
 		 	.addProjectToClasspath("openjdk.test.jlm")
 			.addPrereqJarToClasspath(JarId.JUNIT)
@@ -99,6 +101,7 @@ public class TestJlmRemoteClassNoAuth implements StfPluginInterface {
 
 		// Process definition for the client JVM using server connection
 		JavaProcessDefinition clientJavaInvocationServer = test.createJavaProcessDefinition()
+			.addJvmOption("-Xmx256m")
 			.addJvmOptionIfIBMJava("-Xdump:java:events=throw,file=" + dumpFile.getSpec())
 	 		.addProjectToClasspath("openjdk.test.jlm")
 			.addPrereqJarToClasspath(JarId.JUNIT)
@@ -119,7 +122,7 @@ public class TestJlmRemoteClassNoAuth implements StfPluginInterface {
 		StfProcess clientProxy = test.doRunBackgroundProcess("Running the monitoring "
 				+ "Client with proxy connection(without security)", 
 				"CL1", ECHO_ON,  
-				ExpectedOutcome.cleanRun().within("10m"), 
+				ExpectedOutcome.cleanRun().within("30m"), 
 				clientJavaInvocationProxy);
 		
 		// Wait for the processes to complete
@@ -142,7 +145,7 @@ public class TestJlmRemoteClassNoAuth implements StfPluginInterface {
 		StfProcess clientS = test.doRunBackgroundProcess("Running the Monitoring "
 				+ "Client with server-connection(without security)", 
 				"CL2", ECHO_ON,
-				ExpectedOutcome.cleanRun().within("10m"), 
+				ExpectedOutcome.cleanRun().within("30m"), 
 				clientJavaInvocationServer);
 		
 		// Wait for processes to complete

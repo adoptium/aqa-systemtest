@@ -63,6 +63,7 @@ public class TestJlmRemoteMemoryNoAuth implements StfPluginInterface {
 		String inventoryFile = "/openjdk.test.load/config/inventories/mix/mini-mix.xml";
 		
 		LoadTestProcessDefinition serverJavaInvocation = test.createLoadTestSpecification()
+			.addJvmOption("-Xmx256m")
 			.addJvmOption("-Dcom.sun.management.jmxremote.port=1234")
 			.addJvmOption("-Dcom.sun.management.jmxremote.authenticate=false")
 			.addJvmOption("-Dcom.sun.management.jmxremote.ssl=false")
@@ -76,7 +77,7 @@ public class TestJlmRemoteMemoryNoAuth implements StfPluginInterface {
 			.addSuite("mini-mix")
 			.setSuiteNumTests(900000)
 			.setSuiteInventory(inventoryFile)
-			.setSuiteThreadCount(200)
+			.setSuiteThreadCount(30)
 		   	.setSuiteRandomSelection();
 		
 		// Process definition for the monitoring client JVM that connects with the server via proxy	
@@ -86,6 +87,7 @@ public class TestJlmRemoteMemoryNoAuth implements StfPluginInterface {
 		FileRef dumpFile = resultsDir.childFile("javacore_mem_proxy.%Y%m%d.%H%M%S.%pid.%seq.txt,filter=java.lang.IllegalArgumentException");
 				
 		JavaProcessDefinition clientJavaInvocationProxy = test.createJavaProcessDefinition()
+			.addJvmOption("-Xmx256m")
 			.addJvmOptionIfIBMJava("-Xdump:java:events=throw,file=" + dumpFile.getSpec())
 			.addProjectToClasspath("openjdk.test.jlm")
 			.addPrereqJarToClasspath(JarId.JUNIT)
@@ -121,7 +123,8 @@ public class TestJlmRemoteMemoryNoAuth implements StfPluginInterface {
 		dumpFile = resultsDir.childFile("javacore_mem_server.%Y%m%d.%H%M%S.%pid.%seq.txt,filter=java.lang.IllegalArgumentException");
 		
         JavaProcessDefinition clientJavaInvocationServer =  test.createJavaProcessDefinition()
-		    .addJvmOptionIfIBMJava("-Xdump:java:events=throw,file=" + dumpFile.getSpec())
+        	.addJvmOption("-Xmx256m")
+        	.addJvmOptionIfIBMJava("-Xdump:java:events=throw,file=" + dumpFile.getSpec())
 			.addProjectToClasspath("openjdk.test.jlm")
 			.addPrereqJarToClasspath(JarId.JUNIT)
 			.runClass(MemoryProfiler.class)

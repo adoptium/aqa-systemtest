@@ -76,6 +76,7 @@ public class TestJlmRemoteMemoryAuth implements StfPluginInterface {
 		String inventoryFile = "/openjdk.test.load/config/inventories/mix/mini-mix.xml";
 		
 		LoadTestProcessDefinition serverLoadTestInvocation = test.createLoadTestSpecification()
+			.addJvmOption("-Xmx256m")
 			.addJvmOption("-Dcom.sun.management.jmxremote.port=1234")
 			.addJvmOption("-Dcom.sun.management.jmxremote.ssl.need.client.auth=true")
 			.addJvmOption("-Djavax.net.ssl.keyStore=" + keyStoreFile.getSpec())
@@ -95,7 +96,7 @@ public class TestJlmRemoteMemoryAuth implements StfPluginInterface {
 			.addSuite("mini-mix")
 			.setSuiteNumTests(900000)
 			.setSuiteInventory(inventoryFile)
-			.setSuiteThreadCount(200)
+			.setSuiteThreadCount(30)
 		   	.setSuiteRandomSelection();
 
 		// Process definition for the client JVM that will monitor the server using proxy connection
@@ -105,6 +106,7 @@ public class TestJlmRemoteMemoryAuth implements StfPluginInterface {
 		FileRef dumpFile = resultsDir.childFile("javacore_smem_proxy.%Y%m%d.%H%M%S.%pid.%seq.txt,filter=java.lang.IllegalArgumentException");
 		
 		JavaProcessDefinition clientJavaInvocationProxy = test.createJavaProcessDefinition()
+			.addJvmOption("-Xmx256m")
 			.addJvmOptionIfIBMJava("-Xdump:java:events=throw,file=" + dumpFile.getSpec())
 			.addJvmOption("-Djavax.net.ssl.keyStore=" + keyStoreFile.getSpec())
 			.addJvmOption("-Djavax.net.ssl.trustStore=" + keyStoreFile.getSpec())
@@ -149,6 +151,7 @@ public class TestJlmRemoteMemoryAuth implements StfPluginInterface {
 		dumpFile = resultsDir.childFile("javacore_smem_server.%Y%m%d.%H%M%S.%pid.%seq.txt,filter=java.lang.IllegalArgumentException");
 		
 		JavaProcessDefinition clientJavaInvocationS = test.createJavaProcessDefinition()
+			.addJvmOption("-Xmx256m")
 			.addJvmOptionIfIBMJava("-Xdump:java:events=throw,file=" + dumpFile.getSpec())
 			.addJvmOption("-Djavax.net.ssl.keyStore=" + keyStoreFile.getSpec())
 			.addJvmOption("-Djavax.net.ssl.trustStore=" + keyStoreFile.getSpec())

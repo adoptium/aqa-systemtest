@@ -73,6 +73,7 @@ public class TestJlmRemoteNotifierProxyAuth implements StfPluginInterface {
 		String inventoryFile = "/openjdk.test.load/config/inventories/mix/mini-mix.xml";
 		
 		LoadTestProcessDefinition serverJavaInvocation = test.createLoadTestSpecification()
+				.addJvmOption("-Xmx256m")
 				.addJvmOption("-Dcom.sun.management.jmxremote.port=1234")
 				.addJvmOption("-Dcom.sun.management.jmxremote.ssl.need.client.auth=true")
 				.addJvmOption("-Djavax.net.ssl.keyStore=" + keyStoreFile.getSpec())
@@ -92,11 +93,12 @@ public class TestJlmRemoteNotifierProxyAuth implements StfPluginInterface {
 				.addSuite("mini-mix")
 				.setSuiteNumTests(900000)
 				.setSuiteInventory(inventoryFile)
-				.setSuiteThreadCount(200)
+				.setSuiteThreadCount(30)
 			   	.setSuiteRandomSelection();
 		
 		// Process definition for the client JVM that will monitor the server
 		JavaProcessDefinition clientJavaInvocation = test.createJavaProcessDefinition()
+			.addJvmOption("-Xmx256m")
 			.addJvmOptionIfIBMJava("-Xdump:java:events=throw,file=" + dumpFile.getSpec())
 			.addJvmOption("-Djavax.net.ssl.keyStore=" + keyStoreFile.getSpec())
 			.addJvmOption("-Djavax.net.ssl.trustStore=" + keyStoreFile.getSpec())
@@ -124,7 +126,7 @@ public class TestJlmRemoteNotifierProxyAuth implements StfPluginInterface {
 		// Start the background client process
 		StfProcess client = test.doRunBackgroundProcess("Run client with proxy JMX connection with security", 
 				"CL", ECHO_ON,  
-				ExpectedOutcome.cleanRun().within("10m"), 
+				ExpectedOutcome.cleanRun().within("30m"), 
 				clientJavaInvocation);
 		
 		// Wait for the processes to complete

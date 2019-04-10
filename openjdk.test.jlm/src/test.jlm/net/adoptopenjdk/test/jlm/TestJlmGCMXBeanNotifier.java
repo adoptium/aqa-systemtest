@@ -61,6 +61,7 @@ public class TestJlmGCMXBeanNotifier implements StfPluginInterface {
 		// Process definition for the monitored server JVM 
 		String inventoryFile = "/test.load/config/inventories/mix/mini-mix.xml";
 		LoadTestProcessDefinition serverJavaInvocation = test.createLoadTestSpecification()
+			.addJvmOption("-Xmx256m")
 			.addJvmOption("-Dcom.sun.management.jmxremote.port=1234")
 			.addJvmOption("-Dcom.sun.management.jmxremote.authenticate=false")
 			.addJvmOption("-Dcom.sun.management.jmxremote.ssl=false")
@@ -82,6 +83,7 @@ public class TestJlmGCMXBeanNotifier implements StfPluginInterface {
 		FileRef logFile	= resultsDir.childFile("GCNotifierTest.log");
 				
 		JavaProcessDefinition client1JavaInvocation = test.createJavaProcessDefinition()
+			.addJvmOption("-Xmx256m")
 			.addProjectToClasspath("openjdk.test.jlm")
 			.addPrereqJarToClasspath(JarId.JUNIT)
 			.runClass("com.ibm.runtimes.test.remote.GarbageCollectionNotificationTest") //
@@ -108,7 +110,8 @@ public class TestJlmGCMXBeanNotifier implements StfPluginInterface {
 		
 		// Process definition for the monitoring client JVM that connects with the server			
         JavaProcessDefinition client2JavaInvocation =  test.createJavaProcessDefinition()
-		    .addProjectToClasspath("openjdk.test.jlm")
+        	.addJvmOption("-Xmx256m")
+        	.addProjectToClasspath("openjdk.test.jlm")
 			.addPrereqJarToClasspath(JarId.JUNIT)
 			.runClass("com.ibm.runtimes.test.remote.GCMXBeanTest");
 		

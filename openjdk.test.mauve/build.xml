@@ -59,7 +59,7 @@ limitations under the License.
 		1. cd to openjdk.test.mauve
 		2. Run ant get-source -Dmake=make.  This will download the mauve source to $TMP/mauve (unix) or %TEMP%/mauve (Windows)
 		3. Make amendments to the mauve source
-		4. Run ant force-build -Dmake-make -Djava8_compiler=<path_to_javac(.exe)>.
+		4. Run ant force-build -Dmake=make -Djava_compiler=<path_to_javac(.exe)>.
 		   The mauve test cases have compilation errors with java9 (at 28Apr2017) - they use '_' as an
 		   identifer which is illegal in java 9.
 		   This will rebuild from the source and put the results mauve.jar into ${prereqs_root}/mauve

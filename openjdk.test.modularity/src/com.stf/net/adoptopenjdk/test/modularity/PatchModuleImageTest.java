@@ -124,7 +124,7 @@ public class PatchModuleImageTest implements StfPluginInterface {
 			 */
 			test.doRunForegroundProcess(
 					"Verify if we can patch an upgradable platform " + "module using exploded directory", "OT11",
-					ECHO_ON, ExpectedOutcome.cleanRun().within("1m"),
+					ECHO_ON, ExpectedOutcome.cleanRun().within("5m"),
 					test.createJavaProcessDefinition().addRunImage(runtimeImage)
 							.addModuleAddReads("com.test=ALL-UNNAMED")
 							.addPatchModule("java.xml", overridingPlatformModuleExpDir_JavaXml)
@@ -138,7 +138,7 @@ public class PatchModuleImageTest implements StfPluginInterface {
 			 * module using modular jar
 			 */
 			test.doRunForegroundProcess("Verify if we can patch an upgradable " + "platform module using modular jar",
-					"OT12", ECHO_ON, ExpectedOutcome.cleanRun().within("1m"),
+					"OT12", ECHO_ON, ExpectedOutcome.cleanRun().within("5m"),
 					test.createJavaProcessDefinition().addRunImage(runtimeImage)
 							.addModuleAddReads("com.test=ALL-UNNAMED")
 							.addPatchModule("java.xml", overridingPlatformModuleJar_JavaTransaction)
@@ -156,7 +156,7 @@ public class PatchModuleImageTest implements StfPluginInterface {
 			 * exploded directory
 			 */
 			test.doRunForegroundProcess("Verify if we can patch an Application module " + "using exploded directory",
-					"OT21", ECHO_ON, ExpectedOutcome.cleanRun().within("1m"),
+					"OT21", ECHO_ON, ExpectedOutcome.cleanRun().within("5m"),
 					test.createJavaProcessDefinition().addRunImage(runtimeImage)
 							.addModuleAddReads("com.test=ALL-UNNAMED")
 							.addPatchModule("com.hello", overridingAppModuleExpDir_HelloModule)
@@ -170,7 +170,7 @@ public class PatchModuleImageTest implements StfPluginInterface {
 			 * modular jar
 			 */
 			test.doRunForegroundProcess("Verify if we can patch an Application " + "module using modular jar", "OT22",
-					ECHO_ON, ExpectedOutcome.cleanRun().within("1m"),
+					ECHO_ON, ExpectedOutcome.cleanRun().within("5m"),
 					test.createJavaProcessDefinition().addRunImage(runtimeImage)
 							.addModuleAddReads("com.test=ALL-UNNAMED")
 							.addPatchModule("com.hello", overridingAppModuleJar_HelloModule)
@@ -189,7 +189,7 @@ public class PatchModuleImageTest implements StfPluginInterface {
 			StfProcess ot3 = test.doRunForegroundProcess(
 					"(Negative test) Include a new package that is not exported "
 							+ "and check if the public type cannot be accessed",
-					"OT3", ECHO_ON, ExpectedOutcome.exitValue(1).within("1m"),
+					"OT3", ECHO_ON, ExpectedOutcome.exitValue(1).within("5m"),
 					test.createJavaProcessDefinition().addRunImage(runtimeImage)
 							.addModuleAddReads("com.test=ALL-UNNAMED")
 							.addPatchModule("com.hello", overridingAppModuleJar_HelloModule)
@@ -207,7 +207,7 @@ public class PatchModuleImageTest implements StfPluginInterface {
 			test.doRunForegroundProcess(
 					"Include a new package that is not exported "
 							+ "and check if the public type can be accessed by adding --add-exports",
-					"OT4", ECHO_ON, ExpectedOutcome.cleanRun().within("1m"),
+					"OT4", ECHO_ON, ExpectedOutcome.cleanRun().within("5m"),
 					test.createJavaProcessDefinition().addRunImage(runtimeImage)
 							.addModuleAddReads("com.test=ALL-UNNAMED")
 							.addPatchModule("com.hello", overridingAppModuleJar_HelloModule)
@@ -228,7 +228,7 @@ public class PatchModuleImageTest implements StfPluginInterface {
 			test.doRunForegroundProcess(
 					"Run application class override test "
 							+ "where we specify two exploded module paths in a single --patch-module option",
-					"OT1", ECHO_ON, ExpectedOutcome.cleanRun().within("1m"),
+					"OT1", ECHO_ON, ExpectedOutcome.cleanRun().within("5m"),
 					test.createJavaProcessDefinition().addRunImage(runtimeImage)
 							.addModuleAddReads("com.test=ALL-UNNAMED")
 							.addPatchModule("com.hello", overridingAppModuleExpDir_HelloModule,
@@ -248,7 +248,7 @@ public class PatchModuleImageTest implements StfPluginInterface {
 							"OT7", ECHO_ON,
 							ExpectedOutcome
 									.exitValue(1).within(
-											"1m"),
+											"5m"),
 							test.createJavaProcessDefinition().addRunImage(runtimeImage)
 									.addModuleAddReads("com.test=ALL-UNNAMED").disablePatchModuleAmalgamation()
 									.addPatchModule("com.hello", overridingAppModuleExpDir_HelloNewModule)
@@ -289,7 +289,7 @@ public class PatchModuleImageTest implements StfPluginInterface {
 			 */
 			StfProcess ot8 = test.doRunForegroundProcess(
 					"(Negative test) Verify if --patch-module " + "allows replacing of module-info.class", "OT8",
-					ECHO_ON, ExpectedOutcome.exitValue(1).within("1m"),
+					ECHO_ON, ExpectedOutcome.exitValue(1).within("5m"),
 					test.createJavaProcessDefinition().addRunImage(runtimeImage)
 							.addModuleAddReads("com.test=ALL-UNNAMED")
 							.addPatchModule("com.hello", overridingAppModuleExpDir_HelloNewModule)

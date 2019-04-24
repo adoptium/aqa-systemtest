@@ -78,6 +78,7 @@ limitations under the License.
 			<and>
 				<equals arg1="${can_build_modularity}" arg2="true"/>
 				<equals arg1="${is_windows}" arg2="true"/>
+				<equals arg1="${windows_native_compiler_present}" arg2="true"/>
 			</and>
 		</condition>
 		<condition property="can_build_modularity_natives_unix" value="true">

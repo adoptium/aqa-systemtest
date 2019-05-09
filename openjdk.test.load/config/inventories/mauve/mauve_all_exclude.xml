@@ -1,4 +1,13 @@
 <inventory>
+	<!-- Fails on jdk12 aarch64 linux hotspot with: 
+		 got -4616189728938546314 but expected -4616189728938546315
+		 Issue reference: https://github.com/AdoptOpenJDK/openjdk-systemtest/issues/256-->
+	<mauve class="gnu.testlet.java.lang.Math.cos"/>
+	<!-- Fails on jdk11 aarch64 linux hotspot with: 
+		 gnu.testlet.java.lang.System.arraycopy: Object casting (number 0)
+		 got caught IndexOutOfBoundsException but expected caught ArrayStoreException
+		 Issue reference: https://github.com/AdoptOpenJDK/openjdk-systemtest/issues/256-->
+	<mauve class="gnu.testlet.java.lang.System.arraycopy"/>	
 	<!-- Fails on jdk11 and jdk12 openj9 with: 
 	java.net.SocketException: maximum number of DatagramSockets reached binding to null address (number 0) 
 	Issue reference: https://github.com/AdoptOpenJDK/openjdk-systemtest/issues/237-->

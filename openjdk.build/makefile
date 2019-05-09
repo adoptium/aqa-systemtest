@@ -342,37 +342,13 @@ endif
 
 $(warning JAVA_HOME is $(JAVA_HOME))
 JAVA:=$(JAVA_HOME)$(D)bin$(D)java$(EXE)
+JAVAC:=$(JAVA_HOME)$(D)bin$(D)javac$(EXE)
 JAVA_OUTPUT:=$(shell $(CMD_PREFIX) $(JAVA) -fullversion 2>&1)
 $(warning $(JAVA) -fullversion returned)
 $(warning $(JAVA_OUTPUT))
 
-ifneq (,$(JAVA8_HOME))
-  $(warning JAVA8_HOME is $(JAVA8_HOME))
-  JAVA8:=$(JAVA8_HOME)$(D)bin$(D)java$(EXE)
-  JAVAC8:=$(JAVA8_HOME)$(D)bin$(D)javac$(EXE)
-  JAVA8_OUTPUT:=$(shell $(CMD_PREFIX) $(JAVA8) -fullversion 2>&1)
-  $(warning $(JAVA8) -fullversion returned)
-  $(warning $(JAVA8_OUTPUT))
-else
-  #$(warning JAVA8_HOME not set, will use $(JAVA_HOME) as java8 compiler)
-  JAVA8_HOME:=$(JAVA_HOME)
-endif
-
-ifneq (,$(JAVA9_HOME))
-  $(warning JAVA9_HOME is $(JAVA9_HOME))
-  JAVA9:=$(JAVA9_HOME)$(D)bin$(D)java$(EXE)
-  JAVAC9:=$(JAVA9_HOME)$(D)bin$(D)javac$(EXE)
-  JAVA9_OUTPUT:=$(shell $(CMD_PREFIX) $(JAVA9) -fullversion 2>&1)
-  $(warning $(JAVA9) -fullversion returned)
-  $(warning $(JAVA9_OUTPUT))
-else
-  #$(warning JAVA9_HOME not set, will use $(JAVA_HOME) as java9 compiler)
-  JAVA9_HOME:=$(JAVA_HOME)
-endif
-
 BUILD_COMMAND:=$(CMD_PREFIX) $(ANT_JAVA_HOME)$(D)bin$(D)java$(EXE) -classpath $(ANT_LAUNCHER) org.apache.tools.ant.launch.Launcher -buildfile $(OPENJDK_SYSTEMTEST_TARGET_ROOT)$(D)openjdk.build$(D)build.xml -Dprereqs_root="$(RESOLVED_PREREQS_ROOT)" -Dstf_root=$(STF_ROOT)
-BUILD_COMMAND:=$(BUILD_COMMAND) -Djava8_home=$(JAVA8_HOME)
-BUILD_COMMAND:=$(BUILD_COMMAND) -Djava9_home=$(JAVA9_HOME)
+BUILD_COMMAND:=$(BUILD_COMMAND) -Djava_home=$(JAVA_HOME)
 
 # Provide a means for users to pass -java-args to the STF tests
 # Java arguments may contain imbedded quotes.  These need to be escaped on the STF command line.

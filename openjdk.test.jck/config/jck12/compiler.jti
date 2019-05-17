@@ -93,3 +93,6 @@ jck.tests.setOfModules=
 jck.tests.tests=
 jck.tests.treeOrFile=tree
 jck.timeout.timeout=1
+jck.env.compiler.testCompile.otherOpts=--release 12 --enable-preview
+jck.env.compiler.compRefExecute.otherOpts=--enable-preview
+jck.env.compiler.testCompile.testCompileAPImultiJVM.otherOpts=--enable-preview

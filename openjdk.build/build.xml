@@ -55,6 +55,7 @@ limitations under the License.
 		<ant antfile="${openjdk_systemtest_root}/openjdk.test.load/build.xml" dir="${openjdk_systemtest_root}/openjdk.test.load" inheritAll="true"/>
 		<ant antfile="${openjdk_systemtest_root}/openjdk.test.locking/build.xml" dir="${openjdk_systemtest_root}/openjdk.test.locking" inheritAll="true"/>
 		<ant antfile="${openjdk_systemtest_root}/openjdk.test.math/build.xml" dir="${openjdk_systemtest_root}/openjdk.test.math" inheritAll="true"/>
+		<ant antfile="${openjdk_systemtest_root}/openjdk.test.mauve/build.xml" dir="${openjdk_systemtest_root}/openjdk.test.mauve" inheritAll="true"/>
 		<ant antfile="${openjdk_systemtest_root}/openjdk.test.nio/build.xml" dir="${openjdk_systemtest_root}/openjdk.test.nio" inheritAll="true"/>
 		<ant antfile="${openjdk_systemtest_root}/openjdk.test.serialization/build.xml" dir="${openjdk_systemtest_root}/openjdk.test.serialization" inheritAll="true"/>
 		<ant antfile="${openjdk_systemtest_root}/openjdk.test.util/build.xml" dir="${openjdk_systemtest_root}/openjdk.test.util" inheritAll="true"/>

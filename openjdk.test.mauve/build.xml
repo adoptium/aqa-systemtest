@@ -389,14 +389,14 @@ limitations under the License.
 		<download-file destdir="${prereqs_root}/cvsclient" destfile="org-netbeans-lib-cvsclient.jar" srcurl="https://netbeans.org/projects/versioncontrol/downloads/download/org-netbeans-lib-cvsclient.jar"/>
 	</target>
 
-	<target name="install-archives" if="work_jar_file_exists">
+	<target name="install-archives" if="openjdk_test_mauve_work_jar_file_exists">
 		<echo message="Copying ${openjdk_test_mauve_work_jar_file} to directory ${openjdk_test_mauve_final_dir}"/>
 		<copy file="${openjdk_test_mauve_work_jar_file}" todir="${openjdk_test_mauve_final_dir}"/>
 	</target>
 
 	<target name="check-if-work_jar_file-exists">
 		<echo message="Checking if ${openjdk_test_mauve_work_jar_file} exists"/>
-		<available file="${openjdk_test_mauve_work_jar_file}" property="work_jar_file_exists"/>
+		<available file="${openjdk_test_mauve_work_jar_file}" property="openjdk_test_mauve_work_jar_file_exists"/>
 		<echo message="openjdk_test_mauve_work_jar_file_exists is ${openjdk_test_mauve_work_jar_file_exists}"/>
 	</target>
 

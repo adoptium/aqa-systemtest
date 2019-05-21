@@ -1,4 +1,8 @@
 <inventory>
+	<!-- Fails on jdk12 openj9 on ppcle linux with: 
+		 java.security.AccessControlException: access denied: ("java.util.logging.LoggingPermission" "control")
+		 Issue reference: https://github.com/AdoptOpenJDK/openjdk-systemtest/issues/263-->
+	<mauve class="gnu.testlet.javax.net.ssl.SSLContext.TestDefaultInit"/>
 	<!-- Fails on jdk12 aarch64 linux hotspot with: 
 		 got -4616189728938546314 but expected -4616189728938546315
 		 Issue reference: https://github.com/AdoptOpenJDK/openjdk-systemtest/issues/256-->

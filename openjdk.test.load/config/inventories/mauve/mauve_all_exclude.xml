@@ -1,4 +1,9 @@
 <inventory>
+	<!-- Fails on jdk11 openj9 on s390 linux with: 
+		 FAIL: gnu.testlet.java.util.zip.ZipEntry.time: setTime or getTime broken (number 0)
+			   got 1086325228000 but expected 1086310828000
+		 Issue reference: https://github.com/AdoptOpenJDK/openjdk-systemtest/issues/267-->
+	<mauve class="gnu.testlet.java.util.zip.ZipEntry.time"/>
 	<!-- Fails on jdk12 openj9 on ppcle linux with: 
 		 java.security.AccessControlException: access denied: ("java.util.logging.LoggingPermission" "control")
 		 Issue reference: https://github.com/AdoptOpenJDK/openjdk-systemtest/issues/263-->

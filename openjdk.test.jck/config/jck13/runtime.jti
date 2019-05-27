@@ -183,3 +183,5 @@ jck.tests.setOfModules=java.base java.compiler java.datatransfer java.desktop ja
 jck.tests.tests=
 jck.tests.treeOrFile=tree
 jck.timeout.timeout=1
+jck.env.testPlatform.testsOnPreviewFeaturesEnabled=Yes
+jck.env.runtime.testExecute.otherOpts=--enable-preview

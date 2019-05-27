@@ -319,7 +319,9 @@ public class Jck implements StfPluginInterface {
 			StfProcess tnameserv = null;
 			
 			String executeJar;
-			if ((jckVersion.contains("jck11") ||
+			if ((jckVersion.contains("jck13") ||
+				 jckVersion.contains("jck12") ||
+				 jckVersion.contains("jck11") ||
 				 jckVersion.contains("jck10") ||
 				 jckVersion.contains("jck9") ||
 				 jckVersion.contains("jck8")) &&
@@ -686,11 +688,15 @@ public class Jck implements StfPluginInterface {
 			if ( tests.equals("api/java_lang") || tests.contains("api/java_lang/instrument") || tests.equals("api") ) {
 				fileContent += "set jck.env.runtime.jplis.jplisLivePhase Yes;\n";
 			}
-
+			
 			// Get any additional jvm options for specific tests.
 			extraJvmOptions += getTestSpecificJvmOptions(jckVersion, tests);
 
 			extraJvmOptions += suppressOutOfMemoryDumpOptions;
+			
+			if (jckVersion.contains("jck12") || jckVersion.contains("jck13")) {
+				extraJvmOptions += " --enable-preview";
+			}
 			
 			// Add the JVM options supplied by the user plus those added in this method to the jtb file option.
 			fileContent += "set jck.env.runtime.testExecute.otherOpts \" " + extraJvmOptions + " \"" + ";\n";
@@ -742,8 +748,11 @@ public class Jck implements StfPluginInterface {
 				if (tests.contains("api/signaturetest") || tests.equals("api")) {
 					fileContent += "set jck.env.compiler.testCompile.compilerstaticsigtest.compilerStaticSigTestClasspathRemote \"" + getSignatureTestJars(pathToLib) + "\"" + ";\n";
 				}
-			}
-			else {
+			} if (jckVersion.contains("jck12")) {
+				fileContent += "set jck.env.compiler.testCompile.otherOpts \"-release 12 --enable-preview\"" + ";\n";
+			} if (jckVersion.contains("jck13")) {
+				fileContent += "set jck.env.compiler.testCompile.otherOpts \"-release 13 --enable-preview\"" + ";\n";
+			}else {
 				fileContent += "set jck.env.compiler.testCompile.otherOpts \"-source 9 \"" + ";\n";
 			}
 			if (tests.contains("api/java_rmi") || tests.equals("api")) {
@@ -752,6 +761,10 @@ public class Jck implements StfPluginInterface {
 			fileContent += "set jck.env.compiler.compRefExecute.cmdAsString \"" + pathToJava + "\"" + ";\n";
 
 			extraJvmOptions += suppressOutOfMemoryDumpOptions;
+			
+			if (jckVersion.contains("jck12") || jckVersion.contains("jck13")) {
+				extraJvmOptions += " --enable-preview";
+			}
 			
 			// Add the JVM options supplied by the user plus those added in this method to the jtb file option.
 			fileContent += "set jck.env.compiler.compRefExecute.otherOpts \" " + extraJvmOptions + " \"" + ";\n";	

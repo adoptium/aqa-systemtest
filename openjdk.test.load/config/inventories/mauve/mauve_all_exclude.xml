@@ -1,4 +1,8 @@
 <inventory>
+	<!-- Fails on jdk12 hotspot with: 
+		 got 9218868437227405313 but expected 9223231299366420480
+		 Issue reference: https://github.com/AdoptOpenJDK/openjdk-systemtest/issues/272-->
+	<mauve class="gnu.testlet.java.lang.Math.sin"/>
 	<!-- Fails on jdk13 openj9 with: 
 		 FAIL: gnu.testlet.java.util.logging.Handler.isLoggable (number 0)
 		 Issue reference: https://github.com/AdoptOpenJDK/openjdk-systemtest/issues/260-->

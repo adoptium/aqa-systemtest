@@ -6638,8 +6638,12 @@ public class TestSuite017 extends TestCase
   }
   public void testItem_0975()
   {
-    rc_BigDecimal = (new BigDecimal("0E+12")).movePointRight(0);
-    Assert.assertEquals("0", rc_BigDecimal.toString());
+    rc_BigDecimal = (new BigDecimal("0E+12")).movePointRight(0);  
+    if (JavaSpecVersionChecker.isJDK13OrNewer()) {
+    	Assert.assertEquals("0E+12", rc_BigDecimal.toString());
+    } else {
+    	Assert.assertEquals("0", rc_BigDecimal.toString());
+    }
   }
   public void testItem_0976()
   {

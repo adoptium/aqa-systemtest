@@ -6605,7 +6605,11 @@ public class TestSuite026 extends TestCase
   public void testItem_0980()
   {
     rc_BigDecimal = (new BigDecimal("1E+1")).movePointLeft(0);
-    Assert.assertEquals("10", rc_BigDecimal.toString());
+    if (JavaSpecVersionChecker.isJDK13OrNewer()) {
+    	 Assert.assertEquals("1E+1", rc_BigDecimal.toString());
+    } else {
+    	 Assert.assertEquals("10", rc_BigDecimal.toString());
+    }
   }
   public void testItem_0981()
   {

@@ -3645,7 +3645,11 @@ public class TestSuite014 extends TestCase
   public void testItem_0506()
   {
     rc_BigDecimal = (new BigDecimal("-2.147483648E+10")).movePointRight(0);
-    Assert.assertEquals("-21474836480", rc_BigDecimal.toString());
+    if (JavaSpecVersionChecker.isJDK13OrNewer()) {
+    	Assert.assertEquals("-2.147483648E+10", rc_BigDecimal.toString());
+    } else {
+    	Assert.assertEquals("-21474836480", rc_BigDecimal.toString());
+    }
   }
   public void testItem_0507()
   {

@@ -6920,7 +6920,11 @@ public class TestSuite021 extends TestCase
   public void testItem_0989()
   {
     rc_BigDecimal = (new BigDecimal("0E+2147483647")).movePointRight(0);
-    Assert.assertEquals("0", rc_BigDecimal.toString());
+    if (JavaSpecVersionChecker.isJDK13OrNewer()) {
+    	Assert.assertEquals("0E+2147483647", rc_BigDecimal.toString());
+    } else {
+    	Assert.assertEquals("0", rc_BigDecimal.toString());
+    }
   }
   public void testItem_0990()
   {

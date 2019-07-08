@@ -1243,7 +1243,11 @@ public class TestSuite032 extends TestCase
   public void testItem_0173()
   {
     rc_BigDecimal = (new BigDecimal("-3E+1")).movePointLeft(0);
-    Assert.assertEquals("-30", rc_BigDecimal.toString());
+    if (JavaSpecVersionChecker.isJDK13OrNewer()) {
+    	 Assert.assertEquals("-3E+1", rc_BigDecimal.toString());
+    } else {
+    	 Assert.assertEquals("-30", rc_BigDecimal.toString());
+    }
   }
   public void testItem_0174()
   {

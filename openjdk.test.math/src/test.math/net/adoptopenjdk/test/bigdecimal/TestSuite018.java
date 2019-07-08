@@ -6094,7 +6094,11 @@ public class TestSuite018 extends TestCase
   public void testItem_0903()
   {
     rc_BigDecimal = (new BigDecimal("9.00000000000000000E+18")).movePointLeft(0);
-    Assert.assertEquals("9000000000000000000", rc_BigDecimal.toString());
+    if (JavaSpecVersionChecker.isJDK13OrNewer()) {
+    	Assert.assertEquals("9.00000000000000000E+18", rc_BigDecimal.toString());
+    } else {
+    	Assert.assertEquals("9000000000000000000", rc_BigDecimal.toString());
+    }
   }
   public void testItem_0904()
   {

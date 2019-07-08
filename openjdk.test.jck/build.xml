@@ -21,6 +21,10 @@ limitations under the License.
 
 	<!-- Set default for STF location.  -->
 	<property name="stf_root" location="${source_root}/../stf"/>
+	
+	<!--Set default system test location-->
+	<property name="openjdk_systemtest_root" location="${source_root}/../openjdk-systemtest"/>
+	<property name="jck_makefile_dir" value="${openjdk_systemtest_root}/openjdk.test.jck/src/native"/>
 
 	<!-- Import settings used by multiple projects.  -->
 	<import file="${stf_root}/stf.build/include/top.xml"/>
@@ -31,6 +35,23 @@ limitations under the License.
 	<property name="openjdk_test_jck_bin_dir" value="bin" />
 
 	<property name="openjdk_test_jck_jar_file" value="${openjdk_test_jck_bin_dir}/${openjdk_test_jck_module}.jar" />
+	
+	<propertyregex property="jck_short_version" input="${env.JCK_VERSION}" regexp="jck([^\.]*)" select="\1" casesensitive="false" />
+	<propertyregex property="platform_short_name" defaultValue="${PLATFORM}" input="${PLATFORM}" regexp="([^\.]*)_cr.*$$" select="\1" casesensitive="false" />
+	
+	<condition property="can_build_jck_natives_windows" value="true">
+		<and>
+			<equals arg1="${is_windows}" arg2="true"/>
+			<equals arg1="${windows_native_compiler_present}" arg2="true"/>
+		</and>
+	</condition>
+	<condition property="can_build_jck_natives_unix" value="true">
+		<and>
+			<not>
+				<equals arg1="${is_windows}" arg2="true"/>
+			</not>
+		</and>
+	</condition>
 
 	<!-- We need junit, log4j and stf to compile this project. -->
 	<path id="project.class.path">
@@ -48,12 +69,6 @@ limitations under the License.
 	</target>
 
 	<target name="build-no-natives" depends="check-prereqs, build-dependencies, build-archives">
-	</target>
-
-	<target name="build-natives">
-	</target>
-
-	<target name="build-archives" depends="build-jar">
 	</target>
 
 	<target name="build-jar" depends="build-java, create-bin-dir">
@@ -87,6 +102,32 @@ limitations under the License.
 			<compilerarg value="-Xlint:deprecation,unchecked" />
 			<include name="**/*.java"/>
 		</javac>
+	</target>
+	
+	<target name="build-natives" depends="check-prereqs, setup-native-build-command, build-natives-windows, build-natives-unix">
+	</target>
+	
+	<target name="setup-native-build-command">
+		<echo message="building natives for java_platform ${java_platform}"/>
+		<property name="openjdk_test_jck_native_build_command" value='${setup_windows_build_env}make build -f ${jck_makefile_dir}/makefile SRCDIR=${jck_runtimes_src_dir} PLATFORM=${platform_short_name} JAVA_HOME=${TEST_JDK_HOME} OUTDIR=${out_dir}'/>
+		<tempfile property="openjdk_test_jck_native_build_command_file" destDir="${java.io.tmpdir}" prefix="openjdk.build.command."/>
+	</target>
+
+	<target name="build-natives-windows" if="${can_build_jck_natives_windows}">
+		<echo message="${openjdk_test_jck_native_build_command}" file="${openjdk_test_jck_native_build_command_file}.bat"/>
+		<exec executable="${openjdk_test_jck_native_build_command_file}.bat" failonerror="true"/>
+		<delete file="${openjdk_test_jck_native_build_command_file}.bat" verbose="true"/>
+	</target>
+
+	<target name="build-natives-unix" if="${can_build_jck_natives_unix}">
+		<echo message="${openjdk_test_jck_native_build_command}" file="${openjdk_test_jck_native_build_command_file}.sh"/>
+		<exec executable="/bin/sh" failonerror="true">
+			<arg value="${openjdk_test_jck_native_build_command_file}.sh"/>
+		</exec>
+		<delete file="${openjdk_test_jck_native_build_command_file}.sh" verbose="true"/>
+	</target>
+
+	<target name="build-archives" depends="build-jar">
 	</target>
 
 	<target name="create-bin-dir">

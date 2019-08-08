@@ -22,10 +22,37 @@
 # If JAVA_HOME is set, use that one.
 # If JAVA_HOME is not set, look for jar on the PATH.
 
-D:=/
-ifneq (,$(findstring win,$(PLATFORM)))
-  D:=\\
+WIN=0
+ifeq ($(PLATFORM),win_x86-32)
+	DESTDIR=$(OUTDIR)\$(PLATFORM)
+	WIN=1
 endif
+
+ifeq ($(PLATFORM),win_x86-64)
+	DESTDIR=$(OUTDIR)\$(PLATFORM)
+    WIN=1
+endif
+
+# Environment variable OSTYPE is set to cygwin if running under cygwin.
+# Set our own macro to indicate we're running under cygwin.
+# Also Windows commands will need to be prefixed with cmd /c to run them in a Windows shell
+ifndef CYGWIN
+  OSTYPE?=$(shell echo $$OSTYPE)
+  ifeq ($(OSTYPE),cygwin)
+    CYGWIN:=1
+  else
+    CYGWIN:=0
+  endif
+endif
+
+D:=/
+
+ifeq ($(WIN),1)
+   ifeq (0,$(CYGWIN))
+	   D:=\\
+   endif
+endif 
+
 ifneq (,$(JAVA_HOME))
   JAR:=$(JAVA_HOME)$(D)bin$(D)jar
   $(warning JAVA_HOME set to $(JAVA_HOME). Using $(JAR) to create jar files)
@@ -68,6 +95,8 @@ else
 	BUILDD=$(FULLOUTDIR)
 	VAR=$@
 endif
+
+MKDIR=mkdir -p
 CLEANDIR=rm -rf
 CLEANFILE=rm -rf
 FULLOUTDIR=$(OUTDIR)$(D)$(PLATFORM)$(D)
@@ -75,7 +104,13 @@ COPYDIR=cp -r
 AND_IF_SUCCESSFUL=&&
 export AND_IF_SUCCESSFUL
 
-VPATH=$(SRCDIR)/src/share/lib/jni/:$(SRCDIR)/src/share/lib/atr/:$(SRCDIR)/src/share/lib/jvmti/:$(SRCDIR)/tests/api/javax_management/loading/data/archives/src/C/:$(SRCDIR)/src
+VPATH=$(SRCDIR)$(D)src$(D)share$(D)lib$(D)jni$(D):$(SRCDIR)$(D)src$(D)share$(D)lib$(D)atr$(D):$(SRCDIR)$(D)src$(D)share$(D)lib$(D)jvmti$(D):$(SRCDIR)$(D)tests$(D)api$(D)javax_management$(D)loading$(D)data$(D)archives$(D)src$(D)C$(D):$(SRCDIR)$(D)src
+JMX_DATA_PATH=$(SRCDIR)$(D)tests$(D)api$(D)javax_management$(D)loading$(D)data
+SOLARIS_PATH=$(SRCDIR)$(D)src$(D)share$(D)lib$(D)jni$(D)include$(D)solaris
+LINUX_PATH=$(SRCDIR)$(D)src$(D)share$(D)lib$(D)jni$(D)include$(D)linux
+JNI_INCLUDE_PATH=$(SRCDIR)$(D)src$(D)share$(D)lib$(D)jni$(D)include
+JVMTI_INCLUDE_PATH=$(SRCDIR)$(D)src$(D)share$(D)lib$(D)jvmti$(D)include
+SRC_PATH=$(SRCDIR)/src
 
 # Following are platform and compiler specific settings
 # Prior to jck10 the unix include files are in src/share/lib/jni/include/solaris
@@ -83,73 +118,73 @@ VPATH=$(SRCDIR)/src/share/lib/jni/:$(SRCDIR)/src/share/lib/atr/:$(SRCDIR)/src/sh
 
 ifeq ($(PLATFORM),linux_x86-32)
 	CC=gcc
-	CFLAGS=-fPIC -I$(SRCDIR)/src/share/lib/jni/include/solaris -I$(SRCDIR)/src/share/lib/jni/include/linux -I$(SRCDIR)/src
+	CFLAGS=-fPIC -I$(SOLARIS_PATH) -I$(LINUX_PATH) -I$(SRC_PATH)
 	LDFLAGS=-shared 
 endif	
 
 ifeq ($(PLATFORM),linux_ppc-32)
 	CC=gcc
-	CFLAGS=-fPIC -I$(SRCDIR)/src/share/lib/jni/include/solaris -I$(SRCDIR)/src/share/lib/jni/include/linux -I$(SRCDIR)/src
+	CFLAGS=-fPIC -I$(SOLARIS_PATH) -I$(LINUX_PATH) -I$(SRC_PATH)
 	LDFLAGS=-shared 
 endif	
 
 ifeq ($(PLATFORM),linux_ppc-64)
 	CC=gcc
-	CFLAGS=-fPIC -D_LP64 -m64 -I$(SRCDIR)/src/share/lib/jni/include/solaris -I$(SRCDIR)/src/share/lib/jni/include/linux -I$(SRCDIR)/src
+	CFLAGS=-fPIC -D_LP64 -m64 -I$(SOLARIS_PATH) -I$(LINUX_PATH) -I$(SRC_PATH)
 	LDFLAGS=-shared
 endif
 
 ifeq ($(PLATFORM),linux_ppcle-64)
 	CC=gcc
-	CFLAGS=-fPIC -D_LP64 -m64 -I$(SRCDIR)/src/share/lib/jni/include/solaris -I$(SRCDIR)/src/share/lib/jni/include/linux -I$(SRCDIR)/src
+	CFLAGS=-fPIC -D_LP64 -m64 -I$(SOLARIS_PATH) -I$(LINUX_PATH) -I$(SRC_PATH)
 	LDFLAGS=-shared
 endif
 
 ifeq ($(PLATFORM),linux_x86-64)
 	CC=gcc
-	CFLAGS=-fPIC -D_LP64 -m64 -I$(SRCDIR)/src/share/lib/jni/include/solaris -I$(SRCDIR)/src/share/lib/jni/include/linux -I$(SRCDIR)/src
+	CFLAGS=-fPIC -D_LP64 -m64 -I$(SOLARIS_PATH) -I$(LINUX_PATH) -I$(SRC_PATH)
 	LDFLAGS=-shared
 endif
 
 ifeq ($(PLATFORM),osx_x86-64)
 	CC=gcc
-	CFLAGS=-fPIC -D_LP64 -m64 -I$(SRCDIR)/src/share/lib/jni/include/amd64 -I$(SRCDIR)/src 
+	CFLAGS=-fPIC -D_LP64 -m64 -I$(SRCDIR)/src/share/lib/jni/include/amd64 -I$(SRC_PATH)
 	LDFLAGS=-shared
 endif
 
 ifeq ($(PLATFORM),aix_ppc-32)
 	CC=xlc
-	CFLAGS=-qstaticinline -I$(SRCDIR)/src/share/lib/jni/include/solaris -I$(SRCDIR)/src/share/lib/jni/include/linux -I$(SRCDIR)/src
+	CFLAGS=-qstaticinline  -I$(SOLARIS_PATH) -I$(LINUX_PATH) -I$(SRC_PATH)
 	LDFLAGS=-G
 endif
 
 ifeq ($(PLATFORM),aix_ppc-64)
 	CC=xlc
-	CFLAGS=-q64 -qstaticinline -D_LP64 -I$(SRCDIR)/src/share/lib/jni/include/solaris -I$(SRCDIR)/src/share/lib/jni/include/linux -I$(SRCDIR)/src
+	CFLAGS=-q64 -qstaticinline -D_LP64 -I$(SOLARIS_PATH) -I$(LINUX_PATH) -I$(SRC_PATH)
 	LDFLAGS=-G 
 endif
 
 ifeq ($(PLATFORM),linux_390-31)
 	CC=gcc
-	CFLAGS=-m31 -fPIC -I$(SRCDIR)/src/share/lib/jni/include/solaris -I$(SRCDIR)/src/share/lib/jni/include/linux -I$(SRCDIR)/src
+	CFLAGS=-m31 -fPIC -I$(SOLARIS_PATH) -I$(LINUX_PATH) -I$(SRC_PATH)
 	LDFLAGS=-shared
 endif
 
 ifeq ($(PLATFORM),linux_390-64)
 	CC=gcc
-	CFLAGS=-fPIC -D_LP64 -m64 -I$(SRCDIR)/src/share/lib/jni/include/solaris -I$(SRCDIR)/src/share/lib/jni/include/linux -I$(SRCDIR)/src
+	CFLAGS=-fPIC -D_LP64 -m64 -I$(SOLARIS_PATH) -I$(LINUX_PATH) -I$(SRC_PATH)
 	LDFLAGS=-shared
 endif
 
 ifeq ($(PLATFORM),linux_arm-32)
 	CC=gcc
-	CFLAGS=-fPIC -I$(SRCDIR)/src/share/lib/jni/include/solaris -I$(SRCDIR)/src/share/lib/jni/include/linux -I$(SRCDIR)/src
+	CFLAGS=-fPIC -I$(SOLARIS_PATH) -I$(LINUX_PATH) -I$(SRC_PATH)
 	LDFLAGS=-shared
 endif
 
 ifeq ($(PLATFORM),linux_arm-64)
 	CC=gcc
-	CFLAGS=-fPIC -D_LP64 -I$(SRCDIR)/src/share/lib/jni/include/solaris -I$(SRCDIR)/src/share/lib/jni/include/linux -I$(SRCDIR)/src
+	CFLAGS=-fPIC -D_LP64 -I$(SOLARIS_PATH) -I$(LINUX_PATH) -I$(SRC_PATH)
 	LDFLAGS=-shared
 endif
 
@@ -168,77 +203,94 @@ ifeq ($(PLATFORM),zos_390-64)
 endif
 
 
-ifeq ($(PLATFORM),win_x86-32)
-	CC=cl
-	CFLAGS=/DWIN32 /D_WINDOWS 
-	LDFLAGS=/LD /MD -I$(SRCDIR)/src/share/lib/jni/include/win32 -I$(SRCDIR)/src/share/lib/jni/include/windows -I$(SRCDIR)/src
-	LIBPREF=
-	LIBEXT=dll
-	OFLAG=/Fe
-	CLEANDIR=rmdir /S /Q
-	CLEANFILE=del /Q /S
-	COPYDIR=xcopy /Q /H /R /E /Y /I
-endif
+ifeq ($(WIN),1)
+    ifeq (0,$(CYGWIN))
+       SRCDIR := $(subst /,\,$(SRCDIR))
+       OUTDIR := $(subst /,\,$(OUTDIR))
+       FULLOUTDIR := $(subst /,\,$(FULLOUTDIR))
+       # and let's escape backslashes in case one is stripped by the shell
+       SRCDIR := $(subst \,\\,$(SRCDIR))
+       OUTDIR := $(subst \,\\,$(FULLOUTDIR))
+       FULLOUTDIR := $(subst \,\\,$(OUTDIR))
+       VPATH := $(subst \,\\,$(VPATH))
+       MKDIR=mkdir
+       CLEANDIR=rmdir /S /Q
+	   CLEANFILE=del /Q /S
+	   COPYDIR=xcopy /Q /H /R /E /Y /I
+    else 
+       # cygwin works with forward slashes
+       SRCDIR := $(subst \,/,$(SRCDIR))
+       OUTDIR := $(subst \,/,$(OUTDIR))
+       FULLOUTDIR := $(subst \,/,$(FULLOUTDIR))
+       VPATH := $(subst \,/,$(VPATH))
+       JMX_DATA_PATH := $(subst \,/,$(JMX_DATA_PATH))
+       # Prefix Windows commands with cmd /c to run them in a Windows shell
+       CMD_PREFIX:=cmd /c
+    endif
 
-ifeq ($(PLATFORM),win_x86-64)
+	IFLAGS=/I. /I"$(JAVA_HOME)/../include" /I"$(SRCDIR)$(D)src$(D)share$(D)lib$(D)jni$(D)include$(D)win32" /I"$(SRCDIR)$(D)src$(D)share$(D)lib$(D)jni$(D)include$(D)windows" /I"$(SRCDIR)" /I"$(SRCDIR)$(D)src" /I"$(SRCDIR)$(D)src$(D)share$(D)lib$(D)jni$(D)include" /I"$(SRCDIR)$(D)src$(D)share$(D)lib$(D)jvmti$(D)include"
+	CFLAGS=/DWIN32 /D_WINDOWS /LD /MD $(IFLAGS)
+	LFLAGS=/NOLOGO /DLL /INCREMENTAL:NO /NODEFAULTLIB:LIBCMTD /OUT:
+	LINK_CMD=$(CMD_PREFIX) link
 	CC=cl
-	CFLAGS=/DWIN32 /D_WINDOWS 
-	LDFLAGS=/LD /MD -I$(SRCDIR)/src/share/lib/jni/include/win32 -I$(SRCDIR)/src/share/lib/jni/include/windows -I$(SRCDIR)/src
 	LIBPREF=
 	LIBEXT=dll
 	OFLAG=/Fe
-	CLEANDIR=rmdir /S /Q
-	CLEANFILE=del /Q /S
-	COPYDIR=xcopy  /Q /H /R /E /Y /I
+	
+	JCKJNI=cd $(FULLOUTDIR) && $(LINK_CMD) $(LFLAGS)"$(FULLOUTDIR)$(D)$@" $(FULLOUTDIR)$(D)jckjni.obj
+	JCKJVMTI=cd $(FULLOUTDIR) && $(LINK_CMD) $(LFLAGS)"$(FULLOUTDIR)$(D)$@" $(FULLOUTDIR)$(D)jckjvmti.obj
+	SYSTEMINFOUSENATIVE=cd $(FULLOUTDIR) && $(LINK_CMD) $(LFLAGS)"$(FULLOUTDIR)$(D)$@" $(FULLOUTDIR)$(D)com_sun_management_mbeans_loading_SystemInfoUseNativeLib.obj
+	GETLIBIDFROMNATIVE=cd $(FULLOUTDIR) && $(LINK_CMD) $(LFLAGS)"$(FULLOUTDIR)$(D)$@" $(FULLOUTDIR)$(D)com_sun_management_mbeans_loading_GetLibIdFromNativeLib.obj
+	RANDOMGEN=cd $(FULLOUTDIR) && $(LINK_CMD) $(LFLAGS)"$(FULLOUTDIR)$(D)$@" $(FULLOUTDIR)$(D)com_sun_management_mbeans_loading_RandomGen.obj
 endif
 
 ifeq ($(PLATFORM),hp_ux-32)
         CC=cc
-        CFLAGS=+DD32 +z -c -I$(SRCDIR)/src/share/lib/jni/include/solaris -I$(SRCDIR)/src/share/lib/jni/include/linux -I$(SRCDIR)/src
+        CFLAGS=+DD32 +z -c -I$(SOLARIS_PATH) -I$(LINUX_PATH) -I$(SRC_PATH)
         LDFLAGS=
 endif
 ifeq ($(PLATFORM),hp_ux-64)
         CC=cc
-        CFLAGS=+DD64 +z -c -I$(SRCDIR)/src/share/lib/jni/include/solaris -I$(SRCDIR)/src/share/lib/jni/include/linux -I$(SRCDIR)/src
+        CFLAGS=+DD64 +z -c -I$(SOLARIS_PATH) -I$(LINUX_PATH) -I$(SRC_PATH)
         LDFLAGS=
 endif
 ifeq ($(PLATFORM),hp_ia-32)
         CC=cc
-        CFLAGS=+DD32 +z -c -I$(SRCDIR)/src/share/lib/jni/include/solaris -I$(SRCDIR)/src/share/lib/jni/include/linux -I$(SRCDIR)/src
+        CFLAGS=+DD32 +z -c -I$(SOLARIS_PATH) -I$(LINUX_PATH) -I$(SRC_PATH)
         LDFLAGS=
 endif
 ifeq ($(PLATFORM),hp_ia-64)
         CC=cc
-        CFLAGS=+DD64 +z -c -I$(SRCDIR)/src/share/lib/jni/include/solaris -I$(SRCDIR)/src/share/lib/jni/include/linux -I$(SRCDIR)/src
+        CFLAGS=+DD64 +z -c -I$(SOLARIS_PATH) -I$(LINUX_PATH) -I$(SRC_PATH)
         LDFLAGS=
 endif
 ifeq ($(PLATFORM),sol_sparc-32)
         CC=gcc
-        CFLAGS=-nodefaultlibs -fPIC -I$(SRCDIR)/src/share/lib/jni/include/solaris -I$(SRCDIR)/src/share/lib/jni/include/linux -I$(SRCDIR)/src
+        CFLAGS=-nodefaultlibs -fPIC -I$(SOLARIS_PATH) -I$(LINUX_PATH) -I$(SRC_PATH)
         LDFLAGS=-shared
 endif
 ifeq ($(PLATFORM),sol_sparc-64)
         CC=gcc
-        CFLAGS= -m64 -nodefaultlibs -fPIC -R/usr/sfw/lib/64 -I$(SRCDIR)/src/share/lib/jni/include/solaris -I$(SRCDIR)/src/share/lib/jni/include/linux -I$(SRCDIR)/src
+        CFLAGS= -m64 -nodefaultlibs -fPIC -R/usr/sfw/lib/64 -I$(SOLARIS_PATH) -I$(LINUX_PATH) -I$(SRC_PATH)
         LDFLAGS=-shared
 endif
 ifeq ($(PLATFORM),sol_x86-32)
         #CC=cc
-        #CFLAGS=-G -KPIC -I$(SRCDIR)/src/share/lib/jni/include/solaris
+        #CFLAGS=-G -KPIC -I$(SOLARIS_PATH)
 	CC=gcc
-	CFLAGS=-G -fPIC -I$(SRCDIR)/src/share/lib/jni/include/solaris -I$(SRCDIR)/src/share/lib/jni/include/linux -I$(SRCDIR)/src
+	CFLAGS=-G -fPIC -I$(SOLARIS_PATH) -I$(LINUX_PATH) -I$(SRC_PATH)
         LDFLAGS=
 endif
 ifeq ($(PLATFORM),sol_x86-64)
         #CC=gcc
 	CC=cc
-        CFLAGS=-m64 -fPIC -R/usr/sfw/lib/64  -I$(SRCDIR)/src/share/lib/jni/include/solaris -I$(SRCDIR)/src/share/lib/jni/include/linux -I$(SRCDIR)/src
+        CFLAGS=-m64 -fPIC -R/usr/sfw/lib/64 -I$(SOLARIS_PATH) -I$(LINUX_PATH) -I$(SRC_PATH)
         LDFLAGS=-shared
 endif
 
 OBJS=$(LIBPREF)jckjni.$(LIBEXT)  $(LIBPREF)jckjvmti.$(LIBEXT) $(LIBPREF)systemInfo.$(LIBEXT) $(LIBPREF)jmxlibid.$(LIBEXT) $(LIBPREF)genrandom.$(LIBEXT)
 
-CFLAGS := $(CFLAGS) -I$(SRCDIR) -I$(SRCDIR)/src/share/lib/jni/include -I$(SRCDIR)/src/share/lib/jvmti/include
+CFLAGS := $(CFLAGS) -I$(SRCDIR) -I$(JNI_INCLUDE_PATH) -I$(JVMTI_INCLUDE_PATH)
 .SUFFIXES:.c
 	
 help:
@@ -297,30 +349,26 @@ $(LIBPREF)genrandom.$(LIBEXT):com_sun_management_mbeans_loading_RandomGen.c
 	$(RANDOMGEN)
 
 createdir:
-ifneq (win,$(findstring win,$(PLATFORM)))
-	mkdir -p $(FULLOUTDIR)
-else 
-	if not exist $(FULLOUTDIR) mkdir $(subst /,\,$(FULLOUTDIR))
-endif
+	$(CLEANDIR) $(FULLOUTDIR)
+	$(MKDIR) $(FULLOUTDIR)
 	
 installjmx:
-#ifneq (win,$(findstring win,$(PLATFORM)))
+ifeq ($(WIN),0)
 	$(COPYDIR) $(SRCDIR)$(D)tests$(D)api$(D)javax_management$(D)loading$(D)data$(D)* $(FULLOUTDIR)$(D).
 	cd $(FULLOUTDIR) && $(JAR) uf $(FULLOUTDIR)/archives/MBeanUseNativeLib.jar $(LIBPREF)systemInfo.$(LIBEXT)
 	cd $(FULLOUTDIR) && $(JAR) cf $(FULLOUTDIR)/archives/OnlyLibs.jar $(LIBPREF)jmxlibid.$(LIBEXT)
 	$(CLEANFILE) $(FULLOUTDIR)$(D)$(LIBPREF)systemInfo.$(LIBEXT) 
 	$(CLEANFILE) $(FULLOUTDIR)$(D)$(LIBPREF)jmxlibid.$(LIBEXT) 
-#else
-#	$(COPYDIR) $(SRCDIR)\tests\api\javax_management\loading\data $(subst /,\,$(FULLOUTDIR))
-#	cd $(FULLOUTDIR) && $(JAR) uf $(subst /,\,$(FULLOUTDIR))\archives\MBeanUseNativeLib.jar $(LIBPREF)systemInfo.$(LIBEXT)
-#	cd $(FULLOUTDIR) && $(JAR) cf $(subst /,\,$(FULLOUTDIR))\archives\OnlyLibs.jar $(LIBPREF)jmxlibid.$(LIBEXT)
-#	$(CLEANFILE) $(FULLOUTDIR)/$(LIBPREF)systemInfo.$(LIBEXT) 
-#	$(CLEANFILE) $(FULLOUTDIR)/$(LIBPREF)jmxlibid.$(LIBEXT) 
-#endif
-
+else
+	$(COPYDIR) "$(JMX_DATA_PATH)$(D)." "$(FULLOUTDIR)$(D)"
+	cd "$(FULLOUTDIR)" && $(JAR) uf "$(FULLOUTDIR)$(D)archives$(D)MBeanUseNativeLib.jar" $(LIBPREF)systemInfo.$(LIBEXT)
+	cd "$(FULLOUTDIR)" && $(JAR) cf "$(FULLOUTDIR)$(D)archives$(D)OnlyLibs.jar" $(LIBPREF)jmxlibid.$(LIBEXT)
+	$(CLEANFILE) $(FULLOUTDIR)$(D)$(LIBPREF)systemInfo.$(LIBEXT)
+	$(CLEANFILE) $(FULLOUTDIR)$(D)$(LIBPREF)jmxlibid.$(LIBEXT)
+endif
 
 .PHONY clean:
-ifneq	(win,$(findstring win,$(PLATFORM)))
+ifeq ($(WIN),0)
 	$(CLEANFILE) *.x *.o *.obj 
 	$(CLEANFILE) $(FULLOUTDIR)/*.html
 	$(CLEANFILE)  $(FULLOUTDIR)/*.x

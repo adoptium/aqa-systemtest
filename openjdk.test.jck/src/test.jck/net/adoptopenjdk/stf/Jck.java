@@ -89,7 +89,7 @@ public class Jck implements StfPluginInterface {
 	private String krb5ServerUsername;
 	
 	// Variables which hold the JCK test suite name and version details
-	private String versionNo; 						// Will contain only the version number. (ie) 6b, 7 , 8b etc
+	private String jckVersionNo; 						// Will contain only the version number. (ie) 6b, 7 , 8b etc
 	private String testSuiteFolder;
 	private String platform;	
 	private String fileContent;
@@ -145,9 +145,10 @@ public class Jck implements StfPluginInterface {
 		StfTestArguments testArgs = test.env().getTestProperties("tests","jckversion","testsuite","config=[NULL]","executiontype=[multijvm]","withagent=[off]","interactive=[no]","jckRoot=[NULL]","concurrency=[NULL]");
 		
 		testJdk = System.getenv("JAVA_HOME");
-		tests = testArgs.get("tests");
+		tests = testArgs.get("tests");	
+		jckVersion = testArgs.get("jckversion");	
+		jckVersionNo = jckVersion.replace("jck", "");		
 		
-		jckVersion = testArgs.get("jckversion");
 		// If you want to run JCK tests using a specific Test suite. eg:  jckRoot=/jck/java9/jck-9-ea-tck-b46 or jckRoot=C:\jck\
 		// To use this option the path must be fully qualified.
 		jckRoot = testArgs.get("jckRoot");
@@ -159,7 +160,9 @@ public class Jck implements StfPluginInterface {
 		}
 		else {
 			logger.info("Using -test-args supplied jckRoot " + jckRoot);
+			jckTopDir = jckRoot; 
 		}
+		
 		File f = new File(jckRoot);
 		File[] files = f.listFiles();
 		boolean found = false;
@@ -181,24 +184,20 @@ public class Jck implements StfPluginInterface {
 			throw new StfException(testExecutionType + "Cannot locate the JCK. It must either be placed in a jck subdirectory within a -systemtest-prereqs directory (e.g. /home/user/systemtest_prereqs/jck/jck8b) or be provided via the -test-args=\"jckRoot=xxxx\" option. The check failed because " + jckRoot + " does not point to a directory containing a JCK-runtime directory");
 		}
 		testSuite = testArgs.decodeEnum("testsuite", TestSuite.class);
-		
 		testExecutionType = testArgs.get("executiontype");
 		withAgent = testArgs.get("withagent");
 		interactive = testArgs.get("interactive");
 		concurrencyString = testArgs.get("concurrency");
-		
-		versionNo = jckVersion.replace("jck", "");
-		testSuiteFolder = "JCK-" + testSuite.toString().toLowerCase() + "-" + versionNo;
+		testSuiteFolder = "JCK-" + testSuite.toString().toLowerCase() + "-" + jckVersionNo;
 		platform = test.env().getOsgiOperatingSystemName();	
-		
-		jckBase = test.env().findPrereqDirectory(jckTopDir + jckVersion + "/" + testSuiteFolder);
-		
-		nativesLoc = test.env().findPrereqDirectory(jckTopDir + jckVersion + "/natives/" + test.env().getPlatform());
+		jckBase = test.env().findPrereqDirectory(testSuiteFolder);
+		nativesLoc = test.env().findPrereqDirectory("natives/" + test.env().getPlatform());
 
 		DirectoryRef repositoryConfigLoc = test.env().findTestDirectory("openjdk.test.jck/config");
 		jtiFile = repositoryConfigLoc.childFile("/" + jckVersion + "/" + testSuite.toString().toLowerCase() + ".jti");
+		//fileUrl = "file:///" + jckRoot + "/" + testSuiteFolder + "/testsuite.jtt";
 		
-		fileUrl = "file:///" + test.env().findPrereqFile(jckTopDir + jckVersion + "/" + testSuiteFolder + "/testsuite.jtt");
+		fileUrl = "file:///" + test.env().findPrereqFile(testSuiteFolder + "/testsuite.jtt");
 		
 		// The first release of a JCK will have an initial excludes (.jtx) file in test-suite/lib - e.g. JCK-runtime-8b/lib/jck8b.jtx.
 		// Updates to the excludes list may subsequently be supplied as a separate file, which supersedes the initial file.
@@ -208,11 +207,11 @@ public class Jck implements StfPluginInterface {
 
 		// Look for an update to the initial excludes file
 		if (jckVersion.contains("jck6") || jckVersion.contains("jck7")) {
-			jtxRelativePath = jckTopDir + jckVersion + "/excludes/jdk" + versionNo + ".jtx";
-			kflRelativePath = jckTopDir + jckVersion + "/excludes/jdk" + versionNo + ".kfl";
+			jtxRelativePath = jckRoot + "/excludes/jdk" + jckVersionNo + ".jtx";
+			kflRelativePath = jckRoot + "/excludes/jdk" + jckVersionNo + ".kfl";
 		} else {
-			jtxRelativePath = jckTopDir + jckVersion + "/excludes/jck" + versionNo + ".jtx";
-			kflRelativePath = jckTopDir + jckVersion + "/excludes/jck" + versionNo + ".kfl";
+			jtxRelativePath = jckRoot + "/excludes/jck" + jckVersionNo + ".jtx";
+			kflRelativePath = jckRoot + "/excludes/jck" + jckVersionNo + ".kfl";
 		}
 		try {
 			jtxFullPath = test.env().findPrereqFile(jtxRelativePath).toString();
@@ -240,7 +239,7 @@ public class Jck implements StfPluginInterface {
 			if (config.equals("NULL")) {
 				config = "default";	
 			}
-			String subdir = jckTopDir + jckVersion + "/config/" + config;
+			String subdir = "config/" + config;
 			try {
 				jckConfigLoc = test.env().findPrereqDirectory(subdir);
 			} catch (StfException e) {
@@ -339,10 +338,10 @@ public class Jck implements StfPluginInterface {
 					addModules = "--add-modules java.xml.ws,java.corba";
 				}
 				javatestAgent = test.doRunBackgroundProcess("Starting javatest agent", "AGNT", ECHO_ON, ExpectedOutcome.neverCompletes(), test.createJavaProcessDefinition()
-						.addJvmOption("-Djavatest.security.allowPropertiesAccess=true -Djava.security.policy=" + test.env().findPrereqFile(jckTopDir + jckVersion + "/" + testSuiteFolder + "/lib/jck.policy").toString())
+						.addJvmOption("-Djavatest.security.allowPropertiesAccess=true -Djava.security.policy=" + test.env().findPrereqFile(testSuiteFolder + "/lib/jck.policy").toString())
 						.addJvmOption(addModules)
-						.addJarToClasspath(test.env().findPrereqFile(jckTopDir + jckVersion + "/" + testSuiteFolder + executeJar))
-						.addDirectoryToClasspath(test.env().findPrereqDirectory(jckTopDir + jckVersion + "/" + testSuiteFolder + "/classes"))
+						.addJarToClasspath(test.env().findPrereqFile(testSuiteFolder + executeJar))
+						.addDirectoryToClasspath(test.env().findPrereqDirectory(testSuiteFolder + "/classes"))
 						.runClass("com.sun.javatest.agent.AgentMain")
 						.addArg(" -passive")
 						);
@@ -352,7 +351,7 @@ public class Jck implements StfPluginInterface {
 				
 				rmid = test.doRunBackgroundProcess("Starting rmid", "RMID", ECHO_ON, ExpectedOutcome.neverCompletes(), test.createJDKToolProcessDefinition()
 						.setJDKToolOrUtility("rmid")	
-						.addArg("-J-Dsun.rmi.activation.execPolicy=none " + "-J-Djava.security.policy=" + test.env().findPrereqFile(jckTopDir + jckVersion + "/" + testSuiteFolder + "/lib/jck.policy").toString())
+						.addArg("-J-Dsun.rmi.activation.execPolicy=none " + "-J-Djava.security.policy=" + test.env().findPrereqFile(testSuiteFolder + "/lib/jck.policy").toString())
 						);
 				
 				tnameserv = test.doRunBackgroundProcess("Starting tnameserver", "TNAM", ECHO_ON, ExpectedOutcome.neverCompletes(), test.createJDKToolProcessDefinition()
@@ -374,7 +373,7 @@ public class Jck implements StfPluginInterface {
 			}
 			outcome = ExpectedOutcome.cleanRun().within(timeout);
 
-			test.doRunForegroundProcess(comment, "JCK", ECHO_ON, outcome, test.createJavaProcessDefinition().setExecutableJar(test.env().findPrereqFile(jckTopDir + jckVersion + "/" + testSuiteFolder + executeJar)).addArg(commandLine));
+			test.doRunForegroundProcess(comment, "JCK", ECHO_ON, outcome, test.createJavaProcessDefinition().setExecutableJar(test.env().findPrereqFile(testSuiteFolder + executeJar)).addArg(commandLine));
 			// The Compiler -ANNOT, EXPR and LMBD may take over 6 hours to run on some machines.
 			if (tnameserv != null) {
 				test.doKillProcesses("Stopping javatest agent", javatestAgent);

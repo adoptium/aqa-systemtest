@@ -207,11 +207,11 @@ public class Jck implements StfPluginInterface {
 
 		// Look for an update to the initial excludes file
 		if (jckVersion.contains("jck6") || jckVersion.contains("jck7")) {
-			jtxRelativePath = jckRoot + "/excludes/jdk" + jckVersionNo + ".jtx";
-			kflRelativePath = jckRoot + "/excludes/jdk" + jckVersionNo + ".kfl";
+			jtxRelativePath = "excludes/jdk" + jckVersionNo + ".jtx";
+			kflRelativePath = "excludes/jdk" + jckVersionNo + ".kfl";
 		} else {
-			jtxRelativePath = jckRoot + "/excludes/jck" + jckVersionNo + ".jtx";
-			kflRelativePath = jckRoot + "/excludes/jck" + jckVersionNo + ".kfl";
+			jtxRelativePath = "excludes/jck" + jckVersionNo + ".jtx";
+			kflRelativePath = "excludes/jck" + jckVersionNo + ".kfl";
 		}
 		try {
 			jtxFullPath = test.env().findPrereqFile(jtxRelativePath).toString();

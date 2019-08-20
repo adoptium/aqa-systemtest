@@ -75,7 +75,7 @@ public class MauveMultiThreadLoadTest implements StfPluginInterface {
 				.setSuiteRandomSelection();
 		
 		test.doRunForegroundProcess("Run Mauve load test", "LT", Echo.ECHO_ON,
-				ExpectedOutcome.cleanRun().within("1h"), 
+				ExpectedOutcome.cleanRun().within("2h"), 
 				loadTestInvocation);
 	}
 

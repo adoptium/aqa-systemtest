@@ -9,6 +9,8 @@
 	<mauve class="gnu.testlet.java.net.URLConnection.getPermission"/>
 	<mauve class="gnu.testlet.java.net.URLStreamHandler.Except"/>
 	<mauve class="gnu.testlet.java.net.HttpURLConnection.responseHeadersTest"/>
+	<mauve class="gnu.testlet.javax.security.auth.login.TestOfPR25202"/>
+	<mauve class="gnu.testlet.java.lang.reflect.Proxy.check13"/>
 	
 	<!-- Fails on jdk12 hotspot with: 
 		 got 9218868437227405313 but expected 9223231299366420480

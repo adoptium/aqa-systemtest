@@ -1,15 +1,8 @@
 <inventory>
-	<!-- 
-	Tests that use SecurityManager fail intermittently when run in a 
-	multi-threaded environment due to timing issues. 
-	Issue reference: https://github.com/AdoptOpenJDK/openjdk-systemtest/issues/271
-	 -->
-	<mauve class="gnu.testlet.java.security.ProtectionDomain.Implies"/>
-	<mauve class="gnu.testlet.java.net.URLConnection.getRequestProperties"/>
-	<mauve class="gnu.testlet.java.net.URLConnection.getPermission"/>
-	<mauve class="gnu.testlet.java.net.URLStreamHandler.Except"/>
-	<mauve class="gnu.testlet.java.net.HttpURLConnection.responseHeadersTest"/>
-	
+	<!-- Exclude tests that install SecurityManager 
+	Issue Ref: https://github.com/AdoptOpenJDK/openjdk-systemtest/issues/284-->
+	<mauve class="gnu.testlet.java.util.logging.Logger.getAnonymousLogger"/>
+	<mauve class="gnu.testlet.java.util.logging.Logger.getName"/>
 	<!-- Fails on jdk12 hotspot with: 
 		 got 9218868437227405313 but expected 9223231299366420480
 		 Issue reference: https://github.com/AdoptOpenJDK/openjdk-systemtest/issues/272-->

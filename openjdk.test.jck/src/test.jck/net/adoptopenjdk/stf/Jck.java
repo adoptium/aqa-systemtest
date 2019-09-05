@@ -333,8 +333,9 @@ public class Jck implements StfPluginInterface {
 			if ( (testSuite == TestSuite.RUNTIME) && (tests.contains("api/java_util") || tests.contains("api/java_net") || tests.contains("api/java_rmi")  || tests.contains("api/javax_management") 
 					|| tests.contains("api/org_omg") || tests.contains("api/javax_xml") || tests.equals("api") || tests.contains("vm/jdwp") || tests.equals("vm")) ) {
 				String addModules = "";
-				// Post Java 8 the javatest agent needs to be given access to non default modules.
-				if ( ! jckVersion.contains("jck8") ) {
+				// JCK 9/10 javatest agents need to be given access to non default modules.
+				// JCK 8 doesn't support modules, JCK11 and beyond have removed these two modules: java.xml.ws,java.corba.
+				if ( jckVersion.contains("jck9") || jckVersion.contains("jck10") ) {
 					addModules = "--add-modules java.xml.ws,java.corba";
 				}
 				javatestAgent = test.doRunBackgroundProcess("Starting javatest agent", "AGNT", ECHO_ON, ExpectedOutcome.neverCompletes(), test.createJavaProcessDefinition()

@@ -355,10 +355,13 @@ public class Jck implements StfPluginInterface {
 						.addArg("-J-Dsun.rmi.activation.execPolicy=none " + "-J-Djava.security.policy=" + test.env().findPrereqFile(testSuiteFolder + "/lib/jck.policy").toString())
 						);
 				
-				tnameserv = test.doRunBackgroundProcess("Starting tnameserver", "TNAM", ECHO_ON, ExpectedOutcome.neverCompletes(), test.createJDKToolProcessDefinition()
+				// tnameserv has been removed from jdk11. We only should need it for jck8
+				if (jckVersion.contains("jck8")) { 
+					tnameserv = test.doRunBackgroundProcess("Starting tnameserver", "TNAM", ECHO_ON, ExpectedOutcome.neverCompletes(), test.createJDKToolProcessDefinition()
 						.setJDKToolOrUtility("tnameserv")	
 						.addArg("-ORBInitialPort 9876")
 						);
+				}
 			}
 			
 			String commandLine = " -config "+ jtiFile + " @" + jtbFile;
@@ -376,10 +379,16 @@ public class Jck implements StfPluginInterface {
 
 			test.doRunForegroundProcess(comment, "JCK", ECHO_ON, outcome, test.createJavaProcessDefinition().setExecutableJar(test.env().findPrereqFile(testSuiteFolder + executeJar)).addArg(commandLine));
 			// The Compiler -ANNOT, EXPR and LMBD may take over 6 hours to run on some machines.
-			if (tnameserv != null) {
+			if (javatestAgent != null) {
 				test.doKillProcesses("Stopping javatest agent", javatestAgent);
+			}
+			if (rmiRegistry != null) {
 				test.doKillProcesses("Stopping rmiregistry", rmiRegistry);
+			}
+			if (rmid != null) {
 				test.doKillProcesses("Stopping rmid", rmid);
+			}
+			if (tnameserv != null) {
 				test.doKillProcesses("Stopping tnameserver", tnameserv);
 			}	
 		}
@@ -550,7 +559,6 @@ public class Jck implements StfPluginInterface {
 			} else {
 				throw new StfException("Unknown platform:: " + platform);
 			}
-
 			fileContent += "concurrency " + concurrencyString + ";\n";
 			fileContent += "timeoutfactor 1" + ";\n";				// java_awt and javax_management require more than 1h to finish tests
 			fileContent += keyword + ";\n";
@@ -662,8 +670,12 @@ public class Jck implements StfPluginInterface {
 			if ( tests.contains("api/javax_xml")  || tests.equals("api")) {
 				extraJvmOptions += " -Djdk.xml.maxXMLNameLimit=4000";
 			}	
-			if ( tests.contains("api/org_omg") || tests.contains("api/javax_management") || tests.equals("api") ) {
-				fileContent += "set jck.env.runtime.idl.orbHost " + hostname + ";\n";
+			
+			//CORBA related files (e.g. tnameserver) were removed post Java 9
+			if (jckVersion.contains("jck8")) {
+				if ( tests.contains("api/org_omg") || tests.contains("api/javax_management") || tests.equals("api") ) {
+					fileContent += "set jck.env.runtime.idl.orbHost " + hostname + ";\n";
+				}
 			}
 			// ext/lib was removed at Java 9
 			if ( jckVersion.contains("jck8") ) {

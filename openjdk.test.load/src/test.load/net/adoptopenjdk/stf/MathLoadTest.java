@@ -17,6 +17,7 @@ package net.adoptopenjdk.stf;
 import java.util.Arrays;
 
 import net.adoptopenjdk.loadTest.InventoryData;
+import net.adoptopenjdk.stf.codeGeneration.Stage;
 import net.adoptopenjdk.stf.environment.StfTestArguments;
 import net.adoptopenjdk.stf.extensions.core.StfCoreExtension;
 import net.adoptopenjdk.stf.extensions.core.StfCoreExtension.Echo;
@@ -48,7 +49,27 @@ public class MathLoadTest implements StfPluginInterface {
 		}
 	}
 	
+	// This workload is calibrated for slow running load tests executed under special JIT modes such as -Xjit:count=0
+	private enum WorkloadsSpecial {
+		//Workload  Multiplier  Timeout  InventoryFile
+		math( 		   2, 		 "1h", 	"math.xml"),
+		bigDecimal(    20,		 "1h", 		"bigdecimal.xml"),
+		autoSimd( 	   4000, 	 "5m", 		"autosimd.xml");
+		
+		int multiplier;
+		String timeout;
+		String inventoryFile;
+		
+		private WorkloadsSpecial(int multiplier, String timeout, String inventoryFile) {
+			this.multiplier 	= multiplier;
+			this.timeout		= timeout;
+			this.inventoryFile 	= inventoryFile;
+		}
+	}
+	
 	Workloads workload;
+	WorkloadsSpecial workloadSpecial;
+	boolean specialTest; 
 	
 	public void help(HelpTextGenerator help) throws StfException {
 		help.outputSection("MathLoadTest test");
@@ -64,14 +85,32 @@ public class MathLoadTest implements StfPluginInterface {
 	
 	public void pluginInit(StfCoreExtension stf) throws StfException {
 		// Find out which workload we need to run
-		StfTestArguments testArgs = stf.env().getTestProperties("workload=[math]");
-		workload = testArgs.decodeEnum("workload", Workloads.class);
+		StfTestArguments testArgs = stf.env().getTestProperties("workload=[math]");	
+		specialTest = stf.isJavaArgPresent(Stage.EXECUTE, "-Xjit:count=0"); 
+		if(specialTest) {
+			workloadSpecial = testArgs.decodeEnum("workload", WorkloadsSpecial.class);
+		} else {
+			workload = testArgs.decodeEnum("workload", Workloads.class);
+		}	
 	}
 
 	public void execute(StfCoreExtension test) throws StfException {
-		String inventoryFile = "/openjdk.test.load/config/inventories/math/" + workload.inventoryFile;
-		int numMathTests = InventoryData.getNumberOfTests(test, inventoryFile);
+		String inventoryFile = null;
 		int cpuCount = Runtime.getRuntime().availableProcessors();
+		int multiplier = 1;
+		String timeout = null; 
+		
+		if(specialTest) {
+			multiplier = workloadSpecial.multiplier;
+			timeout = workloadSpecial.timeout; 
+			inventoryFile = "/openjdk.test.load/config/inventories/math/" + workloadSpecial.inventoryFile;
+		} else {
+			multiplier = workload.multiplier;
+			timeout = workload.timeout; 
+			inventoryFile = "/openjdk.test.load/config/inventories/math/" + workload.inventoryFile;
+		}
+		
+		int numMathTests = InventoryData.getNumberOfTests(test, inventoryFile);
 		
 		LoadTestProcessDefinition loadTestInvocation = test.createLoadTestSpecification()
 				.addPrereqJarToClasspath(JavaProcessDefinition.JarId.JUNIT)
@@ -79,12 +118,12 @@ public class MathLoadTest implements StfPluginInterface {
 				.addProjectToClasspath("openjdk.test.math")
 				.addSuite("math")
 				.setSuiteThreadCount(cpuCount - 1, 2)
-				.setSuiteNumTests(numMathTests * workload.multiplier)
+				.setSuiteNumTests(numMathTests * multiplier)
 				.setSuiteInventory(inventoryFile)
 				.setSuiteRandomSelection();
 		
 		test.doRunForegroundProcess("Run math load test", "MLT", Echo.ECHO_ON,
-				ExpectedOutcome.cleanRun().within(workload.timeout), 
+				ExpectedOutcome.cleanRun().within(timeout), 
 				loadTestInvocation);
 	}
 

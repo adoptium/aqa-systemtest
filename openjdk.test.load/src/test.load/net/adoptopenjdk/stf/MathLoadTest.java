@@ -53,7 +53,7 @@ public class MathLoadTest implements StfPluginInterface {
 	private enum WorkloadsSpecial {
 		//Workload  Multiplier  Timeout  InventoryFile
 		math( 		   2, 		 "1h", 	"math.xml"),
-		bigDecimal(    20,		 "1h", 		"bigdecimal.xml"),
+		bigDecimal(    15,		 "1h", 		"bigdecimal.xml"),
 		autoSimd( 	   4000, 	 "5m", 		"autosimd.xml");
 		
 		int multiplier;
@@ -86,7 +86,13 @@ public class MathLoadTest implements StfPluginInterface {
 	public void pluginInit(StfCoreExtension stf) throws StfException {
 		// Find out which workload we need to run
 		StfTestArguments testArgs = stf.env().getTestProperties("workload=[math]");	
-		specialTest = stf.isJavaArgPresent(Stage.EXECUTE, "-Xjit:count=0"); 
+		
+		if (stf.isJavaArgPresent(Stage.EXECUTE, "-Xjit:count=0") || 
+			stf.isJavaArgPresent(Stage.EXECUTE, "-Xjit:count=0,optlevel=warm,gcOnResolve,rtResolve") ||
+			stf.isJavaArgPresent(Stage.EXECUTE, "-Xjit:enableOSR,enableOSROnGuardFailure,count=1,disableAsyncCompilation")) {
+			specialTest = true;
+		}
+		
 		if(specialTest) {
 			workloadSpecial = testArgs.decodeEnum("workload", WorkloadsSpecial.class);
 		} else {

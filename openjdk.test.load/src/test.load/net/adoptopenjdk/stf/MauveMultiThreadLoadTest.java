@@ -15,6 +15,7 @@
 package net.adoptopenjdk.stf;
 
 import net.adoptopenjdk.loadTest.InventoryData;
+import net.adoptopenjdk.stf.codeGeneration.Stage;
 import net.adoptopenjdk.stf.environment.FileRef;
 import net.adoptopenjdk.stf.environment.JavaVersion;
 import net.adoptopenjdk.stf.extensions.core.StfCoreExtension;
@@ -64,14 +65,22 @@ public class MauveMultiThreadLoadTest implements StfPluginInterface {
 			}; 
 		}
 		
+		int multiplier = 1000; 
+		
+		// If special JIT modes are used, the test runs much slower, so we need to use a reduced amount of load
+		if (test.isJavaArgPresent(Stage.EXECUTE, "-Xjit:count=0") || 
+				test.isJavaArgPresent(Stage.EXECUTE, "-Xjit:count=0,optlevel=warm,gcOnResolve,rtResolve") ||
+				test.isJavaArgPresent(Stage.EXECUTE, "-Xjit:enableOSR,enableOSROnGuardFailure,count=1,disableAsyncCompilation")) {
+				multiplier = 250;
+		}
+
 		LoadTestProcessDefinition loadTestInvocation = test.createLoadTestSpecification()
 				.addJvmOption(modularityOptions)
 				.addJarToClasspath(mauveJar)
 				.addSuite("mauve")
 				.setSuiteInventory(inventoryFile)
 				.setSuiteThreadCount(cpuCount - 1, 3)   // Leave 1 cpu for the JIT and one for GC, but min 2
-				.setSuiteNumTests(numMauveTests * 1000) // Run each test about 1000 times
-//				.setSuiteSequentialSelection();
+				.setSuiteNumTests(numMauveTests * multiplier) // Run each test about 1000 times
 				.setSuiteRandomSelection();
 		
 		test.doRunForegroundProcess("Run Mauve load test", "LT", Echo.ECHO_ON,

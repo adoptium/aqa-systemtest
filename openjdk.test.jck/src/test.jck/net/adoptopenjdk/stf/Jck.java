@@ -299,7 +299,7 @@ public class Jck implements StfPluginInterface {
 		
 		fileContent += "set jck.excludeList.customFiles \"" + initialJtxFullPath + " " + jtxFullPath + " " + kflFullPath + "\"" + ";\n";
 		fileContent += "runTests" + ";\n";
-		fileContent += "writeReport " + reportDir + ";\n";
+		fileContent += "writeReport -type xml " + reportDir + ";\n";
 		
 		// Make sure any backslashes are escaped, required by the test harness.
 		fileContent = fileContent.replace("\\\\", "\\"); 		// Replaces \\ with \, leave \ alone.
@@ -316,19 +316,7 @@ public class Jck implements StfPluginInterface {
 			StfProcess rmiRegistry = null;
 			StfProcess rmid = null;
 			StfProcess tnameserv = null;
-			
-			String executeJar;
-			if ((jckVersion.contains("jck13") ||
-				 jckVersion.contains("jck12") ||
-				 jckVersion.contains("jck11") ||
-				 jckVersion.contains("jck10") ||
-				 jckVersion.contains("jck9") ||
-				 jckVersion.contains("jck8")) &&
-				 (testSuite == TestSuite.RUNTIME) ) {
-				executeJar = "/lib/jtlite.jar" ;
-			} else {
-				executeJar = "/lib/javatest.jar" ;
-			}
+			String executeJar = "/lib/javatest.jar";
 			
 			if ( (testSuite == TestSuite.RUNTIME) && (tests.contains("api/java_util") || tests.contains("api/java_net") || tests.contains("api/java_rmi")  || tests.contains("api/javax_management") 
 					|| tests.contains("api/org_omg") || tests.contains("api/javax_xml") || tests.equals("api") || tests.contains("vm/jdwp") || tests.equals("vm")) ) {
@@ -394,12 +382,7 @@ public class Jck implements StfPluginInterface {
 		}
 	}
 
-	
-	public void tearDown(StfCoreExtension test) throws Exception {
-		//test.doEchoFile("JCK results provided by Test harness", head -5 test.env().getResultsDir().childDirectory("workdir/jtData").childFile("harness.trace"));
-		test.doEchoFile("Test run Summary:\n", test.env().getResultsDir().childDirectory("report/text").childFile("summary.txt"));
-		test.doEchoFile("Failed Tests are:\n", test.env().getResultsDir().childDirectory("report/html").childFile("failed.html"));
-	}
+	public void tearDown(StfCoreExtension test) throws Exception {}
 	
 	private static class KerberosConfig {
 		static String kdcRealmName;

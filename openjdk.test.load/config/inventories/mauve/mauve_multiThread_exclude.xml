@@ -1,4 +1,8 @@
 <inventory>
+	<!-- Exclude tests not suited for multi-threaded testing
+	Issue ref: https://github.com/AdoptOpenJDK/openjdk-systemtest/issues/298 -->
+	<mauve class="gnu.testlet.java.util.Calendar.getInstance"/>
+	<mauve class="gnu.testlet.java.util.Date.range"/>
 	<!-- Exclude tests that install SecurityManager 
 	Issue Ref: https://github.com/AdoptOpenJDK/openjdk-systemtest/issues/284-->
 	<mauve class="gnu.testlet.java.util.logging.Logger.getAnonymousLogger"/>

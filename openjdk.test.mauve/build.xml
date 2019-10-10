@@ -116,7 +116,7 @@ limitations under the License.
 			   executable="${java_compiler}"
 			   classpathref="project.class.path"
 			   debug="true"
-			   encoding="ISO-8859-1"
+			   encoding="${src-encoding}"
 			   includeantruntime="false"
 			   failonerror="true">
 			<include name="**/*.java" />
@@ -150,7 +150,7 @@ limitations under the License.
 			   executable="${java_compiler}"
 			   classpathref="project.class.path"
 			   debug="true"
-			   encoding="ISO-8859-1"
+			   encoding="${src-encoding}"
 			   includeantruntime="false"
 			   failonerror="true">
 			<include name="*.java" />

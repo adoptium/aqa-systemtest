@@ -100,7 +100,7 @@ limitations under the License.
 			   executable="${java_compiler}"
 			   debug="true"
 			   classpathref="project.class.path"
-			   encoding="ISO-8859-1"
+			   encoding="${src-encoding}"
 			   failonerror="true">
 			<include name="net/adoptopenjdk/test/nio2/filesystem/**"/>
 		</javac>
@@ -154,7 +154,7 @@ limitations under the License.
 			   executable="${java_compiler}"
 			   debug="true"
 			   classpathref="project.class.path"
-			   encoding="ISO-8859-1"
+			   encoding="${src-encoding}"
 			   includeantruntime="false"
 			   failonerror="true">
 			<include name="**/*.java"/>

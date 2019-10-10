@@ -39,11 +39,11 @@ close(TEMPLATE_FILE);
 my $numberOfProvidersToCreate = 1000;
 
 # To create the file required for the JVM to know about the SPI Providers
-open SERVICES, ">:encoding(ISO-8859-1)", $services_file or die "Unable to open services file - $services_file";
+open SERVICES, ">:encoding(UTF-8)", $services_file or die "Unable to open services file - $services_file";
 
 for (my $counter = 0; $counter < $numberOfProvidersToCreate; $counter++) {
 
-	open OUTPUT_FILE, ">:encoding(ISO-8859-1)",catfile("$Bin", "..","..","filesystem","MemoryFileSystemProviderImpl${counter}.java");
+	open OUTPUT_FILE, ">:encoding(UTF-8)",catfile("$Bin", "..","..","filesystem","MemoryFileSystemProviderImpl${counter}.java");
 
 	# Update the file contents with the right counter value	
 	my $iterationContents = $templateContents;

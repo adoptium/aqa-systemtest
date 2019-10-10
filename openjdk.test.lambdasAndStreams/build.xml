@@ -89,7 +89,7 @@ limitations under the License.
 			   executable="${java_compiler}"
 			   debug="true"
 			   classpathref="project.class.path"
-			   encoding="${src-encoding}"
+			   encoding="ISO-8859-1"
 			   includeantruntime="false"
 			   failonerror="true">
 			<include name="**/*.java"/>

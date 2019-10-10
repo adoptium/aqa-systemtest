@@ -94,7 +94,7 @@ limitations under the License.
 			   executable="${java_compiler}"
 			   debug="true"
 			   classpathref="project.class.path"
-			   encoding="${src-encoding}"
+			   encoding="ISO-8859-1"
 			   includeantruntime="false"
 			   failonerror="true">
 			<compilerarg value="-Xlint:deprecation,unchecked" />
@@ -113,7 +113,7 @@ limitations under the License.
 					   executable="${java_compiler}"
 					   debug="true"
 					   classpath="${openjdk_test_classloading_src_dir}/notonclasspath/url2"
-			           encoding="${src-encoding}"
+					   encoding="ISO-8859-1"
 					   includeantruntime="false"
 					   failonerror="true">
 					   <compilerarg value="-Xlint:deprecation,unchecked" />
@@ -125,7 +125,7 @@ limitations under the License.
 					   executable="${java_compiler}"
 					   debug="true"
 					   classpath="${openjdk_test_classloading_src_dir}/notonclasspath/url1"
-					   encoding="${src-encoding}"
+					   encoding="ISO-8859-1"
 					   includeantruntime="false"
 					   failonerror="true">
 					   <compilerarg value="-Xlint:deprecation,unchecked" />

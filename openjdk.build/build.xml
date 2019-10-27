@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<project name="openjdk.build" default="build">
+<project name="openjdk.build" default="build" xmlns:if="ant:if" xmlns:unless="ant:unless">
 
 	<echo message="Executing openjdk.build/build.xml"/>
 
@@ -49,12 +49,7 @@ limitations under the License.
 		<ant antfile="${openjdk_systemtest_root}/openjdk.test.classloading/build.xml" dir="${openjdk_systemtest_root}/openjdk.test.classloading" inheritAll="true"/>
 		<ant antfile="${openjdk_systemtest_root}/openjdk.test.debugging/build.xml" dir="${openjdk_systemtest_root}/openjdk.test.debugging" inheritAll="true"/>
 		<ant antfile="${openjdk_systemtest_root}/openjdk.test.gc/build.xml" dir="${openjdk_systemtest_root}/openjdk.test.gc" inheritAll="true"/>
-		<if>
-			<isset property="jck_runtimes_src_dir" />
-			<then>
-				<ant antfile="${openjdk_systemtest_root}/openjdk.test.jck/build.xml" dir="${openjdk_systemtest_root}/openjdk.test.jck" inheritAll="true"/>
-			</then>
-		</if>
+		<ant antfile="${openjdk_systemtest_root}/openjdk.test.jck/build.xml" dir="${openjdk_systemtest_root}/openjdk.test.jck" inheritAll="true" if:set="jck_runtimes_src_dir"/>
 		<ant antfile="${openjdk_systemtest_root}/openjdk.test.lambdasAndStreams/build.xml" dir="${openjdk_systemtest_root}/openjdk.test.lambdasAndStreams" inheritAll="true"/>
 		<ant antfile="${openjdk_systemtest_root}/openjdk.test.lang/build.xml" dir="${openjdk_systemtest_root}/openjdk.test.lang" inheritAll="true"/>
 		<ant antfile="${openjdk_systemtest_root}/openjdk.test.load/build.xml" dir="${openjdk_systemtest_root}/openjdk.test.load" inheritAll="true"/>

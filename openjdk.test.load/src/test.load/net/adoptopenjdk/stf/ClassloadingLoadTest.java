@@ -17,6 +17,7 @@ package net.adoptopenjdk.stf;
 import java.util.ArrayList;
 
 import net.adoptopenjdk.loadTest.InventoryData;
+import net.adoptopenjdk.stf.codeGeneration.Stage;
 import net.adoptopenjdk.stf.environment.DirectoryRef;
 import net.adoptopenjdk.stf.extensions.core.StfCoreExtension;
 import net.adoptopenjdk.stf.extensions.core.StfCoreExtension.Echo;
@@ -31,6 +32,10 @@ import net.adoptopenjdk.stf.runner.modes.HelpTextGenerator;
  * from the test.classloading project.
  */
 public class ClassloadingLoadTest implements StfPluginInterface {
+	
+	private int testCountMultiplier = 3000; 
+	private boolean specialTest = false; 
+	
 	public void help(HelpTextGenerator help) throws StfException {
 		help.outputSection("ClassloadingLoadTest");
 		help.outputText("ClassloadingLoadTest runs a workload of tests "
@@ -38,6 +43,16 @@ public class ClassloadingLoadTest implements StfPluginInterface {
 	}
 
 	public void pluginInit(StfCoreExtension stf) throws StfException {
+		if (stf.isJavaArgPresent(Stage.EXECUTE, "-Xjit:count=0,optlevel=warm,gcOnResolve,rtResolve") ||
+			stf.isJavaArgPresent(Stage.EXECUTE, "-Xjit:enableOSR,enableOSROnGuardFailure,count=1,disableAsyncCompilation")) {
+				specialTest = true;
+			}
+			
+			if(specialTest) {
+				// If we are running with special JIT modes which are slow, reduce workload 
+				testCountMultiplier = 1500; 
+				
+			} 	
 	}
 
 	public void setUp(StfCoreExtension test) throws StfException {
@@ -75,7 +90,7 @@ public class ClassloadingLoadTest implements StfPluginInterface {
 				.addSuite("classloading")
 				.setSuiteThreadCount(cpuCount - 1, 10)
 				.setSuiteInventory(inventoryFile)
-				.setSuiteNumTests(totalTests * 3000)
+				.setSuiteNumTests(totalTests * testCountMultiplier)
 				.setSuiteRandomSelection();
 		
 		test.doRunForegroundProcess("Run classloading tests", "CLT", Echo.ECHO_ON,

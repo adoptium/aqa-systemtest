@@ -1,4 +1,6 @@
 <inventory>
+	<!-- Excluded as invalid test. Ref: https://github.com/eclipse/openj9/issues/7020 -->
+	<mauve class="gnu.testlet.java.io.InputStreamReader.utf8"/>
 	<!-- Exclude tests not suited for multi-threaded testing
 	Issue ref: https://github.com/AdoptOpenJDK/openjdk-systemtest/issues/298 -->
 	<mauve class="gnu.testlet.java.util.Calendar.getInstance"/>

@@ -14,12 +14,14 @@
 
 package net.adoptopenjdk.stf; 
 
+import static net.adoptopenjdk.stf.extensions.core.StfCoreExtension.Echo.ECHO_OFF;
 import static net.adoptopenjdk.stf.extensions.core.StfCoreExtension.Echo.ECHO_ON; 
 
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.InputStream;
 import java.net.InetAddress;
 import java.net.ServerSocket;
@@ -28,8 +30,17 @@ import java.util.Properties;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
+import org.xml.sax.SAXParseException;
 
 import net.adoptopenjdk.stf.environment.DirectoryRef; 
 import net.adoptopenjdk.stf.environment.FileRef;
@@ -38,8 +49,10 @@ import net.adoptopenjdk.stf.environment.StfTestArguments;
 import net.adoptopenjdk.stf.extensions.core.StfCoreExtension;
 import net.adoptopenjdk.stf.plugin.interfaces.StfPluginInterface;
 import net.adoptopenjdk.stf.processes.ExpectedOutcome; 
-import net.adoptopenjdk.stf.processes.StfProcess; 
-import net.adoptopenjdk.stf.runner.modes.HelpTextGenerator; 
+import net.adoptopenjdk.stf.processes.StfProcess;
+import net.adoptopenjdk.stf.processes.definitions.JavaProcessDefinition;
+import net.adoptopenjdk.stf.processes.definitions.JavaProcessDefinition.JarId;
+import net.adoptopenjdk.stf.runner.modes.HelpTextGenerator;
 
 public class Jck implements StfPluginInterface {
 	private static final Logger logger = LogManager.getLogger(JavaVersion.class.getName());
@@ -378,11 +391,18 @@ public class Jck implements StfPluginInterface {
 			}
 			if (tnameserv != null) {
 				test.doKillProcesses("Stopping tnameserver", tnameserv);
-			}	
+			}
 		}
 	}
 
-	public void tearDown(StfCoreExtension test) throws Exception {}
+	public void tearDown(StfCoreExtension test) throws Exception {
+		test.doRunForegroundProcess("Generating Result Summary", "RS", ECHO_ON, 
+			ExpectedOutcome.cleanRun().within("2m"), test.createJavaProcessDefinition()
+			.addProjectToClasspath("openjdk.test.jck")
+			.runClass(SummaryGenerator.class)
+			.addArg(test.env().getResultsDir().childDirectory("report/xml").childFile("report.xml").getSpec()));
+		
+	}
 	
 	private static class KerberosConfig {
 		static String kdcRealmName;

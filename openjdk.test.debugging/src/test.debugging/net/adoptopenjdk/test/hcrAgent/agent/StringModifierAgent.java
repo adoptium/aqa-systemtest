@@ -42,7 +42,7 @@ public class StringModifierAgent {
 		int duration = 240; //in seconds.
 		Random randomNumberGenerator = new Random();
 		long seed = randomNumberGenerator.nextLong();
-		long threadsTimeout = 20*1000;
+		long threadsTimeout = 60*1000;
 		String debugOption = "";
 		
 		//Concatenate any command-line options with any env var options. 

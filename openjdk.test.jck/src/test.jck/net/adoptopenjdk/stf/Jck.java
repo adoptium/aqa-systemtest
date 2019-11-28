@@ -913,7 +913,7 @@ public class Jck implements StfPluginInterface {
 	
 	private String getTestSpecificJvmOptions (String jckVersion, String tests) {
 		String testSpecificJvmOptions = "";
-		Matcher matcher = Pattern.compile("jck(\\d+)b?").matcher(jckVersion);
+		Matcher matcher = Pattern.compile("jck(\\d+)c?").matcher(jckVersion);
 		if (matcher.matches()) {
 			// first group is going to be 8, 9, 10, 11, etc.
 			int jckVerNum = Integer.parseInt(matcher.group(1));

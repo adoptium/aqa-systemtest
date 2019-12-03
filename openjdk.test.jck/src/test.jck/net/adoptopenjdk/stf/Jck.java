@@ -45,6 +45,7 @@ import org.xml.sax.SAXParseException;
 import net.adoptopenjdk.stf.environment.DirectoryRef; 
 import net.adoptopenjdk.stf.environment.FileRef;
 import net.adoptopenjdk.stf.environment.JavaVersion;
+import net.adoptopenjdk.stf.environment.PlatformFinder;
 import net.adoptopenjdk.stf.environment.StfTestArguments; 
 import net.adoptopenjdk.stf.extensions.core.StfCoreExtension;
 import net.adoptopenjdk.stf.plugin.interfaces.StfPluginInterface;
@@ -317,6 +318,13 @@ public class Jck implements StfPluginInterface {
 		fileContent = fileContent.replace("\\", "\\\\");		// Replaces \ with \\
 		 
 		test.doWriteFile("Writing into jtb file.", newJtbFileRef, fileContent);
+		
+		test.doEchoFile("The JTB file generated\n", newJtbFileRef);
+
+		if ( PlatformFinder.isZOS() ) {
+			test.doIconvFile("Converting .jtb file to ascii", newJtbFileRef.getSpec(), "IBM-1047", "ISO8859-1");
+		}
+
 	}
 
 	public void execute(StfCoreExtension test) throws Exception {
@@ -364,8 +372,6 @@ public class Jck implements StfPluginInterface {
 			}
 			
 			String commandLine = " -config "+ jtiFile + " @" + jtbFile;
-			
-			test.doEchoFile("The JTB file generated\n", jtbFile);
 
 			ExpectedOutcome outcome;
 			String timeout = "24h";

@@ -17,6 +17,9 @@
 *.dtd git-encoding=iso8859-1 working-tree-encoding=iso8859-1
 *.xsd git-encoding=iso8859-1 working-tree-encoding=iso8859-1
 *.classpath git-encoding=iso8859-1 working-tree-encoding=iso8859-1
+*.jti git-encoding=iso8859-1 working-tree-encoding=iso8859-1
+*.jtx git-encoding=iso8859-1 working-tree-encoding=iso8859-1
+*.kfl git-encoding=iso8859-1 working-tree-encoding=iso8859-1
 
 # Default - treat files as text as convert line ending to LF
 * text eol=lf

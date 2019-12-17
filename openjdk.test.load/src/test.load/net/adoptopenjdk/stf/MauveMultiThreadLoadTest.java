@@ -49,6 +49,17 @@ public class MauveMultiThreadLoadTest implements StfPluginInterface {
 		JavaVersion jvm = test.env().primaryJvm();
 
 		String inventoryFile = "/openjdk.test.load/config/inventories/mauve/mauve_multiThread.xml";
+		
+		/*We have a set of tests that load awt libraries causing hang on osx jdk8 openj9
+		 * for multi-threaded mauve load test. These tests have been disabled only on osx and openj9 jdk8 
+		 * in a special inventory file: mauve_multiThread_osx_openj9_jdk8.xml.
+		 * */
+		if (jvm.isIBMJvm() 
+			&& jvm.getJavaVersion() == 8
+			&& test.env().getOsgiOperatingSystemName().equals("macosx")) {
+			inventoryFile = "/openjdk.test.load/config/inventories/mauve/mauve_multiThread_osx_openj9_jdk8.xml";
+		}
+		
 		int numMauveTests = InventoryData.getNumberOfTests(test, inventoryFile);
 		int cpuCount = Runtime.getRuntime().availableProcessors();
 

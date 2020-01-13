@@ -104,6 +104,13 @@ public class ClassMapHog
 								continue;
 							}
 						}
+						
+						if (javaVersion >= 14) {
+							// java.security.acl package has been removed from jdk 14
+							if ( classToLoad.startsWith("java.security.acl") ) {
+								continue;
+							}
+						}
 					
 						// get the class loader to load the current class
 						// Class is the class that represents a classes 'blueprint'

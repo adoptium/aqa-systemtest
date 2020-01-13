@@ -61,6 +61,13 @@ public class ClassHog
 							continue;
 						}
 					}
+					
+					if (javaVersion >= 14) {
+						// java.security.acl package has been removed from jdk 14
+						if ( classToLoad.startsWith("java.security.acl") ) {
+							continue;
+						}
+					}
 					// use the class loader to get the Class class that represents the class on the current line
 					c = Class.forName (classToLoad);
 					cnt++;

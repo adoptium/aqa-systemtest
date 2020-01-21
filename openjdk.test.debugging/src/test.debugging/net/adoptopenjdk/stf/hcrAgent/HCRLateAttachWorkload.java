@@ -1,5 +1,4 @@
 /*******************************************************************************
-
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
@@ -57,7 +56,7 @@ public class HCRLateAttachWorkload implements StfPluginInterface {
 		}
 		
 		// Specify the Process definition for the workload processes.
-		FileRef asmJar = test.env().findPrereqFile("/asm-7.1/asm-7.1.jar");
+		FileRef asmJar = test.env().findPrereqFile("/asm-7.3/asm-7.3.jar");
 		// Temporarily switched from using mini-mix to avoid test failures not related to HCR.
 		//String inventoryFile = "/openjdk.test.load/config/inventories/mix/mini-mix.xml";
 		String inventoryFile = "/openjdk.test.load/config/inventories/util/util.xml";

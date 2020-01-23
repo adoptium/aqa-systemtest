@@ -37,7 +37,6 @@ limitations under the License.
 	<property name="openjdk_test_jck_jar_file" value="${openjdk_test_jck_bin_dir}/${openjdk_test_jck_module}.jar" />
 	
 	<propertyregex property="jck_short_version" input="${env.JCK_VERSION}" regexp="jck([^\.]*)" select="\1" casesensitive="false" />
-	<propertyregex property="platform_short_name" defaultValue="${PLATFORM}" input="${PLATFORM}" regexp="([^\.]*)_cr.*$$" select="\1" casesensitive="false" />
 	
 	<condition property="can_build_jck_natives_windows" value="true">
 		<and>
@@ -109,7 +108,7 @@ limitations under the License.
 	
 	<target name="setup-native-build-command">
 		<echo message="building natives for java_platform ${java_platform}"/>
-		<property name="openjdk_test_jck_native_build_command" value='${setup_windows_build_env}make build -f ${jck_makefile_dir}/makefile SRCDIR=${jck_runtimes_src_dir} PLATFORM=${platform_short_name} JAVA_HOME=${TEST_JDK_HOME} OUTDIR=${out_dir}'/>
+		<property name="openjdk_test_jck_native_build_command" value='${setup_windows_build_env}make build -f ${jck_makefile_dir}/makefile SRCDIR=${jck_runtimes_src_dir} PLATFORM=${java_platform} JAVA_HOME=${TEST_JDK_HOME} OUTDIR=${out_dir}'/>
 		<tempfile property="openjdk_test_jck_native_build_command_file" destDir="${java.io.tmpdir}" prefix="openjdk.build.command."/>
 	</target>
 

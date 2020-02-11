@@ -208,11 +208,15 @@ ifeq ($(WIN),1)
        SRCDIR := $(subst /,\,$(SRCDIR))
        OUTDIR := $(subst /,\,$(OUTDIR))
        FULLOUTDIR := $(subst /,\,$(FULLOUTDIR))
+       JNI_INCLUDE_PATH := $(subst /,\,$(JNI_INCLUDE_PATH))
+	   JVMTI_INCLUDE_PATH := $(subst /,\,$(JVMTI_INCLUDE_PATH))
        # and let's escape backslashes in case one is stripped by the shell
        SRCDIR := $(subst \,\\,$(SRCDIR))
        OUTDIR := $(subst \,\\,$(FULLOUTDIR))
        FULLOUTDIR := $(subst \,\\,$(OUTDIR))
        VPATH := $(subst \,\\,$(VPATH))
+       JNI_INCLUDE_PATH := $(subst \,\\,$(JNI_INCLUDE_PATH))
+	   JVMTI_INCLUDE_PATH := $(subst \,\\,$(JVMTI_INCLUDE_PATH))
        MKDIR=mkdir
        CLEANDIR=rmdir /S /Q
 	   CLEANFILE=del /Q /S
@@ -224,6 +228,8 @@ ifeq ($(WIN),1)
        FULLOUTDIR := $(subst \,/,$(FULLOUTDIR))
        VPATH := $(subst \,/,$(VPATH))
        JMX_DATA_PATH := $(subst \,/,$(JMX_DATA_PATH))
+       JNI_INCLUDE_PATH := $(subst \,/,$(JNI_INCLUDE_PATH))
+	   JVMTI_INCLUDE_PATH := $(subst \,/,$(JVMTI_INCLUDE_PATH))
        # Prefix Windows commands with cmd /c to run them in a Windows shell
        CMD_PREFIX:=cmd /c
     endif
@@ -290,7 +296,7 @@ endif
 
 OBJS=$(LIBPREF)jckjni.$(LIBEXT)  $(LIBPREF)jckjvmti.$(LIBEXT) $(LIBPREF)systemInfo.$(LIBEXT) $(LIBPREF)jmxlibid.$(LIBEXT) $(LIBPREF)genrandom.$(LIBEXT)
 
-CFLAGS := $(CFLAGS) -I$(SRCDIR) -I$(JNI_INCLUDE_PATH) -I$(JVMTI_INCLUDE_PATH)
+CFLAGS := $(CFLAGS) -I"$(SRCDIR)" -I"$(JNI_INCLUDE_PATH)" -I"$(JVMTI_INCLUDE_PATH)"
 .SUFFIXES:.c
 	
 help:

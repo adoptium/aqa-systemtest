@@ -108,7 +108,7 @@ limitations under the License.
 	
 	<target name="setup-native-build-command">
 		<echo message="building natives for java_platform ${java_platform}"/>
-		<property name="openjdk_test_jck_native_build_command" value='${setup_windows_build_env}make build -f ${jck_makefile_dir}/makefile SRCDIR=${jck_runtimes_src_dir} PLATFORM=${java_platform} JAVA_HOME=${TEST_JDK_HOME} OUTDIR=${out_dir}'/>
+		<property name="openjdk_test_jck_native_build_command" value='${setup_windows_build_env}make build -C ${out_dir} -f ${jck_makefile_dir}/makefile SRCDIR=${jck_runtimes_src_dir} PLATFORM=${java_platform} JAVA_HOME=${TEST_JDK_HOME} OUTDIR=.'/>
 		<tempfile property="openjdk_test_jck_native_build_command_file" destDir="${java.io.tmpdir}" prefix="openjdk.build.command."/>
 	</target>
 

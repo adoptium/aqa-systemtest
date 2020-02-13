@@ -24,12 +24,10 @@
 
 WIN=0
 ifeq ($(PLATFORM),win_x86-32)
-	DESTDIR=$(OUTDIR)\$(PLATFORM)
 	WIN=1
 endif
 
 ifeq ($(PLATFORM),win_x86-64)
-	DESTDIR=$(OUTDIR)\$(PLATFORM)
     WIN=1
 endif
 
@@ -212,8 +210,8 @@ ifeq ($(WIN),1)
 	   JVMTI_INCLUDE_PATH := $(subst /,\,$(JVMTI_INCLUDE_PATH))
        # and let's escape backslashes in case one is stripped by the shell
        SRCDIR := $(subst \,\\,$(SRCDIR))
-       OUTDIR := $(subst \,\\,$(FULLOUTDIR))
-       FULLOUTDIR := $(subst \,\\,$(OUTDIR))
+       OUTDIR := $(subst \,\\,$(OUTDIR))
+       FULLOUTDIR := $(subst \,\\,$(FULLOUTDIR))
        VPATH := $(subst \,\\,$(VPATH))
        JNI_INCLUDE_PATH := $(subst \,\\,$(JNI_INCLUDE_PATH))
 	   JVMTI_INCLUDE_PATH := $(subst \,\\,$(JVMTI_INCLUDE_PATH))
@@ -243,11 +241,11 @@ ifeq ($(WIN),1)
 	LIBEXT=dll
 	OFLAG=/Fe
 	
-	JCKJNI=cd $(FULLOUTDIR) && $(LINK_CMD) $(LFLAGS)"$(FULLOUTDIR)$(D)$@" $(FULLOUTDIR)$(D)jckjni.obj
-	JCKJVMTI=cd $(FULLOUTDIR) && $(LINK_CMD) $(LFLAGS)"$(FULLOUTDIR)$(D)$@" $(FULLOUTDIR)$(D)jckjvmti.obj
-	SYSTEMINFOUSENATIVE=cd $(FULLOUTDIR) && $(LINK_CMD) $(LFLAGS)"$(FULLOUTDIR)$(D)$@" $(FULLOUTDIR)$(D)com_sun_management_mbeans_loading_SystemInfoUseNativeLib.obj
-	GETLIBIDFROMNATIVE=cd $(FULLOUTDIR) && $(LINK_CMD) $(LFLAGS)"$(FULLOUTDIR)$(D)$@" $(FULLOUTDIR)$(D)com_sun_management_mbeans_loading_GetLibIdFromNativeLib.obj
-	RANDOMGEN=cd $(FULLOUTDIR) && $(LINK_CMD) $(LFLAGS)"$(FULLOUTDIR)$(D)$@" $(FULLOUTDIR)$(D)com_sun_management_mbeans_loading_RandomGen.obj
+	JCKJNI=cd $(FULLOUTDIR) && $(LINK_CMD) $(LFLAGS)"$@" ../jckjni.obj
+	JCKJVMTI=cd $(FULLOUTDIR) && $(LINK_CMD) $(LFLAGS)"$@" ../jckjvmti.obj
+	SYSTEMINFOUSENATIVE=cd $(FULLOUTDIR) && $(LINK_CMD) $(LFLAGS)"$@" ../com_sun_management_mbeans_loading_SystemInfoUseNativeLib.obj
+	GETLIBIDFROMNATIVE=cd $(FULLOUTDIR) && $(LINK_CMD) $(LFLAGS)"$@" ../com_sun_management_mbeans_loading_GetLibIdFromNativeLib.obj
+	RANDOMGEN=cd $(FULLOUTDIR) && $(LINK_CMD) $(LFLAGS)"$@" ../com_sun_management_mbeans_loading_RandomGen.obj
 endif
 
 ifeq ($(PLATFORM),hp_ux-32)
@@ -331,27 +329,23 @@ help:
 build:createdir $(OBJS) installjmx
 
 $(LIBPREF)jckjni.$(LIBEXT): jckjni.c 
-	cd $(FULLOUTDIR) && $(CC) $(CFLAGS) $(LDFLAGS) $< $(OFLAG)$(FULLOUTDIR)$(VAR)
+	$(CC) $(CFLAGS) $(LDFLAGS) $< $(OFLAG)$(FULLOUTDIR)$(VAR)
 	$(JCKJNI)
-
-#$(LIBPREF)jckatr.$(LIBEXT): jckatr.c
-#	cd $(FULLOUTDIR) && $(CC) $(CFLAGS) $(LDFLAGS) $< $(OFLAG)$(FULLOUTDIR)$(VAR)
-#	$(JCKATR)
 	
 $(LIBPREF)jckjvmti.$(LIBEXT):jckjvmti.c
-	cd $(FULLOUTDIR) && $(CC) $(CFLAGS) $(LDFLAGS) $< $(OFLAG)$(FULLOUTDIR)$(VAR)
+	$(CC) $(CFLAGS) $(LDFLAGS) $< $(OFLAG)$(FULLOUTDIR)$(VAR)
 	$(JCKJVMTI)
 	
 $(LIBPREF)systemInfo.$(LIBEXT):com_sun_management_mbeans_loading_SystemInfoUseNativeLib.c
-	cd $(FULLOUTDIR) && $(CC) $(CFLAGS) $(LDFLAGS) $< $(OFLAG)$(VAR)
+	$(CC) $(CFLAGS) $(LDFLAGS) $< $(OFLAG)$(FULLOUTDIR)$(VAR)
 	$(SYSTEMINFOUSENATIVE)
 
 $(LIBPREF)jmxlibid.$(LIBEXT):com_sun_management_mbeans_loading_GetLibIdFromNativeLib.c
-	cd $(FULLOUTDIR) && $(CC) $(CFLAGS) $(LDFLAGS) $< $(OFLAG)$(VAR)
+	$(CC) $(CFLAGS) $(LDFLAGS) $< $(OFLAG)$(FULLOUTDIR)$(VAR)
 	$(GETLIBIDFROMNATIVE)
 
 $(LIBPREF)genrandom.$(LIBEXT):com_sun_management_mbeans_loading_RandomGen.c
-	cd $(FULLOUTDIR) && $(CC) $(CFLAGS) $(LDFLAGS) $< $(OFLAG)$(FULLOUTDIR)$(VAR)
+	$(CC) $(CFLAGS) $(LDFLAGS) $< $(OFLAG)$(FULLOUTDIR)$(VAR)
 	$(RANDOMGEN)
 
 createdir:
@@ -360,17 +354,20 @@ createdir:
 	
 installjmx:
 ifeq ($(WIN),0)
-	$(COPYDIR) $(SRCDIR)$(D)tests$(D)api$(D)javax_management$(D)loading$(D)data$(D)* $(FULLOUTDIR)$(D).
-	cd $(FULLOUTDIR) && $(JAR) uf $(FULLOUTDIR)/archives/MBeanUseNativeLib.jar $(LIBPREF)systemInfo.$(LIBEXT)
-	cd $(FULLOUTDIR) && $(JAR) cf $(FULLOUTDIR)/archives/OnlyLibs.jar $(LIBPREF)jmxlibid.$(LIBEXT)
-	$(CLEANFILE) $(FULLOUTDIR)$(D)$(LIBPREF)systemInfo.$(LIBEXT) 
-	$(CLEANFILE) $(FULLOUTDIR)$(D)$(LIBPREF)jmxlibid.$(LIBEXT) 
+	$(COPYDIR) $(SRCDIR)$(D)tests$(D)api$(D)javax_management$(D)loading$(D)data$(D)* .
+	$(JAR) uf archives/MBeanUseNativeLib.jar $(LIBPREF)systemInfo.$(LIBEXT)
+	$(JAR) cf archives/OnlyLibs.jar $(LIBPREF)jmxlibid.$(LIBEXT)
+	$(CLEANFILE) $(LIBPREF)systemInfo.$(LIBEXT)
+	$(CLEANFILE) $(LIBPREF)jmxlibid.$(LIBEXT)
 else
-	$(COPYDIR) "$(JMX_DATA_PATH)$(D)." "$(FULLOUTDIR)$(D)"
-	cd "$(FULLOUTDIR)" && $(JAR) uf "$(FULLOUTDIR)$(D)archives$(D)MBeanUseNativeLib.jar" $(LIBPREF)systemInfo.$(LIBEXT)
-	cd "$(FULLOUTDIR)" && $(JAR) cf "$(FULLOUTDIR)$(D)archives$(D)OnlyLibs.jar" $(LIBPREF)jmxlibid.$(LIBEXT)
-	$(CLEANFILE) $(FULLOUTDIR)$(D)$(LIBPREF)systemInfo.$(LIBEXT)
-	$(CLEANFILE) $(FULLOUTDIR)$(D)$(LIBPREF)jmxlibid.$(LIBEXT)
+	cd $(FULLOUTDIR) 
+	$(COPYDIR) "$(JMX_DATA_PATH)$(D)." .
+	pwd 
+	ls -la 
+	$(JAR) uf "archives$(D)MBeanUseNativeLib.jar" $(LIBPREF)systemInfo.$(LIBEXT)
+	$(JAR) cf "archives$(D)OnlyLibs.jar" $(LIBPREF)jmxlibid.$(LIBEXT)
+	$(CLEANFILE) $(LIBPREF)systemInfo.$(LIBEXT)
+	$(CLEANFILE) $(LIBPREF)jmxlibid.$(LIBEXT)
 endif
 
 .PHONY clean:

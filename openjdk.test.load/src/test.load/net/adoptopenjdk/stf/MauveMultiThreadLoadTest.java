@@ -60,11 +60,12 @@ public class MauveMultiThreadLoadTest implements StfPluginInterface {
 			inventoryFile = "/openjdk.test.load/config/inventories/mauve/mauve_multiThread_osx_openj9_jdk8.xml";
 		}
 		
-		/* Temporarily exclude DecimalFormat.setGroupingSize from openj9 jdk14 
+		/* Temporarily exclude DecimalFormat.setGroupingSize from openj9 jdk14 +
 			Ref: https://github.com/eclipse/openj9/issues/8086
+				 https://github.com/eclipse/openj9/issues/8620
 		 */
 		if (jvm.isIBMJvm() 
-			&& jvm.getJavaVersion() == 14) {
+			&& jvm.getJavaVersion() >= 14) {
 			inventoryFile = "/openjdk.test.load/config/inventories/mauve/mauve_multiThread_openj9_jdk14.xml";
 		}
 		

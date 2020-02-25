@@ -1,6 +1,4 @@
 <inventory>
-	<!-- Excluded due to https://bugs.openjdk.java.net/browse/JDK-8231851 -->
-	<mauve class="gnu.testlet.java.text.DecimalFormat.setGroupingSize"/>
 	<!-- Fails on jdk12 hotspot with: 
 		 got 9218868437227405313 but expected 9223231299366420480
 		 Issue reference: https://github.com/AdoptOpenJDK/openjdk-systemtest/issues/272-->

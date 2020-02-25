@@ -1,6 +1,17 @@
 <inventory>
 	<!-- Excluded from JDK 14 openj9 for https://github.com/eclipse/openj9/issues/8086 -->
+	<!-- Excluded due to https://bugs.openjdk.java.net/browse/JDK-8231851 -->
 	<mauve class="gnu.testlet.java.text.DecimalFormat.setGroupingSize"/>
+	<!-- Excluded as invalid test. Ref: https://github.com/eclipse/openj9/issues/7020 -->
+	<mauve class="gnu.testlet.java.io.InputStreamReader.utf8"/>
+	<!-- Exclude tests not suited for multi-threaded testing
+	Issue ref: https://github.com/AdoptOpenJDK/openjdk-systemtest/issues/298 -->
+	<mauve class="gnu.testlet.java.util.Calendar.getInstance"/>
+	<mauve class="gnu.testlet.java.util.Date.range"/>
+	<!-- Exclude tests that install SecurityManager 
+	Issue Ref: https://github.com/AdoptOpenJDK/openjdk-systemtest/issues/284-->
+	<mauve class="gnu.testlet.java.util.logging.Logger.getAnonymousLogger"/>
+	<mauve class="gnu.testlet.java.util.logging.Logger.getName"/>
 	<!-- Fails on jdk12 hotspot with: 
 		 got 9218868437227405313 but expected 9223231299366420480
 		 Issue reference: https://github.com/AdoptOpenJDK/openjdk-systemtest/issues/272-->
@@ -14,25 +25,50 @@
 			   got 1086325228000 but expected 1086310828000
 		 Issue reference: https://github.com/AdoptOpenJDK/openjdk-systemtest/issues/267-->
 	<mauve class="gnu.testlet.java.util.zip.ZipEntry.time"/>
-	<!-- Fails on jdk12 aarch64 linux hotspot with: 
-		 got -4616189728938546314 but expected -4616189728938546315
-		 Issue reference: https://github.com/AdoptOpenJDK/openjdk-systemtest/issues/256-->
-	<mauve class="gnu.testlet.java.lang.Math.cos"/>
-	<!-- Fails on jdk11 aarch64 linux hotspot with: 
-		 gnu.testlet.java.lang.System.arraycopy: Object casting (number 0)
-		 got caught IndexOutOfBoundsException but expected caught ArrayStoreException
-		 Issue reference: https://github.com/AdoptOpenJDK/openjdk-systemtest/issues/256-->
-	<mauve class="gnu.testlet.java.lang.System.arraycopy"/>	
+	<!-- Fails on jdk12 openj9 on ppcle linux with: 
+		java.security.AccessControlException: access denied: ("java.util.logging.LoggingPermission" "control")
+		Issue reference: https://github.com/AdoptOpenJDK/openjdk-systemtest/issues/263-->
+	<mauve class="gnu.testlet.javax.net.ssl.SSLContext.TestDefaultInit"/> 
 	<!-- Fails on jdk11 and jdk12 openj9 with: 
 	java.net.SocketException: maximum number of DatagramSockets reached binding to null address (number 0) 
 	Issue reference: https://github.com/AdoptOpenJDK/openjdk-systemtest/issues/237-->
 	<mauve class="gnu.testlet.java.net.DatagramSocket.bind"/>
+	<!--Fails on multi-threaded scenario with 
+		java.security.AccessControlException: access denied
+		Excluded due to https://github.com/eclipse/openj9/issues/4681
+	-->
+	<mauve class="gnu.testlet.java.net.HttpURLConnection.requestPropertiesTest"/>
+	<!--Fails on multi-threaded scenario with 
+		java.security.AccessControlException: access denied
+		Excluded due to https://github.com/eclipse/openj9/issues/4681
+	-->
+	<mauve class="gnu.testlet.java.net.HttpURLConnection.requestPropertiesTest"/>
+	<!--Fails on multi-threaded scenario with 
+		java.security.AccessControlException: access denied
+		Excluded due to https://github.com/eclipse/openj9/issues/4681
+	-->
+	<mauve class="gnu.testlet.java.net.HttpURLConnection.responseHeadersTest"/>
+	<!--Fails on multi-threaded scenario with 
+		java.security.AccessControlException: access denied
+		Excluded due to https://github.com/eclipse/openj9/issues/4681
+	-->
+	<mauve class="gnu.testlet.javax.imageio.spi.IIORegistry.getDefaultInstance"/>
+	<!-- Fails on OpenJ9 Java 11 and Java 12 with
+		FAIL: gnu.testlet.java.text.DateFormat.hashCode (number 0)
+		PASS: gnu.testlet.java.text.DateFormat.hashCode (number 1)
+	-->
+	<mauve class="gnu.testlet.java.text.DateFormat.hashCode"/>
 	<!-- Fails with
 		 PASS: gnu.testlet.java.util.zip.ZipFile.DirEntryTest: getEntry("dir/") (number 0)
 		 FAIL: gnu.testlet.java.util.zip.ZipFile.DirEntryTest: getEntry("dir") (number 0)
 		 got dir/ but expected dir
 	-->
 	<mauve class="gnu.testlet.java.util.zip.ZipFile.DirEntryTest"/>
+	<!-- Fails on AIX on OpenJ9 Java 12 with
+		 FAIL: gnu.testlet.java.text.MessageFormat.format14: time (number 3)
+		 Permanently excluded, ref: https://github.com/AdoptOpenJDK/openjdk-systemtest/issues/237
+	-->
+	<mauve class="gnu.testlet.java.text.MessageFormat.format14"/>
 	<!-- Fails on IBM and Oracle Java 9 with 
 		 Exception in thread "main" java.lang.IllegalArgumentException: gnu.testlet.javax.imageio.spi.ServiceRegistry.registerServiceProvider$SomeService is not an ImageIO SPI class
 	-->
@@ -52,11 +88,6 @@
 		 java.lang.IllegalArgumentException: Illegal pattern  character 'j'
 	-->
 	<mauve class="gnu.testlet.java.text.SimpleDateFormat.applyLocalizedPattern"/>
-	<!-- The following tests fail on Hotspot Java 11 on aarch64 with 
-		 FAIL: gnu.testlet.java.lang.System.arraycopy: Object casting (number 0)
-		 Permanently excluded, ref: https://github.com/AdoptOpenJDK/openjdk-systemtest/issues/237
-	-->
-	<mauve class="gnu.testlet.java.lang.System.arraycopy"/>
 	<!-- Fails on Oracle Java 9 with
 		 Suite number  = 0
 		 Thread number = 1
@@ -72,37 +103,19 @@
 		 got d-MMM-yyyy but expected j-nnn-aaaa
 	-->
 	<mauve class="gnu.testlet.java.text.SimpleDateFormat.toLocalizedPattern"/>
-	
-	<!-- Fails on Hotspot and OpenJ9 Java 11 and 12 with 
-		 FAIL: gnu.testlet.javax.swing.DefaultListSelectionModel.setSelectionInterval: SINGLE_SELECTION_X (number 7)
-		 got 2 but expected 4
+	<!-- Fails on Oracle Java 9 with
+		 Suite number  = 0
+		 Thread number = 2
+		 PASS: gnu.testlet.java.util.logging.SocketHandler.SocketHandler (number 0)
+		 FAIL: gnu.testlet.java.util.logging.SocketHandler.SocketHandler (number 1)
 	-->
-	<mauve class="gnu.testlet.javax.swing.DefaultListSelectionModel.setSelectionInterval"/>
-	<!-- Fails on OpenJ9 Java 11 with 
-		 FAIL: gnu.testlet.javax.swing.DefaultListSelectionModel.setSelectionMode: testIntervalToSingle() (number 2)
-		 LT  got false but expected true
-	-->
-	<mauve class="gnu.testlet.javax.swing.DefaultListSelectionModel.setSelectionMode"/>
-	<!-- Fails on OpenJ9 Java 8 with 
-		 FAIL: gnu.testlet.java.text.MessageFormat.format14: date (number 0)
-			   got 18-Dec-2018 but expected Dec 18, 2018
-	-->
-	<mauve class="gnu.testlet.java.text.MessageFormat.format14"/>
-	
-	<!-- Fails on OpenJ9 Java 8 with 
-		 PASS: gnu.testlet.java.math.BigInteger.multiply (number 7)
-         FAIL: gnu.testlet.java.math.BigInteger.multiply (number 8)
-	-->
-	<mauve class="gnu.testlet.java.math.BigInteger.multiply"/>
-	<!-- Fails on OpenJ9 Java 8 -->
-	<mauve class="gnu.testlet.java.awt.color.ColorSpace.getInstance"/>
-	
+	<mauve class="gnu.testlet.java.util.logging.SocketHandler.SocketHandler"/>
 	<!-- Fails on Oracle Java 9 with
 		 Suite number  = 0
 		 Thread number = 0
-		 FAIL: gnu.testlet.java.awt.image.RescaleOp.filterRaster: filter(Raster) with one scaling factor (number 2)
+		 FAIL: gnu.testlet.java.net.InetSocketAddress.InetSocketAddressTest: Error : test_Basics failed - 5 Resolveable hostname got not resolved (number 0)
 	-->
-	<mauve class="gnu.testlet.java.awt.image.RescaleOp.filterRaster"/>
+	<mauve class="gnu.testlet.java.net.InetSocketAddress.InetSocketAddressTest"/>
 	<!-- The following tests are excluded because they parse the java.version property and the code does not cater for releases post Java 7. -->
 	<mauve class="gnu.testlet.java.lang.AbstractMethodError.classInfo.getAnnotations"/>
 	<mauve class="gnu.testlet.java.lang.AbstractMethodError.classInfo.getConstructor"/>

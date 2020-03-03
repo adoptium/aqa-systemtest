@@ -50,24 +50,6 @@ public class MauveSingleInvocationLoadTest implements StfPluginInterface {
 
 		String inventoryFile = "/openjdk.test.load/config/inventories/mauve/mauve_all.xml";
 		
-		/* We temporarily run a special load for osx for openj9 jdk8 that 
-		 * constitute a set of tests that do not hang. 
-		 * Ref: https://github.com/eclipse/openj9/issues/7050
-		 */
-		if (jvm.isIBMJvm() 
-			&& jvm.getJavaVersion() == 8
-			&& test.env().getOsgiOperatingSystemName().equals("macosx")) {
-			inventoryFile = "/openjdk.test.load/config/inventories/mauve/mauve_all_osx_openj9_jdk8.xml";
-		}
-		
-		/* Temporarily exclude DecimalFormat.setGroupingSize from openj9 jdk14 +
-			Ref: https://github.com/eclipse/openj9/issues/8086
-			 	 https://github.com/eclipse/openj9/issues/8620
-		 */
-		if (jvm.isIBMJvm() 
-			&& jvm.getJavaVersion() >= 14) {
-			inventoryFile = "/openjdk.test.load/config/inventories/mauve/mauve_all_openj9_jdk14.xml";
-		}
 		int numMauveTests = InventoryData.getNumberOfTests(test, inventoryFile);
 		
 		/*

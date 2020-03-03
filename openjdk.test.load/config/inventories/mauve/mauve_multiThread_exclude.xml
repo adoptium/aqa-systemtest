@@ -1,5 +1,27 @@
 <inventory>
-	<!-- Excluded due to https://bugs.openjdk.java.net/browse/JDK-8231851 -->
+	<!-- Disabled as the following tests load awt libraries that are not thread-safe and cause hang on osx openj9 jdk8 : 
+	https://github.com/eclipse/openj9/issues/7050 -->
+	<mauve class="gnu.testlet.java.text.AttributedCharacterIterator.getRunLimit"/>
+	<mauve class="gnu.testlet.java.text.AttributedCharacterIterator.getRunStart"/>
+	<mauve class="gnu.testlet.javax.swing.ViewportLayout.minimumLayoutSize"/>
+	<mauve class="gnu.testlet.java.net.DatagramPacket.DatagramPacketTest2"/>
+	<mauve class="gnu.testlet.java.text.AttributedString.getIterator"/>
+	<mauve class="gnu.testlet.java.lang.reflect.Proxy.check13"/>
+	<mauve class="gnu.testlet.java.text.AttributedString.constructors"/>
+	<mauve class="gnu.testlet.java.security.KeyPairGenerator.getInstance14"/>
+	<mauve class="gnu.testlet.java.security.AlgorithmParameterGenerator.getInstance14"/>
+	<mauve class="gnu.testlet.java.lang.Class.serialization"/>
+	<mauve class="gnu.testlet.java.lang.reflect.Proxy.check13"/>
+	<mauve class="gnu.testlet.java.security.AlgorithmParameters.getInstance14"/>
+	<mauve class="gnu.testlet.java.text.AttributedString.addAttributes"/>
+	<mauve class="gnu.testlet.java.security.KeyFactory.getInstance14"/>
+	<mauve class="gnu.testlet.java.security.SecureRandom.TestOfPR23899"/>
+	<mauve class="gnu.testlet.java.util.UUID.TestAll"/>
+	
+	<!-- Excluded due to https://bugs.openjdk.java.net/browse/JDK-8231851 
+		Ref: https://github.com/eclipse/openj9/issues/8086
+			 https://github.com/eclipse/openj9/issues/8620
+	-->
 	<mauve class="gnu.testlet.java.text.DecimalFormat.setGroupingSize"/>
 	<!-- Excluded as invalid test. Ref: https://github.com/eclipse/openj9/issues/7020 -->
 	<mauve class="gnu.testlet.java.io.InputStreamReader.utf8"/>

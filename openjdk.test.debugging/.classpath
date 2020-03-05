@@ -6,6 +6,6 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/stf.core"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/stf.load"/>
 	<classpathentry kind="lib" path="/systemtest_prereqs/tools/tools.jar"/>
-	<classpathentry kind="lib" path="/systemtest_prereqs/asm-7.3/asm-7.3.jar"/>
+	<classpathentry kind="lib" path="/systemtest_prereqs/asm-7.3.1/asm-7.3.1.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

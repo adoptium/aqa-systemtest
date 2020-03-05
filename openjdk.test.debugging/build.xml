@@ -46,7 +46,7 @@ limitations under the License.
 	<path id="project.class.path">
 		<path refid="junit.class.path" />
 		<path refid="stf.class.path" />
-		<path refid="asm.7.3.class.path" />
+		<path refid="asm.class.path" />
 		<path refid="tools.class.path" />
 	</path>
 	

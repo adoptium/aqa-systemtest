@@ -1,0 +1,12 @@
+<!-- 
+  This is a minimal inventory intended for tests which just want to be able
+  to generate a load which can be used for testing other capabilities alongside.
+-->
+
+<inventory>
+	<include inventory="/openjdk.test.load/config/inventories/math/bigdecimal.xml"/>
+	<include inventory="/openjdk.test.load/config/inventories/mauve/mauve_all.xml"/>
+	<include inventory="/openjdk.test.load/config/inventories/lang/lang.xml"/>
+	<include inventory="/openjdk.test.load/config/inventories/nio/nio.xml"/>
+	<include inventory="/openjdk.test.load/config/inventories/concurrent/concurrent.xml"/>
+</inventory>

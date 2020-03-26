@@ -26,16 +26,16 @@ JCK_CONFIG=default
 # and is set to a supported version.
 ifneq (,$(findstring test.jck,$(MAKECMDGOALS)))
   ifeq (,$(JCKVERSION))
-    $(error JCKVERSION must be specified: example make test.jck JCKVERSION=jck8b)
+    $(error JCKVERSION must be specified: example make test.jck JCKVERSION=jck8c)
   endif
 endif
 
 ifneq (,$(findstring test.jck,$(MAKECMDGOALS)))
-  ifneq (jck8b,$(JCKVERSION))
+  ifneq (jck8c,$(JCKVERSION))
     ifneq (jck9,$(JCKVERSION))
       ifneq (jck10,$(JCKVERSION))
         ifneq (jck11,$(JCKVERSION))
-          $(error JCKVERSION $(JCKVERSION) not supported.  Specify one of jck8b, jck9, jck10 or jck11)
+          $(error JCKVERSION $(JCKVERSION) not supported.  Specify one of jck8c, jck9, jck10 or jck11)
         endif
       endif
     endif
@@ -367,16 +367,16 @@ test.jck.runtime.noconfig \
 test.jck.compiler \
 test.jck.devtools
 
-# Tests applicable to jck8b
+# Tests applicable to jck8c
 # Chunks of tests
-jck8b_RUNTIME_TESTS:=$(JCK_RUNTIME_TESTS)
-jck8b_RUNTIME_TESTS_NO_CONFIG:=$(JCK_RUNTIME_TESTS_NO_CONFIG)
-jck8b_COMPILER_TESTS:=$(JCK_COMPILER_TESTS)
-jck8b_DEVTOOLS_TESTS:=$(JCK_DEVTOOLS_TESTS)
-# All the jck8b tests
-jck8b_TESTS:=$(jck8b_RUNTIME_TESTS) $(jck8b_COMPILER_TESTS) $(jck8b_DEVTOOLS_TESTS)
+jck8c_RUNTIME_TESTS:=$(JCK_RUNTIME_TESTS)
+jck8c_RUNTIME_TESTS_NO_CONFIG:=$(JCK_RUNTIME_TESTS_NO_CONFIG)
+jck8c_COMPILER_TESTS:=$(JCK_COMPILER_TESTS)
+jck8c_DEVTOOLS_TESTS:=$(JCK_DEVTOOLS_TESTS)
+# All the jck8c tests
+jck8c_TESTS:=$(jck8c_RUNTIME_TESTS) $(jck8c_COMPILER_TESTS) $(jck8c_DEVTOOLS_TESTS)
 # The tests which do not require http or kerberos setup
-jck8b_TESTS_NO_CONFIG:=$(filter-out $(JCK_TESTS_REQUIRING_CONFIG),$(jck8b_TESTS))
+jck8c_TESTS_NO_CONFIG:=$(filter-out $(JCK_TESTS_REQUIRING_CONFIG),$(jck8c_TESTS))
 
 # Tests applicable to jck9
 # Chunks of tests
@@ -1452,7 +1452,7 @@ help.jck:
 	@echo -------------------------------------------------------------------------------
 	@echo To run any JCK test
 	@echo make test.jck.custom JCKVERSION=jckVersion JCKTESTSUITE=testsuite JCKTEST=testDirectory JCKCONCURRENCY=cpus/nn
-	@echo JCKVERSION - jck8b, jck9, jck10, jck11, etc.
+	@echo JCKVERSION - jck8c, jck9, jck10, jck11, etc.
 	@echo JCKTESTSUITE - COMPILER, DEVTOOLS or RUNTIME
 	@echo JCKTEST - A JCK directory, e.g. api, api/javax_management, schema_bind, schema_bind/bind_javaType
 	@echo JCKCONCURRENCY - A number or the value cpus
@@ -1502,14 +1502,14 @@ help.jcktests:
 	@echo -------------------------------------------------------------------------------
 	@echo New help text:
 	@echo -------------------------------------------------------------------------------
-	@echo The following targets run subsets of the jck8b runtime tests
-	@echo $(subst $(SPACE),$(NEWLINE)echo ,$(jck8b_RUNTIME_TESTS))
+	@echo The following targets run subsets of the jck8c runtime tests
+	@echo $(subst $(SPACE),$(NEWLINE)echo ,$(jck8c_RUNTIME_TESTS))
 	@echo -------------------------------------------------------------------------------
-	@echo The following targets run subsets of the jck8b compiler tests
-	@echo $(subst $(SPACE),$(NEWLINE)echo ,$(jck8b_COMPILER_TESTS))
+	@echo The following targets run subsets of the jck8c compiler tests
+	@echo $(subst $(SPACE),$(NEWLINE)echo ,$(jck8c_COMPILER_TESTS))
 	@echo -------------------------------------------------------------------------------
-	@echo The following targets run subsets of the jck8b devtools tests
-	@echo $(subst $(SPACE),$(NEWLINE)echo ,$(jck8b_DEVTOOLS_TESTS))
+	@echo The following targets run subsets of the jck8c devtools tests
+	@echo $(subst $(SPACE),$(NEWLINE)echo ,$(jck8c_DEVTOOLS_TESTS))
 	@echo -------------------------------------------------------------------------------
 	@echo The following targets run subsets of the jck9 runtime tests
 	@echo $(subst $(SPACE),$(NEWLINE)echo ,$(jck9_RUNTIME_TESTS))

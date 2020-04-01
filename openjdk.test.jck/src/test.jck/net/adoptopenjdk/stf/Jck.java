@@ -766,6 +766,8 @@ public class Jck implements StfPluginInterface {
 				if (tests.contains("api/signaturetest") || tests.equals("api")) {
 					fileContent += "set jck.env.compiler.testCompile.compilerstaticsigtest.compilerStaticSigTestClasspathRemote \"" + getSignatureTestJars(pathToLib) + "\"" + ";\n";
 				}
+			} else if (jckVersion.contains("jck11")) {
+				fileContent += "set jck.env.compiler.testCompile.otherOpts \"-source 11 \"" + ";\n";
 			} else if (jckVersion.contains("jck12")) {
 				fileContent += "set jck.env.compiler.testCompile.otherOpts \"-release 12 --enable-preview\"" + ";\n";
 			} else if (jckVersion.contains("jck13")) {

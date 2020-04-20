@@ -769,13 +769,10 @@ public class Jck implements StfPluginInterface {
 				}
 			} else if (jckVersion.contains("jck11")) {
 				fileContent += "set jck.env.compiler.testCompile.otherOpts \"-source 11 \"" + ";\n";
-			} else if (jckVersion.contains("jck12")) {
-				fileContent += "set jck.env.compiler.testCompile.otherOpts \"-release 12 --enable-preview\"" + ";\n";
-			} else if (jckVersion.contains("jck13")) {
-				fileContent += "set jck.env.compiler.testCompile.otherOpts \"-release 13 --enable-preview\"" + ";\n";
-			} else {
-				fileContent += "set jck.env.compiler.testCompile.otherOpts \"-source 9 \"" + ";\n";
-			}
+			} else { // This is the case where JCK Version > 11
+				fileContent += "set jck.env.compiler.testCompile.otherOpts \"-release " + jckVersionNo + " --enable-preview\"" + ";\n";
+			} 
+			
 			if (tests.contains("api/java_rmi") || tests.equals("api")) {
 				fileContent += "set jck.env.compiler.testRmic.cmdAsString \"" + pathToRmic + "\"" + ";\n";
 			}

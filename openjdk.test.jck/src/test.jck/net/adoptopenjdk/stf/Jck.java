@@ -770,7 +770,7 @@ public class Jck implements StfPluginInterface {
 			} else if (jckVersion.contains("jck11")) {
 				fileContent += "set jck.env.compiler.testCompile.otherOpts \"-source 11 \"" + ";\n";
 			} else { // This is the case where JCK Version > 11
-				fileContent += "set jck.env.compiler.testCompile.otherOpts \"-release " + jckVersionNo + " --enable-preview\"" + ";\n";
+				fileContent += "set jck.env.compiler.testCompile.otherOpts \"-source " + jckVersionNo + " --enable-preview\"" + ";\n";
 			} 
 			
 			if (tests.contains("api/java_rmi") || tests.equals("api")) {

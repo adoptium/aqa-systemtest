@@ -285,8 +285,7 @@ public class Jck implements StfPluginInterface {
 		// If we're testing a J9 VM that will result in dumps being taken and a non-zero return code
 		// which stf will detect as a failure. So in this case add the -Xdump options required to suppress
 		// taking dumps for OutOfMemory.
-		// Note -Xdump:system:none is unsupported on OSX
-		if (test.env().primaryJvm().isIBMJvm() && !PlatformFinder.isOSX()) {
+		if (test.env().primaryJvm().isIBMJvm()) {
 			suppressOutOfMemoryDumpOptions = " -Xdump:system:none -Xdump:system:events=gpf+abort+traceassert+corruptcache -Xdump:snap:none -Xdump:snap:events=gpf+abort+traceassert+corruptcache -Xdump:java:none -Xdump:java:events=gpf+abort+traceassert+corruptcache -Xdump:heap:none -Xdump:heap:events=gpf+abort+traceassert+corruptcache";
 		}
 	}

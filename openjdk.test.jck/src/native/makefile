@@ -164,7 +164,7 @@ ifeq ($(PLATFORM),aix_ppc-64)
 	LDFLAGS=-G 
 endif
 
-ifeq ($(PLATFORM),linux_390-31)
+ifeq ($(PLATFORM),linux_390-32)
 	CC=gcc
 	CFLAGS=-m31 -fPIC -I$(SOLARIS_PATH) -I$(LINUX_PATH) -I$(SRC_PATH)
 	LDFLAGS=-shared
@@ -188,7 +188,7 @@ ifeq ($(PLATFORM),linux_arm-64)
 	LDFLAGS=-shared
 endif
 
-ifeq ($(PLATFORM),zos_390-31)
+ifeq ($(PLATFORM),zos_390-32)
 	CC=c89
 	CFLAGS=-I$(SRCDIR)/src/share/lib/jni/include/unix -I$(SRCDIR)/src/share/lib/jni/include -I$(FULLOUTDIR)/include -I$(SRCDIR)/src -Wc,ASCII -W"c,xplink(backchain,oscall(downstack)),noansialias,float(ieee),langlvl(extended),ROCONST,ROSTRING,enum(4),noupconv,sscom" -W"c,target(zOSV2R2)" -W"c,inline(auto,noreport,1200,8000)" -W"a,goff,ESD" -W"c,dll,expo" -W"l,xplink,compat=min" -Wl,dll -Ds390 -DARCH='"s390"'
 	LDFLAGS=-D_ALL_SOURCE -DUSE_MALLOC -DIBM_STACK_GROWS_UP -D_XOPEN_SOURCE_EXTENDED=1 -DIBM_ATOE -DOS390CTRACE -DIBM_WRITE_BARRIER -DIBM_MVS -DASYNCH_FI -DRASTRACE_TDF -DJNI_JCL_H -DIBM_ALL -DIBM_UNIX -D_POSIX_SOURCE -DSOLARIS2 -DIBM_OE_XWINDOWS -DIBM_NOAUDIO -DIBM_OE -DIBM_BUILD_TYPE_int -DJ9J2SE -D_BIG_ENDIAN -D_UNIX03_SOURCE -DSTDC -D_LARGE_FILES 
@@ -309,11 +309,11 @@ help:
 	@echo   linux_ppc-32
 	@echo   linux_ppcle-64
 	@echo   linux_ppc-64
-	@echo   linux_390-31
+	@echo   linux_390-32
 	@echo   linux_390-64
 	@echo   win_x86-32
 	@echo   win_x86-64
-	@echo   zos_390-31
+	@echo   zos_390-32
 	@echo   zos_390-64
 	@echo   hp_ux-32
 	@echo   hp_ux-64

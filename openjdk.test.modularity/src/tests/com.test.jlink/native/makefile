@@ -85,6 +85,11 @@ ifeq ($(PLATFORM),linux_x86-64)
 	LFLAGS=-shared -m64 -o 
 endif
 
+ifeq ($(PLATFORM),linux_ppc-32)
+    CFLAGS=-D_JNI_IMPLEMENTATION_ -D_TRIVIAL_AGENT -O0 -g3 -pedantic -c -Wall -std=c99 -fPIC -fno-omit-frame-pointer -static-libgcc -m32 -o $(OBJDIR)/$(SRC)$(OSUFFIX)
+    LFLAGS=-L. -L../bin/$(PLATFORM) -m32 -shared -o 
+endif
+
 ifeq ($(PLATFORM),linux_ppc-64)
     CFLAGS=-D_JNI_IMPLEMENTATION_ -D_TRIVIAL_AGENT -O0 -g3 -pedantic -c -Wall -std=c99 -fPIC -fno-omit-frame-pointer -static-libgcc -m64 -mcpu=powerpc64 -o $(OBJDIR)/$(SRC)$(OSUFFIX)
     LFLAGS=-L. -L../bin/$(PLATFORM) -m64 -shared -o 

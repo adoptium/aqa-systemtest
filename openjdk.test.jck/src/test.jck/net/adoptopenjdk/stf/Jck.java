@@ -739,14 +739,19 @@ public class Jck implements StfPluginInterface {
 			fileContent += "concurrency " + concurrencyString + ";\n";
 			fileContent += "timeoutfactor 1" + ";\n";							// lang.CLSS,CONV,STMT,INFR requires more than 1h to complete. lang.Annot,EXPR,LMBD require more than 2h to complete tests
 			fileContent += keyword + ";\n";
-			
+
+			String cmdAsStringOrFile = "cmdAsString"; // Whether to reference cmd via cmdAsString or cmdAsFile
 			if (platform.equals("win32")) {
 				// On Windows set the testplatform.os to Windows and set systemRoot, but do not
 				// set the file and path separators (an error is thrown if they are set).
 				fileContent += "set jck.env.testPlatform.os \"Windows\";\n";
 				fileContent += "set jck.env.testPlatform.systemRoot " + System.getenv("WINDIR") + ";\n";
-			}
-			else {
+			} else if (platform.equals("zos") || platform.equals("aix")) {
+				// On z/OS and AIX set the testplatform.os Current system
+				// due to JCK class OsHelper bug with getFileSep() in Compiler JCK Interviewer
+				fileContent += "set jck.env.testPlatform.os \"Current system\";\n";
+				cmdAsStringOrFile = "cmdAsFile";
+			} else {
 				// On other platforms set the testplatform.os to other and set the file and path separators.
 				fileContent += "set jck.env.testPlatform.os \"other\";\n";
 				fileContent += "set jck.env.testPlatform.fileSep \"/\";\n";
@@ -755,7 +760,7 @@ public class Jck implements StfPluginInterface {
 			
 			// If the Select Compiler question in the JCK interview was answered as "Java Compiler API (JSR199)",
 			// set jck.env.compiler.testCompile.testCompileAPImultiJVM.cmdAsString.
-			fileContent += "set jck.env.compiler.testCompile.testCompileAPImultiJVM.cmdAsString \"" + pathToJava + "\"" + ";\n";
+			fileContent += "set jck.env.compiler.testCompile.testCompileAPImultiJVM." + cmdAsStringOrFile + " \"" + pathToJava + "\"" + ";\n";
 
 			// If the Select Compiler question in the JCK interview was answered as "command line tool",
 			// set set jck.env.compiler.testCompile.cmdAsString.
@@ -773,9 +778,16 @@ public class Jck implements StfPluginInterface {
 			} 
 			
 			if (tests.contains("api/java_rmi") || tests.equals("api")) {
-				fileContent += "set jck.env.compiler.testRmic.cmdAsString \"" + pathToRmic + "\"" + ";\n";
+				fileContent += "set jck.env.compiler.testRmic." + cmdAsStringOrFile + " \"" + pathToRmic + "\"" + ";\n";
 			}
-			fileContent += "set jck.env.compiler.compRefExecute.cmdAsString \"" + pathToJava + "\"" + ";\n";
+			fileContent += "set jck.env.compiler.compRefExecute." + cmdAsStringOrFile + " \"" + pathToJava + "\"" + ";\n";
+
+			if (platform.equals("zos") || platform.equals("aix")) {
+                                // On z/OS and AIX set the compRefExecute file and path separators
+                                // due to JCK class OsHelper bug with getFileSep() in Compiler JCK Interviewer
+                                fileContent += "set jck.env.compiler.compRefExecute.fileSep \"/\";\n";
+                                fileContent += "set jck.env.compiler.compRefExecute.pathSep \":\";\n";
+			}
 
 			extraJvmOptions += suppressOutOfMemoryDumpOptions;
 			

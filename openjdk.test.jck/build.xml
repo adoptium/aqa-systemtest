@@ -55,7 +55,7 @@ limitations under the License.
 	<!-- We need junit, log4j and stf to compile this project. -->
 	<path id="project.class.path">
 		<path refid="junit.class.path" />
-		<path refid="log4j-2.3.class.path" />
+		<path refid="log4j-2.13.3.class.path" />
 		<path refid="stf.class.path" />
 	</path>
 

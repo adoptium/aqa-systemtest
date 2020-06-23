@@ -24,7 +24,7 @@ import net.adoptopenjdk.stf.plugin.interfaces.StfPluginInterface;
 import net.adoptopenjdk.stf.processes.definitions.LoadTestProcessDefinition;
 import net.adoptopenjdk.stf.runner.modes.HelpTextGenerator;
 
-public class MauveSingleThreadLoadTestWithTraceOption implements StfPluginInterface {
+public class MauveSingleThreadTestTrc implements StfPluginInterface {
 	public void help(HelpTextGenerator help) throws StfException {
 		help.outputSection("MauveSingleThreadLoadTest");
 		help.outputText("The MauveSingleThreadLoadTest runs a subset of tests from the GNU mauve project. "

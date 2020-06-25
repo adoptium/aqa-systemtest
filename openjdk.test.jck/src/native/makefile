@@ -118,13 +118,13 @@ SRC_PATH=$(SRCDIR)/src
 
 ifeq ($(PLATFORM),linux_x86-32)
 	CC=gcc
-	CFLAGS=-fPIC -I$(SOLARIS_PATH) -I$(LINUX_PATH) -I$(SRC_PATH)
+	CFLAGS=-fPIC -m32 -I$(SOLARIS_PATH) -I$(LINUX_PATH) -I$(SRC_PATH)
 	LDFLAGS=-shared 
 endif	
 
 ifeq ($(PLATFORM),linux_ppc-32)
 	CC=gcc
-	CFLAGS=-fPIC -I$(SOLARIS_PATH) -I$(LINUX_PATH) -I$(SRC_PATH)
+	CFLAGS=-fPIC -m32 -I$(SOLARIS_PATH) -I$(LINUX_PATH) -I$(SRC_PATH)
 	LDFLAGS=-shared 
 endif	
 
@@ -178,7 +178,7 @@ endif
 
 ifeq ($(PLATFORM),linux_arm-32)
 	CC=gcc
-	CFLAGS=-fPIC -I$(SOLARIS_PATH) -I$(LINUX_PATH) -I$(SRC_PATH)
+	CFLAGS=-fPIC -m32 -I$(SOLARIS_PATH) -I$(LINUX_PATH) -I$(SRC_PATH)
 	LDFLAGS=-shared
 endif
 

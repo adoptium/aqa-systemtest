@@ -67,7 +67,7 @@ public class MauveSingleThreadTestTrc implements StfPluginInterface {
 		
 		LoadTestProcessDefinition loadTestInvocation = test.createLoadTestSpecification()
 				.addJvmOption(modularityOptions)
-				.addJvmOption("-Xdump:system:events=throw,filter=net/adoptopenjdk/loadTest/MauveTestFailureException,range=1..1,request=exclusive+prepwalk")
+				.addJvmOption("-Xdump:system:events=throw,filter=net/adoptopenjdk/loadTest/reporting/MauveTestFailureException,range=1..1,request=exclusive+prepwalk")
 				.addJarToClasspath(mauveJar)
 				.addSuite("mauve")
 				.setSuiteInventory(inventoryFile)

@@ -1,4 +1,11 @@
 <inventory>
+	<!--  Disabled due to https://github.com/eclipse/openj9/issues/8204 -->
+	<mauve class="gnu.testlet.java.util.SimpleTimeZone.inDaylightTime"/>
+	<mauve class="gnu.testlet.java.util.SimpleTimeZone.hashCode"/>
+	<mauve class="gnu.testlet.java.util.SimpleTimeZone.hasSameRules"/>
+	<mauve class="gnu.testlet.java.util.SimpleTimeZone.equals"/>
+	<mauve class="gnu.testlet.java.util.TimeZone.zdump"/>
+	
 	<!-- Disabled as the following tests load awt libraries that are not thread-safe and cause hang on osx openj9 jdk8 : 
 	https://github.com/eclipse/openj9/issues/7050 -->
 	<mauve class="gnu.testlet.java.text.AttributedCharacterIterator.getRunLimit"/>

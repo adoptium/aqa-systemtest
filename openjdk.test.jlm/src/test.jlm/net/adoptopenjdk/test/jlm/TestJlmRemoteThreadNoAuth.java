@@ -67,6 +67,8 @@ public class TestJlmRemoteThreadNoAuth implements StfPluginInterface {
 		// Process definition for the server JVM
 		String inventoryFile = "/openjdk.test.load/config/inventories/mix/mini-mix.xml";
 		
+		// setSuiteNumTests and setSuiteThreadCount need to be big enough to ensure the workload does not
+		// end within the setTimeLimit time.
 		LoadTestProcessDefinition serverLoadTestInvocation = test.createLoadTestSpecification()
 			.addJvmOption("-Xmx256m")
 			.addJvmOption("-Dcom.sun.management.jmxremote.port=1234")
@@ -80,7 +82,7 @@ public class TestJlmRemoteThreadNoAuth implements StfPluginInterface {
 			.setTimeLimit("30m")
 			.setAbortAtFailureLimit(-1)
 			.addSuite("mini-mix")
-			.setSuiteNumTests(900000)
+			.setSuiteNumTests(20000000)
 			.setSuiteInventory(inventoryFile)
 			.setSuiteThreadCount(30)
 		   	.setSuiteRandomSelection();

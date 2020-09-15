@@ -1062,16 +1062,24 @@ public class ThreadData extends VMData {
 						ie.printStackTrace();
 						Assert.fail(ie.getMessage());
 					}
-
-					// GetThreadInfo guess value are not valid so don't try
-					if (methodSignature != null && !operationName.equals("getThreadInfo")
-							&& !operationName.equals("getNativeThreadIds") //This requires "monitor" permission - which is not configured 
-							&& supported == true) {
-						Report.printlnSuccessMsg("Attempting to invoke MBean operation " + operationName);
-						returnedResult = mbsc.invoke(objectName, operationName, arguments, methodSignature);
-						Report.printlnSuccessMsg(
-								"MBean operation " + operationName + " invoked successfully.  Returned result is "
-										+ ((returnedResult == null) ? "" : "not ") + "null");
+					// Make sure we have supplied the right number of arguments for the operation
+					if (methodSignature != null ) {
+					    if ( methodSignature.length != arguments.length ) {
+							Report.printlnInformationMsg(
+								"Not invoking operation " + operationName + " because number of arguments in methodSignature(" + methodSignature.length + ") does not match the number provided in the test(" + arguments.length + ")");
+						}
+						else {
+							// GetThreadInfo guess value are not valid so don't try
+							if ( !operationName.equals("getThreadInfo")
+								&& !operationName.equals("getNativeThreadIds") //This requires "monitor" permission - which is not configured
+								&& supported == true) {
+									Report.printlnSuccessMsg("Attempting to invoke MBean operation " + operationName);
+									returnedResult = mbsc.invoke(objectName, operationName, arguments, methodSignature);
+									Report.printlnSuccessMsg(
+										"MBean operation " + operationName + " invoked successfully.  Returned result is "
+											+ ((returnedResult == null) ? "" : "not ") + "null");
+							}
+						}
 					}
 				}
 			}

@@ -448,7 +448,6 @@ public class ThreadData extends VMData {
 			CompositeData[] lockThdDataset = null;
 			CompositeData[] dumpThdDataset = null;
 
-			Report.printlnIndent("Invoking invokeMBeanOperation: 1");
 			dumpThdDataset = (CompositeData[])invokeMBeanOperation(mbs, tb, "dumpAllThreads", 
 					new Object[] { monitorSupported, synchSupported });
 
@@ -794,7 +793,6 @@ public class ThreadData extends VMData {
 						Report.decrementIndentation();
 					}
 					Report.decrementIndentation();
-					Report.printlnIndent("Invoking invokeMBeanOperation: 2");
 					invokeMBeanOperation(mbsc, objectName, mbci.getName(), arguments);
 					ExpectedMBeanInfo.checkOffConstructor(mbci.getName());
 				} // End of "if(empty mbpia) ... else ..."
@@ -885,7 +883,6 @@ public class ThreadData extends VMData {
 						Report.incrementIndentation();
 						Report.printlnIndent("returns \"" + mboi.getReturnType() + "\"");
 						Report.decrementIndentation();
-						Report.printlnIndent("Invoking invokeMBeanOperation: 3");
 						invokeMBeanOperation(mbsc, objectName, mboi.getName(), arguments);
 					}
 					ExpectedMBeanInfo.checkOffOperation(mboi.getName());
@@ -1034,65 +1031,82 @@ public class ThreadData extends VMData {
 								Assert.fail("MBeanOperationInfo.getSignature() returned null on " + operationName);
 								Report.println("");
 							} else {
-								if ( parameterTypesMatch(mbpia, arguments) ) {
-									available = true;
-									methodSignature = new String[mbpia.length];
-									for (int i = 0; i < mbpia.length; ++i) {
-										methodSignature[i] = mbpia[i].getType();
-									}
-									Report.printlnSuccessMsg("MBean operation " + operationName + " is available");
+								available = true;
+								methodSignature = new String[mbpia.length];
+								for (int i = 0; i < mbpia.length; ++i) {
+									methodSignature[i] = mbpia[i].getType();
+								}
+								Report.printlnSuccessMsg("MBean operation " + operationName + " is available");
 	
-									boolean supported = true;
+								boolean supported = true;
 	
-									try {
-										//Some operations may not be supported check first...
-										if (methodSignature != null && (operationName.equals("getCurrentThreadCpuTime")
-												|| operationName.equals("getCurrentThreadUserTime"))) {
-											supported = ((Boolean)mbsc.getAttribute(objectName, "CurrentThreadCpuTimeSupported"))
-													.booleanValue();
-										} else if (methodSignature != null && (operationName.equals("getThreadCpuTime")
-												|| operationName.equals("getThreadUserTime"))) {
-											supported = ((Boolean)mbsc.getAttribute(objectName, "ThreadCpuTimeSupported"))
-													.booleanValue();
-										} else if (methodSignature != null && operationName.equals("setThreadCpuTimeEnabled")) {
-											boolean currentThdSupported = ((Boolean)mbsc.getAttribute(objectName,
-													"CurrentThreadCpuTimeSupported")).booleanValue();
-											boolean thdSupported = ((Boolean)mbsc.getAttribute(objectName, "ThreadCpuTimeSupported"))
-													.booleanValue();
-											if (currentThdSupported == false || thdSupported == false) {
-												supported = false;
-											}
-										} else if (methodSignature != null
-												&& operationName.equals("setThreadContentionMonitoringEnabled")) {
-											supported = ((Boolean)mbsc.getAttribute(objectName, "ThreadContentionMonitoringSupported"))
-													.booleanValue();
-										} else if (methodSignature != null && operationName.equals("findDeadlockedThreads")) {
-											supported = ((Boolean)mbsc.getAttribute(objectName, "SynchronizerUsageSupported"))
-													.booleanValue();
+								try {
+									//Some operations may not be supported check first...
+									if (methodSignature != null && (operationName.equals("getCurrentThreadCpuTime")
+											|| operationName.equals("getCurrentThreadUserTime"))) {
+										supported = ((Boolean)mbsc.getAttribute(objectName, "CurrentThreadCpuTimeSupported"))
+												.booleanValue();
+									} else if (methodSignature != null && (operationName.equals("getThreadCpuTime")
+											|| operationName.equals("getThreadUserTime"))) {
+										supported = ((Boolean)mbsc.getAttribute(objectName, "ThreadCpuTimeSupported"))
+												.booleanValue();
+									} else if (methodSignature != null && operationName.equals("setThreadCpuTimeEnabled")) {
+										boolean currentThdSupported = ((Boolean)mbsc.getAttribute(objectName,
+												"CurrentThreadCpuTimeSupported")).booleanValue();
+										boolean thdSupported = ((Boolean)mbsc.getAttribute(objectName, "ThreadCpuTimeSupported"))
+												.booleanValue();
+										if (currentThdSupported == false || thdSupported == false) {
+											supported = false;
 										}
-									} catch (AttributeNotFoundException ie) {
-										Report.flushAll();
-										ie.printStackTrace();
-										Assert.fail(ie.getMessage());
+									} else if (methodSignature != null
+											&& operationName.equals("setThreadContentionMonitoringEnabled")) {
+										supported = ((Boolean)mbsc.getAttribute(objectName, "ThreadContentionMonitoringSupported"))
+												.booleanValue();
+									} else if (methodSignature != null && operationName.equals("findDeadlockedThreads")) {
+										supported = ((Boolean)mbsc.getAttribute(objectName, "SynchronizerUsageSupported"))
+												.booleanValue();
 									}
+								} catch (AttributeNotFoundException ie) {
+									Report.flushAll();
+									ie.printStackTrace();
+									Assert.fail(ie.getMessage());
+								}
 
-									if ( supported != true ) {
-										Report.printlnSuccessMsg("MBean operation " + operationName + " not invoked because it is not supported");
-									}
-									if ( operationName.equals("getThreadInfo") || operationName.equals("getNativeThreadIds") ) {
-										Report.printlnSuccessMsg("MBean operation " + operationName + " not invoked - filtered out in ThreadData.java");
-									}
-									if (methodSignature != null
-										&& !operationName.equals("getThreadInfo")
-										&& !operationName.equals("getNativeThreadIds") //This requires "monitor" permission - which is not configured
-										&& supported == true) {
-										Report.printlnSuccessMsg("Attempting to invoke MBean operation " + operationName);
+								if ( supported != true ) {
+									Report.printlnSuccessMsg("MBean operation " + operationName + " not invoked because it is not supported");
+								}
+								if ( operationName.equals("getThreadInfo") || operationName.equals("getNativeThreadIds") ) {
+									Report.printlnSuccessMsg("MBean operation " + operationName + " not invoked - filtered out in ThreadData.java");
+								}
+								if (methodSignature != null
+									&& !operationName.equals("getThreadInfo")
+									&& !operationName.equals("getNativeThreadIds") //This requires "monitor" permission - which is not configured
+									&& supported == true) {
+									Report.printlnSuccessMsg("Attempting to invoke MBean operation " + operationName);
+									boolean parameterTypesMatch = parameterTypesMatch(mbpia, arguments);
+//									if ( parameterTypesMatch(mbpia, arguments) ) {
+									try {
 										returnedResult = mbsc.invoke(objectName, operationName, arguments, methodSignature);
 										Report.printlnSuccessMsg(
 												"MBean operation " + operationName + " invoked successfully.  Returned result is "
 														+ ((returnedResult == null) ? "" : "not ") + "null");
+									} catch (RuntimeMBeanException rmbe) {
+										Report.flushAll();
+										if (rmbe.getCause() instanceof IllegalArgumentException) {
+											if ( ! parameterTypesMatch ) {
+												Report.printlnInformationMsg(
+													"Invocation failed: IllegalArgumentException thrown as expected");
+											} else {
+												Report.printlnInformationMsg(
+														"Invocation failed: IllegalArgumentException thrown unexpectedly (maybe guessed argument values badly)");
+												rmbe.printStackTrace();
+												Assert.fail(rmbe.getMessage());
+											}
+										} else {
+											rmbe.printStackTrace();
+											Assert.fail(rmbe.getMessage());
+										}
 									}
-									break;  // Operation with the required parameters has been found and executed.
 								}
 							}
 						}
@@ -1133,7 +1147,7 @@ public class ThreadData extends VMData {
 	}
 	
 	// Check whether the arguments supplied for an MBean invocation match its signature.
-	// Used to prevent calling overloaded methods with incorrect arguments.
+	// Used to detect calling overloaded methods with incorrect arguments.
 	private boolean parameterTypesMatch (MBeanParameterInfo[] mbpia, Object[] arguments) {
 		boolean parameterTypesMatch = true;
 		if ( mbpia.length != arguments.length ) {

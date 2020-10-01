@@ -64,7 +64,7 @@ public class StringTransformer implements ClassFileTransformer {
 				byte[] classfileBuffer) throws IllegalClassFormatException {
 		byte[] newClassFileBuffer = classfileBuffer;
 		try {
-			if (className.equals("java/lang/String")) {
+			if ((className != null) && className.equals("java/lang/String")) {
 				AgentLogger.printThis("Thread " + threadNumber + "'s transformer is now transforming String.",2);
 				//Step 1: Make a Reader.
 				ClassReader cr = new ClassReader(newClassFileBuffer);

@@ -1081,6 +1081,7 @@ public class ThreadData extends VMData {
 								if (methodSignature != null
 									&& !operationName.equals("getThreadInfo")
 									&& !operationName.equals("getNativeThreadIds") //This requires "monitor" permission - which is not configured
+									&& ( !operationName.equals("dumpAllThreads") && arguments.length == 3 ) // Known openj9 defect. Remove check when https://github.com/eclipse/openj9/issues/10796 is fixed
 									&& supported == true) {
 									Report.printlnSuccessMsg("Attempting to invoke MBean operation " + operationName);
 									boolean parameterTypesMatch = parameterTypesMatch(mbpia, arguments);

@@ -153,8 +153,16 @@ public class JlinkTest implements StfPluginInterface {
 	public void execute(StfCoreExtension test) throws Exception {
 		StfTestArguments testArgs = test.env().getTestProperties("variant");
 		Variant variant = testArgs.decodeEnum("variant", Variant.class);
-		
+		int javaVersion = test.env().primaryJvm().getJavaVersion();
 	    DirectoryRef jmodsDir = test.env().getJavaHome().childDirectory("jmods");
+	    
+	    // For JCK 16+, jlink error message to report unsupported class file format
+	    // prints an additonal exception trace, resulting in an error message we are 
+	    // looking for to appear twice instead of once. 
+	    int jlinkErrMessageCount = 1; 
+	    if (javaVersion > 15 ) {
+	    	jlinkErrMessageCount = 2; 
+	    }
 		
 		switch (variant) {
 			case RequiredMod :
@@ -308,7 +316,7 @@ public class JlinkTest implements StfPluginInterface {
 						ECHO_ON, ExpectedOutcome.exitValue(1).within("2m"), jlinkDefinition);
 				
 				test.doCountFileMatches("Check output", process.getStdoutFileRef(), 
-						1, "not found, required by java.sql");	
+						jlinkErrMessageCount, "not found, required by java.sql");	
 				
 			break;
 		}

@@ -156,9 +156,9 @@ public class JlinkTest implements StfPluginInterface {
 		int javaVersion = test.env().primaryJvm().getJavaVersion();
 	    DirectoryRef jmodsDir = test.env().getJavaHome().childDirectory("jmods");
 	    
-	    // For JCK 16+, jlink error message to report unsupported class file format
-	    // prints an additonal exception trace, resulting in an error message we are 
-	    // looking for to appear twice instead of once. 
+	    // For JDK 16+, jlink error message to report unsupported class file format
+	    // prints an additional exception trace, resulting in an error message we are 
+	    // looking for in the log to now appear twice (for JDK 16+), instead of once. 
 	    int jlinkErrMessageCount = 1; 
 	    if (javaVersion > 15 ) {
 	    	jlinkErrMessageCount = 2; 

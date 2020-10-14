@@ -59,6 +59,7 @@ public class DirectByteBufferLoadTest implements StfPluginInterface {
 				.addProjectToClasspath("openjdk.test.gc")
 				.addProjectToClasspath("openjdk.test.nio")
 				.addSuite("DirectByteBuffer")
+ 				.setSuiteThinkingTime("1ms", "1ms")//   Waiting for 1ms between tests to give the system a chance to reclaim unused native memory.
 				.setSuiteThreadCount(cpuCount - 1, 2) 
 				.setSuiteNumTests(numTests)
 				.setSuiteInventory(inventory)

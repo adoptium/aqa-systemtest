@@ -1085,7 +1085,6 @@ public class ThreadData extends VMData {
 									&& supported == true) {
 									Report.printlnSuccessMsg("Attempting to invoke MBean operation " + operationName);
 									boolean parameterTypesMatch = parameterTypesMatch(mbpia, arguments);
-//									if ( parameterTypesMatch(mbpia, arguments) ) {
 									try {
 										returnedResult = mbsc.invoke(objectName, operationName, arguments, methodSignature);
 										Report.printlnSuccessMsg(

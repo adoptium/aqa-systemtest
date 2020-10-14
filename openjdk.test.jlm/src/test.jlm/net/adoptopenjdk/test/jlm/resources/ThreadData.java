@@ -1128,17 +1128,6 @@ public class ThreadData extends VMData {
 			}
 			re.printStackTrace();
 			Assert.fail(re.getMessage());
-		} catch (RuntimeMBeanException rmbe) {
-			Report.flushAll();
-			if (rmbe.getCause() instanceof IllegalArgumentException) {
-				Report.printlnInformationMsg(
-						"Invocation failed: IllegalArgumentException (probably guessed arguments badly)");
-				rmbe.printStackTrace();
-			}
-			else {
-				rmbe.printStackTrace();
-				Assert.fail(rmbe.getMessage());
-			}
 		} finally {
 			Report.printlnIndent("Attempt to execute MBean operation called \"" + operationName + " complete\"");
 		}

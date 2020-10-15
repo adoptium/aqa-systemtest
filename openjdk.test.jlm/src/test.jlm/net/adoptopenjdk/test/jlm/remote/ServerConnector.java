@@ -109,33 +109,37 @@ public abstract class ServerConnector {
 
 		boolean connected = false;
 		int attempts = 0;
-		while (connected == false && attempts < 30) {        
-			try {
-				Message.logOut("Trying to connect using JMXConnectorFactory");
+		long connectTimeout = 300L * 1000L * 1000L * 1000L;  // 300 secs in nanoseconds
+		long connectStart = System.nanoTime();
+		long connectEnd = 0L;
+		long connectElapsed = 0L;
+		while (connected == false && attempts < 30 && (connectElapsed < connectTimeout) ) {
+			Message.logOut("Attempting to connect");
+			try {    
 				connector = JMXConnectorFactory.connect(address);
 				connected = true;
 			} catch (IOException ie) {
-				// If we didn't connect, keep trying - the JVM being monitored might not be 
-				// ready to accept connections yet.
-				try {           	  
-					Thread.sleep(10000);
-				} catch (InterruptedException e) {
-					Message.logOut("The sleeping profiler was interrupted");
-					e.printStackTrace();
-				}
-
-				Message.logOut("Monitored VM not ready at " + 
-						DateFormat.getDateTimeInstance().format(new Date()) +
-						" (attempt " + attempts + ").");
-				Message.logOut("Wait 10 secs and trying again...");	
+				// If we didn't connect keep trying - the jvm being monitored might not be 
+				// ready to accept connections yet 
+				connectEnd = System.nanoTime();
+				connectElapsed = connectEnd - connectStart;
 
 				attempts++;           	
 				connected = false;
 
-				if (attempts == 30) {
-					Message.logOut("Failed to connect to Monitored VM after "
-							+ "30 attempts - giving up.  IOException received is below:");	 
+				if (connectElapsed > connectTimeout || attempts == 30 ) {
+					Message.logOut("Failed to connect to Monitored VM after " + attempts + " attempts in " + (connectElapsed / 1000000000) + " seconds - giving up.  Connection Exception received is below:");	 
 					ie.printStackTrace();        	  	  
+				}
+				else {
+					Message.logOut("Monitored VM not ready at " + DateFormat.getDateTimeInstance().format(new Date()) +" (attempt " + attempts + ", elapsed " + (connectElapsed / 1000000) + "ms).");
+					Message.logOut("Waiting 5 secs and trying again...");	
+					try {           	  
+						Thread.sleep(5000);
+					} catch (InterruptedException e) {
+						Message.logOut("The sleeping profiler was interrupted");
+						e.printStackTrace();
+					}
 				}
 			} 
 		}
@@ -171,31 +175,39 @@ public abstract class ServerConnector {
 		String[] credentials = new String[] { user, pw };
 		props.put("jmx.remote.credentials", credentials);             
 
-		// If we didn't connect keep try - the jvm being monitored might not be 
-		// ready to accept connections yet 
 		boolean connected = false;
 		int attempts = 0;
-		while (connected == false && attempts < 30) {        
+		long connectTimeout = 300L * 1000L * 1000L * 1000L;  // 300 secs in nanoseconds
+		long connectStart = System.nanoTime();
+		long connectEnd = 0L;
+		long connectElapsed = 0L;
+		while (connected == false && attempts < 30 && (connectElapsed < connectTimeout) ) {
+			Message.logOut("Attempting to connect");
 			try {    
 				connector = JMXConnectorFactory.connect(address, props);
 				connected = true;
 			} catch (IOException ie) {
-				try {           	  
-					Thread.sleep(5000);
-				} catch (InterruptedException e) {
-					Message.logOut("The sleeping profiler was interrupted");
-					e.printStackTrace();
-				}
-
-				Message.logOut("Monitored VM not ready at " + DateFormat.getDateTimeInstance().format(new Date()) +" (attempt " + attempts + ").");
-				Message.logOut("Wait 5 secs and trying again...");	
+				// If we didn't connect keep trying - the jvm being monitored might not be 
+				// ready to accept connections yet 
+				connectEnd = System.nanoTime();
+				connectElapsed = connectEnd - connectStart;
 
 				attempts++;           	
 				connected = false;
 
-				if (attempts == 30) {
-					Message.logOut("Failed to connect to Monitored VM after 30 attempts - giving up.  Connection Exception received is below:");	 
+				if (connectElapsed > connectTimeout || attempts == 30 ) {
+					Message.logOut("Failed to connect to Monitored VM after " + attempts + " attempts in " + (connectElapsed / 1000000000) + " seconds - giving up.  Connection Exception received is below:");	 
 					ie.printStackTrace();        	  	  
+				}
+				else {
+					Message.logOut("Monitored VM not ready at " + DateFormat.getDateTimeInstance().format(new Date()) +" (attempt " + attempts + ", elapsed " + (connectElapsed / 1000000) + "ms).");
+					Message.logOut("Waiting 5 secs and trying again...");	
+					try {           	  
+						Thread.sleep(5000);
+					} catch (InterruptedException e) {
+						Message.logOut("The sleeping profiler was interrupted");
+						e.printStackTrace();
+					}
 				}
 			} 
 		}

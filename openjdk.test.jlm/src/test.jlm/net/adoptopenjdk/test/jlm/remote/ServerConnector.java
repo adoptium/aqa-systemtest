@@ -47,6 +47,7 @@ public abstract class ServerConnector {
 	protected boolean secure;
 	protected String user;
 	protected String pw;
+	long nanosecondsPerSecond = 1000000000L;
 
 	protected ServerConnector (boolean useProxy) {  
 		this.secure = false;
@@ -94,7 +95,10 @@ public abstract class ServerConnector {
 		return builtServerURL;
 	}
 
-	private void getServerConnection() {   
+	private connect() {
+		
+	}
+	private void getServerConnection() {
 		JMXConnector connector = null;
 		JMXServiceURL address = null;
 
@@ -109,11 +113,12 @@ public abstract class ServerConnector {
 
 		boolean connected = false;
 		int attempts = 0;
-		long connectTimeout = 300L * 1000L * 1000L * 1000L;  // 300 secs in nanoseconds
+		int maxAttempts = 30;
+		long connectTimeout = 300L * nanosecondsPerSecond;  // 300 secs in nanoseconds
 		long connectStart = System.nanoTime();
 		long connectEnd = 0L;
 		long connectElapsed = 0L;
-		while (connected == false && attempts < 30 && (connectElapsed < connectTimeout) ) {
+		while (connected == false && attempts < maxAttempts && (connectElapsed < connectTimeout) ) {
 			Message.logOut("Attempting to connect");
 			try {    
 				connector = JMXConnectorFactory.connect(address);
@@ -177,11 +182,12 @@ public abstract class ServerConnector {
 
 		boolean connected = false;
 		int attempts = 0;
-		long connectTimeout = 300L * 1000L * 1000L * 1000L;  // 300 secs in nanoseconds
+		int maxAttempts = 30;
+		long connectTimeout = 300L * nanosecondsPerSecond;  // 300 secs in nanoseconds
 		long connectStart = System.nanoTime();
 		long connectEnd = 0L;
 		long connectElapsed = 0L;
-		while (connected == false && attempts < 30 && (connectElapsed < connectTimeout) ) {
+		while (connected == false && attempts < maxAttempts && (connectElapsed < connectTimeout) ) {
 			Message.logOut("Attempting to connect");
 			try {    
 				connector = JMXConnectorFactory.connect(address, props);

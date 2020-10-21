@@ -96,6 +96,10 @@ public abstract class ServerConnector {
 	}
 
 	private void getServerConnection() {
+		int maxAttempts = 30;
+		long connectTimeout = 300L * nanosecondsPerSecond;  // 300 secs in nanoseconds
+		doConnect(false, maxAttempts, connectTimeout);
+/*
 		JMXConnector connector = null;
 		JMXServiceURL address = null;
 
@@ -157,9 +161,16 @@ public abstract class ServerConnector {
 				ie.printStackTrace();
 			} 
 		}
+*/
 	}
 
 	private void getSecureServerConnection(String user, String pw) {
+		int maxAttempts = 30;
+		long connectTimeout = 300L * nanosecondsPerSecond;  // 300 secs in nanoseconds
+		doConnect(true, maxAttempts, connectTimeout);
+/*
+		doConnect(true)
+	}
 		// Define a JMX connector and connect to it securely using credentials
 		JMXConnector connector = null;
 		JMXServiceURL address = null;
@@ -200,6 +211,82 @@ public abstract class ServerConnector {
 
 				if (connectElapsed > connectTimeout || attempts == 30 ) {
 					Message.logOut("Failed to connect to Monitored VM after " + attempts + " attempts in " + (connectElapsed / 1000000000) + " seconds - giving up.  Connection Exception received is below:");	 
+					ie.printStackTrace();        	  	  
+				}
+				else {
+					Message.logOut("Monitored VM not ready at " + DateFormat.getDateTimeInstance().format(new Date()) +" (attempt " + attempts + ", elapsed " + (connectElapsed / 1000000) + "ms).");
+					Message.logOut("Waiting 5 secs and trying again...");	
+					try {           	  
+						Thread.sleep(5000);
+					} catch (InterruptedException e) {
+						Message.logOut("The sleeping profiler was interrupted");
+						e.printStackTrace();
+					}
+				}
+			} 
+		}
+
+		try {
+			// Find out if we're running on an IBM JVM
+			if (connected == true) {	
+				Message.logOut("Connection established!");
+				this.mbs = connector.getMBeanServerConnection();
+				setIfIBM();
+			}
+		} catch (IOException ie) {
+			Message.logOut("Problem setting IBM extensions flag");
+			ie.printStackTrace();
+		}
+*/
+	}
+
+	private void doConnect(boolean connectSecurely, int maxAttempts, long connectTimeout) {
+		// Define a JMX connector and connect to it
+		JMXConnector connector = null;
+		JMXServiceURL address = null;
+
+		try {
+			address = new JMXServiceURL(this.buildServerURL());
+		} catch (MalformedURLException mue) {
+			Message.logOut("One part of the JMXServiceURL is syntactically incorrect, " +
+					"or host is null and it is not possible to find the local host name, " + 
+					"or port is negative");
+			mue.printStackTrace();
+		} 
+
+		// Is a secure connection required?
+		Map<String, String[]> props = new HashMap<String, String[]>();
+		if ( connectSecurely ) { 
+			String[] credentials = new String[] { this.user, this.pw };
+			props.put("jmx.remote.credentials", credentials);
+		}
+
+		boolean connected = false;
+		int attempts = 0;
+		long connectStart = System.nanoTime();
+		long connectEnd = 0L;
+		long connectElapsed = 0L;
+		while (connected == false && attempts < maxAttempts && (connectElapsed < connectTimeout) ) {
+			Message.logOut("Attempting to connect");
+			try {    
+				if ( connectSecurely ) {
+					connector = JMXConnectorFactory.connect(address, props);
+				}
+				else {
+					connector = JMXConnectorFactory.connect(address);
+				}
+				connected = true;
+			} catch (IOException ie) {
+				// If we didn't connect keep trying - the jvm being monitored might not be 
+				// ready to accept connections yet 
+				connectEnd = System.nanoTime();
+				connectElapsed = connectEnd - connectStart;
+
+				attempts++;           	
+				connected = false;
+
+				if (connectElapsed > connectTimeout || attempts == maxAttempts ) {
+					Message.logOut("Failed to connect to Monitored VM after " + attempts + " attempts in " + (connectElapsed / nanosecondsPerSecond) + " seconds - giving up.  Connection Exception received is below:");	 
 					ie.printStackTrace();        	  	  
 				}
 				else {

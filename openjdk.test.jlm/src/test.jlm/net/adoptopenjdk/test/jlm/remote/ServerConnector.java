@@ -95,9 +95,6 @@ public abstract class ServerConnector {
 		return builtServerURL;
 	}
 
-	private connect() {
-		
-	}
 	private void getServerConnection() {
 		JMXConnector connector = null;
 		JMXServiceURL address = null;

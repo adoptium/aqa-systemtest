@@ -25,6 +25,15 @@ limitations under the License.
 	<!--Set default system test location-->
 	<property name="openjdk_systemtest_root" location="${source_root}/../openjdk-systemtest"/>
 	<property name="jck_makefile_dir" value="${openjdk_systemtest_root}/openjdk.test.jck/src/native"/>
+	
+	<!--Set default JCK location. Relies on environment variables JCK_ROOT and JCK_VERSION -->
+	<loadresource property="jck_short_version">
+	    <concat>${env.JCK_VERSION}</concat>
+	    <filterchain>
+	        <replaceregex pattern="jck([^\.]*)" replace="\1" />
+	    </filterchain>
+	</loadresource>
+	<property name="jck_runtimes_src_dir" value="${env.JCK_ROOT}/JCK-runtime-${jck_short_version}"/>
 
 	<!-- Import settings used by multiple projects.  -->
 	<import file="${stf_root}/stf.build/include/top.xml"/>
@@ -35,17 +44,17 @@ limitations under the License.
 	<property name="openjdk_test_jck_bin_dir" value="bin" />
 
 	<property name="openjdk_test_jck_jar_file" value="${openjdk_test_jck_bin_dir}/${openjdk_test_jck_module}.jar" />
-	
-	<propertyregex property="jck_short_version" input="${env.JCK_VERSION}" regexp="jck([^\.]*)" select="\1" casesensitive="false" />
-	
+
 	<condition property="can_build_jck_natives_windows" value="true">
 		<and>
+			<available file="${jck_runtimes_src_dir}" type="dir"/>
 			<equals arg1="${is_windows}" arg2="true"/>
 			<equals arg1="${windows_native_compiler_present}" arg2="true"/>
 		</and>
 	</condition>
 	<condition property="can_build_jck_natives_unix" value="true">
 		<and>
+			<available file="${jck_runtimes_src_dir}" type="dir"/>
 			<not>
 				<equals arg1="${is_windows}" arg2="true"/>
 			</not>

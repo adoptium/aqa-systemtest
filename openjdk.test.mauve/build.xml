@@ -39,7 +39,7 @@ limitations under the License.
 	<property name="openjdk_test_mauve_work_dir" value="${java.io.tmpdir}/mauve"/>
 	<property name="openjdk_test_mauve_src_dir" value="${openjdk_test_mauve_work_dir}/mauve"/>
 	<property name="openjdk_test_mauve_work_jar_file" value="${openjdk_test_mauve_work_dir}/mauve.jar"/>
-	<property name="openjdk_test_mauve_final_dir" value="${prereqs_root}/mauve"/>
+	<property name="openjdk_test_mauve_final_dir" value="${first_prereqs_root}/mauve"/>
 
 	<!-- We need junit compile this project. -->
 	<path id="project.class.path">
@@ -62,7 +62,7 @@ limitations under the License.
 		4. Run ant force-build -Dmake=make -Djava_compiler=<path_to_javac(.exe)>.
 		   The mauve test cases have compilation errors with java9 (at 28Apr2017) - they use '_' as an
 		   identifer which is illegal in java 9.
-		   This will rebuild from the source and put the results mauve.jar into ${prereqs_root}/mauve
+		   This will rebuild from the source and put the results mauve.jar into ${first_prereqs_root}/mauve
 	-->
 	<target name="force-build" depends="check-if-cvs-available, check-if-source-available, build-archives, check-if-work_jar_file-exists, install-archives">
 	</target>
@@ -363,7 +363,7 @@ limitations under the License.
 		<exec dir="${openjdk_test_mauve_work_dir}" executable="java">
 		<arg value="-Dcvs.root=:pserver:anoncvs@sourceware.org:/cvs/mauve"/>
 		<arg value="-jar"/>
-		<arg value="${prereqs_root}/cvsclient/org-netbeans-lib-cvsclient.jar"/>
+		<arg value="${first_prereqs_root}/cvsclient/org-netbeans-lib-cvsclient.jar"/>
 		<arg value="export"/>
 		<arg value="-r"/>
 		<arg value="HEAD"/>
@@ -379,14 +379,14 @@ limitations under the License.
 	</target>
 
 	<target name="check-if-cvs-available">
-		<echo message="Checking if ${prereqs_root}/cvsclient/org-netbeans-lib-cvsclient.jar exists"/>
-		<available file="${prereqs_root}/cvsclient/org-netbeans-lib-cvsclient.jar" property="cvs_available"/>
+		<echo message="Checking if ${first_prereqs_root}/cvsclient/org-netbeans-lib-cvsclient.jar exists"/>
+		<available file="${first_prereqs_root}/cvsclient/org-netbeans-lib-cvsclient.jar" property="cvs_available"/>
 		<echo message="cvs_available is ${cvs_available}"/>
 	</target>
 
 	<target name="download-cvsclient" depends="check-for-download-tool" unless="${cvs_available}">
-		<mkdir dir="${prereqs_root}/cvsclient"/>
-		<download-file destdir="${prereqs_root}/cvsclient" destfile="org-netbeans-lib-cvsclient.jar" srcurl="https://netbeans.org/projects/versioncontrol/downloads/download/org-netbeans-lib-cvsclient.jar"/>
+		<mkdir dir="${first_prereqs_root}/cvsclient"/>
+		<download-file destdir="${first_prereqs_root}/cvsclient" destfile="org-netbeans-lib-cvsclient.jar" srcurl="https://netbeans.org/projects/versioncontrol/downloads/download/org-netbeans-lib-cvsclient.jar"/>
 	</target>
 
 	<target name="install-archives" if="openjdk_test_mauve_work_jar_file_exists">

@@ -53,6 +53,7 @@ public class DirectByteBufferLoadTest implements StfPluginInterface {
 		int cpuCount = Runtime.getRuntime().availableProcessors();
 		
 		LoadTestProcessDefinition loadTestInvocation = test.createLoadTestSpecification()
+				.addJvmOption("-Xmx512m")
 				.addPrereqJarToClasspath(JavaProcessDefinition.JarId.JUNIT)
 				.addPrereqJarToClasspath(JavaProcessDefinition.JarId.HAMCREST)
 				.addJarToClasspath(filesystemJar)

@@ -40,6 +40,12 @@ public class DirectMemoryTest extends TestCase {
 				bbStore[i] = ByteBuffer.allocateDirect(ALLOC_SIZE);
 				// *** dereference to allow GC
 				bbStore[i] = null;
+				
+				// Allow GC to happen so that native memory is reclaimed 
+				if (i % 5 == 0) {
+					System.gc();
+					System.gc();
+				}
 			}
 			
 			assertTrue(i==ITERATIONS);

@@ -116,11 +116,11 @@ ifeq ($(PLATFORM),linux_arm-64)
 endif
 
 ifeq ($(PLATFORM),osx_x86-64)
-	CFLAGS=-D_JNI_IMPLEMENTATION_ -D_TRIVIAL_AGENT -O0 -g3 -pedantic -c -Wall -std=c99 -fPIC -fno-omit-frame-pointer -static-libgcc -m64 -o $(OBJDIR)/$(SRC)$(OSUFFIX)
-	LFLAGS=-shared -m64 -o
-	IFLAGS=-I. -I$(HEADERDIR) -I$(JAVA_HOME)/include/darwin -I$(JAVA_HOME)/include -I/usr/include
+    SUFFIX=.dylib
+    CFLAGS=-D_JNI_IMPLEMENTATION_ -D_TRIVIAL_AGENT -O0 -g3 -pedantic -c -Wall -std=c99 -fPIC -fno-omit-frame-pointer -m64 -o $(OBJDIR)/$(SRC)$(OSUFFIX)
+    LFLAGS=-m64 -dynamiclib -o
+    IFLAGS=-I. -I$(HEADERDIR) -I$(JAVA_HOME)/include/darwin -I$(JAVA_HOME)/include -I/usr/include
 endif
-
 ifeq ($(PLATFORM),win_x86-32)
     DESTDIR=$(OUTDIR)\$(PLATFORM)
     WIN=1
@@ -132,11 +132,11 @@ ifeq ($(PLATFORM),win_x86-64)
 endif
  
 ifeq ($(PLATFORM),bsd_x86-64)
-	CC=cc
-	LD=cc
-	IFLAGS=-I. -I$(HEADERDIR) -I$(JAVA_HOME)/include/$(shell uname | tr "[:upper:]" "[:lower:]") -I$(JAVA_HOME)/include -I/usr/include
-	CFLAGS=-D_JNI_IMPLEMENTATION_ -D_TRIVIAL_AGENT -O0 -g3 -pedantic -c -Wall -std=c99 -fPIC -fno-omit-frame-pointer -m64 -o $(OBJDIR)/$(SRC)$(OSUFFIX)
-	LFLAGS=-shared -m64 -o
+    CC=cc
+    LD=cc
+    IFLAGS=-I. -I$(HEADERDIR) -I$(JAVA_HOME)/include/$(shell uname | tr "[:upper:]" "[:lower:]") -I$(JAVA_HOME)/include -I/usr/include
+    CFLAGS=-D_JNI_IMPLEMENTATION_ -D_TRIVIAL_AGENT -O0 -g3 -pedantic -c -Wall -std=c99 -fPIC -fno-omit-frame-pointer -m64 -o $(OBJDIR)/$(SRC)$(OSUFFIX)
+    LFLAGS=-shared -m64 -o
 endif
 
 ifeq ($(WIN),1)

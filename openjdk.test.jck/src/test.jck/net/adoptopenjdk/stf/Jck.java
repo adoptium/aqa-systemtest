@@ -113,6 +113,9 @@ public class Jck implements StfPluginInterface {
 	// Variables which hold the values needed for tests
 	private int freePort;
 	
+	private static String archName = System.getProperty("os.arch");
+	private static boolean isRiscv = archName.toLowerCase().contains("riscv");
+	
 	public void help(HelpTextGenerator help) {
 		help.outputSection("JckTest");
 		help.outputText("JckTest executes the Java Compatibility Kit (JCK).");
@@ -377,7 +380,7 @@ public class Jck implements StfPluginInterface {
 			String timeout = "24h";
 			// Use the presence of a '/' to signify that we are running a subset of tests.
 			// If one of the highest level test nodes is being run it is likely to take a long time.
-			if ( tests.contains("/") ) {
+			if ( tests.contains("/") && !isRiscv ) {
 				timeout = "6h";
 			}
 			outcome = ExpectedOutcome.cleanRun().within(timeout);
@@ -400,8 +403,9 @@ public class Jck implements StfPluginInterface {
 	}
 
 	public void tearDown(StfCoreExtension test) throws Exception {
+		String timeout = isRiscv ? "24h" : "2m";
 		test.doRunForegroundProcess("Generating Result Summary", "RS", ECHO_ON, 
-			ExpectedOutcome.cleanRun().within("2m"), test.createJavaProcessDefinition()
+			ExpectedOutcome.cleanRun().within(timeout), test.createJavaProcessDefinition()
 			.addProjectToClasspath("openjdk.test.jck")
 			.runClass(SummaryGenerator.class)
 			.addArg(test.env().getResultsDir().childDirectory("report/xml").childFile("report.xml").getSpec()));

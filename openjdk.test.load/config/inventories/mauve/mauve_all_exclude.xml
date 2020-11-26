@@ -1048,8 +1048,6 @@
 	<mauve class="gnu.testlet.javax.net.ssl.SSLContext.TestGetInstance"/>
 	<mauve class="gnu.testlet.java.security.SecureRandom.SHA1PRNG"/>
 
-	<!-- Excluded due to https://github.com/eclipse/openj9/issues/11206 -->
-	<mauve class="gnu.testlet.java.lang.NullPointerException.constructor"/>
 	<!-- Excluded due to https://bugs.openjdk.java.net/browse/JDK-8231851 -->
 	<mauve class="gnu.testlet.java.text.DecimalFormat.setGroupingSize"/>
 	<!-- Fails on jdk12 hotspot with: 

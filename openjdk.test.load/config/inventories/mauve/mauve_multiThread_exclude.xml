@@ -1,7 +1,4 @@
 <inventory>
-	<!-- Excluded due to https://github.com/eclipse/openj9/issues/11206 -->
-	<mauve class="gnu.testlet.java.lang.NullPointerException.constructor"/>
-
 	<!--  Disabled due to https://github.com/eclipse/openj9/issues/8204 -->
 	<mauve class="gnu.testlet.java.util.SimpleTimeZone.inDaylightTime"/>
 	<mauve class="gnu.testlet.java.util.SimpleTimeZone.hashCode"/>

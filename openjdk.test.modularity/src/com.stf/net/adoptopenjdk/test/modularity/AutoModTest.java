@@ -33,7 +33,7 @@ import java.io.File;
 import org.junit.*;
 import org.junit.runner.*;
 
-public class AutomaticModulesTest implements StfPluginInterface {
+public class AutoModTest implements StfPluginInterface {
 	
 	/**
 	 * Each of the values of the following enum corresponds to a particular test.
@@ -42,11 +42,11 @@ public class AutomaticModulesTest implements StfPluginInterface {
 	 * 		stf.pl -test=AutomaticModulesTest -test-args="variant=<enum_value_of_test>" 
 	 * */
 	public enum Variant { 
-		AutomaticModulesTest1, 
-		AutomaticModulesTest2,
-		ImpliedReadabilityTest1,
-		ImpliedReadabilityTest2,
-		ImpliedReadabilityTest3
+		AutoMod1, 
+		AutoMod2,
+		Impl1,
+		Impl2,
+		Impl3
 	};
 	
 	FileRef commonJar;
@@ -99,7 +99,7 @@ public class AutomaticModulesTest implements StfPluginInterface {
 		Variant variant = testArgs.decodeEnum("variant", Variant.class);
 		
 		switch (variant) {
-			case AutomaticModulesTest1 : 
+			case AutoMod1 : 
 				/**
 				 * Running com.test.TestAutomaticModules for usecase1. 
 				 * Refer to the TestAutomaticModules.java for details.
@@ -119,7 +119,7 @@ public class AutomaticModulesTest implements StfPluginInterface {
 								 .addArg("net.adoptopenjdk.test.modularity.junit.TestAutomaticModules"));
 				break;
 				
-			case AutomaticModulesTest2 : 
+			case AutoMod2 : 
 				/**
 				 * Running com.test.TestAutomaticModules for usecase2. 
 				 * Refer to the TestAutomaticModules.java for details.
@@ -139,7 +139,7 @@ public class AutomaticModulesTest implements StfPluginInterface {
 								 .addArg("net.adoptopenjdk.test.modularity.junit.TestAutomaticModules"));
 				break;
 			
-			case ImpliedReadabilityTest1: 
+			case Impl1: 
 				/**
 				 * Running com.test.TestImpliedReadaibility for usecase1. 
 				 * Refer to the TestImpliedReadaibility.java for details.
@@ -161,7 +161,7 @@ public class AutomaticModulesTest implements StfPluginInterface {
 							 .addArg("net.adoptopenjdk.test.modularity.junit.TestImpliedReadability"));
 				break;
 			
-			case ImpliedReadabilityTest2: 
+			case Impl2: 
 				/**
 				 * Running com.test.TestImpliedReadaibility for usecase2. 
 				 * Refer to the TestImpliedReadaibility.java for details.
@@ -183,7 +183,7 @@ public class AutomaticModulesTest implements StfPluginInterface {
 							.addArg("net.adoptopenjdk.test.modularity.junit.TestImpliedReadability"));
 				break;
 			
-			case ImpliedReadabilityTest3: 
+			case Impl3: 
 				/**
 				 * Running com.test.TestImpliedReadaibility for usecase3.
 				 * Refer to the TestImpliedReadaibility.java for details.

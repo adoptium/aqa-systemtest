@@ -53,7 +53,7 @@ import net.adoptopenjdk.stf.*;
  * This STF automation plugin drives the Override tests using 
  * --patch-module option for Java 9 Modularity
  */
-public class PatchModuleTest implements StfPluginInterface {
+public class PatModTest implements StfPluginInterface {
 	
 	/**
 	 * Each of the values of the following enum corresponds to a particular test.
@@ -62,10 +62,10 @@ public class PatchModuleTest implements StfPluginInterface {
 	 * 		stf.pl -test=PatchModuleTest -test-args="variant=<enum_value_of_test>" 
 	 * */
 	public enum Variant { 
-		PlatformModPatchModule,
-		AppModPatchModule,
-		UnexportedTypePatchModule,
-		AdvancedPatchModule
+		PlatMod,
+		AppMod,
+		Unex,
+		Adv
 	};
 	
 	public void help(HelpTextGenerator help) {
@@ -107,7 +107,7 @@ public class PatchModuleTest implements StfPluginInterface {
 		Variant variant = testArgs.decodeEnum("variant", Variant.class);
 		
 		switch (variant) {
-			case PlatformModPatchModule :
+			case PlatMod :
 				/** 
 				 * Test case 1.1) Verify if we can patch an upgradable platform module using 
 				 * exploded directory
@@ -147,7 +147,7 @@ public class PatchModuleTest implements StfPluginInterface {
 				
 				break;
 				
-			case AppModPatchModule :
+			case AppMod :
 				
 				/** 
 				 * Test case 2.1) Verify if we can patch an Application module 
@@ -189,7 +189,7 @@ public class PatchModuleTest implements StfPluginInterface {
 				
 				break;
 				
-			case UnexportedTypePatchModule :
+			case Unex :
 				
 				/** 
 				 * Test case 3) (Negative test) Include a new package that is not exported 
@@ -232,7 +232,7 @@ public class PatchModuleTest implements StfPluginInterface {
 						);
 				break;
 				
-			case AdvancedPatchModule : 
+			case Adv : 
 				
 				/**
 				 * Test case (5) and (6) are implemented here, please see  

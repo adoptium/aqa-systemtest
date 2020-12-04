@@ -20,7 +20,7 @@ import net.adoptopenjdk.stf.environment.StfTestArguments;
 import net.adoptopenjdk.stf.plugin.interfaces.StfPluginInterface;
 import net.adoptopenjdk.stf.processes.definitions.JavaProcessDefinition.JarId;
 import net.adoptopenjdk.stf.processes.definitions.JlinkDefinition;
-import net.adoptopenjdk.test.modularity.PatchModuleTest.Variant;
+import net.adoptopenjdk.test.modularity.PatModTest.Variant;
 import net.adoptopenjdk.stf.runner.modes.HelpTextGenerator;
 import static net.adoptopenjdk.stf.extensions.core.StfCoreExtension.Echo.ECHO_ON;
 import static net.adoptopenjdk.stf.extensions.core.StfCoreExtension.Echo.ECHO_OFF;
@@ -63,7 +63,7 @@ import org.junit.runner.*;
  * This STF automation plugin drives the Override tests using --patch-module
  * option in a custom runtime image, for Java 9 Modularity
  */
-public class PatchModuleImageTest implements StfPluginInterface {
+public class PatModImgTest implements StfPluginInterface {
 
 	public void help(HelpTextGenerator help) {
 		help.outputSection("Override test with --patch-module");
@@ -117,7 +117,7 @@ public class PatchModuleImageTest implements StfPluginInterface {
 		Variant variant = testArgs.decodeEnum("variant", Variant.class);
 
 		switch (variant) {
-		case PlatformModPatchModule:
+		case PlatMod:
 			/**
 			 * Test case 1.1) Verify if we can patch an upgradable platform
 			 * module using exploded directory
@@ -149,7 +149,7 @@ public class PatchModuleImageTest implements StfPluginInterface {
 
 			break;
 
-		case AppModPatchModule:
+		case AppMod:
 
 			/**
 			 * Test case 2.1) Verify if we can patch an Application module using
@@ -180,7 +180,7 @@ public class PatchModuleImageTest implements StfPluginInterface {
 							.addArg("net.adoptopenjdk.test.modularity.junit.TestOverrideUsingAppModule"));
 			break;
 
-		case UnexportedTypePatchModule:
+		case Unex:
 
 			/**
 			 * Test case 3) (Negative test) Include a new package that is not
@@ -219,7 +219,7 @@ public class PatchModuleImageTest implements StfPluginInterface {
 
 			break;
 
-		case AdvancedPatchModule:
+		case Adv:
 
 			/**
 			 * Test case (1) and (2) are implemented here, please see

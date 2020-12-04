@@ -78,8 +78,8 @@ public class JlinkTest implements StfPluginInterface {
 	 * 		stf.pl -test=JlinkTest -test-args="variant=<enum_value_of_test>" 
 	 * */
 	public enum Variant { 
-		RequiredMod,
-		AddModLimitMod
+		ReqdMod,
+		AddMLimitM
 	};
 	
 	public void help(HelpTextGenerator help) {
@@ -165,7 +165,7 @@ public class JlinkTest implements StfPluginInterface {
 	    }
 		
 		switch (variant) {
-			case RequiredMod :
+			case ReqdMod :
 				/******** 
 				 * Usecase 1: As a Java product developer I can create a custom java runtime image 
 				 * with the required modules (modules - in either .jmod or modular jar format), 
@@ -237,7 +237,7 @@ public class JlinkTest implements StfPluginInterface {
 				
 			break; 
 			
-			case AddModLimitMod : 
+			case AddMLimitM : 
 		
 				/******** 
 				 * Usecase 2: As a Java product developer I can create a custom java runtime 

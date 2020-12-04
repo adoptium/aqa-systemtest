@@ -40,7 +40,7 @@ import org.junit.runner.*;
  * again into a modular jar (place the module descriptor - module-info.class at the root dir)
  */
 
-public class ExplicitModulesTest implements StfPluginInterface {
+public class ExplMod implements StfPluginInterface {
 	public void help(HelpTextGenerator help) {
 		help.outputSection("Explicit Modules test");
 		help.outputText("This test verifies if non-modular jar can be used to run the apps by converting into explicit modules");

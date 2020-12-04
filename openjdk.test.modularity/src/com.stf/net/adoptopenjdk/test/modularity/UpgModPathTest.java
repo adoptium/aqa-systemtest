@@ -56,7 +56,7 @@ import net.adoptopenjdk.test.modularity.*;
  * This STF automation plugin drives the Override tests using 
  * --upgrade-module-path option for Java 9 Modularity
  */
-public class UpgradeModPathTest implements StfPluginInterface {
+public class UpgModPathTest implements StfPluginInterface {
 	
 	/**
 	 * Each of the values of the following enum corresponds to a particular test.
@@ -65,10 +65,10 @@ public class UpgradeModPathTest implements StfPluginInterface {
 	 * 		stf.pl -test=UpgradeModPathTest -test-args="variant=<enum_value_of_test>" 
 	 * */
 	public enum Variant { 
-		ExpDirModUpgrade, 
-		ExpDirModUpgradeCRImage,
-		JarredModUpgrade, 
-		JarredModUpgradeCRImage
+		Exp, 
+		ExpImg,
+		Jar, 
+		JarImg
 	};
 	
 	ModuleRef helloOverrideModule = null;
@@ -111,7 +111,7 @@ public class UpgradeModPathTest implements StfPluginInterface {
 			 * 1) The following tests pertain to overriding 
 			 * using an exploded module folder 
 			 * ******************************/
-			case ExpDirModUpgrade : 
+			case Exp : 
 				/*1.1) Override an application module*/
 				test.doRunForegroundProcess("Override an application module", "OT11", 
 						ECHO_ON, ExpectedOutcome.cleanRun().within("1m"), 
@@ -166,7 +166,7 @@ public class UpgradeModPathTest implements StfPluginInterface {
 				
 				break;
 				
-			case ExpDirModUpgradeCRImage : 
+			case ExpImg : 
 				
 				/*1.3) Override an application module using a custom runtime image*/
 				test.doRunForegroundProcess("Override an application module "
@@ -224,7 +224,7 @@ public class UpgradeModPathTest implements StfPluginInterface {
 			 * using modularized jar 
 			 * ******************************/
 				
-			case JarredModUpgrade :
+			case Jar :
 				
 				/*2.1) Override an application module*/
 				intializeOverrideModuleJars(test);
@@ -284,7 +284,7 @@ public class UpgradeModPathTest implements StfPluginInterface {
 				 
 				break;
 				
-			case JarredModUpgradeCRImage :
+			case JarImg :
 				
 				/*2.3) Override an application module using a custom runtime image*/
 				intializeOverrideModuleJars(test);

@@ -48,7 +48,7 @@ service provider when there are multiple service provider jars  specified on the
 as exploded modules, provider2 - as modular jar, provider3 - regular jar with META_INF/services on 
 modulepath) and classpath (provider 4 - regular jar with META_INF/services)
 */
-public class ServiceLoadersTest implements StfPluginInterface {
+public class SLTest implements StfPluginInterface {
 	public void help(HelpTextGenerator help) {
 		help.outputSection("Service Loaders test");
 		help.outputText("This test verifies if the ServiceLoader loads the providers specified on the modulepath as explicit modules modular jars, exploded modules, automatic modules and on classpath");

@@ -44,7 +44,7 @@ import org.junit.runner.*;
  */
 public class CLTestImage implements StfPluginInterface {
 	
-	enum Variant { CLTest, CLTestUsingResourceFiles };
+	enum Variant { Img, CLTestUsingResourceFiles };
 	
 	public void help(HelpTextGenerator help) {
 		help.outputSection("ClassLoading test using a custom runtime image");
@@ -86,7 +86,7 @@ public class CLTestImage implements StfPluginInterface {
 		StfTestArguments testArgs = test.env().getTestProperties("variant");
 		Variant variant = testArgs.decodeEnum("variant", Variant.class);
 		switch (variant) {
-			case CLTest : 
+			case Img : 
 				test.doRunForegroundProcess("Run Modularity ClassLoading tests using a "
 						+ "Custom Runtime Image", "CLI", 
 						ECHO_ON, ExpectedOutcome.cleanRun().within("1m"), 

@@ -32,7 +32,7 @@ import java.io.File;
 import org.junit.*;
 import org.junit.runner.*;
 
-public class JDKInternalAPIsTest implements StfPluginInterface {
+public class InternalAPIs implements StfPluginInterface {
 	public void help(HelpTextGenerator help) {
 		help.outputSection("JDK Internal APIs test");
 		help.outputText("This test verifies if the critical internal APIs as "

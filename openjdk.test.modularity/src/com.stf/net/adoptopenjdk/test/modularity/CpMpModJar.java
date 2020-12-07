@@ -44,7 +44,7 @@ import org.junit.runner.*;
  * self contained, and means that you don't need to know what the build.xml is doing
  * in order to understand this test.
  */
-public class CpMpModularJarTest implements StfPluginInterface {
+public class CpMpModJar implements StfPluginInterface {
 	public void help(HelpTextGenerator help) {
 		help.outputSection("Mixed classpath & modulepath test using modular jars");
 		help.outputText("This test invokes a Module test that accesses public types on both classpath and modulepath");

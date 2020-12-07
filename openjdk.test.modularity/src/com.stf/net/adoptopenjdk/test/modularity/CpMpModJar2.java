@@ -34,12 +34,13 @@ import org.junit.*;
 import org.junit.runner.*;
 
 import adoptopenjdk.test.modularity.hi.Hi;
+
 /**
- * This test is a variant of CpMpModularJarTest2, except that the main class to run
- * is not embedded in the modular jar with '--main-class=adoptopenjdk.test.modularity.hi.Hi'. 
- * It is instead supplied as a main class on the '-m' java argument. eg, '-m com.hi/adoptopenjdk.test.modularity.hi.Hi'
+ * This test is a variant of CpMpModJar.
+ * It runs java usinfg a modular jar which has a main class. This has been 
+ * created with '--main-class=adoptopenjdk.test.modularity.hi.Hi'
  */
-public class CpMpModularJarTest3 implements StfPluginInterface {
+public class CpMpModJar2 implements StfPluginInterface {
 	public void help(HelpTextGenerator help) {
 		help.outputSection("Mixed classpath & modulepath test using modular jars");
 		help.outputText("This test invokes a Module test that accesses public types on both classpath and modulepath");
@@ -50,24 +51,25 @@ public class CpMpModularJarTest3 implements StfPluginInterface {
 	
 	public void setUp(StfCoreExtension test) throws StfException {
 	}
-
+	
 	public void execute(StfCoreExtension test) throws StfException {
-		// Package com.hi into a modular jar.
-		// Note there is no main class specified
-	    ModuleRef hiModule = test.doCreateModularJar("Create com.hello jar", "openjdk.test.modularity/bin/common-mods/com.hi");
+		// Package com.hi into a modular jar with a main class
+	    ModuleRef hiModule = test.doCreateModularJar("Create com.hello jar", 
+	    		"openjdk.test.modularity/bin/common-mods/com.hi", Hi.class);
 		
 		// Build a description of how to run JUnit with the modular jar.
-	    // Roughly equivilant to: java --module-path com.hi.jar -m com.hi/adoptopenjdk.test.modularity.hi.Hi "everyone"
+	    // Roughly equivilant to: java --module-path com.hi.jar -m com.hi "everyone"
 		JavaProcessDefinition javaProcessDefinition = test.createJavaProcessDefinition()
 		    .addModuleToModulepath(hiModule)
-		    .addInitialModule("com.hi", Hi.class)  // Specify class to run
+		    .addInitialModule("com.hi")
 		    .addArg("everyone");
 		
-		// Run Hi.main()
-		String comment = "Run modularity test with module main class";
-		StfProcess process = test.doRunForegroundProcess(comment, "CpMp", ECHO_ON, ExpectedOutcome.cleanRun().within("1m"), javaProcessDefinition);
+		// Run TestCpMp as junit test with modular jars
+		String comment = "Run modularity test in Junit";
+		StfProcess process = test.doRunForegroundProcess(comment, "CpMp", ECHO_ON, 
+				ExpectedOutcome.cleanRun().within("1m"), javaProcessDefinition);
 		
-		// Make sure that a single instance of the expected output was produced
+		// Make sure that 'hi.class' wrote a single instance of the expected output
 		test.doCountFileMatches("Check output", process.getStdoutFileRef(), 1, "Hi everyone");
 	}
 

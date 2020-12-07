@@ -66,7 +66,7 @@ import org.junit.runner.*;
  * 		and ensure a given key,value pair exists in the release info file of the created image. 
  */
 
-public class JlinkPluginOptionsTest implements StfPluginInterface {
+public class JlinkPluginTest implements StfPluginInterface {
 
    ModuleRef mainModuleMjar;
    ModuleRef helloModuleMjar;
@@ -83,8 +83,8 @@ public class JlinkPluginOptionsTest implements StfPluginInterface {
 	 * 		stf.pl -test=JlinkPluginOptionsTest -test-args="variant=<enum_value_of_test>" 
 	 * */
 	public enum Variant { 
-		CompressOptionTest,
-		GeneralOptionsTest
+		Compress,
+		GenOpt
 	};
 	
 	
@@ -149,7 +149,7 @@ public class JlinkPluginOptionsTest implements StfPluginInterface {
 	  Variant variant = testArgs.decodeEnum("variant", Variant.class);
 	  
 	  switch (variant) {
-	     case CompressOptionTest :
+	     case Compress :
 	        /********  
 	         * Use case 4.2 Create Custom java runtime image(modules - in either .jmod or modular 
 	         * jar format or exploded directory ) using  jlink Option: --compress=<0|1|2>
@@ -186,7 +186,7 @@ public class JlinkPluginOptionsTest implements StfPluginInterface {
 	    
 		 break;
 	    
-	     case GeneralOptionsTest : 
+	     case GenOpt : 
 	        		  
 		    /********
 		     * Usecase 4.3) Create a custom runtime image(modules in .jar format) using jlink plugin option: --exclude-files

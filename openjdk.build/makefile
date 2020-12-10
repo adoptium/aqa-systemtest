@@ -811,7 +811,7 @@ test.TestJlmRemoteThreadNoAuth:
 	echo Target $@ completed	
 test.MixedLoadTest:
 	echo Running target $@
-	$(STF_COMMAND) -test=MixedLoadTest -test-args="workload=mix-few" $(LOG)
+	$(STF_COMMAND) -test=MixedLoadTest -test-args="timeLimit=1m" $(LOG)
 	echo Target $@ completed
 																					
 # The test.Custom target enables users to execute arbitrary stf.pl command lines if required for investigating failures.

@@ -15,6 +15,7 @@
 package net.adoptopenjdk.stf;
 
 import net.adoptopenjdk.loadTest.InventoryData;
+import net.adoptopenjdk.stf.codeGeneration.Stage;
 import net.adoptopenjdk.stf.environment.FileRef;
 import net.adoptopenjdk.stf.environment.JavaVersion;
 import net.adoptopenjdk.stf.extensions.core.StfCoreExtension;
@@ -24,12 +25,11 @@ import net.adoptopenjdk.stf.plugin.interfaces.StfPluginInterface;
 import net.adoptopenjdk.stf.processes.definitions.LoadTestProcessDefinition;
 import net.adoptopenjdk.stf.runner.modes.HelpTextGenerator;
 
-public class MauveSingleThreadLoadTest implements StfPluginInterface {
+public class MauveMultiThrdLoadTrc implements StfPluginInterface {
 	public void help(HelpTextGenerator help) throws StfException {
-		help.outputSection("MauveSingleThreadLoadTest");
-		help.outputText("The MauveSingleThreadLoadTest runs a subset of tests from the GNU mauve project. "
-				+ "The tests run on a single thread because some of them exercise swing and awt "
-				+ "which are not thread safe");
+		help.outputSection("MauveMultiThrdLoadTrc");
+		help.outputText("The MauveMultiThrdLoadTrc runs a subset of tests from the GNU mauve project. "
+				+ "All tests are thread safe.");
 	}
 
 	public void pluginInit(StfCoreExtension stf) throws StfException {
@@ -48,10 +48,11 @@ public class MauveSingleThreadLoadTest implements StfPluginInterface {
 		
 		JavaVersion jvm = test.env().primaryJvm();
 
-		String inventoryFile = "/openjdk.test.load/config/inventories/mauve/mauve_all.xml";
+		String inventoryFile = "/openjdk.test.load/config/inventories/mauve/mauve_multiThread.xml";
 		
 		int numMauveTests = InventoryData.getNumberOfTests(test, inventoryFile);
-		
+		int cpuCount = Runtime.getRuntime().availableProcessors();
+
 		/*
 		 * Three Mauve tests require these add-opens options to run because modularity Java (9+) 
 		 * denies them the JCL module/package access they need to run to completion.
@@ -65,18 +66,27 @@ public class MauveSingleThreadLoadTest implements StfPluginInterface {
 			}; 
 		}
 		
+		int multiplier = 1000; 
+		
+		// If special JIT modes are used, the test runs much slower, so we need to use a reduced amount of load
+		if (test.isJavaArgPresent(Stage.EXECUTE, "-Xjit:count=0") || 
+				test.isJavaArgPresent(Stage.EXECUTE, "-Xjit:count=0,optlevel=warm,gcOnResolve,rtResolve") ||
+				test.isJavaArgPresent(Stage.EXECUTE, "-Xjit:enableOSR,enableOSROnGuardFailure,count=1,disableAsyncCompilation")) {
+				multiplier = 250;
+		}
+
 		LoadTestProcessDefinition loadTestInvocation = test.createLoadTestSpecification()
 				.addJvmOption(modularityOptions)
+				.addJvmOption("-Xdump:system:events=throw,filter=net/adoptopenjdk/loadTest/reporting/MauveTestFailureException,range=1..1,request=exclusive+prepwalk")
 				.addJarToClasspath(mauveJar)
 				.addSuite("mauve")
 				.setSuiteInventory(inventoryFile)
-				.setSuiteThreadCount(1)
-				.setSuiteNumTests(numMauveTests * 500) // Run each test 500 times
-				.setSuiteSequentialSelection();
-//				.setSuiteRandomSelection();
+				.setSuiteThreadCount(cpuCount - 1, 3)   // Leave 1 cpu for the JIT and one for GC, but min 2
+				.setSuiteNumTests(numMauveTests * multiplier) // Run each test about 1000 times
+				.setSuiteRandomSelection();
 		
 		test.doRunForegroundProcess("Run Mauve load test", "LT", Echo.ECHO_ON,
-				ExpectedOutcome.cleanRun().within("1h"), 
+				ExpectedOutcome.cleanRun().within("2h"), 
 				loadTestInvocation);
 	}
 

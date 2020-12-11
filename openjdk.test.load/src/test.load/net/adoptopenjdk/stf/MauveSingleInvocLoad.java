@@ -24,12 +24,12 @@ import net.adoptopenjdk.stf.plugin.interfaces.StfPluginInterface;
 import net.adoptopenjdk.stf.processes.definitions.LoadTestProcessDefinition;
 import net.adoptopenjdk.stf.runner.modes.HelpTextGenerator;
 
-public class MauveSingleThreadTestTrc implements StfPluginInterface {
+public class MauveSingleInvocLoad implements StfPluginInterface {
 	public void help(HelpTextGenerator help) throws StfException {
-		help.outputSection("MauveSingleThreadLoadTest");
-		help.outputText("The MauveSingleThreadLoadTest runs a subset of tests from the GNU mauve project. "
-				+ "The tests run on a single thread because some of them exercise swing and awt "
-				+ "which are not thread safe");
+		help.outputSection("MauveSingleInvocLoad");
+		help.outputText("The MauveSingleInvocLoad runs a subset of tests from the GNU mauve project. "
+				+ "The tests are run once to identify any issues which do not actually require a load test "
+				+ "(multi-invocation or multi-thread to reveal themselves");
 	}
 
 	public void pluginInit(StfCoreExtension stf) throws StfException {
@@ -67,12 +67,11 @@ public class MauveSingleThreadTestTrc implements StfPluginInterface {
 		
 		LoadTestProcessDefinition loadTestInvocation = test.createLoadTestSpecification()
 				.addJvmOption(modularityOptions)
-				.addJvmOption("-Xdump:system:events=throw,filter=net/adoptopenjdk/loadTest/reporting/MauveTestFailureException,range=1..1,request=exclusive+prepwalk")
 				.addJarToClasspath(mauveJar)
 				.addSuite("mauve")
 				.setSuiteInventory(inventoryFile)
 				.setSuiteThreadCount(1)
-				.setSuiteNumTests(numMauveTests * 500) // Run each test 500 times
+				.setSuiteNumTests(numMauveTests) // Run each test once times
 				.setSuiteSequentialSelection();
 //				.setSuiteRandomSelection();
 		

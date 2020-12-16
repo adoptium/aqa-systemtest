@@ -56,7 +56,7 @@ public class HCRLateAttachWorkload implements StfPluginInterface {
 		}
 		
 		// Specify the Process definition for the workload processes.
-		FileRef asmJar = test.env().findPrereqFile("/asm-7.3.1/asm-7.3.1.jar");
+		FileRef asmJar = test.env().findPrereqFile("/asm-9.0/asm-9.0.jar");
 		// Temporarily switched from using mini-mix to avoid test failures not related to HCR.
 		//String inventoryFile = "/openjdk.test.load/config/inventories/mix/mini-mix.xml";
 		String inventoryFile = "/openjdk.test.load/config/inventories/util/util.xml";

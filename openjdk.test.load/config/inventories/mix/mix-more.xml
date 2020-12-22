@@ -5,7 +5,7 @@
 
 <inventory>
 	<include inventory="/openjdk.test.load/config/inventories/math/bigdecimal.xml"/>
-	<include inventory="/openjdk.test.load/config/inventories/mauve/mauve_all.xml"/>
+	<include inventory="/openjdk.test.load/config/inventories/mauve/mauve_multiThread.xml"/>
 	<include inventory="/openjdk.test.load/config/inventories/lang/lang.xml"/>
 	<include inventory="/openjdk.test.load/config/inventories/nio/nio.xml"/>
 	<include inventory="/openjdk.test.load/config/inventories/concurrent/concurrent.xml"/>

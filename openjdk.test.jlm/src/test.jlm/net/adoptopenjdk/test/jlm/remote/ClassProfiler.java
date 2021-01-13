@@ -166,22 +166,23 @@ public class ClassProfiler extends ServerConnector {
 			ie.printStackTrace();
 			Assert.fail("The sleeping profiler was interrupted");
 		} catch (UndeclaredThrowableException ue) {
+			// If the exception was caused by a Connect or Unmarshal Exception
+			// assume the monitored JVM has finished.
 			Throwable cause = ue.getCause();
 			Class<ConnectException> connectExcept = ConnectException.class;
 			Class<UnmarshalException> unmarshalExcept = UnmarshalException.class;
-
-			if (connectExcept.isInstance(cause) || unmarshalExcept.isInstance(cause)) {
-				
-				// If the exception was caused by a Connect or Unmarshal
-				// Exception, assume the monitored JVM has finished. 
-				this.closeCSVFile();
-				Message.logOut("Exiting as JVM we are connected to has finished");
-				Assert.fail("Exiting as JVM we are connected to has finished");
-			} else {
-				Message.logOut(ue.getMessage());
-				ue.printStackTrace();
-				Assert.fail(ue.getMessage());
+			String msg = "";
+			if (connectExcept.isInstance(cause)) {
+				msg = "Exiting as ConnectException thrown receiving data from the connected JVM.  This may mean the JVM we are connected to has finished. ";
 			}
+			else if (unmarshalExcept.isInstance(cause)) {
+				msg = "Exiting as UnmarshalException thrown receiving data from the connected JVM.  This may mean the JVM we are connected to has finished. ";
+			}
+			msg += ue.getMessage();
+			this.closeCSVFile();
+			Message.logOut(msg);
+			ue.printStackTrace();
+			Assert.fail(msg);
 		} finally {
 			this.closeCSVFile();
 		}
@@ -258,17 +259,22 @@ public class ClassProfiler extends ServerConnector {
 				Thread.sleep(1000);
 				secondsCnt++;
 			}
-
-			// If the exception is a Connect or Unmarshal Exception, assume the
-			// monitored JVM has finished 
+		// If the exception is a Connect or Unmarshal Exception assume the
+		// monitored JVM has finished.
 		} catch (ConnectException ce) {
 			this.closeCSVFile();
-			Message.logOut("Exiting as JVM we are connected to has finished");
-			Assert.fail("Exiting as JVM we are connected to has finished");
+			String msg = "Exiting as ConnectException thrown receiving data from the connected JVM.  This may mean the JVM we are connected to has finished. ";
+			msg += ce.getMessage();
+			Message.logOut(msg);
+			ce.printStackTrace();
+			Assert.fail(msg);
 		} catch (UnmarshalException ue) {
 			this.closeCSVFile();
-			Message.logOut("Exiting as JVM we are connected to has finished");
-			Assert.fail("Exiting as JVM we are connected to has finished");
+			String msg = "Exiting as UnmarshalException thrown receiving data from the connected JVM.  This may mean the JVM we are connected to has finished. ";
+			msg += ue.getMessage();
+			Message.logOut(msg);
+			ue.printStackTrace();
+			Assert.fail(msg);
 		} catch (InterruptedException ie) {
 			Message.logOut("The sleeping profiler was interrupted");
 			ie.printStackTrace();

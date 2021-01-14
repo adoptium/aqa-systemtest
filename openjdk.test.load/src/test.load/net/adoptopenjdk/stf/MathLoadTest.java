@@ -34,7 +34,7 @@ import net.adoptopenjdk.stf.runner.modes.HelpTextGenerator;
 public class MathLoadTest implements StfPluginInterface {
 	private enum Workloads {
 		//Workload  Multiplier  Timeout  InventoryFile
-		math( 		   50, 		 "20h", 	"math.xml"),
+		math( 		   50, 		 "2h", 	"math.xml"),
 		bigDecimal(    50,		 "1h", 		"bigdecimal.xml"),
 		autoSimd( 	   4000, 	 "5m", 		"autosimd.xml");
 		

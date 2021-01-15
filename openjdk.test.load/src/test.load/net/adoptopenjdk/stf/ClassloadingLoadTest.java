@@ -43,22 +43,25 @@ public class ClassloadingLoadTest implements StfPluginInterface {
 	}
 
 	public void pluginInit(StfCoreExtension stf) throws StfException {
-		if (stf.isJavaArgPresent(Stage.EXECUTE, "-Xjit:count=0,optlevel=warm,gcOnResolve,rtResolve") ||
-			stf.isJavaArgPresent(Stage.EXECUTE, "-Xjit:enableOSR,enableOSROnGuardFailure,count=1,disableAsyncCompilation")) {
-				specialTest = true;
-			}
-			
-			if(specialTest) {
-				// If we are running with special JIT modes which are slow, reduce workload 
-				testCountMultiplier = 1500; 
-				
-			} 	
 	}
 
 	public void setUp(StfCoreExtension test) throws StfException {
 	}
 
 	public void execute(StfCoreExtension test) throws StfException {
+		String jvmOptionsInUse = test.getJavaArgs(test.env().primaryJvm()); 
+		
+		if (jvmOptionsInUse.contains("-Xjit:count") ||
+			jvmOptionsInUse.contains("Xjit:enableOSR")) {
+			specialTest = true;
+		}
+		
+		if(specialTest) {
+			// If we are running with special JIT modes which are slow, reduce workload 
+			testCountMultiplier = 500; 
+			
+		} 	
+		
 		String inventoryFile = "/openjdk.test.load/config/inventories/classloading/classloading.xml";
 		int totalTests = InventoryData.getNumberOfTests(test, inventoryFile);
 		int cpuCount = Runtime.getRuntime().availableProcessors();

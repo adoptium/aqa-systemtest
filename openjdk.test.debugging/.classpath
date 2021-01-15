@@ -2,10 +2,10 @@
 <classpath>
 	<classpathentry kind="src" path="src/test.debugging"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="lib" path="/systemtest_prereqs/junit-4.12/junit-4.12.jar"/>
+	<classpathentry kind="lib" path="/systemtest_prereqs/junit/junit.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/stf.core"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/stf.load"/>
 	<classpathentry kind="lib" path="/systemtest_prereqs/tools/tools.jar"/>
-	<classpathentry kind="lib" path="/systemtest_prereqs/asm-9.0/asm-9.0.jar"/>
+	<classpathentry kind="lib" path="/systemtest_prereqs/asm/asm.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

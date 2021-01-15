@@ -3,8 +3,8 @@
 	<classpathentry kind="src" path="src/test.jck"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/stf.core"/>
-	<classpathentry kind="lib" path="/systemtest_prereqs/log4j-2.13.3/log4j-api-2.13.3.jar"/>
-	<classpathentry kind="lib" path="/systemtest_prereqs/log4j-2.13.3/log4j-core-2.13.3.jar"/>
-	<classpathentry kind="lib" path="/systemtest_prereqs/junit-4.12/junit-4.12.jar"/>
+	<classpathentry kind="lib" path="/systemtest_prereqs/log4j/log4j-api.jar"/>
+	<classpathentry kind="lib" path="/systemtest_prereqs/log4j/log4j-core.jar"/>
+	<classpathentry kind="lib" path="/systemtest_prereqs/junit/junit.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

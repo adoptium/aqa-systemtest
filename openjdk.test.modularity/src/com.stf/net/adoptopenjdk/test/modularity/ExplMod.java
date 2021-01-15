@@ -56,8 +56,8 @@ public class ExplMod implements StfPluginInterface {
 		FileRef junitPath = test.env().getJarLocation(JavaProcessDefinition.JarId.JUNIT);
 		FileRef hamcrestPath = test.env().getJarLocation(JavaProcessDefinition.JarId.HAMCREST);
 		
-		String explicitModule_JunitJarName = "junit-4.12.jar";
-		String explicitModule_HamcrestJarName = "hamcrest-core-1.3.jar";
+		String explicitModule_JunitJarName = "junit.jar";
+		String explicitModule_HamcrestJarName = "hamcrest-core.jar";
 		DirectoryRef testsDir = test.env().findTestDirectory("openjdk.test.modularity/bin/tests");
 		
 		// Create necessary modular jars 
@@ -112,7 +112,7 @@ public class ExplMod implements StfPluginInterface {
 						.setJDKToolOrUtility("jar")	
 						.addArg("-xf " + junitCopy.childFile(explicitModule_JunitJarName).getSpec() ));
 		
-		// Compile the module-info.java generated for junit-4.12.jar and update the module-info.class in the jar file.
+		// Compile the module-info.java generated for junit.jar and update the module-info.class in the jar file.
 		test.doRunForegroundProcess("Compiling the module info", "JAVC", ECHO_ON, ExpectedOutcome.cleanRun().within("1m"), 
 					test.createJDKToolProcessDefinition()
 						.setJDKToolOrUtility("javac")	

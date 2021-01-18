@@ -18,10 +18,10 @@ package net.adoptopenjdk.test.hcrAgent.agent;
 import java.lang.instrument.ClassFileTransformer;
 import java.security.ProtectionDomain;
 import java.lang.instrument.IllegalClassFormatException;
-import org.objectweb.asm.Opcodes;
-import org.objectweb.asm.ClassReader;
-import org.objectweb.asm.ClassWriter;
-import org.objectweb.asm.ClassVisitor;
+import jdk.internal.org.objectweb.asm.Opcodes;
+import jdk.internal.org.objectweb.asm.ClassReader;
+import jdk.internal.org.objectweb.asm.ClassWriter;
+import jdk.internal.org.objectweb.asm.ClassVisitor;
 
 /*
  * This class allows us to take an existing class' byte code and pass it through our modifier code.

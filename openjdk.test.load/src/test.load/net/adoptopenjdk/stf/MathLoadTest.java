@@ -17,7 +17,6 @@ package net.adoptopenjdk.stf;
 import java.util.Arrays;
 
 import net.adoptopenjdk.loadTest.InventoryData;
-import net.adoptopenjdk.stf.codeGeneration.Stage;
 import net.adoptopenjdk.stf.environment.StfTestArguments;
 import net.adoptopenjdk.stf.extensions.core.StfCoreExtension;
 import net.adoptopenjdk.stf.extensions.core.StfCoreExtension.Echo;
@@ -84,12 +83,16 @@ public class MathLoadTest implements StfPluginInterface {
 	}
 	
 	public void pluginInit(StfCoreExtension stf) throws StfException {
+	}
+
+	public void execute(StfCoreExtension test) throws StfException {
 		// Find out which workload we need to run
-		StfTestArguments testArgs = stf.env().getTestProperties("workload=[math]");	
+		StfTestArguments testArgs = test.env().getTestProperties("workload=[math]");
+		String jvmOptionsInUse = test.getJavaArgs(test.env().primaryJvm()); 
 		
-		if (stf.isJavaArgPresent(Stage.EXECUTE, "-Xjit:count=0") || 
-			stf.isJavaArgPresent(Stage.EXECUTE, "-Xjit:count=0,optlevel=warm,gcOnResolve,rtResolve") ||
-			stf.isJavaArgPresent(Stage.EXECUTE, "-Xjit:enableOSR,enableOSROnGuardFailure,count=1,disableAsyncCompilation")) {
+		// If we are using JVM options that contains slow running JIT options, use reduced workload 
+		if (jvmOptionsInUse.contains("-Xjit:count") ||
+			jvmOptionsInUse.contains("Xjit:enableOSR")) {
 			specialTest = true;
 		}
 		
@@ -98,9 +101,7 @@ public class MathLoadTest implements StfPluginInterface {
 		} else {
 			workload = testArgs.decodeEnum("workload", Workloads.class);
 		}	
-	}
-
-	public void execute(StfCoreExtension test) throws StfException {
+		
 		String inventoryFile = null;
 		int cpuCount = Runtime.getRuntime().availableProcessors();
 		int multiplier = 1;

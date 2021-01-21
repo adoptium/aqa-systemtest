@@ -17,11 +17,10 @@ package net.adoptopenjdk.stf;
 import java.util.ArrayList;
 
 import net.adoptopenjdk.loadTest.InventoryData;
-import net.adoptopenjdk.stf.codeGeneration.Stage;
+import net.adoptopenjdk.loadTest.TimeBasedLoadTest;
 import net.adoptopenjdk.stf.environment.DirectoryRef;
 import net.adoptopenjdk.stf.extensions.core.StfCoreExtension;
 import net.adoptopenjdk.stf.extensions.core.StfCoreExtension.Echo;
-import net.adoptopenjdk.stf.plugin.interfaces.StfPluginInterface;
 import net.adoptopenjdk.stf.processes.ExpectedOutcome;
 import net.adoptopenjdk.stf.processes.definitions.JavaProcessDefinition;
 import net.adoptopenjdk.stf.processes.definitions.LoadTestProcessDefinition;
@@ -31,7 +30,7 @@ import net.adoptopenjdk.stf.runner.modes.HelpTextGenerator;
  * This is a simple test plugin that runs a workload of tests 
  * from the test.classloading project.
  */
-public class ClassloadingLoadTest implements StfPluginInterface {
+public class ClassloadingLoadTest extends TimeBasedLoadTest {
 	
 	private int testCountMultiplier = 3000; 
 	private boolean specialTest = false; 
@@ -40,12 +39,6 @@ public class ClassloadingLoadTest implements StfPluginInterface {
 		help.outputSection("ClassloadingLoadTest");
 		help.outputText("ClassloadingLoadTest runs a workload of tests "
 				+ "from the test.classloading project.");
-	}
-
-	public void pluginInit(StfCoreExtension stf) throws StfException {
-	}
-
-	public void setUp(StfCoreExtension test) throws StfException {
 	}
 
 	public void execute(StfCoreExtension test) throws StfException {
@@ -88,19 +81,25 @@ public class ClassloadingLoadTest implements StfPluginInterface {
 				.addModules(modulesAdd)
 				.addPrereqJarToClasspath(JavaProcessDefinition.JarId.JUNIT)
 				.addPrereqJarToClasspath(JavaProcessDefinition.JarId.HAMCREST)
-				.addProjectToClasspath("openjdk.test.classloading")
-				.setAbortIfOutOfMemory(false)
+				.addProjectToClasspath("openjdk.test.classloading"); 
+		
+		if (isTimeBasedLoadTest) { 
+			loadTestInvocation = loadTestInvocation.setTimeLimit(timeLimit); // If it's a time based test, stop execution after given time duration
+		}
+		
+		loadTestInvocation = loadTestInvocation.setAbortIfOutOfMemory(false)
 				.addSuite("classloading")
 				.setSuiteThreadCount(cpuCount - 1, 10)
-				.setSuiteInventory(inventoryFile)
-				.setSuiteNumTests(totalTests * testCountMultiplier)
-				.setSuiteRandomSelection();
+				.setSuiteInventory(inventoryFile);
+		
+		if (!isTimeBasedLoadTest) { 
+			loadTestInvocation = loadTestInvocation.setSuiteNumTests(totalTests * testCountMultiplier);
+		}
+			
+		loadTestInvocation = loadTestInvocation.setSuiteRandomSelection();
 		
 		test.doRunForegroundProcess("Run classloading tests", "CLT", Echo.ECHO_ON,
-				ExpectedOutcome.cleanRun().within("2h"), 
+				ExpectedOutcome.cleanRun().within(finalTimeout), 
 				loadTestInvocation);
-	}
-
-	public void tearDown(StfCoreExtension stf) throws StfException {
 	}
 }

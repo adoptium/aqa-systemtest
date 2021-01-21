@@ -15,9 +15,9 @@
 package net.adoptopenjdk.stf;
 
 import net.adoptopenjdk.loadTest.InventoryData;
+import net.adoptopenjdk.loadTest.TimeBasedLoadTest;
 import net.adoptopenjdk.stf.extensions.core.StfCoreExtension;
 import net.adoptopenjdk.stf.extensions.core.StfCoreExtension.Echo;
-import net.adoptopenjdk.stf.plugin.interfaces.StfPluginInterface;
 import net.adoptopenjdk.stf.processes.ExpectedOutcome;
 import net.adoptopenjdk.stf.processes.definitions.JavaProcessDefinition;
 import net.adoptopenjdk.stf.processes.definitions.LoadTestProcessDefinition;
@@ -27,16 +27,10 @@ import net.adoptopenjdk.stf.runner.modes.HelpTextGenerator;
  * This is a test plugin for Java.lang related tests, it runs a workload of 
  * invoke tests and project coin tests.
  */
-public class LangLoadTest implements StfPluginInterface {
+public class LangLoadTest extends TimeBasedLoadTest {
 	public void help(HelpTextGenerator help) throws StfException {
 		help.outputSection("LangLoadTest runs a workload of Java.lang related tests.");
 		help.outputText("");
-	}
-
-	public void pluginInit(StfCoreExtension stf) throws StfException {
-	}
-
-	public void setUp(StfCoreExtension test) throws StfException {
 	}
 
 	public void execute(StfCoreExtension test) throws StfException {
@@ -47,18 +41,24 @@ public class LangLoadTest implements StfPluginInterface {
 		LoadTestProcessDefinition loadTestInvocation = test.createLoadTestSpecification()
 				.addPrereqJarToClasspath(JavaProcessDefinition.JarId.JUNIT)
 				.addPrereqJarToClasspath(JavaProcessDefinition.JarId.HAMCREST)
-				.addProjectToClasspath("openjdk.test.lang")
-				.addSuite("lang")
-				.setSuiteThreadCount(cpuCount - 1, 2)
-				.setSuiteNumTests(numlangTests * 100)
-				.setSuiteInventory(inventoryFile)
+				.addProjectToClasspath("openjdk.test.lang"); 
+		
+		if (isTimeBasedLoadTest) { 
+			loadTestInvocation = loadTestInvocation.setTimeLimit(timeLimit);	// If it's a time based test, stop execution after given time duration
+		}
+		
+		loadTestInvocation = loadTestInvocation.addSuite("lang")
+				.setSuiteThreadCount(cpuCount - 1, 2);
+		
+		if (!isTimeBasedLoadTest) { 
+			loadTestInvocation = loadTestInvocation.setSuiteNumTests(numlangTests * 100);
+		}
+		
+		loadTestInvocation = loadTestInvocation.setSuiteInventory(inventoryFile)
 				.setSuiteRandomSelection();
 		
 		test.doRunForegroundProcess("Run lang load test", "LLT", Echo.ECHO_ON,
-				ExpectedOutcome.cleanRun().within("10m"), 
+				ExpectedOutcome.cleanRun().within(finalTimeout), 
 				loadTestInvocation);
-	}
-
-	public void tearDown(StfCoreExtension stf) throws StfException {
 	}
 }

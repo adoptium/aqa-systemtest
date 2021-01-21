@@ -14,25 +14,19 @@
 
 package net.adoptopenjdk.stf;
 
+import net.adoptopenjdk.loadTest.InventoryData;
+import net.adoptopenjdk.loadTest.TimeBasedLoadTest;
 import net.adoptopenjdk.stf.extensions.core.StfCoreExtension;
 import net.adoptopenjdk.stf.extensions.core.StfCoreExtension.Echo;
-import net.adoptopenjdk.stf.plugin.interfaces.StfPluginInterface;
 import net.adoptopenjdk.stf.processes.ExpectedOutcome;
 import net.adoptopenjdk.stf.processes.definitions.JavaProcessDefinition;
 import net.adoptopenjdk.stf.processes.definitions.LoadTestProcessDefinition;
 import net.adoptopenjdk.stf.runner.modes.HelpTextGenerator;
-import net.adoptopenjdk.loadTest.InventoryData;
 
-public class ConcurrentLoadTest implements StfPluginInterface {
+public class ConcurrentLoadTest extends TimeBasedLoadTest {
 	public void help(HelpTextGenerator help) throws StfException {
 		help.outputSection("ConcurrentLoadTest runs concurrency unit tests");
 		help.outputText("");
-	}
-
-	public void pluginInit(StfCoreExtension stf) throws StfException {
-	}
-
-	public void setUp(StfCoreExtension test) throws StfException {
 	}
 
 	public void execute(StfCoreExtension test) throws StfException {
@@ -43,20 +37,25 @@ public class ConcurrentLoadTest implements StfPluginInterface {
 		LoadTestProcessDefinition loadTestInvocation = test.createLoadTestSpecification()
 				.addPrereqJarToClasspath(JavaProcessDefinition.JarId.JUNIT)
 				.addPrereqJarToClasspath(JavaProcessDefinition.JarId.HAMCREST)
-				.addProjectToClasspath("openjdk.test.concurrent")
-				.setAbortIfOutOfMemory(false)
+				.addProjectToClasspath("openjdk.test.concurrent");
+		
+		if (isTimeBasedLoadTest) { 
+			loadTestInvocation = loadTestInvocation.setTimeLimit(timeLimit); // If it's a time based test, stop execution after given time duration
+		}
+		
+		loadTestInvocation = loadTestInvocation.setAbortIfOutOfMemory(false)
 				.addSuite("concurrent")
 				.setSuiteThreadCount(cpuCount - 2, 20)	  	// Leave 1 cpu for the JIT. i for GC and set min 20
-				.setSuiteInventory(inventoryFile) 			// Point at the file which lists the tests
-				.setSuiteNumTests(totalTests * 20)			// Run for about 2 minutes with no -X options
-				.setSuiteRandomSelection();		  			// Randomly pick the next test each time
+				.setSuiteInventory(inventoryFile);			// Point at the file which lists the tests
+				
+		if (!isTimeBasedLoadTest) { 		
+			loadTestInvocation = loadTestInvocation.setSuiteNumTests(totalTests * 20); // Run for about 2 minutes with no -X options
+		}
 		
-		//.setSuiteNumTests(totalTests * 50)			// Run for about 5 minutes
+		loadTestInvocation = loadTestInvocation.setSuiteRandomSelection(); // Randomly pick the next test each time
+		
 		test.doRunForegroundProcess("Run concurrency unit tests", "LT", Echo.ECHO_ON,
-				ExpectedOutcome.cleanRun().within("1h"), 
+				ExpectedOutcome.cleanRun().within(finalTimeout), 
 				loadTestInvocation);
-	}
-
-	public void tearDown(StfCoreExtension stf) throws StfException {
 	}
 }

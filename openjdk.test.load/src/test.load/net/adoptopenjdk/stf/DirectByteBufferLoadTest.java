@@ -14,10 +14,10 @@
 package net.adoptopenjdk.stf;
 
 import net.adoptopenjdk.loadTest.InventoryData;
+import net.adoptopenjdk.loadTest.TimeBasedLoadTest;
 import net.adoptopenjdk.stf.environment.FileRef;
 import net.adoptopenjdk.stf.extensions.core.StfCoreExtension;
 import net.adoptopenjdk.stf.extensions.core.StfCoreExtension.Echo;
-import net.adoptopenjdk.stf.plugin.interfaces.StfPluginInterface;
 import net.adoptopenjdk.stf.processes.ExpectedOutcome;
 import net.adoptopenjdk.stf.processes.definitions.JavaProcessDefinition;
 import net.adoptopenjdk.stf.processes.definitions.LoadTestProcessDefinition;
@@ -29,19 +29,13 @@ import net.adoptopenjdk.stf.runner.modes.HelpTextGenerator;
  * 
  * The DirectMemoryTest allocates direct memory ByteBuffers and dereferences them.
  */
-public class DirectByteBufferLoadTest implements StfPluginInterface {	
+public class DirectByteBufferLoadTest extends TimeBasedLoadTest {	
 	public void help(HelpTextGenerator help) throws StfException {
 		String testName = DirectByteBufferLoadTest.class.getSimpleName();
 		
 		help.outputSection(testName + " test");
 		help.outputText(testName + " runs the DirectMemoryTest test class along side a NIO workload.");
 		help.outputText("This test is primarily aimed at stressing the Garbage Collector.");
-	}
-
-	public void pluginInit(StfCoreExtension test) throws StfException {
-	}
-
-	public void setUp(StfCoreExtension test) throws Exception {
 	}
 
 	public void execute(StfCoreExtension test) throws StfException {
@@ -58,19 +52,26 @@ public class DirectByteBufferLoadTest implements StfPluginInterface {
 				.addPrereqJarToClasspath(JavaProcessDefinition.JarId.HAMCREST)
 				.addJarToClasspath(filesystemJar)
 				.addProjectToClasspath("openjdk.test.gc")
-				.addProjectToClasspath("openjdk.test.nio")
-				.addSuite("DirectByteBuffer")
+				.addProjectToClasspath("openjdk.test.nio");
+		
+		if (isTimeBasedLoadTest) { 
+			loadTestInvocation = loadTestInvocation.setTimeLimit(timeLimit); // If it's a time based test, stop execution after given time duration
+		}
+		
+		loadTestInvocation = loadTestInvocation.addSuite("DirectByteBuffer")
  				.setSuiteThinkingTime("1ms", "1ms")//   Waiting for 1ms between tests to give the system a chance to reclaim unused native memory.
-				.setSuiteThreadCount(cpuCount - 1, 2) 
-				.setSuiteNumTests(numTests)
-				.setSuiteInventory(inventory)
+				.setSuiteThreadCount(cpuCount - 1, 2);
+		
+		if (!isTimeBasedLoadTest) { 
+			loadTestInvocation = loadTestInvocation.setSuiteNumTests(numTests);
+		}
+		
+		loadTestInvocation = loadTestInvocation.setSuiteInventory(inventory)
 				.setSuiteRandomSelection();
 		
 		test.doRunForegroundProcess("Run DirectByteBuffer load test", "DBLT", Echo.ECHO_ON,
-				ExpectedOutcome.cleanRun().within("5m"), 
+				ExpectedOutcome.cleanRun().within(finalTimeout), 
 				loadTestInvocation);
 	}
-
-	public void tearDown(StfCoreExtension test) throws StfException {
-	}
 }
+

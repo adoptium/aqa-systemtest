@@ -2,6 +2,6 @@
 <classpath>
 	<classpathentry kind="src" path="src/test.util"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="lib" path="/systemtest_prereqs/junit-4.12/junit-4.12.jar"/>
+	<classpathentry kind="lib" path="/systemtest_prereqs/junit/junit.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

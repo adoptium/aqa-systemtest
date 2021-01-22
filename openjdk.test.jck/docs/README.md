@@ -77,7 +77,7 @@ git repositories and the test and prereqs (including the JCK):
 /home/user/git/openjdk-systemtests
 /home/user/git/openjdk-systemtests/........       <- openjdk-systemtest repository files
 /home/user/systemtest_prereqs
-/home/user/systemtest_prereqs/junit-4.12/........ <- junit files
+/home/user/systemtest_prereqs/junit/........      <- junit files
 /home/user/systemtest_prereqs/jck
 /home/user/systemtest_prereqs/jck/jck8b           <- Java 8 JCK (jck8b) files
 /home/user/systemtest_prereqs/.........           <- other prereq directories

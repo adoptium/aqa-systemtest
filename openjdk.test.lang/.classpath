@@ -3,6 +3,6 @@
 	<classpathentry kind="src" path="src/test.lang"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/stf.core"/>
-	<classpathentry kind="lib" path="/systemtest_prereqs/junit-4.12/junit-4.12.jar"/>
+	<classpathentry kind="lib" path="/systemtest_prereqs/junit/junit.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

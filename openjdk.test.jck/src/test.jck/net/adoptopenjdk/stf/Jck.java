@@ -571,7 +571,7 @@ public class Jck implements StfPluginInterface {
 				throw new StfException("Unknown platform:: " + platform);
 			}
 			fileContent += "concurrency " + concurrencyString + ";\n";
-			fileContent += "timeoutfactor 1" + ";\n";				// java_awt and javax_management require more than 1h to finish tests
+			fileContent += "timeoutfactor 2" + ";\n";	// 2 base time limit equal 20 minutes
 			fileContent += keyword + ";\n";
 			
 			if (platform.equals("win32")) {

@@ -15,9 +15,9 @@ limitations under the License.
 
 package net.adoptopenjdk.test.hcrAgent.agent;
 
-import org.objectweb.asm.ClassVisitor;
-import org.objectweb.asm.MethodVisitor;
-import org.objectweb.asm.Opcodes;
+import jdk.internal.org.objectweb.asm.ClassVisitor;
+import jdk.internal.org.objectweb.asm.MethodVisitor;
+import jdk.internal.org.objectweb.asm.Opcodes;
 import java.util.Random;
 
 /*

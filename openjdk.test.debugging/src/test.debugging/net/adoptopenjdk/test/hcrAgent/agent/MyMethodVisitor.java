@@ -15,8 +15,8 @@ limitations under the License.
 
 package net.adoptopenjdk.test.hcrAgent.agent;
 
-import jdk.internal.org.objectweb.asm.MethodVisitor;
-import jdk.internal.org.objectweb.asm.Opcodes;
+import org.objectweb.asm.MethodVisitor;
+import org.objectweb.asm.Opcodes;
 
 /*
  * This class inserts new byte codes into an existing Java class.
@@ -36,7 +36,7 @@ public class MyMethodVisitor extends MethodVisitor {
 	 * @param threadNumber Used to generate thread-specific log messages, as many of these may be running at once.
 	 */
 	public MyMethodVisitor(MethodVisitor mv, String methodName, int randomNumber, int threadNumber) {
-		super(Opcodes.ASM4, mv);
+		super(Opcodes.ASM7, mv);
 		methodNameLocal = methodName;
 		this.randomNumber = randomNumber;
 		this.threadNumber = threadNumber;

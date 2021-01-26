@@ -37,8 +37,6 @@ limitations under the License.
 	<!-- For modularity you need a directory above the package structure to hold the module.java file -->
 	<property name="openjdk_test_debugging_module" value="test.debugging" />
 	<property name="openjdk_test_debugging_src_dir" value="src/${openjdk_test_debugging_module}" />
-	<property name="openjdk_test_debugging_src_80_dir" value="src_80/${openjdk_test_debugging_module}" />
-	<property name="openjdk_test_debugging_src_110_dir" value="src_110/${openjdk_test_debugging_module}" />
 	<property name="openjdk_test_debugging_bin_dir" value="bin" />
 
 	<property name="openjdk_test_debugging_jdi_jar_file" value="${openjdk_test_debugging_bin_dir}/JdiTests.jar" />
@@ -121,8 +119,7 @@ limitations under the License.
 			   encoding="${src-encoding}"
 			   includeantruntime="false"
 			   failonerror="true">
-			<src path="${openjdk_test_debugging_src_dir}" />
-			<src path="${openjdk_test_debugging_src_80_dir}" />
+			<include name="**/*.java"/>
 		</javac>
 	</target>
 	
@@ -139,7 +136,6 @@ limitations under the License.
 			<include name="**/*.java"/>
 		</depend>
 		-->
-		<property name="addExports" value="--add-exports java.base/jdk.internal.org.objectweb.asm=ALL-UNNAMED" />
 		<javac srcdir="${openjdk_test_debugging_src_dir}"
 			   destdir="${openjdk_test_debugging_bin_dir}"
 			   fork="true"
@@ -149,12 +145,10 @@ limitations under the License.
 			   encoding="${src-encoding}"
 			   includeantruntime="false"
 			   failonerror="true">
-			<src path="${openjdk_test_debugging_src_dir}" />
-			<src path="${openjdk_test_debugging_src_110_dir}" />
 			<compilerarg value="-source"/>
 			<compilerarg value="${java.specification.version}"/>
 			<compilerarg value="--enable-preview"/>
-			<compilerarg line='${addExports}' />
+			<include name="**/*.java"/>
 		</javac>
 	</target>
 	

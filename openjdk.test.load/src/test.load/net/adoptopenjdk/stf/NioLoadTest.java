@@ -15,10 +15,10 @@
 package net.adoptopenjdk.stf;
 
 import net.adoptopenjdk.loadTest.InventoryData;
+import net.adoptopenjdk.loadTest.TimeBasedLoadTest;
 import net.adoptopenjdk.stf.environment.FileRef;
 import net.adoptopenjdk.stf.extensions.core.StfCoreExtension;
 import net.adoptopenjdk.stf.extensions.core.StfCoreExtension.Echo;
-import net.adoptopenjdk.stf.plugin.interfaces.StfPluginInterface;
 import net.adoptopenjdk.stf.processes.ExpectedOutcome;
 import net.adoptopenjdk.stf.processes.definitions.JavaProcessDefinition;
 import net.adoptopenjdk.stf.processes.definitions.LoadTestProcessDefinition;
@@ -39,16 +39,10 @@ import net.adoptopenjdk.stf.runner.modes.HelpTextGenerator;
  * For further info about the tests see the the test documentation attached to the
  * test.nio project (NioTestsDoc.md and ChatClient.md).
  */
-public class NioLoadTest implements StfPluginInterface {	
+public class NioLoadTest extends TimeBasedLoadTest {	
 	public void help(HelpTextGenerator help) throws StfException {
 		help.outputSection("NioLoadTest runs the former JGrinder nio and nio2 tests");
 		help.outputText("");
-	}
-
-	public void pluginInit(StfCoreExtension stf) throws StfException {
-	}
-
-	public void setUp(StfCoreExtension test) throws StfException {
 	}
 
 	public void execute(StfCoreExtension test) throws StfException {
@@ -66,18 +60,27 @@ public class NioLoadTest implements StfPluginInterface {
 				.addPrereqJarToClasspath(JavaProcessDefinition.JarId.JUNIT)
 				.addPrereqJarToClasspath(JavaProcessDefinition.JarId.HAMCREST)
 				.addJarToClasspath(fileSystemJar)
-				.addProjectToClasspath("openjdk.test.nio")
+				.addProjectToClasspath("openjdk.test.nio");
+		
+		if (isTimeBasedLoadTest) { 
+			loadTestInvocation = loadTestInvocation.setTimeLimit(timeLimit);	// If it's a time based test, stop execution after given time duration
+		}
+		
+		loadTestInvocation = loadTestInvocation.setAbortIfOutOfMemory(false)
 				.addSuite("nio")
-				.setSuiteThreadCount(cpuCount - 2, 2)		// Leave 1 cpu for the JIT, 1 cpu for GC and set min 2
-				.setSuiteNumTests(numNioTests * 10)
-				.setSuiteInventory(inventoryFile)
-				.setSuiteRandomSelection();
+				.setSuiteThreadCount(cpuCount - 2, 2);	// Leave 1 cpu for the JIT, 1 cpu for GC and set min 2
+		
+		if (!isTimeBasedLoadTest) { // If it's not a time-based run, set number of tests to run
+			loadTestInvocation = loadTestInvocation.setSuiteNumTests(numNioTests * 10); 
+		}
+		
+		loadTestInvocation = loadTestInvocation
+				.setSuiteInventory(inventoryFile) 	// Point at the file which lists the tests
+				.setSuiteRandomSelection(); 		// Randomly pick the next test each time
 		
 		test.doRunForegroundProcess("Run nio load test", "NLT", Echo.ECHO_ON,
-				ExpectedOutcome.cleanRun().within("30m"), 
+				ExpectedOutcome.cleanRun().within(finalTimeout), 
 				loadTestInvocation);
 	}
-
-	public void tearDown(StfCoreExtension stf) throws StfException {
-	}
 }
+

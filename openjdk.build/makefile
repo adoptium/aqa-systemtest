@@ -591,7 +591,7 @@ test.LockingLoadTest:
 	echo Target $@ completed
 test.MathLoadTest_all:
 	echo Running target $@
-	$(STF_COMMAND) -test=MathLoadTest $(LOG)
+	$(STF_COMMAND) -test=MathLoadTest -test-args="workload=math" $(LOG)
 	echo Target $@ completed
 test.MathLoadTest_autosimd:
 	echo Running target $@
@@ -603,15 +603,15 @@ test.MathLoadTest_bigdecimal:
 	echo Target $@ completed
 test.MauveSingleThreadLoadTest:
 	echo Running target $@
-	$(STF_COMMAND) -test=MauveSingleThreadLoadTest $(LOG)
+	$(STF_COMMAND) -test=MauveSingleThrdLoad $(LOG)
 	echo Target $@ completed
 test.MauveSingleInvocationLoadTest:
 	echo Running target $@
-	$(STF_COMMAND) -test=MauveSingleInvocationLoadTest $(LOG)
+	$(STF_COMMAND) -test=MauveSingleInvocLoad $(LOG)
 	echo Target $@ completed
 test.MauveMultiThreadLoadTest:
 	echo Running target $@
-	$(STF_COMMAND) -test=MauveMultiThreadLoadTest $(LOG)
+	$(STF_COMMAND) -test=MauveMultiThrdLoad $(LOG)
 	echo Target $@ completed
 test.NioLoadTest:
 	echo Running target $@

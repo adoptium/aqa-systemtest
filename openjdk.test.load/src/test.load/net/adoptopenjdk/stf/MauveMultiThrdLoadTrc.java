@@ -15,27 +15,21 @@
 package net.adoptopenjdk.stf;
 
 import net.adoptopenjdk.loadTest.InventoryData;
+import net.adoptopenjdk.loadTest.TimeBasedLoadTest;
 import net.adoptopenjdk.stf.codeGeneration.Stage;
 import net.adoptopenjdk.stf.environment.FileRef;
 import net.adoptopenjdk.stf.environment.JavaVersion;
 import net.adoptopenjdk.stf.extensions.core.StfCoreExtension;
 import net.adoptopenjdk.stf.extensions.core.StfCoreExtension.Echo;
 import net.adoptopenjdk.stf.processes.ExpectedOutcome;
-import net.adoptopenjdk.stf.plugin.interfaces.StfPluginInterface;
 import net.adoptopenjdk.stf.processes.definitions.LoadTestProcessDefinition;
 import net.adoptopenjdk.stf.runner.modes.HelpTextGenerator;
 
-public class MauveMultiThrdLoadTrc implements StfPluginInterface {
+public class MauveMultiThrdLoadTrc extends TimeBasedLoadTest  {
 	public void help(HelpTextGenerator help) throws StfException {
 		help.outputSection("MauveMultiThrdLoadTrc");
 		help.outputText("The MauveMultiThrdLoadTrc runs a subset of tests from the GNU mauve project. "
 				+ "All tests are thread safe.");
-	}
-
-	public void pluginInit(StfCoreExtension stf) throws StfException {
-	}
-
-	public void setUp(StfCoreExtension test) throws StfException {
 	}
 
 	public void execute(StfCoreExtension test) throws StfException {
@@ -78,18 +72,25 @@ public class MauveMultiThrdLoadTrc implements StfPluginInterface {
 		LoadTestProcessDefinition loadTestInvocation = test.createLoadTestSpecification()
 				.addJvmOption(modularityOptions)
 				.addJvmOption("-Xdump:system:events=throw,filter=net/adoptopenjdk/loadTest/reporting/MauveTestFailureException,range=1..1,request=exclusive+prepwalk")
-				.addJarToClasspath(mauveJar)
-				.addSuite("mauve")
-				.setSuiteInventory(inventoryFile)
-				.setSuiteThreadCount(cpuCount - 1, 3)   // Leave 1 cpu for the JIT and one for GC, but min 2
-				.setSuiteNumTests(numMauveTests * multiplier) // Run each test about 1000 times
-				.setSuiteRandomSelection();
+				.addJarToClasspath(mauveJar); 
 		
+		if (isTimeBasedLoadTest) { 
+			loadTestInvocation = loadTestInvocation.setTimeLimit(timeLimit);	// If it's a time based test, stop execution after given time duration
+		}
+		
+		loadTestInvocation = loadTestInvocation.addSuite("mauve")
+				.setSuiteInventory(inventoryFile)
+				.setSuiteThreadCount(cpuCount - 1, 3);   // Leave 1 cpu for the JIT and one for GC, but min 2
+		
+		if (!isTimeBasedLoadTest) { 
+			loadTestInvocation = loadTestInvocation.setSuiteNumTests(numMauveTests * multiplier); // Run each test about 1000 times
+		}
+				
+		loadTestInvocation = loadTestInvocation.setSuiteRandomSelection();
+	
 		test.doRunForegroundProcess("Run Mauve load test", "LT", Echo.ECHO_ON,
-				ExpectedOutcome.cleanRun().within("2h"), 
+				ExpectedOutcome.cleanRun().within(finalTimeout), 
 				loadTestInvocation);
 	}
-
-	public void tearDown(StfCoreExtension stf) throws StfException {
-	}
 }
+

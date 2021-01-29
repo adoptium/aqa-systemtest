@@ -17,23 +17,23 @@ package net.adoptopenjdk.stf;
 import java.util.Arrays;
 
 import net.adoptopenjdk.loadTest.InventoryData;
-import net.adoptopenjdk.stf.environment.StfTestArguments;
+import net.adoptopenjdk.loadTest.TimeBasedLoadTest;
 import net.adoptopenjdk.stf.extensions.core.StfCoreExtension;
 import net.adoptopenjdk.stf.extensions.core.StfCoreExtension.Echo;
-import net.adoptopenjdk.stf.plugin.interfaces.StfPluginInterface;
 import net.adoptopenjdk.stf.processes.ExpectedOutcome;
 import net.adoptopenjdk.stf.processes.definitions.JavaProcessDefinition;
 import net.adoptopenjdk.stf.processes.definitions.LoadTestProcessDefinition;
 import net.adoptopenjdk.stf.runner.modes.HelpTextGenerator;
+import net.adoptopenjdk.stf.util.TimeParser;
 
 /**
  * This is a test plugin for Math related tests, it runs workloads of BigDecimal 
  * JUnit tests and AutoSIMD tests in random order.
  */
-public class MathLoadTest implements StfPluginInterface {
+public class MathLoadTest extends TimeBasedLoadTest {
 	private enum Workloads {
 		//Workload  Multiplier  Timeout  InventoryFile
-		math( 		   50, 		 "2h", 	"math.xml"),
+		math( 		   50, 		 "2h", 		"math.xml"),
 		bigDecimal(    50,		 "1h", 		"bigdecimal.xml"),
 		autoSimd( 	   4000, 	 "5m", 		"autosimd.xml");
 		
@@ -51,7 +51,7 @@ public class MathLoadTest implements StfPluginInterface {
 	// This workload is calibrated for slow running load tests executed under special JIT modes such as -Xjit:count=0
 	private enum WorkloadsSpecial {
 		//Workload  Multiplier  Timeout  InventoryFile
-		math( 		   2, 		 "1h", 	"math.xml"),
+		math( 		   2, 		 "1h", 		"math.xml"),
 		bigDecimal(    15,		 "1h", 		"bigdecimal.xml"),
 		autoSimd( 	   4000, 	 "5m", 		"autosimd.xml");
 		
@@ -81,13 +81,10 @@ public class MathLoadTest implements StfPluginInterface {
 				+ "the following workloads: "
 				+ Arrays.toString(Workloads.values()).replace("math", "math(default)"));
 	}
-	
-	public void pluginInit(StfCoreExtension stf) throws StfException {
-	}
 
 	public void execute(StfCoreExtension test) throws StfException {
 		// Find out which workload we need to run
-		StfTestArguments testArgs = test.env().getTestProperties("workload=[math]");
+
 		String jvmOptionsInUse = test.getJavaArgs(test.env().primaryJvm()); 
 		
 		// If we are using JVM options that contains slow running JIT options, use reduced workload 
@@ -122,21 +119,32 @@ public class MathLoadTest implements StfPluginInterface {
 		LoadTestProcessDefinition loadTestInvocation = test.createLoadTestSpecification()
 				.addPrereqJarToClasspath(JavaProcessDefinition.JarId.JUNIT)
 				.addPrereqJarToClasspath(JavaProcessDefinition.JarId.HAMCREST)
-				.addProjectToClasspath("openjdk.test.math")
-				.addSuite("math")
-				.setSuiteThreadCount(cpuCount - 1, 2)
-				.setSuiteNumTests(numMathTests * multiplier)
-				.setSuiteInventory(inventoryFile)
+				.addProjectToClasspath("openjdk.test.math"); 
+		
+		if (isTimeBasedLoadTest) { 
+			loadTestInvocation = loadTestInvocation.setTimeLimit(timeLimit);	// If it's a time based test, stop execution after given time duration
+		}
+		
+		loadTestInvocation = loadTestInvocation.addSuite("math")
+				.setSuiteThreadCount(cpuCount - 1, 2); 
+		
+		if (!isTimeBasedLoadTest) { 
+			loadTestInvocation = loadTestInvocation.setSuiteNumTests(numMathTests * multiplier);
+		}
+		
+		loadTestInvocation = loadTestInvocation.setSuiteInventory(inventoryFile)
 				.setSuiteRandomSelection();
 		
+		finalTimeout = timeout; 
+		
+		if (isTimeBasedLoadTest) { 
+			long finalTimeoutInSeconds = TimeParser.parseTimeSpecification(timeout).getSeconds() + 
+				TimeParser.parseTimeSpecification(timeLimit).getSeconds();
+			finalTimeout = finalTimeoutInSeconds + "s";
+		}
+		
 		test.doRunForegroundProcess("Run math load test", "MLT", Echo.ECHO_ON,
-				ExpectedOutcome.cleanRun().within(timeout), 
+				ExpectedOutcome.cleanRun().within(finalTimeout), 
 				loadTestInvocation);
-	}
-
-	public void tearDown(StfCoreExtension stf) throws StfException {
-	}
-	
-	public void setUp(StfCoreExtension stf) throws StfException {
 	}
 }

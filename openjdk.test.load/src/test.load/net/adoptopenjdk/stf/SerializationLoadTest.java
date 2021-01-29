@@ -14,25 +14,19 @@
 
 package net.adoptopenjdk.stf;
 
+import net.adoptopenjdk.loadTest.InventoryData;
+import net.adoptopenjdk.loadTest.TimeBasedLoadTest;
 import net.adoptopenjdk.stf.extensions.core.StfCoreExtension;
 import net.adoptopenjdk.stf.extensions.core.StfCoreExtension.Echo;
-import net.adoptopenjdk.stf.plugin.interfaces.StfPluginInterface;
 import net.adoptopenjdk.stf.processes.ExpectedOutcome;
 import net.adoptopenjdk.stf.processes.definitions.JavaProcessDefinition;
 import net.adoptopenjdk.stf.processes.definitions.LoadTestProcessDefinition;
 import net.adoptopenjdk.stf.runner.modes.HelpTextGenerator;
-import net.adoptopenjdk.loadTest.InventoryData;
 
-public class SerializationLoadTest implements StfPluginInterface {
+public class SerializationLoadTest extends TimeBasedLoadTest {
 	public void help(HelpTextGenerator help) throws StfException {
 		help.outputSection("SerializationLoadTest runs a workload of Java util related tests");
 		help.outputText("");
-	}
-
-	public void pluginInit(StfCoreExtension stf) throws StfException {
-	}
-
-	public void setUp(StfCoreExtension test) throws StfException {
 	}
 
 	public void execute(StfCoreExtension test) throws StfException {
@@ -43,19 +37,25 @@ public class SerializationLoadTest implements StfPluginInterface {
 		LoadTestProcessDefinition loadTestInvocation = test.createLoadTestSpecification()
 				.addPrereqJarToClasspath(JavaProcessDefinition.JarId.JUNIT)
 				.addPrereqJarToClasspath(JavaProcessDefinition.JarId.HAMCREST)
-				.addProjectToClasspath("openjdk.test.serialization")
-				.setAbortIfOutOfMemory(false)
+				.addProjectToClasspath("openjdk.test.serialization");
+		
+		if (isTimeBasedLoadTest) { 
+			loadTestInvocation = loadTestInvocation.setTimeLimit(timeLimit);	// If it's a time based test, stop execution after given time duration
+		}
+		
+		loadTestInvocation = loadTestInvocation.setAbortIfOutOfMemory(false)
 				.addSuite("serialization")
 				.setSuiteThreadCount(cpuCount - 1, 2)	  	// Leave 1 cpu for the JIT and set min 2
-				.setSuiteInventory(inventoryFile) 		// Point at the file which lists the tests
-				.setSuiteNumTests(totalTests * 10000)		// Run for about 2 minutes with no -X options
-				.setSuiteRandomSelection();		  	// Randomly pick the next test each time
+				.setSuiteInventory(inventoryFile); 		// Point at the file which lists the tests
+		
+		if (!isTimeBasedLoadTest) { 
+			loadTestInvocation = loadTestInvocation.setSuiteNumTests(totalTests * 10000);		// Run for about 2 minutes with no -X options
+		}
+		
+		loadTestInvocation = loadTestInvocation.setSuiteRandomSelection();		  	// Randomly pick the next test each time
 		
 		test.doRunForegroundProcess("Run serialization tests", "SLT", Echo.ECHO_ON,
-				ExpectedOutcome.cleanRun().within("30m"), 
+				ExpectedOutcome.cleanRun().within(finalTimeout), 
 				loadTestInvocation);
-	}
-
-	public void tearDown(StfCoreExtension stf) throws StfException {
 	}
 }

@@ -13,7 +13,7 @@
     <junit class="net.adoptopenjdk.test.lambda.TestLambdaRecursive"/>
     <junit class="net.adoptopenjdk.test.lambda.TestLambdasUserDefinedInterface"/>
     
-    <!-- Add the Streams tests -->
-    <junit class="net.adoptopenjdk.test.streams.TestParallelStreamOperations"/>
+    <!-- Add the Streams tests.
+         TestParallelStreamOperations runs in the separate workload, parallelStreams.xml -->
     <junit class="net.adoptopenjdk.test.streams.TestStreamOperations"/>
 </inventory>

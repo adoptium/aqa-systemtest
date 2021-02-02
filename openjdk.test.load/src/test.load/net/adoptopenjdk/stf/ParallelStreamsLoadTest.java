@@ -14,47 +14,48 @@
 
 package net.adoptopenjdk.stf;
 
-import net.adoptopenjdk.loadTest.TimeBasedLoadTest;
 import net.adoptopenjdk.stf.extensions.core.StfCoreExtension;
 import net.adoptopenjdk.stf.extensions.core.StfCoreExtension.Echo;
+import net.adoptopenjdk.stf.plugin.interfaces.StfPluginInterface;
 import net.adoptopenjdk.stf.processes.ExpectedOutcome;
 import net.adoptopenjdk.stf.processes.definitions.JavaProcessDefinition;
 import net.adoptopenjdk.stf.processes.definitions.LoadTestProcessDefinition;
 import net.adoptopenjdk.stf.runner.modes.HelpTextGenerator;
 
-public class LambdaLoadTest extends TimeBasedLoadTest {
+import java.util.*;
+
+public class ParallelStreamsLoadTest implements StfPluginInterface {
 	public void help(HelpTextGenerator help) throws StfException {
-		help.outputSection("LambdaLoadTest runs unit tests for Lambda and Streams");
+		help.outputSection("ParallelStreamsLoadTest runs junit tests for parallel stream operations");
 		help.outputText("");
 	}
 
+	public void pluginInit(StfCoreExtension test) throws StfException {
+	}
+
+	public void setUp(StfCoreExtension test) throws StfException {
+	}
+
 	public void execute(StfCoreExtension test) throws StfException {
-		String inventoryFile = "/openjdk.test.load/config/inventories/lambdasAndStreams/lambda.xml";
-		int cpuCount = Runtime.getRuntime().availableProcessors();
+		String inventoryFile = "/openjdk.test.load/config/inventories/lambdasAndStreams/parallelStreams.xml";
 
 		LoadTestProcessDefinition loadTestInvocation = test.createLoadTestSpecification()
-				.addJvmOption("-Xss3192K")                  // TestLambdaRecursive needs a large stack 
+				.addJvmOption("-Xmx1024M")                  // Workload test TestParallelStreamOperations requires at least 800Mb heap on openj9 non-compressed refs
 				.addPrereqJarToClasspath(JavaProcessDefinition.JarId.JUNIT)
 				.addPrereqJarToClasspath(JavaProcessDefinition.JarId.HAMCREST)
-				.addProjectToClasspath("openjdk.test.lambdasAndStreams");
-		
-		if (isTimeBasedLoadTest) { 
-			loadTestInvocation = loadTestInvocation.setTimeLimit(timeLimit); // If it's a time based test, stop execution after given time duration
-		}
-		
-		loadTestInvocation = loadTestInvocation.setInactivityLimit("60m") // Since this test is run using -Xint as well, set a larger inactivity limit than default 
-				.addSuite("lambda")				  			// Start args for the first suite
-				.setSuiteThreadCount(cpuCount - 2, 2)		// Leave 1 cpu for the JIT, 1 cpu for GC and set min 2
-				.setSuiteInventory(inventoryFile); 			// Point at the file which lists the tests
-	
-		if (!isTimeBasedLoadTest) { 
-			loadTestInvocation = loadTestInvocation.setSuiteNumTests(3000); // Run this many tests
-		}
-		
-		loadTestInvocation = loadTestInvocation.setSuiteRandomSelection();	// Randomly pick the next test each time
+				.addProjectToClasspath("openjdk.test.lambdasAndStreams")
+				.setInactivityLimit("60m")                  // The test may take a long time to run with -Xint and appear to be hung to the load test harness. 
+				.addSuite("parallelStreams")                // Start args for the first suite
+				.setSuiteThreadCount(2)		                // The TestParallelStreamOperations test is self limiting to two instances running concurrently
+				.setSuiteInventory(inventoryFile)           // Point at the file which lists the tests
+				.setSuiteNumTests(2)                        // Run the TestParallelStreamOperations test once on each of the two threads
+				.setSuiteSequentialSelection();
 
-		test.doRunForegroundProcess("Run lambda and stream load test", "LT", Echo.ECHO_ON,
-				ExpectedOutcome.cleanRun().within(finalTimeout), 
+		test.doRunForegroundProcess("Run parallel streams load test", "LT", Echo.ECHO_ON,
+				ExpectedOutcome.cleanRun().within("60m"),
 				loadTestInvocation);
+	}
+
+	public void tearDown(StfCoreExtension test) throws StfException {
 	}
 }

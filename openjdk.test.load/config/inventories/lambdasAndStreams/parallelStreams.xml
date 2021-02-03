@@ -1,0 +1,7 @@
+<inventory> 
+    <!-- Each instance of TestParallelStreamOperations requires 200Mb or more of Java heap
+         and terminates if two instances of the test are already running, so run in its own
+         workload with just two threads.
+         The test may take over an hour if run in interpreted (-Xint) mode.  -->
+    <junit class="net.adoptopenjdk.test.streams.TestParallelStreamOperations"/>
+</inventory>

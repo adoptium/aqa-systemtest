@@ -55,6 +55,17 @@ limitations under the License.
 	<condition property="isJavas8" value="true">
 		<equals arg1="${java.specification.version}" arg2="1.8"/>
 	</condition>
+	
+	<condition property="isJavas11" value="true">
+		<equals arg1="${java.specification.version}" arg2="11"/>
+	</condition>
+	
+	<condition property="isBelowJava12" value="true">
+		<or>
+			<isset property="isJavas8"/>
+			<isset property="isJavas11"/>
+		</or>
+	</condition>
 
 	<!-- Projects which need to be built before this one. -->
 	<!-- dir must be set on the ant task otherwise the basedir property is not set to a new value in the subant task. -->
@@ -97,7 +108,7 @@ limitations under the License.
 		</jar>
 	</target>
 
-	<target name="build-java" depends="build-java-8, build-java-11-and-up" />
+	<target name="build-java" depends="build-java-8, build-java-11, build-java-above-11" />
 		
 	<target name="build-java-8" if="${isJavas8}" depends="check-prereqs, create-bin-dir">
 		 <!--
@@ -126,7 +137,7 @@ limitations under the License.
 		</javac>
 	</target>
 	
-	<target name="build-java-11-and-up" unless="${isJavas8}" depends="check-prereqs, create-bin-dir">
+	<target name="build-java-11" if="${isJavas11}" depends="check-prereqs, create-bin-dir">
 		 <!--
 		 	The Ant javac task only checks time dependencies between .java files and their .class files,
 			so fails to recompile in situations such as the signatures of a dependent method changing.
@@ -139,45 +150,41 @@ limitations under the License.
 			<include name="**/*.java"/>
 		</depend>
 		-->
-		<if>
-			<equals arg1="${JDK_VERSION}" arg2="11"/>
-			<then>
-				<javac srcdir="${openjdk_test_debugging_src_dir}"
-					destdir="${openjdk_test_debugging_bin_dir}"
-					fork="true"
-					executable="${java_compiler}"
-					debug="true"
-					classpathref="project.class.path"
-					encoding="${src-encoding}"
-					includeantruntime="false"
-					failonerror="true">
-					<src path="${openjdk_test_debugging_src_dir}" />
-					<src path="${openjdk_test_debugging_src_80_110_dir}" />
-					<compilerarg value="-source"/>
-					<compilerarg value="${java.specification.version}"/>
-					<compilerarg value="--enable-preview"/>
-				</javac>
-			</then>
-			<else>
-				<property name="addExports" value="--add-exports java.base/jdk.internal.org.objectweb.asm=ALL-UNNAMED" />
-				<javac srcdir="${openjdk_test_debugging_src_dir}"
-					destdir="${openjdk_test_debugging_bin_dir}"
-					fork="true"
-					executable="${java_compiler}"
-					debug="true"
-					classpathref="project.class.path"
-					encoding="${src-encoding}"
-					includeantruntime="false"
-					failonerror="true">
-					<src path="${openjdk_test_debugging_src_dir}" />
-					<src path="${openjdk_test_debugging_src_150_dir}" />
-					<compilerarg value="-source"/>
-					<compilerarg value="${java.specification.version}"/>
-					<compilerarg value="--enable-preview"/>
-					<compilerarg line='${addExports}' />
-				</javac>
-			</else>
-		</if>
+		<javac srcdir="${openjdk_test_debugging_src_dir}"
+			destdir="${openjdk_test_debugging_bin_dir}"
+			fork="true"
+			executable="${java_compiler}"
+			debug="true"
+			classpathref="project.class.path"
+			encoding="${src-encoding}"
+			includeantruntime="false"
+			failonerror="true">
+			<src path="${openjdk_test_debugging_src_dir}" />
+			<src path="${openjdk_test_debugging_src_80_110_dir}" />
+			<compilerarg value="-source"/>
+			<compilerarg value="${java.specification.version}"/>
+			<compilerarg value="--enable-preview"/>
+		</javac>
+	</target>
+		
+	<target name="build-java-above-11" unless="${isBelowJava12}" depends="check-prereqs, create-bin-dir">
+		<property name="addExports" value="--add-exports java.base/jdk.internal.org.objectweb.asm=ALL-UNNAMED" />
+		<javac srcdir="${openjdk_test_debugging_src_dir}"
+			destdir="${openjdk_test_debugging_bin_dir}"
+			fork="true"
+			executable="${java_compiler}"
+			debug="true"
+			classpathref="project.class.path"
+			encoding="${src-encoding}"
+			includeantruntime="false"
+			failonerror="true">
+			<src path="${openjdk_test_debugging_src_dir}" />
+			<src path="${openjdk_test_debugging_src_150_dir}" />
+			<compilerarg value="-source"/>
+			<compilerarg value="${java.specification.version}"/>
+			<compilerarg value="--enable-preview"/>
+			<compilerarg line='${addExports}' />
+		</javac>
 	</target>
 	
 	<target name="create-bin-dir">

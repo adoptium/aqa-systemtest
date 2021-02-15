@@ -272,24 +272,24 @@ ifeq (,$(ANT_JAVA_HOME))
   $(warning ANT_JAVA_HOME not set, will use $(JAVA_HOME) to run ant)
 endif
 
-# See if there is a apache-ant-1.10.2 directory present in one of the $(PREREQS_ROOT) directories.
-ANT_SUBDIR:=apache-ant-1.10.2
-ANT_1.10.2_DIRS:=$(foreach PREREQS_ROOT,$(ABSOLUTE_PREREQS_ROOT_LIST),$(wildcard $(PREREQS_ROOT)$(D)$(ANT_SUBDIR)))
-ANT_1.10.2_DIR:=$(firstword $(ANT_1.10.2_DIRS))
-#$(warning ANT_1.10.2_DIRS is $(ANT_1.10.2_DIRS))
-#$(warning ANT_1.10.2_DIR is $(ANT_1.10.2_DIR))
-ifeq (,$(ANT_1.10.2_DIR))
+# See if there is a apache-ant directory present in one of the $(PREREQS_ROOT) directories.
+ANT_SUBDIR:=apache-ant
+ANT_DIRS:=$(foreach PREREQS_ROOT,$(ABSOLUTE_PREREQS_ROOT_LIST),$(wildcard $(PREREQS_ROOT)$(D)$(ANT_SUBDIR)))
+ANT_DIR:=$(firstword $(ANT_DIRS))
+#$(warning ANT_DIRS is $(ANT_DIRS))
+#$(warning ANT_DIR is $(ANT_DIR))
+ifeq (,$(ANT_DIR))
   $(warning No ant dir found in $(PREREQS_ROOT))
 endif
 
 ifndef ANT_HOME
   # If we haven't been told which ant to use via ANT_HOME, see if there is an ant present in one of the $(PREREQS_ROOT) directories?
   # If not, try to find ant on the path and use that one.
-  ifndef ANT_1.10.2_DIR
-    $(warning ANT_HOME not set, and apache-ant-1.10.2 was not found in $(PREREQS_ROOT), looking for ant on the PATH)
+  ifndef ANT_DIR
+    $(warning ANT_HOME not set, and apache-ant was not found in $(PREREQS_ROOT), looking for ant on the PATH)
     ANT_NOT_FOUND:=1
   else
-    ANT_HOME:=$(ANT_1.10.2_DIR)
+    ANT_HOME:=$(ANT_DIR)
     ifneq (,$(wildcard $(ANT_LAUNCHER)))
       $(warning Found $(ANT_LAUNCHER))
     else
@@ -307,7 +307,7 @@ ifndef ANT_HOME
       ifneq (,$(ANT_BINDIR))
         ANT_HOME:=$(ANT_BINDIR)$(D)..
         $(warning ANT_HOME set to $(ANT_HOME))
-        $(warning Found $(ANT_BINDIR), will start build with $(ANT_LAUNCHER).  Run make configure to install the required ant version 1.10.2 or follow the prereq install instructions in build$(D)build.md)
+        $(warning Found $(ANT_BINDIR), will start build with $(ANT_LAUNCHER).  Run make configure to install the required ant version or follow the prereq install instructions in build$(D)build.md)
       else
         $(error Unable to locate ant to start the build. Either add ant to PATH, set ANT_HOME or follow the prereq install instructions in openjdk.build$(D)docs$(D)build$(D)build.md)
       endif
@@ -319,7 +319,7 @@ ifndef ANT_HOME
         ANT_BINDIR:=$(realpath $(ANT_BINDIR)$(D)ant$(BAT))
         ANT_HOME:=$(abspath $(ANT_BINDIR)$(D)..$(D)..)
         $(warning ANT_HOME set to $(ANT_HOME))
-        $(warning Found $(ANT_BINDIR), will start build with $(ANT_LAUNCHER).  Run make configure to install the required ant version 1.10.2 or follow the prereq install instructions in build$(D)build.md)
+        $(warning Found $(ANT_BINDIR), will start build with $(ANT_LAUNCHER).  Run make configure to install the required ant version or follow the prereq install instructions in build$(D)build.md)
         ifeq (,$(wildcard $(ANT_LIB_PATH)))
         # On OSX if ant has been installed using homebrew cater for the ant-launcher.jar being in libexec/lib rather than lib.
         $(warning WARNING: Cannot find $(ANT_LIB_PATH) directory. Looking in libexec/lib.)
@@ -475,7 +475,7 @@ test.TestJlmRemoteClassNoAuth \
 test.TestJlmRemoteMemoryAuth \
 test.TestJlmRemoteMemoryNoAuth \
 test.TestJlmRemoteNotifierProxyAuth \
-test.TestJlmRemoteThreadNoAuth  \
+test.TestJlmRemoteThreadNoAuth \
 test.MixedLoadTest
 
 # Tests which won't run on Java 8
@@ -517,10 +517,28 @@ test.CLTest \
 test.CLTestImage \
 test.CLLoadTest \
 test.CLStressWithLayers \
-test.CLStressWithLayersCRI \
+test.CLStressWithLayersCRI
 
-TEST_TARGETS:= \
-$(LOAD_TESTS)
+# Time-based load test targets
+LOAD_TESTS_5m:= test.ClassloadingLoadTest_5m \
+test.ConcurrentLoadTest_5m \
+test.DirectByteBufferLoadTest_5m \
+test.LangLoadTest_5m \
+test.MathLoadTest_autosimd_5m \
+test.MathLoadTest_bigdecimal_5m \
+test.MathLoadTest_all_5m \
+test.MauveSingleInvocationLoadTest_5m \
+test.MauveSingleThreadLoadTest_5m \
+test.MauveMultiThreadLoadTest_5m \
+test.NioLoadTest_5m \
+test.SerializationLoadTest_5m \
+test.UtilLoadTest_5m \
+test.LambdaLoadTest_5m \
+test.MixedLoadTest_5m
+
+TEST_TARGETS:=\
+$(LOAD_TESTS) \
+$(LOAD_TESTS_5m)
 
 # Allow the user to exclude tests from the command line
 
@@ -551,6 +569,7 @@ endif
 
 test: $(TEST_TARGETS)
 test.load: $(LOAD_TESTS)
+test.load.5m: $(LOAD_TESTS_5m)
 test.java8: $(filter-out $(NOT_JAVA8_TESTS),$(TEST_TARGETS))
 
 test.list:
@@ -813,7 +832,67 @@ test.MixedLoadTest:
 	echo Running target $@
 	$(STF_COMMAND) -test=MixedLoadTest -test-args="timeLimit=1m" $(LOG)
 	echo Target $@ completed
-																					
+test.ClassloadingLoadTest_5m:
+	echo Running target $@
+	$(STF_COMMAND) -test=ClassloadingLoadTest -test-args=“timeLimit=5m” $(LOG)
+	echo Target $@ completed
+test.ConcurrentLoadTest_5m:
+	echo Running target $@
+	$(STF_COMMAND) -test=ConcurrentLoadTest -test-args="timeLimit=5m" $(LOG)
+	echo Target $@ completed
+test.DirectByteBufferLoadTest_5m:
+	echo Running target $@
+	$(STF_COMMAND) -test=DirectByteBufferLoadTest -test-args="timeLimit=5m" $(LOG)
+	echo Target $@ completed
+test.LangLoadTest_5m:
+	echo Running target $@
+	$(STF_COMMAND) -test=LangLoadTest -test-args="timeLimit=5m" $(LOG)
+	echo Target $@ completed
+test.MathLoadTest_all_5m:
+	echo Running target $@
+	$(STF_COMMAND) -test=MathLoadTest -test-args="workload=math,timeLimit=5m" $(LOG)
+	echo Target $@ completed
+test.MathLoadTest_autosimd_5m:
+	echo Running target $@
+	$(STF_COMMAND) -test=MathLoadTest -test-args="workload=autoSimd,timeLimit=5m" $(LOG)
+	echo Target $@ completed
+test.MathLoadTest_bigdecimal_5m:
+	echo Running target $@
+	$(STF_COMMAND) -test=MathLoadTest -test-args="workload=bigDecimal,timeLimit=5m" $(LOG)
+	echo Target $@ completed
+test.MauveSingleThreadLoadTest_5m:
+	echo Running target $@
+	$(STF_COMMAND) -test=MauveSingleThrdLoad -test-args="timeLimit=5m" $(LOG)
+	echo Target $@ completed
+test.MauveSingleInvocationLoadTest_5m:
+	echo Running target $@
+	$(STF_COMMAND) -test=MauveSingleInvocLoad -test-args="timeLimit=5m" $(LOG)
+	echo Target $@ completed
+test.MauveMultiThreadLoadTest_5m:
+	echo Running target $@
+	$(STF_COMMAND) -test=MauveMultiThrdLoad -test-args="timeLimit=5m" $(LOG)
+	echo Target $@ completed
+test.NioLoadTest_5m:
+	echo Running target $@
+	$(STF_COMMAND) -test=NioLoadTest -test-args="timeLimit=5m" $(LOG)
+	echo Target $@ completed
+test.UtilLoadTest_5m:
+	echo Running target $@
+	$(STF_COMMAND) -test=UtilLoadTest -test-args="timeLimit=5m" $(LOG)
+	echo Target $@ completed
+test.SerializationLoadTest_5m:
+	echo Running target $@
+	$(STF_COMMAND) -test=SerializationLoadTest -test-args="timeLimit=5m" $(LOG)
+	echo Target $@ completed
+test.LambdaLoadTest_5m:
+	echo Running target $@
+	$(STF_COMMAND) -test=LambdaLoadTest -test-args="timeLimit=5m" $(LOG)
+	echo Target $@ completed
+test.MixedLoadTest_5m:
+	echo Running target $@
+	$(STF_COMMAND) -test=MixedLoadTest -test-args="timeLimit=5m" $(LOG)
+	echo Target $@ completed
+
 # The test.Custom target enables users to execute arbitrary stf.pl command lines if required for investigating failures.
 # Example:
 # make test.Custom TEST=JdiTest TEST_ARGS="test=basic_launch" 

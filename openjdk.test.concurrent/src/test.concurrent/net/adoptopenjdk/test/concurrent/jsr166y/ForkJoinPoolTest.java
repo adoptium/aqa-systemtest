@@ -119,7 +119,7 @@ public class ForkJoinPoolTest extends ConcurrentTest
 		assertEquals("2 : getUncaughtExceptionHandler()", null, apiPool.getUncaughtExceptionHandler());				// Default exception handler
 		assertEquals("3 : getAsyncMode()", false, apiPool.getAsyncMode());											// Default asynchronous mode
 		assertEquals("4 : getFactory()", ForkJoinPool.defaultForkJoinWorkerThreadFactory, apiPool.getFactory());
-		assertEquals("5 : getActiveThreadCount()", 0, apiPool.getActiveThreadCount());    
+		// assertEquals("5 : getActiveThreadCount()", 0, apiPool.getActiveThreadCount());							// getActiveThreadCount may be inaccurate see https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/concurrent/ForkJoinPool.html#getActiveThreadCount()    
 	    // assertEquals("6 : getPoolSize()", firstRun ? 0 : 2, apiPool.getPoolSize());
 		assertEquals("7 : getQueuedSubmissionCount()", 0, apiPool.getQueuedSubmissionCount());
 		assertEquals("8 : getQueuedTaskCount()", 0, apiPool.getQueuedTaskCount());

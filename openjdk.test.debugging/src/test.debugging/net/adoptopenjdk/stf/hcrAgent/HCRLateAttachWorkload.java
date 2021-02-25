@@ -14,6 +14,8 @@ limitations under the License.
 
 package net.adoptopenjdk.stf.hcrAgent;
 
+import static net.adoptopenjdk.stf.extensions.core.StfCoreExtension.Echo.ECHO_OFF;
+
 import net.adoptopenjdk.loadTest.InventoryData;
 import net.adoptopenjdk.stf.plugin.interfaces.StfPluginInterface;
 import net.adoptopenjdk.stf.StfConstants;
@@ -32,8 +34,8 @@ import net.adoptopenjdk.stf.runner.modes.HelpTextGenerator;
 
 public class HCRLateAttachWorkload implements StfPluginInterface {
 	public void help(HelpTextGenerator help) throws StfException {
-		help.outputSection("HCRMiniMixLoadTest");
-		help.outputText("The HCRMiniMixLoadTest runs a mixture of different unit tests repeatedly. "
+		help.outputSection("HCRLoadTest");
+		help.outputText("The HCRLoadTest runs a mixture of different unit tests repeatedly. "
 				+ "Shortly after that process starts, we launch another one to late-attach a java "
 				+ "agent to the first process. This agent makes rapid, repeated changes to the "
 				+ "java.lang.String class in the form of new method calls added into existing "
@@ -68,18 +70,18 @@ public class HCRLateAttachWorkload implements StfPluginInterface {
 				.addProjectToClasspath("openjdk.test.lang")  // For mini-mix inventory
 				.addProjectToClasspath("openjdk.test.util")  // For mini-mix inventory
 				.addProjectToClasspath("openjdk.test.math")  // For mini-mix inventory
-				.setTimeLimit("5m")
-				.addSuite("mini-mix")
+				.setTimeLimit("10m")
+				.addSuite("util")
 				.setSuiteInventory(inventoryFile)
 				.setSuiteThreadCount(3)
 				.setSuiteSequentialSelection();
 
 		//Step 1: Run the background test.
-		StfProcess miniMixProcess = test.doRunBackgroundProcess("Run MiniMix load test", "LT", Echo.ECHO_ON,
-				ExpectedOutcome.cleanRun().within("10m"), 
+
+		StfProcess loadProcess = test.doRunBackgroundProcess("Run load test", "LT", Echo.ECHO_ON,
+				ExpectedOutcome.neverCompletes(),
 				loadTestSpecification);
-		
-		
+
 		//Step 2: Attach the agent.
 		
 		FileRef agentJar = test.env().findTestDirectory("openjdk.test.debugging/bin").childFile("StringModifierAgent.jar");
@@ -95,7 +97,7 @@ public class HCRLateAttachWorkload implements StfPluginInterface {
 				.addJarToClasspath(agentJar)
 				.addJarToClasspath(toolsJar)
 				.runClass("net.adoptopenjdk.test.hcrAgent.agent.Attacher")
-				.addPerlProcessData(miniMixProcess,StfConstants.PERL_PROCESS_PID)
+				.addPerlProcessData(loadProcess,StfConstants.PERL_PROCESS_PID)
 				.addArg(agentJar.toString())
 				.addArg(agentOptions);
 		
@@ -103,7 +105,10 @@ public class HCRLateAttachWorkload implements StfPluginInterface {
 				ExpectedOutcome.cleanRun().within("10m"), 
 				testProcess2);
 
-		test.doMonitorProcesses("Wait for Agent to complete, followed by the MiniMix test seconds later.",miniMixProcess,agentProcess);
+		// Wait for the agent process to complete
+		test.doMonitorProcesses("Wait for Agent to complete",loadProcess,agentProcess);
+		// Terminate the workload process
+		test.doKillProcesses("Stop LT process", loadProcess);
 	}
 
 	public void tearDown(StfCoreExtension stf) throws StfException {

@@ -42,7 +42,7 @@ public class StringModifierAgent {
 		int duration = 240; //in seconds.
 		Random randomNumberGenerator = new Random();
 		long seed = randomNumberGenerator.nextLong();
-		long threadsTimeout = 60*1000;
+		long threadsTimeout = 300*1000;
 		String debugOption = "";
 		
 		//Concatenate any command-line options with any env var options. 
@@ -83,9 +83,6 @@ public class StringModifierAgent {
 			if (oneArg.startsWith("duration=")) {
 				duration = Integer.parseInt(oneArg.substring(9));
 			}
-			if (oneArg.startsWith("duration=")) {
-				duration = Integer.parseInt(oneArg.substring(9));
-			}
 			if (oneArg.startsWith("seed=")) {
 				seed = Long.parseLong(oneArg.substring(5));
 			}
@@ -103,20 +100,21 @@ public class StringModifierAgent {
 		AgentLogger.printThis("To re-run this agent with these options, pass this option to the agent on the command line: \"" + debugOption + "percentage=" + percentage + ",threads=" + threadsLimit + ",threadsTimeout=" + threadsTimeout + ",duration=" + duration + ",seed=" + seed + "\"",1);
 
 		TransformerMakerThread[] threadArray = new TransformerMakerThread[threadsLimit];
-		AgentLogger.printThis("Initialising all of the threads.",2);
+		AgentLogger.printThis("Initialising all of the threads.",1);
 		//Initialise each thread.
 		for (int i = 0;i < threadsLimit;++i) {
 			//Make new threads.
 			threadArray[i] = new TransformerMakerThread(inst, i, percentage, randomNumberGenerator.nextLong());
-			AgentLogger.printThis("Starting thread " + i,2);
+			AgentLogger.printThis("Starting thread " + i,1);
 			threadArray[i].start();
 		}
-		AgentLogger.printThis("Threads are all initialised.",2);
+		AgentLogger.printThis("Threads are all initialised.",1);
 
 		//And now loop until we hit the duration limit.
 		long end = System.currentTimeMillis() + (duration*1000);
 
-		AgentLogger.printThis("Entering the loop that will replace dead threads with live ones until we run out of time.",2);
+		AgentLogger.printThis("Entering the loop that will replace dead threads with live ones until we run out of time.",1);
+		int transformationCount = 0;
 		while (end > System.currentTimeMillis()){
 			sleepNow(2 * 1000); //Wait for 2 seconds so we're not drowning out the attachee.
 			for (int i = 0;i < threadsLimit;++i) {
@@ -124,32 +122,46 @@ public class StringModifierAgent {
 					threadArray[i] = new TransformerMakerThread(inst, i, percentage, randomNumberGenerator.nextLong());
 					AgentLogger.printThis("Replacing thread " + i + " with a new one",2);
 					threadArray[i].start();
+					transformationCount++;
 				}
 			}
 			//Here we throw any error a transformer has seen in the last few seconds.
 			//The transformer cannot throw them itself because Java catches them.
 			AgentLogger.throwErrors();
 		}
+		AgentLogger.printThis("Finished creating threads. started " + transformationCount + " transformation threads in total",1);
 
 		//Now we wait for a while to make sure every thread finishes.
 		//Set the timeout, and override with the user's timeout if they've set one.
-		AgentLogger.printThis("We've reached the duration, and will now wait " + threadsTimeout + " milliseconds for the last few agents to finish.",2);
+		AgentLogger.printThis(("We've reached the duration, and will now wait " + threadsTimeout + " milliseconds for the last few agents to finish."),1);
+		long start = System.currentTimeMillis();
+		long elapsed = 0;
 		boolean allFinished = false;
-		threadsTimeout = System.currentTimeMillis() + threadsTimeout;
-		while ((threadsTimeout > System.currentTimeMillis()) && !allFinished){
-			sleepNow(1 * 1000); //Wait for 1 second so we're not drowning out the attachee.
+		int aliveCount = 0;
+		int iterationCount = 0;
+		while ((elapsed < threadsTimeout) && !allFinished) {
+			iterationCount++;
+			sleepNow(10 * 1000); // Poll every 10 secs.
 			allFinished = true;
+			aliveCount = 0;
 			for (int i = 0;i < threadsLimit;++i) {
 				if (threadArray[i].isAlive()){
+					AgentLogger.printThis("Thread " + i + " is still running",1);
+					aliveCount++;
 					allFinished = false;
 				}
+				else {
+					AgentLogger.printThis("Thread " + i + " has ended",2);
+				}
 			}
+			elapsed = System.currentTimeMillis() - start;
+			AgentLogger.printThis("Finished timeout loop iteration " + iterationCount + ". There are " + aliveCount + " threads still running",1);
 		}
 
 		//Throw an exception if any thread has not finished by this point.
 		if (!allFinished) {
-			AgentLogger.printThis("The agent's transformer threads failed to finish in time. The agent will now throw a RuntimeException.",0);
-			throw new RuntimeException("At least one agent thread did not end within 20 seconds.");
+			AgentLogger.printThis("The agent's transformer threads failed to within " + threadsTimeout + " milliseconds. The agent will now throw a RuntimeException.",0);
+			throw new RuntimeException(aliveCount + " agent threads did not end within " + threadsTimeout + " milliseconds.");
 		}
 
 		AgentLogger.printThis("The agent is leaving the agentmain method and shutting down.",0);

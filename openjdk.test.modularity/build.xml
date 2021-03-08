@@ -297,7 +297,7 @@ limitations under the License.
 	
 	<target name="setup-native-build-command" if="${can_build_modularity}">
 		<echo message="building natives for java_platform ${java_platform}"/>
-		<property name="openjdk_test_modularity_native_build_command" value='${setup_windows_build_env}${MAKE} -C ${openjdk_test_modularity_jlink_testcase_src}/native SRC=${openjdk_test_modularity_native_src} PLATFORM=${java_platform} JAVA_HOME=${java_home} OUTDIR=${openjdk_test_modularity_jlink_outdir} HEADERDIR=${openjdk_test_modularity_jlink_headerdir} OSNAME=${java_osname}'/>
+		<property name="openjdk_test_modularity_native_build_command" value='${setup_windows_build_env}${MAKE} -C ${openjdk_test_modularity_jlink_testcase_src}/native SRC=${openjdk_test_modularity_native_src} JAVA_HOME=${java_home} OUTDIR=${openjdk_test_modularity_jlink_outdir} HEADERDIR=${openjdk_test_modularity_jlink_headerdir} OSNAME=${java_osname}'/>
 		<tempfile property="openjdk_test_modularity_native_build_command_file" destDir="${java.io.tmpdir}" prefix="openjdk.build.command."/>
 	</target>
 

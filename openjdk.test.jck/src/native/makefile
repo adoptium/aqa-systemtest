@@ -11,26 +11,47 @@
 # limitations under the License.
 
 # This makefile compiles the native test cases in the JCK.
-# Usage: make build [PLATFORM=name] [SRCDIR=path] [OUTDIR=path] 
+# Usage: make build [SRCDIR=path] [OUTDIR=path] 
 # Example:
-# make build PLATFORM=win_x86-32   SRCDIR=C:\jck\jck8b\JCK-runtime-8b OUTDIR=C:\jck\jck8b\natives
-# make build PLATFORM=linux_x86-32 SRCDIR=/jck/jck8b/JCK-runtime-8b OUTDIR=/jck/jck8b/natives
-# make clean PLATFORM=win_x86-32   OUTDIR=C:\jck\jck8b\natives
-# make clean PLATFORM=linux_x86-32 OUTDIR=/jck/jck8b/natives
+# make build SRCDIR=C:\jck\jck8b\JCK-runtime-8b OUTDIR=C:\jck\jck8b\natives
+# make build SRCDIR=/jck/jck8b/JCK-runtime-8b OUTDIR=/jck/jck8b/natives
+# make clean OUTDIR=C:\jck\jck8b\natives
+# make clean OUTDIR=/jck/jck8b/natives
 
 # This makefile needs to run jar.
 # If JAVA_HOME is set, use that one.
 # If JAVA_HOME is not set, look for jar on the PATH.
 
-WIN=0
-ifeq ($(PLATFORM),win_x86-32)
-	DESTDIR=$(OUTDIR)\$(PLATFORM)
-	WIN=1
+###
+# Figure out current platform
+###
+OS:=$(shell uname -s | tr "[:upper:]" "[:lower:]")
+
+ifneq (,$(findstring cygwin,$(OS)))
+	OS:=win
 endif
 
-ifeq ($(PLATFORM),win_x86-64)
-	DESTDIR=$(OUTDIR)\$(PLATFORM)
-    WIN=1
+ifneq (,$(findstring darwin,$(OS)))
+	OS:=osx
+endif
+
+ifeq ($(OS),os/390)
+	OS:=zos
+endif 
+
+ifneq (,$(findstring win,$(OS)))
+	OS:=win
+endif
+
+$(info OS is $(OS))
+
+ifeq ($(OS),win)
+	DESTDIR=$(OUTDIR)\$(OS)
+endif
+
+# AIX requires bitmode value to be passed into compilar flags
+ifeq ($(OS),aix)
+	BitMode:=$(shell getconf KERNEL_BITMODE)
 endif
 
 # Environment variable OSTYPE is set to cygwin if running under cygwin.
@@ -47,7 +68,7 @@ endif
 
 D:=/
 
-ifeq ($(WIN),1)
+ifeq ($(OS),win)
    ifeq (0,$(CYGWIN))
 	   D:=\\
    endif
@@ -57,7 +78,7 @@ ifneq (,$(JAVA_HOME))
   JAR:=$(JAVA_HOME)$(D)bin$(D)jar
   $(warning JAVA_HOME set to $(JAVA_HOME). Using $(JAR) to create jar files)
 else
-  ifneq (,$(findstring win,$(PLATFORM)))
+  ifneq (,$(findstring win,$(OS)))
     JAR:=$(dir $(firstword $(shell where jar.exe 2>nul)))
   else  # Unix
     JAR:=$(dir $(firstword $(shell which jar 2>/dev/null)))
@@ -71,16 +92,16 @@ endif
 
 # Following defaults set for Unix environment. For Windows platform following variables are overriden
 LIBPREF=lib
-ifneq (,$(findstring aix,$(PLATFORM)))
+ifneq (,$(findstring aix,$(OS)))
 	LIBEXT=a
 else
-ifneq (,$(findstring osx,$(PLATFORM)))
+ifneq (,$(findstring osx,$(OS)))
 	LIBEXT=dylib
 else
 	LIBEXT=so
 endif
 endif
-ifneq (,$(findstring hp,$(PLATFORM)))
+ifneq (,$(findstring hp,$(OS)))
 	OFLAG=
 	BUILDD=
 	OFLAGTEMP=ld -b -o
@@ -99,16 +120,18 @@ endif
 MKDIR=mkdir -p
 CLEANDIR=rm -rf
 CLEANFILE=rm -rf
-FULLOUTDIR=$(OUTDIR)$(D)$(PLATFORM)$(D)
+FULLOUTDIR=$(OUTDIR)$(D)$(OS)$(D)
 COPYDIR=cp -r
 AND_IF_SUCCESSFUL=&&
 export AND_IF_SUCCESSFUL
 
 VPATH=$(SRCDIR)$(D)src$(D)share$(D)lib$(D)jni$(D):$(SRCDIR)$(D)src$(D)share$(D)lib$(D)atr$(D):$(SRCDIR)$(D)src$(D)share$(D)lib$(D)jvmti$(D):$(SRCDIR)$(D)tests$(D)api$(D)javax_management$(D)loading$(D)data$(D)archives$(D)src$(D)C$(D):$(SRCDIR)$(D)src
 JMX_DATA_PATH=$(SRCDIR)$(D)tests$(D)api$(D)javax_management$(D)loading$(D)data
-SOLARIS_PATH=$(SRCDIR)$(D)src$(D)share$(D)lib$(D)jni$(D)include$(D)solaris
-LINUX_PATH=$(SRCDIR)$(D)src$(D)share$(D)lib$(D)jni$(D)include$(D)linux
 JNI_INCLUDE_PATH=$(SRCDIR)$(D)src$(D)share$(D)lib$(D)jni$(D)include
+SOLARIS_PATH=$(JNI_INCLUDE_PATH)$(D)solaris
+LINUX_PATH=$(JNI_INCLUDE_PATH)$(D)linux
+UNIX_PATH=$(JNI_INCLUDE_PATH)$(D)unix
+OSX_PATH=$(JNI_INCLUDE_PATH)$(D)amd64
 JVMTI_INCLUDE_PATH=$(SRCDIR)$(D)src$(D)share$(D)lib$(D)jvmti$(D)include
 SRC_PATH=$(SRCDIR)/src
 
@@ -116,100 +139,29 @@ SRC_PATH=$(SRCDIR)/src
 # Prior to jck10 the unix include files are in src/share/lib/jni/include/solaris
 # From jck10 the unix include files are in src/share/lib/jni/include/linux
 
-ifeq ($(PLATFORM),linux_x86-32)
-	CC=gcc
-	CFLAGS=-fPIC -m32 -I$(SOLARIS_PATH) -I$(LINUX_PATH) -I$(SRC_PATH)
-	LDFLAGS=-shared 
-endif	
+CC=gcc
+CFLAGS=-fPIC -I$(SOLARIS_PATH) -I$(LINUX_PATH) -I$(SRC_PATH)
+LDFLAGS=-shared 
 
-ifeq ($(PLATFORM),linux_ppc-32)
+ifeq ($(OS),osx)
 	CC=gcc
-	CFLAGS=-fPIC -m32 -I$(SOLARIS_PATH) -I$(LINUX_PATH) -I$(SRC_PATH)
-	LDFLAGS=-shared 
-endif	
-
-ifeq ($(PLATFORM),linux_ppc-64)
-	CC=gcc
-	CFLAGS=-fPIC -D_LP64 -m64 -I$(SOLARIS_PATH) -I$(LINUX_PATH) -I$(SRC_PATH)
+	CFLAGS=-fPIC -I$(OSX_PATH) -I$(SRC_PATH)
 	LDFLAGS=-shared
 endif
 
-ifeq ($(PLATFORM),linux_ppcle-64)
-	CC=gcc
-	CFLAGS=-fPIC -D_LP64 -m64 -I$(SOLARIS_PATH) -I$(LINUX_PATH) -I$(SRC_PATH)
-	LDFLAGS=-shared
-endif
-
-ifeq ($(PLATFORM),linux_x86-64)
-	CC=gcc
-	CFLAGS=-fPIC -D_LP64 -m64 -I$(SOLARIS_PATH) -I$(LINUX_PATH) -I$(SRC_PATH)
-	LDFLAGS=-shared
-endif
-
-ifeq ($(PLATFORM),osx_x86-64)
-	CC=gcc
-	CFLAGS=-fPIC -D_LP64 -m64 -I$(SRCDIR)/src/share/lib/jni/include/amd64 -I$(SRC_PATH)
-	LDFLAGS=-shared
-endif
-
-ifeq ($(PLATFORM),aix_ppc-32)
+ifeq ($(OS),aix)
 	CC=xlc
-	CFLAGS=-qstaticinline  -I$(SOLARIS_PATH) -I$(LINUX_PATH) -I$(SRC_PATH)
-	LDFLAGS=-G
+	CFLAGS=-qstaticinline -q$(BitMode) -I$(LINUX_PATH) -I$(SRC_PATH)
+	LDFLAGS=-G -q$(BitMode)
 endif
 
-ifeq ($(PLATFORM),aix_ppc-64)
-	CC=xlc
-	CFLAGS=-q64 -qstaticinline -D_LP64 -I$(SOLARIS_PATH) -I$(LINUX_PATH) -I$(SRC_PATH)
-	LDFLAGS=-G 
-endif
-
-ifeq ($(PLATFORM),linux_390-32)
-	CC=gcc
-	CFLAGS=-m31 -fPIC -I$(SOLARIS_PATH) -I$(LINUX_PATH) -I$(SRC_PATH)
-	LDFLAGS=-shared
-endif
-
-ifeq ($(PLATFORM),linux_390-64)
-	CC=gcc
-	CFLAGS=-fPIC -D_LP64 -m64 -I$(SOLARIS_PATH) -I$(LINUX_PATH) -I$(SRC_PATH)
-	LDFLAGS=-shared
-endif
-
-ifeq ($(PLATFORM),linux_arm-32)
-	CC=gcc
-	CFLAGS=-fPIC -m32 -I$(SOLARIS_PATH) -I$(LINUX_PATH) -I$(SRC_PATH)
-	LDFLAGS=-shared
-endif
-
-ifeq ($(PLATFORM),linux_arm-64)
-	CC=gcc
-	CFLAGS=-fPIC -D_LP64 -I$(SOLARIS_PATH) -I$(LINUX_PATH) -I$(SRC_PATH)
-	LDFLAGS=-shared
-endif
-
-ifeq ($(PLATFORM),linux_riscv-64)
-	CC=gcc
-	CFLAGS=-fPIC -D_LP64 -I$(SOLARIS_PATH) -I$(LINUX_PATH) -I$(SRC_PATH)
-	LDFLAGS=-shared
-endif
-
-ifeq ($(PLATFORM),zos_390-32)
+ifeq ($(OS),zos)
 	CC=c89
-	CFLAGS=-I$(SRCDIR)/src/share/lib/jni/include/unix -I$(SRCDIR)/src/share/lib/jni/include -I$(FULLOUTDIR)/include -I$(SRCDIR)/src -Wc,ASCII -W"c,xplink(backchain,oscall(downstack)),noansialias,float(ieee),langlvl(extended),ROCONST,ROSTRING,enum(4),noupconv,sscom" -W"c,target(zOSV2R2)" -W"c,inline(auto,noreport,1200,8000)" -W"a,goff,ESD" -W"c,dll,expo" -W"l,xplink,compat=min" -Wl,dll -Ds390 -DARCH='"s390"'
+	CFLAGS=-I$(UNIX_PATH) -I$(JNI_INCLUDE_PATH) -I$(FULLOUTDIR)/include -I$(SRCDIR)/src -Wc,ASCII -W"c,xplink(backchain,oscall(downstack)),noansialias,float(ieee),langlvl(extended),ROCONST,ROSTRING,enum(4),noupconv,sscom" -W"c,target(zOSV2R2)" -W"c,inline(auto,noreport,1200,8000)" -W"a,goff,ESD" -W"c,dll,expo" -W"l,xplink,compat=min" -Wl,dll -Ds390 -DARCH='"s390"'
 	LDFLAGS=-D_ALL_SOURCE -DUSE_MALLOC -DIBM_STACK_GROWS_UP -D_XOPEN_SOURCE_EXTENDED=1 -DIBM_ATOE -DOS390CTRACE -DIBM_WRITE_BARRIER -DIBM_MVS -DASYNCH_FI -DRASTRACE_TDF -DJNI_JCL_H -DIBM_ALL -DIBM_UNIX -D_POSIX_SOURCE -DSOLARIS2 -DIBM_OE_XWINDOWS -DIBM_NOAUDIO -DIBM_OE -DIBM_BUILD_TYPE_int -DJ9J2SE -D_BIG_ENDIAN -D_UNIX03_SOURCE -DSTDC -D_LARGE_FILES 
 endif
 
-#Warnings displayed can be ignored
-ifeq ($(PLATFORM),zos_390-64)
-	CC=c89
-	CFLAGS=-I$(SRCDIR)/src/share/lib/jni/include/unix -I$(SRCDIR)/src/share/lib/jni/include -I$(FULLOUTDIR)/include -I$(SRCDIR)/src -Wc,ASCII -W"c,lp64,warn64" -W"l,lp64" -W"c,check(port)" -W"c,xplink(backchain,oscall(downstack)),noansialias,float(ieee),langlvl(extended),ROCONST,ROSTRING,enum(4),noupconv,sscom" -W"c,target(zOSV2R2)" -W"c,inline(auto,noreport,1200,8000)" -W"a,goff,ESD" -W"c,dll,expo" -W"l,xplink,compat=min" -Wl,dll -Ds390 -DARCH='"s390"'
-	LDFLAGS=-D_ALL_SOURCE -DUSE_MALLOC -DIBM_STACK_GROWS_UP -D_XOPEN_SOURCE_EXTENDED=1 -DIBM_ATOE -DOS390CTRACE -DIBM_WRITE_BARRIER -DIBM_MVS -DASYNCH_FI -DRASTRACE_TDF -DJNI_JCL_H -DIBM_ALL -DIBM_UNIX -D_POSIX_SOURCE -DSOLARIS2 -DIBM_OE_XWINDOWS -DIBM_NOAUDIO -DIBM_OE -DIBM_BUILD_TYPE_int -DJ9J2SE -D_BIG_ENDIAN -D_UNIX03_SOURCE -DSTDC -D_LARGE_FILES 
-
-endif
-
-
-ifeq ($(WIN),1)
+ifeq ($(OS),win)
     ifeq (0,$(CYGWIN))
        SRCDIR := $(subst /,\,$(SRCDIR))
        OUTDIR := $(subst /,\,$(OUTDIR))
@@ -256,57 +208,13 @@ ifeq ($(WIN),1)
 	RANDOMGEN=cd $(FULLOUTDIR) && $(LINK_CMD) $(LFLAGS)"$(FULLOUTDIR)$(D)$@" $(FULLOUTDIR)$(D)com_sun_management_mbeans_loading_RandomGen.obj
 endif
 
-ifeq ($(PLATFORM),hp_ux-32)
-        CC=cc
-        CFLAGS=+DD32 +z -c -I$(SOLARIS_PATH) -I$(LINUX_PATH) -I$(SRC_PATH)
-        LDFLAGS=
-endif
-ifeq ($(PLATFORM),hp_ux-64)
-        CC=cc
-        CFLAGS=+DD64 +z -c -I$(SOLARIS_PATH) -I$(LINUX_PATH) -I$(SRC_PATH)
-        LDFLAGS=
-endif
-ifeq ($(PLATFORM),hp_ia-32)
-        CC=cc
-        CFLAGS=+DD32 +z -c -I$(SOLARIS_PATH) -I$(LINUX_PATH) -I$(SRC_PATH)
-        LDFLAGS=
-endif
-ifeq ($(PLATFORM),hp_ia-64)
-        CC=cc
-        CFLAGS=+DD64 +z -c -I$(SOLARIS_PATH) -I$(LINUX_PATH) -I$(SRC_PATH)
-        LDFLAGS=
-endif
-ifeq ($(PLATFORM),sol_sparc-32)
-        CC=gcc
-        CFLAGS=-nodefaultlibs -fPIC -I$(SOLARIS_PATH) -I$(LINUX_PATH) -I$(SRC_PATH)
-        LDFLAGS=-shared
-endif
-ifeq ($(PLATFORM),sol_sparc-64)
-        CC=gcc
-        CFLAGS= -m64 -nodefaultlibs -fPIC -R/usr/sfw/lib/64 -I$(SOLARIS_PATH) -I$(LINUX_PATH) -I$(SRC_PATH)
-        LDFLAGS=-shared
-endif
-ifeq ($(PLATFORM),sol_x86-32)
-        #CC=cc
-        #CFLAGS=-G -KPIC -I$(SOLARIS_PATH)
-	CC=gcc
-	CFLAGS=-G -fPIC -I$(SOLARIS_PATH) -I$(LINUX_PATH) -I$(SRC_PATH)
-        LDFLAGS=
-endif
-ifeq ($(PLATFORM),sol_x86-64)
-        #CC=gcc
-	CC=cc
-        CFLAGS=-m64 -fPIC -R/usr/sfw/lib/64 -I$(SOLARIS_PATH) -I$(LINUX_PATH) -I$(SRC_PATH)
-        LDFLAGS=-shared
-endif
-
 OBJS=$(LIBPREF)jckjni.$(LIBEXT)  $(LIBPREF)jckjvmti.$(LIBEXT) $(LIBPREF)systemInfo.$(LIBEXT) $(LIBPREF)jmxlibid.$(LIBEXT) $(LIBPREF)genrandom.$(LIBEXT)
 
 CFLAGS := $(CFLAGS) -I"$(SRCDIR)" -I"$(JNI_INCLUDE_PATH)" -I"$(JVMTI_INCLUDE_PATH)"
 .SUFFIXES:.c
 	
 help:
-	@echo "Usage: gmake build PLATFORM=<platform> SRCDIR=<JCK directory> OUTDIR=<target binaries directory>"
+	@echo "Usage: gmake build SRCDIR=<JCK directory> OUTDIR=<target binaries directory>"
 	@echo "Requirement : Default compiler and jar tool should be in path"
 	@echo platform:	aix_ppc-32
 	@echo   aix_ppc-64
@@ -329,10 +237,10 @@ help:
 	@echo   sol_sparc-64
 	@echo   sol_x86-32
 	@echo   sol_x86-64
-	@echo Binaries are placed in the directory OUTDIR/PLATFORM. 
+	@echo Binaries are placed in the directory OUTDIR/OS. 
 	@echo Examples:
-	@echo "gmake build PLATFORM=win_x86-32 SRCDIR=C:\jck\java8b\JCK-runtime-8b OUTDIR=C:\jck\java8b\natives" 
-	@echo "gmake build PLATFORM=linux_x86-32 SRCDIR=/jck/java8b/JCK-runtime-8b OUTDIR=/jck/java8b/natives" 
+	@echo "gmake build SRCDIR=C:\jck\java8b\JCK-runtime-8b OUTDIR=C:\jck\java8b\natives" 
+	@echo "gmake build SRCDIR=/jck/java8b/JCK-runtime-8b OUTDIR=/jck/java8b/natives" 
 
 build:createdir $(OBJS) installjmx
 
@@ -365,7 +273,7 @@ createdir:
 	$(MKDIR) $(FULLOUTDIR)
 	
 installjmx:
-ifeq ($(WIN),0)
+ifneq ($(OS),win)
 	$(COPYDIR) $(SRCDIR)$(D)tests$(D)api$(D)javax_management$(D)loading$(D)data$(D)* $(FULLOUTDIR)$(D).
 	cd $(FULLOUTDIR) && $(JAR) uf $(FULLOUTDIR)/archives/MBeanUseNativeLib.jar $(LIBPREF)systemInfo.$(LIBEXT)
 	cd $(FULLOUTDIR) && $(JAR) cf $(FULLOUTDIR)/archives/OnlyLibs.jar $(LIBPREF)jmxlibid.$(LIBEXT)
@@ -380,7 +288,7 @@ else
 endif
 
 .PHONY clean:
-ifeq ($(WIN),0)
+ifneq ($(OS),win)
 	$(CLEANFILE) *.x *.o *.obj 
 	$(CLEANFILE) $(FULLOUTDIR)/*.html
 	$(CLEANFILE)  $(FULLOUTDIR)/*.x

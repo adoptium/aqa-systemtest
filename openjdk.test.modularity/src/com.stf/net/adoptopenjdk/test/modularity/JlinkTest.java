@@ -95,7 +95,7 @@ public class JlinkTest implements StfPluginInterface {
 		
 		DirectoryRef jLinkDir = test.env().findTestDirectory("openjdk.test.modularity/bin/tests/com.test.jlink");
 		DirectoryRef confDir = test.env().findTestDirectory("openjdk.test.modularity/bin/tests/com.test.jlink/conf");
-		nativeDir = test.env().findTestDirectory("openjdk.test.modularity/bin/tests/com.test.jlink/native/bin/" + test.env().getPlatform());
+		nativeDir = test.env().findTestDirectory("openjdk.test.modularity/bin/tests/com.test.jlink/native/bin/" + test.env().getPlatformSimple());
 		DirectoryRef helloDir = test.env().findTestDirectory("openjdk.test.modularity/bin/common-mods/com.hello");
 		
 		/*Creating a modularized jar / jmod out of com.test.jlink.*/ 

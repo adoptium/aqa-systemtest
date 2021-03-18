@@ -151,7 +151,7 @@ endif
 
 ifeq ($(OS),aix)
 	CC=xlc
-	CFLAGS=-qstaticinline -q$(BitMode) -I$(LINUX_PATH) -I$(SRC_PATH)
+	CFLAGS=-qstaticinline -q$(BitMode) -I$(UNIX_PATH) -I$(LINUX_PATH) -I$(SRC_PATH)
 	LDFLAGS=-G -q$(BitMode)
 endif
 

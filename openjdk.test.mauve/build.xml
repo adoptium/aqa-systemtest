@@ -386,7 +386,7 @@ limitations under the License.
 
 	<target name="download-cvsclient" depends="check-for-download-tool" unless="${cvs_available}">
 		<mkdir dir="${first_prereqs_root}/cvsclient"/>
-		<download-file destdir="${first_prereqs_root}/cvsclient" destfile="org-netbeans-lib-cvsclient.jar" srcurl="https://netbeans.org/projects/versioncontrol/downloads/download/org-netbeans-lib-cvsclient.jar"/>
+		<download-file destdir="${first_prereqs_root}/cvsclient" destfile="org-netbeans-lib-cvsclient.jar" srcurl="https://repo1.maven.org/maven2/org/netbeans/lib/cvsclient/20060125/cvsclient-20060125.jar"/>
 	</target>
 
 	<target name="install-archives" if="openjdk_test_mauve_work_jar_file_exists">

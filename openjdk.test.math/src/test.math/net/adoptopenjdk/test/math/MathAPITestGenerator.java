@@ -646,10 +646,6 @@ public class MathAPITestGenerator
 		// **************************************************************************************
 		
 		// exp - double
-		// Exclude Math.exp on win_x86-32 hotspot jdk11 or later when the expected result is
-		// Infinity pending resolution to issues:
-		// https://github.com/AdoptOpenJDK/openjdk-tests/issues/2062
-		// https://github.com/AdoptOpenJDK/openjdk-support/issues/182
 		// **************************************************************************************
 		testCount = 0;
 		System.out.println("public void testExp()");
@@ -658,8 +654,7 @@ public class MathAPITestGenerator
 		{
 			System.out.println("assertEquals(\"exp(double)["+testCount+++"] ::\", " + StrictMath.exp(doubleTestValues[i]) + ", StrictMath.exp("+doubleTestStrings[i]+"));");
 			if ( Double.isInfinite(StrictMath.exp(doubleTestValues[i])) ) {
-				System.out.println("if ( ! ( System.getProperty(\"sun.arch.data.model\").equals(\"32\") && System.getProperty(\"os.name\").toLowerCase().contains(\"win\") && runtimeJdkRange.equals(\"notPreJdk9\") ) ) {assertEquals(\"exp(double)["+testCount+++"] ::\", " + StrictMath.exp(doubleTestValues[i]) + ", Math.exp("+doubleTestStrings[i]+"));}");
-				//System.out.println("assertEquals(\"exp(double)["+testCount+++"] ::\", " + StrictMath.exp(doubleTestValues[i]) + ", Math.exp("+doubleTestStrings[i]+"));");
+				System.out.println("assertEquals(\"exp(double)["+testCount+++"] ::\", " + StrictMath.exp(doubleTestValues[i]) + ", Math.exp("+doubleTestStrings[i]+"));");
 			}
 			else {
 				dTolerance = StrictMath.ulp(StrictMath.exp(doubleTestValues[i]));

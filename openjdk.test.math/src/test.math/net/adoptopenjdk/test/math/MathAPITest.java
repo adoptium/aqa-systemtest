@@ -1268,19 +1268,19 @@ assertTrue("exp(double)[17] ::", 0.9999999999999998 <= Math.exp(0D) && 1.0000000
 assertEquals("exp(double)[18] ::", 11.3842406513381, StrictMath.exp(2.43223D));
 assertTrue("exp(double)[19] ::", 11.384240651338098 <= Math.exp(2.43223D) && 11.384240651338102 >= Math.exp(2.43223D));
 assertEquals("exp(double)[20] ::", Infinity, StrictMath.exp(18232155.3323566D));
-if ( ! ( System.getProperty("sun.arch.data.model").equals("32") && System.getProperty("os.name").toLowerCase().contains("win") && runtimeJdkRange.equals("notPreJdk9") ) ) {assertEquals("exp(double)[21] ::", Infinity, Math.exp(18232155.3323566D));}
+assertEquals("exp(double)[21] ::", Infinity, Math.exp(18232155.3323566D));
 assertEquals("exp(double)[22] ::", 1.0, StrictMath.exp(Double.MIN_VALUE));
 assertTrue("exp(double)[23] ::", 0.9999999999999998 <= Math.exp(Double.MIN_VALUE) && 1.0000000000000002 >= Math.exp(Double.MIN_VALUE));
 assertEquals("exp(double)[24] ::", 1.0, StrictMath.exp((Double.MIN_VALUE * 200)));
 assertTrue("exp(double)[25] ::", 0.9999999999999998 <= Math.exp((Double.MIN_VALUE * 200)) && 1.0000000000000002 >= Math.exp((Double.MIN_VALUE * 200)));
 assertEquals("exp(double)[26] ::", Infinity, StrictMath.exp((Double.MAX_VALUE / 500)));
-if ( ! ( System.getProperty("sun.arch.data.model").equals("32") && System.getProperty("os.name").toLowerCase().contains("win") && runtimeJdkRange.equals("notPreJdk9") ) ) {assertEquals("exp(double)[27] ::", Infinity, Math.exp((Double.MAX_VALUE / 500)));}
+assertEquals("exp(double)[27] ::", Infinity, Math.exp((Double.MAX_VALUE / 500)));
 assertEquals("exp(double)[28] ::", Infinity, StrictMath.exp((Double.MAX_VALUE / 200)));
-if ( ! ( System.getProperty("sun.arch.data.model").equals("32") && System.getProperty("os.name").toLowerCase().contains("win") && runtimeJdkRange.equals("notPreJdk9") ) ) {assertEquals("exp(double)[29] ::", Infinity, Math.exp((Double.MAX_VALUE / 200)));}
+assertEquals("exp(double)[29] ::", Infinity, Math.exp((Double.MAX_VALUE / 200)));
 assertEquals("exp(double)[30] ::", Infinity, StrictMath.exp(Double.MAX_VALUE));
-if ( ! ( System.getProperty("sun.arch.data.model").equals("32") && System.getProperty("os.name").toLowerCase().contains("win") && runtimeJdkRange.equals("notPreJdk9") ) ) {assertEquals("exp(double)[31] ::", Infinity, Math.exp(Double.MAX_VALUE));}
+assertEquals("exp(double)[31] ::", Infinity, Math.exp(Double.MAX_VALUE));
 assertEquals("exp(double)[32] ::", Infinity, StrictMath.exp(Double.MAX_VALUE + 1));
-if ( ! ( System.getProperty("sun.arch.data.model").equals("32") && System.getProperty("os.name").toLowerCase().contains("win") && runtimeJdkRange.equals("notPreJdk9") ) ) {assertEquals("exp(double)[33] ::", Infinity, Math.exp(Double.MAX_VALUE + 1));}
+assertEquals("exp(double)[33] ::", Infinity, Math.exp(Double.MAX_VALUE + 1));
 }
 
 public void testExpm1()

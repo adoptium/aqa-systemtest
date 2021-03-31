@@ -357,13 +357,16 @@ public class Jck implements StfPluginInterface {
 						.addArg(" -passive")
 						);
 				
-				rmiRegistry = test.doRunBackgroundProcess("Starting rmiregistry", "RMI", ECHO_ON, ExpectedOutcome.neverCompletes(), test.createJDKToolProcessDefinition()
-						.setJDKToolOrUtility("rmiregistry")	);
-				
-				rmid = test.doRunBackgroundProcess("Starting rmid", "RMID", ECHO_ON, ExpectedOutcome.neverCompletes(), test.createJDKToolProcessDefinition()
-						.setJDKToolOrUtility("rmid")	
-						.addArg("-J-Dsun.rmi.activation.execPolicy=none " + "-J-Djava.security.policy=" + test.env().findPrereqFile(testSuiteFolder + "/lib/jck.policy").toString())
-						);
+				// We only need RMI registry and RMI activation daemon processes for tests under api/java_rmi
+				if (tests.contains("api/java_rmi")) { 
+					rmiRegistry = test.doRunBackgroundProcess("Starting RMI registry", "RMI", ECHO_ON, ExpectedOutcome.neverCompletes(), test.createJDKToolProcessDefinition()
+							.setJDKToolOrUtility("rmiregistry")	);
+					
+					rmid = test.doRunBackgroundProcess("Starting RMI activation system daemon", "RMID", ECHO_ON, ExpectedOutcome.neverCompletes(), test.createJDKToolProcessDefinition()
+							.setJDKToolOrUtility("rmid")	
+							.addArg("-J-Dsun.rmi.activation.execPolicy=none " + "-J-Djava.security.policy=" + test.env().findPrereqFile(testSuiteFolder + "/lib/jck.policy").toString())
+							);
+				}
 				
 				// tnameserv has been removed from jdk11. We only should need it for jck8
 				if (jckVersion.contains("jck8")) { 
@@ -381,7 +384,7 @@ public class Jck implements StfPluginInterface {
 			// Use the presence of a '/' to signify that we are running a subset of tests.
 			// If one of the highest level test nodes is being run it is likely to take a long time.
 			if ( tests.contains("/") && !isRiscv ) {
-				timeout = "6h";
+				timeout = "8h";
 			}
 			outcome = ExpectedOutcome.cleanRun().within(timeout);
 

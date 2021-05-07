@@ -86,7 +86,7 @@ public class SLTest implements StfPluginInterface {
 
 		/*
 		 * Temporarily exclude the failing service loader tests until 
-		 * https://github.com/AdoptOpenJDK/openjdk-systemtest/issues/137 
+		 * https://github.com/adoptium/aqa-systemtest/issues/137 
 		 * is resolved
 		 * */
 	    /*junitProcessDefinition = test.createJavaProcessDefinition()

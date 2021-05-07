@@ -65,7 +65,7 @@ public class ClassloadingLoadTest extends TimeBasedLoadTest {
 		
 		// Find the directory root (from testRoots) which contains the classes to be loaded by the URLClassLoaders within the classloading deadlock test
 		// (these are deliberately compiled into a directory which is not on the classpath (called bin_notonclasspath)). 
-		// For example, if openjdk-systemtest was cloned into the default location of $HOME/git then this will be set to /home/user/git/openjdk-systemtest
+		// For example, if aqa-systemtest was cloned into the default location of $HOME/git then this will be set to /home/user/git/aqa-systemtest
 		DirectoryRef notonclasspathDirRoot = DirectoryRef.findDirectoryRoot("openjdk.test.classloading/bin_notonclasspath/url1/net/adoptopenjdk/test/classloading/deadlock/package1/",
 													 testRoots);
 		String modulesAdd = "";

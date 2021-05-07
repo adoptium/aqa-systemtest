@@ -102,18 +102,18 @@ It is also possible to run these tests without automation and STF aid, however d
 
 The way to manually run the tests is using the property file such as:
 
-	$JAVA_HOME/bin/java -Djava.net.preferIPv4Stack=true -classpath $HOME/git/openjdk-systemtest/openjdk.test.debugging/bin:$JAVA_HOME/lib/tools.jar net.adoptopenjdk.test.jdi.debugger.Connectors $HOME/git/openjdk-systemtest/openjdk.test.debugging/src/test.debugging/com/ibm/runtimes/jdi/properties/basic_launch.prop dt_socket $HOME/git/openjdk-systemtest/openjdk.test.debugging/bin
+	$JAVA_HOME/bin/java -Djava.net.preferIPv4Stack=true -classpath $HOME/git/aqa-systemtest/openjdk.test.debugging/bin:$JAVA_HOME/lib/tools.jar net.adoptopenjdk.test.jdi.debugger.Connectors $HOME/git/aqa-systemtest/openjdk.test.debugging/src/test.debugging/com/ibm/runtimes/jdi/properties/basic_launch.prop dt_socket $HOME/git/aqa-systemtest/openjdk.test.debugging/bin
 
 The simplest way of connecting is using the launch type of connection which does not require any other process to be started.
 Remember if the properties file contains a connection type of listening or attach these will need to be started in a separate process. The listening connection should be started before the debugger is run, the attaching should be run afterwards.
 
 To start a vm listening, use:
 
-	$JAVA_HOME/bin/java -Xrunjdwp:transport=dt_socket,address=800,server=y -Xdebug -Xnoagent -Djava.compiler=NONE -classpath $HOME/git/openjdk-systemtest/openjdk.test.debugging/bin net.adoptopenjdk.test.jdi.targetvm.HellowWorld
+	$JAVA_HOME/bin/java -Xrunjdwp:transport=dt_socket,address=800,server=y -Xdebug -Xnoagent -Djava.compiler=NONE -classpath $HOME/git/aqa-systemtest/openjdk.test.debugging/bin net.adoptopenjdk.test.jdi.targetvm.HellowWorld
 
 To get a vm to attach to the debugger, use:
 
-	$JAVA_HOME/bin/java -Xrunjdwp:transport=dt_socket,address=800 -classpath $HOME/git/openjdk-systemtest/openjdk.test.debugging/bin net.adoptopenjdk.test.jdi.targetvm.HellowWorld
+	$JAVA_HOME/bin/java -Xrunjdwp:transport=dt_socket,address=800 -classpath $HOME/git/aqa-systemtest/openjdk.test.debugging/bin net.adoptopenjdk.test.jdi.targetvm.HellowWorld
 
 Port doesn't have to be 800, just needs to be the same on listener and attacher! Note: to work on linux the port must be higher than 1024.
 

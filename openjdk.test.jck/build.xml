@@ -23,7 +23,7 @@ limitations under the License.
 	<property name="stf_root" location="${source_root}/../stf"/>
 	
 	<!--Set default system test location-->
-	<property name="openjdk_systemtest_root" location="${source_root}/../openjdk-systemtest"/>
+	<property name="openjdk_systemtest_root" location="${source_root}/../aqa-systemtest"/>
 	<property name="jck_makefile_dir" value="${openjdk_systemtest_root}/openjdk.test.jck/src/native"/>
 	
 	<!--Set default JCK location. Relies on environment variables JCK_ROOT and JCK_VERSION -->

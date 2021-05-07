@@ -9,7 +9,7 @@ Only a subset of the Mauve tests (about 7000 tests) are executed in this way bec
 
 The Mauve test cases themselves are not part of the openjdk.test.mauve project.
 The openjdk.test.mauve project only contains the files required to download, select and build the tests.
-Those files are executed by the 'make configure' step of the openjdk-systemtest repository build process, when the mauve source
+Those files are executed by the 'make configure' step of the aqa-systemtest repository build process, when the mauve source
 code is downloaded from the mauve project cvs repository and compiled into a mauve.jar file.
 
 The mauve.jar is placed in $SYSTEMTEST_PREREQS_ROOT/mauve/mauve.jar. The default location for $SYSTEMTEST_PREREQS_ROOT is $HOME/systemtest_prereqs (unix)

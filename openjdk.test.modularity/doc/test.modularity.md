@@ -26,7 +26,7 @@ Testing areas covered in Modularity test suite at a very high level:
 
 ###How are the tests implemented? 
 
-The test cases are all written in Java, using the [STF test framework](https://github.com/AdoptOpenJDK/stf/blob/master/stf.core/docs/STF-Manual.md).
+The test cases are all written in Java, using the [STF test framework](https://github.com/adoptium/stf/blob/master/stf.core/docs/STF-Manual.md).
 
 At the top level, we have 'STF test' classes (e.g. under /openjdk.test.modularity/src/com.stf/net/adoptopenjdk/test/modularity.* package) that manage execution of one or more Java processes. These Java processes in turn drive the actual test classes (e.g. classes under /openjdk.test.modularity/src/tests/com.test/net/adoptopenjdk/test/modularity/junit.* package). Each test class contains one or more Junit test methods. Test validations typically take place both in these Junit test methods, as well as in the STF test classes.
       
@@ -34,8 +34,8 @@ openjdk.test.modularity project makes use of a number of test modules (found und
 are used for various testing purposes including patching, upgrading module paths, class loading, etc.
     
 ###What setup is required? 
-openjdk.test.modularity can be built as part of openjdk-systemtest on your local machine. Please follow instructions in the 
-[openjdk-systemtest wiki at Adopt](https://github.com/AdoptOpenJDK/openjdk-systemtest/) for instructions on how to install systemtest prereqs. 
+openjdk.test.modularity can be built as part of aqa-systemtest on your local machine. Please follow instructions in the 
+[aqa-systemtest wiki at Adopt](https://github.com/adoptium/aqa-systemtest/) for instructions on how to install systemtest prereqs. 
     
 ###Use cases 
     

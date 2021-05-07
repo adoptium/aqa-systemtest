@@ -23,7 +23,7 @@ limitations under the License.
 
 	<!-- Set default for STF location.  -->
 	<property name="stf_root" location="${source_root}/../stf"/>
-    <property name="openjdk_systemtest_root" location="${source_root}/../openjdk-systemtest"/>
+    <property name="openjdk_systemtest_root" location="${source_root}/../aqa-systemtest"/>
 
 	<!-- Import settings used by multiple projects.  -->
 	<import file="${stf_root}/stf.build/include/top.xml"/>

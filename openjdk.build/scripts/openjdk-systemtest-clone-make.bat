@@ -13,19 +13,19 @@ REM limitations under the License.
 REM Save current directory
 set currdir=%cd%
 REM Clone stf
-(IF NOT EXIST %USERPROFILE%\git mkdir %USERPROFILE%\git) && cd %USERPROFILE%\git && (IF EXIST stf rmdir /s /q stf) && git clone https://github.com/AdoptOpenJDK/stf.git stf
-REM Clone openjdk-systemtest
-(IF NOT EXIST %USERPROFILE%\git mkdir %USERPROFILE%\git) && cd %USERPROFILE%\git && (IF EXIST openjdk-systemtest rmdir /s /q openjdk-systemtest) && git clone https://github.com/AdoptOpenJDK/openjdk-systemtest.git openjdk-systemtest
+(IF NOT EXIST %USERPROFILE%\git mkdir %USERPROFILE%\git) && cd %USERPROFILE%\git && (IF EXIST stf rmdir /s /q stf) && git clone https://github.com/adoptium/stf.git stf
+REM Clone aqa-systemtest
+(IF NOT EXIST %USERPROFILE%\git mkdir %USERPROFILE%\git) && cd %USERPROFILE%\git && (IF EXIST aqa-systemtest rmdir /s /q aqa-systemtest) && git clone https://github.com/adoptium/aqa-systemtest.git aqa-systemtest
 REM Configure (get prereqs)
-cd %USERPROFILE%\git\openjdk-systemtest\openjdk.build
+cd %USERPROFILE%\git\aqa-systemtest\openjdk.build
 make configure
 IF ERRORLEVEL 1 cd %currdir% && exit /B 1
 REM Build
-cd %USERPROFILE%\git\openjdk-systemtest\openjdk.build
+cd %USERPROFILE%\git\aqa-systemtest\openjdk.build
 make
 IF ERRORLEVEL 1 cd %currdir% && exit /B 1
-@echo openjdk-systemtest repository build successful - to run the tests
-@echo cd %USERPROFILE%\git\openjdk-systemtest\openjdk.build && make test
+@echo aqa-systemtest repository build successful - to run the tests
+@echo cd %USERPROFILE%\git\aqa-systemtest\openjdk.build && make test
 REM Restore current directory
 cd %currdir%
 exit /B 0

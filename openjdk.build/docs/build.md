@@ -1,25 +1,25 @@
-# openjdk-systemtest Repository Build
+# aqa-systemtest Repository Build
 
 Basic process is:
 1. Install prereqs
 1. clone the System Test Framework (stf) git repository
-1. clone this (openjdk-systemtest) git repository
+1. clone this (aqa-systemtest) git repository
 1. make configure (installs some other prereqs)
-1. make (or make build - builds the stf and openjdk-systemtest repositories)
+1. make (or make build - builds the stf and aqa-systemtest repositories)
 1. make test (runs a basic set of tests (all the tests in default (no -Xoptions) mode))
 
-## Prereqs which cannot be installed by the openjdk-systemtest build scripts
-These prereqs must be installed before attempting to build openjdk-systemtest
+## Prereqs which cannot be installed by the aqa-systemtest build scripts
+These prereqs must be installed before attempting to build aqa-systemtest
 1. ant version 1.8.4 or later
 1. Java 8 or later (any implementation)
 1. GNU make 3.79 or later
 1. wget (optional - required to install other prereqs automatically)
 
-## Prereqs which can be installed by the openjdk-systemtest build scripts
+## Prereqs which can be installed by the aqa-systemtest build scripts
 ### Installing the prereqs using the build scripts
 1. An internet connection is required
 1. Review the list of prereqs listed under ' Installing prereqs manually' and confirm that you accept their license terms.
-1. git clone https://github.com/AdoptOpenJDK/openjdk-systemtest.git openjdk-systemtest
+1. git clone https://github.com/adoptium/aqa-systemtest.git aqa-systemtest
 1. cd &lt;git-root&gt;openjdk.build
 1. make configure
 
@@ -40,8 +40,8 @@ These prereqs must be installed before attempting to build openjdk-systemtest
 | wget                  | https://www.gnu.org/copyleft/gpl.html                         | stf.build, openjdk.build | Windows - download from https://sourceforge.net/projects/gnuwin32/files/wget/1.11.4-1/wget-1.11.4-1-bin.zip<br>This needs below dependency so download it from <br>https://sourceforge.net/projects/gnuwin32/files/wget/1.11.4-1/wget-1.11.4-1-dep.zip                                                                                                                                                | Add both downloads to PATH                                                                                                                                                                                                                                                           | No                                 |
 
 ## Building from a command line
-1. git clone https://github.com/AdoptOpenJDK/stf.git stf
-1. git clone https://github.com/AdoptOpenJDK/openjdk-systemtest.git openjdk-systemtest
+1. git clone https://github.com/adoptium/stf.git stf
+1. git clone https://github.com/adoptium/aqa-systemtest.git aqa-systemtest
 1. cd &lt;git-root&gt;openjdk.build
 1. make
 
@@ -50,7 +50,7 @@ These prereqs must be installed before attempting to build openjdk-systemtest
 in the project .classpath files to work out the test dependencies and are translated into -classpath command
 line arguments when the tests execute.
 1. Create a new Eclipse workspace.  Once configured the workspace will reference multiple git repositories and a local directory containing the test prereqs.
-1. Install the prereqs following the instructions in 'Installing prereqs' (e.g. clone the stf and openjdk-systemtest repositories and run make configure for the openjdk-systemtest repo).
+1. Install the prereqs following the instructions in 'Installing prereqs' (e.g. clone the stf and aqa-systemtest repositories and run make configure for the aqa-systemtest repo).
 1. Create a 'General Project' in your Eclipse workspace called systemtest_prereqs.
 1. Import the prereqs into the Eclipse workspace
 - Create a General Project in Eclipse called systemtest_prereqs
@@ -61,8 +61,8 @@ want).
 1. Import the prereqs into the systemtest_prereqs project in the Eclipse workspace - Import --> File System and then locate the systemtest_prereqs directory.  Do not select the 'Create top level directory' (otherwise you will get an extra systemtest_prereqs directory which you don't want).
 1. Import the STF projects into Eclipse (Find and import Eclipse projects from the STF git repo)
 1. Eclipse should now build the stf projects without error (check the 'Problems' view).
-1. Import the openjdk-systemtest projects into Eclipse (Find and import Eclipse projects)
-1. Eclipse should now build the openjdk-systemtest (openjdk.xxxx) projects without error (check the 'Problems' view).
+1. Import the aqa-systemtest projects into Eclipse (Find and import Eclipse projects)
+1. Eclipse should now build the aqa-systemtest (openjdk.xxxx) projects without error (check the 'Problems' view).
 
 ## Running tests
 ### Running via make
@@ -98,20 +98,20 @@ repository to generate makefiles to run the tests.
 ### Running stf.pl directly
 For debugging test failures and developing new tests you are likely to want to STF directly on the command line yourself.
 ```
-perl $HOME/git/stf/stf.pl -test-root="$HOME/git/openjdk-systemtest" -list
+perl $HOME/git/stf/stf.pl -test-root="$HOME/git/aqa-systemtest" -list
 ```
-will list all the tests in the stf and openjdk-systemtest repositories (the stf repository contains sample tests).
+will list all the tests in the stf and aqa-systemtest repositories (the stf repository contains sample tests).
 ```
-perl $HOME/git/stf/stf.pl -test-root="$HOME/git/openjdk-systemtest" -test=xxxx
+perl $HOME/git/stf/stf.pl -test-root="$HOME/git/aqa-systemtest" -test=xxxx
 ```
 will execute the test xxxx.  
 Some tests require test specific arguments:
 ```
-perl $HOME/git/stf/stf.pl -test-root="$HOME/git/openjdk-systemtest" -test=xxxx
+perl $HOME/git/stf/stf.pl -test-root="$HOME/git/aqa-systemtest" -test=xxxx
 ```
 JVM arguments can be passed to the Java command run during the test via:
 ```
-perl $HOME/git/stf/stf.pl -test-root="$HOME/git/openjdk-systemtest" -java-args="-Xint" -test=xxxx
+perl $HOME/git/stf/stf.pl -test-root="$HOME/git/aqa-systemtest" -java-args="-Xint" -test=xxxx
 ```
-For a full list of ways to direct stf behaviour refer to the stf documentation in the stf repository https://github.com/AdoptOpenJDK/stf.
+For a full list of ways to direct stf behaviour refer to the stf documentation in the stf repository https://github.com/adoptium/stf.
 

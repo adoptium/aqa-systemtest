@@ -1,6 +1,6 @@
 <inventory>
 	<!-- Disabled as the following sub-tests are incompatible with jdk16 on HotSpot -->
-	<!-- Details in issue: https://github.com/AdoptOpenJDK/openjdk-tests/issues/2150 -->
+	<!-- Details in issue: https://github.com/adoptium/openjdk-tests/issues/2150 -->
 	<mauve class="gnu.testlet.java.util.HashMap.AcuniaHashMapTest"/>
 	
 	<!-- Disabled as the following tests load awt libraries that are not thread-safe and cause hang on osx openj9 jdk8 : https://github.com/eclipse/openj9/issues/7050 -->
@@ -1056,29 +1056,29 @@
 	<mauve class="gnu.testlet.java.text.DecimalFormat.setGroupingSize"/>
 	<!-- Fails on jdk12 hotspot with: 
 		 got 9218868437227405313 but expected 9223231299366420480
-		 Issue reference: https://github.com/AdoptOpenJDK/openjdk-systemtest/issues/272-->
+		 Issue reference: https://github.com/adoptium/aqa-systemtest/issues/272-->
 	<mauve class="gnu.testlet.java.lang.Math.sin"/>
 	<!-- Fails on jdk13 openj9 with: 
 		 FAIL: gnu.testlet.java.util.logging.Handler.isLoggable (number 0)
-		 Issue reference: https://github.com/AdoptOpenJDK/openjdk-systemtest/issues/260-->
+		 Issue reference: https://github.com/adoptium/aqa-systemtest/issues/260-->
 	<mauve class="gnu.testlet.java.util.logging.Handler.isLoggable"/>
 	<!-- Fails on jdk11 openj9 on s390 linux with: 
 		 FAIL: gnu.testlet.java.util.zip.ZipEntry.time: setTime or getTime broken (number 0)
 			   got 1086325228000 but expected 1086310828000
-		 Issue reference: https://github.com/AdoptOpenJDK/openjdk-systemtest/issues/267-->
+		 Issue reference: https://github.com/adoptium/aqa-systemtest/issues/267-->
 	<mauve class="gnu.testlet.java.util.zip.ZipEntry.time"/>
 	<!-- Fails on jdk12 aarch64 linux hotspot with: 
 		 got -4616189728938546314 but expected -4616189728938546315
-		 Issue reference: https://github.com/AdoptOpenJDK/openjdk-systemtest/issues/256-->
+		 Issue reference: https://github.com/adoptium/aqa-systemtest/issues/256-->
 	<mauve class="gnu.testlet.java.lang.Math.cos"/>
 	<!-- Fails on jdk11 aarch64 linux hotspot with: 
 		 gnu.testlet.java.lang.System.arraycopy: Object casting (number 0)
 		 got caught IndexOutOfBoundsException but expected caught ArrayStoreException
-		 Issue reference: https://github.com/AdoptOpenJDK/openjdk-systemtest/issues/256-->
+		 Issue reference: https://github.com/adoptium/aqa-systemtest/issues/256-->
 	<mauve class="gnu.testlet.java.lang.System.arraycopy"/>	
 	<!-- Fails on jdk11 and jdk12 openj9 with: 
 	java.net.SocketException: maximum number of DatagramSockets reached binding to null address (number 0) 
-	Issue reference: https://github.com/AdoptOpenJDK/openjdk-systemtest/issues/237-->
+	Issue reference: https://github.com/adoptium/aqa-systemtest/issues/237-->
 	<mauve class="gnu.testlet.java.net.DatagramSocket.bind"/>
 	<!-- Fails with
 		 PASS: gnu.testlet.java.util.zip.ZipFile.DirEntryTest: getEntry("dir/") (number 0)
@@ -1107,7 +1107,7 @@
 	<mauve class="gnu.testlet.java.text.SimpleDateFormat.applyLocalizedPattern"/>
 	<!-- The following tests fail on Hotspot Java 11 on aarch64 with 
 		 FAIL: gnu.testlet.java.lang.System.arraycopy: Object casting (number 0)
-		 Permanently excluded, ref: https://github.com/AdoptOpenJDK/openjdk-systemtest/issues/237
+		 Permanently excluded, ref: https://github.com/adoptium/aqa-systemtest/issues/237
 	-->
 	<mauve class="gnu.testlet.java.lang.System.arraycopy"/>
 	<!-- Fails on Oracle Java 9 with

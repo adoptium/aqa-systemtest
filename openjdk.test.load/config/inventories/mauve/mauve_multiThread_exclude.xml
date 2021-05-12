@@ -37,33 +37,33 @@
 	<!-- Excluded as invalid test. Ref: https://github.com/eclipse/openj9/issues/7020 -->
 	<mauve class="gnu.testlet.java.io.InputStreamReader.utf8"/>
 	<!-- Exclude tests not suited for multi-threaded testing
-	Issue ref: https://github.com/AdoptOpenJDK/openjdk-systemtest/issues/298 -->
+	Issue ref: https://github.com/adoptium/aqa-systemtest/issues/298 -->
 	<mauve class="gnu.testlet.java.util.Calendar.getInstance"/>
 	<mauve class="gnu.testlet.java.util.Date.range"/>
 	<!-- Exclude tests that install SecurityManager 
-	Issue Ref: https://github.com/AdoptOpenJDK/openjdk-systemtest/issues/284-->
+	Issue Ref: https://github.com/adoptium/aqa-systemtest/issues/284-->
 	<mauve class="gnu.testlet.java.util.logging.Logger.getAnonymousLogger"/>
 	<mauve class="gnu.testlet.java.util.logging.Logger.getName"/>
 	<!-- Fails on jdk12 hotspot with: 
 		 got 9218868437227405313 but expected 9223231299366420480
-		 Issue reference: https://github.com/AdoptOpenJDK/openjdk-systemtest/issues/272-->
+		 Issue reference: https://github.com/adoptium/aqa-systemtest/issues/272-->
 	<mauve class="gnu.testlet.java.lang.Math.sin"/>
 	<!-- Fails on jdk13 openj9 with: 
 		 FAIL: gnu.testlet.java.util.logging.Handler.isLoggable (number 0)
-		 Issue reference: https://github.com/AdoptOpenJDK/openjdk-systemtest/issues/260-->
+		 Issue reference: https://github.com/adoptium/aqa-systemtest/issues/260-->
 	<mauve class="gnu.testlet.java.util.logging.Handler.isLoggable"/>
 	<!-- Fails on jdk11 openj9 on s390 linux with: 
 		 FAIL: gnu.testlet.java.util.zip.ZipEntry.time: setTime or getTime broken (number 0)
 			   got 1086325228000 but expected 1086310828000
-		 Issue reference: https://github.com/AdoptOpenJDK/openjdk-systemtest/issues/267-->
+		 Issue reference: https://github.com/adoptium/aqa-systemtest/issues/267-->
 	<mauve class="gnu.testlet.java.util.zip.ZipEntry.time"/>
 	<!-- Fails on jdk12 openj9 on ppcle linux with: 
 		java.security.AccessControlException: access denied: ("java.util.logging.LoggingPermission" "control")
-		Issue reference: https://github.com/AdoptOpenJDK/openjdk-systemtest/issues/263-->
+		Issue reference: https://github.com/adoptium/aqa-systemtest/issues/263-->
 	<mauve class="gnu.testlet.javax.net.ssl.SSLContext.TestDefaultInit"/> 
 	<!-- Fails on jdk11 and jdk12 openj9 with: 
 	java.net.SocketException: maximum number of DatagramSockets reached binding to null address (number 0) 
-	Issue reference: https://github.com/AdoptOpenJDK/openjdk-systemtest/issues/237-->
+	Issue reference: https://github.com/adoptium/aqa-systemtest/issues/237-->
 	<mauve class="gnu.testlet.java.net.DatagramSocket.bind"/>
 	<!--Fails on multi-threaded scenario with 
 		java.security.AccessControlException: access denied
@@ -98,7 +98,7 @@
 	<mauve class="gnu.testlet.java.util.zip.ZipFile.DirEntryTest"/>
 	<!-- Fails on AIX on OpenJ9 Java 12 with
 		 FAIL: gnu.testlet.java.text.MessageFormat.format14: time (number 3)
-		 Permanently excluded, ref: https://github.com/AdoptOpenJDK/openjdk-systemtest/issues/237
+		 Permanently excluded, ref: https://github.com/adoptium/aqa-systemtest/issues/237
 	-->
 	<mauve class="gnu.testlet.java.text.MessageFormat.format14"/>
 	<!-- Fails on IBM and Oracle Java 9 with 

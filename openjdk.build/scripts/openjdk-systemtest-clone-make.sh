@@ -14,29 +14,29 @@
 #-------------------------------------------------------------------------
 
 # Clone stf
-mkdir -p $HOME/git && cd $HOME/git && rm -rf stf && mkdir stf && git clone https://github.com/AdoptOpenJDK/stf.git stf
+mkdir -p $HOME/git && cd $HOME/git && rm -rf stf && mkdir stf && git clone https://github.com/adoptium/stf.git stf
 if [ "$?" != "0" ]; then
         echo "Error cloning stf" 1>&2
         exit 1
 fi
-# Clone openjdk-systemtest
-mkdir -p $HOME/git && cd $HOME/git && rm -rf openjdk-systemtest && mkdir openjdk-systemtest && git clone https://github.com/AdoptOpenJDK/openjdk-systemtest.git openjdk-systemtest
+# Clone aqa-systemtest
+mkdir -p $HOME/git && cd $HOME/git && rm -rf aqa-systemtest && mkdir aqa-systemtest && git clone https://github.com/adoptium/aqa-systemtest.git aqa-systemtest
 if [ "$?" != "0" ]; then
-        echo "Error cloning openjdk-systemtest" 1>&2
+        echo "Error cloning aqa-systemtest" 1>&2
         exit 1
 fi
 # Configure (get prereqs)
-cd $HOME/git/openjdk-systemtest/openjdk.build/ && make configure
+cd $HOME/git/aqa-systemtest/openjdk.build/ && make configure
 if [ "$?" != "0" ]; then
-        echo "Error configuring openjdk-systemtest - see build output" 1>&2
+        echo "Error configuring aqa-systemtest - see build output" 1>&2
         exit 1
 fi
 # Build
-cd $HOME/git/openjdk-systemtest/openjdk.build/ && make
+cd $HOME/git/aqa-systemtest/openjdk.build/ && make
 if [ "$?" != "0" ]; then
-        echo "Error building openjdk-systemtest - see build output" 1>&2
+        echo "Error building aqa-systemtest - see build output" 1>&2
         exit 1
 fi
-echo "openjdk-systemtest repository build successful - to run the tests"
-echo "make -f $HOME/git/openjdk-systemtest/openjdk.build/makefile test"
+echo "aqa-systemtest repository build successful - to run the tests"
+echo "make -f $HOME/git/aqa-systemtest/openjdk.build/makefile test"
 exit 0

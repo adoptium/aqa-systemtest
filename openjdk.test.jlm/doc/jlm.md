@@ -36,7 +36,7 @@ The aim of this testsuite is to exercise the functionality provided by the MBean
 
 ### How are the tests implemented? 
 
-The test cases are all implemented in Java, using the *STF*. Please see [STF test framework manual](https://github.com/AdoptOpenJDK/stf/blob/master/stf.core/docs/STF-Manual.md).  
+The test cases are all implemented in Java, using the *STF*. Please see [STF test framework manual](https://github.com/adoptium/stf/blob/master/stf.core/docs/STF-Manual.md).  
     
 At the top level, we have 'STF automation plugin' test classes (e.g. classes under /openjdk.test.jlm/src/test.jlm/net.adoptopenjdk.test.jlm.stf.* package) that contain the implementation details of each jlm test. 
     

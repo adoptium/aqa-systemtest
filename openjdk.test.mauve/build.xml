@@ -26,7 +26,7 @@ limitations under the License.
 	<!-- Assumes source repositories are checked out under a common root and the repository
 		has been built in-situ - i.e.
 		stf repository: /home/userid/git/stf
-		openjdk-systemtest repository: /home/userid/git/openjdk-systemtest
+		aqa-systemtest repository: /home/userid/git/aqa-systemtest
 		If the stf repository has been cloned or built to a different location, the stf_root property
 		must be set on the command line - e.g. -Dstf_root=/my_stf_build_dir
 	-->

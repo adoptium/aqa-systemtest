@@ -1,4 +1,4 @@
 <inventory> 
-	<!--  Disabled due to https://github.com/AdoptOpenJDK/openjdk-tests/issues/1916 -->
+	<!--  Disabled due to https://github.com/adoptium/aqa-tests/issues/1916 -->
 	<junit class="net.adoptopenjdk.test.util.solver.SolverTest"/>
 </inventory>

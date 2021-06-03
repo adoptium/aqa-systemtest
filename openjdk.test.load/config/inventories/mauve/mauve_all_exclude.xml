@@ -1,6 +1,8 @@
 <inventory>
+	<!-- Excluded as invalid test. Ref: https://github.com/eclipse/openj9/issues/7020 -->
+	<mauve class="gnu.testlet.java.io.InputStreamReader.utf8"/>
 	<!-- Disabled as the following sub-tests are incompatible with jdk16 on HotSpot -->
-	<!-- Details in issue: https://github.com/adoptium/openjdk-tests/issues/2150 -->
+	<!-- Details in issue: https://github.com/adoptium/aqa-tests/issues/2150 -->
 	<mauve class="gnu.testlet.java.util.HashMap.AcuniaHashMapTest"/>
 	
 	<!-- Disabled as the following tests load awt libraries that are not thread-safe and cause hang on osx openj9 jdk8 : https://github.com/eclipse/openj9/issues/7050 -->

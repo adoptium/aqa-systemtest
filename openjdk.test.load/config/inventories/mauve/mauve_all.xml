@@ -2743,7 +2743,7 @@
 	<mauve class="gnu.testlet.java.lang.Math.classInfo.isSynthetic"/>
 	<!-- Excluding because
 	     The Math.cos Not a Number (NaN) tests are invalid.
-	     See https://github.com/AdoptOpenJDK/openjdk-tests/issues/2120
+	     See https://github.com/adoptium/aqa-tests/issues/2120
 	<mauve class="gnu.testlet.java.lang.Math.cos"/>
 	-->
 	<mauve class="gnu.testlet.java.lang.Math.cosh"/>
@@ -2758,7 +2758,7 @@
 	     The strictfp_modifier tests are not valid (they assume the strictfp
 	     modifier should modify the behaviour of the Math.xxx calls within
 	     the test case but this is incorrect).
-	     See https://github.com/AdoptOpenJDK/openjdk-tests/issues/1891
+	     See https://github.com/adoptium/aqa-tests/issues/1891
 	<mauve class="gnu.testlet.java.lang.Math.strictfp_modifier.acos"/>
 	<mauve class="gnu.testlet.java.lang.Math.strictfp_modifier.asin"/>
 	<mauve class="gnu.testlet.java.lang.Math.strictfp_modifier.atan"/>

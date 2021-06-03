@@ -1,6 +1,6 @@
 <inventory>
 	<!-- Disabled as the following sub-tests are incompatible with jdk16 on HotSpot -->
-	<!-- Details in issue: https://github.com/AdoptOpenJDK/openjdk-tests/issues/2150 -->
+	<!-- Details in issue: https://github.com/adoptium/aqa-tests/issues/2150 -->
 	<mauve class="gnu.testlet.java.util.HashMap.AcuniaHashMapTest"/>
 	
 	<!--  Disabled due to https://github.com/eclipse/openj9/issues/8204 -->

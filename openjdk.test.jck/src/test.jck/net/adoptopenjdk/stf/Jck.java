@@ -384,7 +384,7 @@ public class Jck implements StfPluginInterface {
 			// Use the presence of a '/' to signify that we are running a subset of tests.
 			// If one of the highest level test nodes is being run it is likely to take a long time.
 			if ( tests.contains("/") && !isRiscv ) {
-				timeout = "8h";
+				timeout = "10h";
 			}
 			outcome = ExpectedOutcome.cleanRun().within(timeout);
 

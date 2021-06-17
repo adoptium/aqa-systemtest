@@ -140,8 +140,20 @@ SRC_PATH=$(SRCDIR)/src
 # From jck10 the unix include files are in src/share/lib/jni/include/linux
 
 CC=gcc
-CFLAGS=-fPIC -I$(SOLARIS_PATH) -I$(LINUX_PATH) -I$(SRC_PATH)
+CFLAGS=-fPIC -I$(LINUX_PATH) -I$(SRC_PATH)
 LDFLAGS=-shared 
+
+ifeq ($(OS),osx)
+	CC=gcc
+	CFLAGS=-fPIC -I$(OSX_PATH) -I$(SRC_PATH)
+	LDFLAGS=-shared
+endif
+
+ifeq ($(OS),sunos)
+	CC=cc
+	CFLAGS=-fPIC -I$(SOLARIS_PATH) -I$(SRC_PATH)
+	LDFLAGS=-shared
+endif
 
 ifeq ($(OS),osx)
 	CC=gcc

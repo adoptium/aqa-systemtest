@@ -560,6 +560,9 @@ public class Jck implements StfPluginInterface {
 			} else if (platform.equals("linux"))  {
 				libPath = "LD_LIBRARY_PATH";
 				robotAvailable = "Yes";
+			} else if (platform.equals("solaris"))  {
+				libPath = "LD_LIBRARY_PATH";
+				robotAvailable = "Yes";
 			} else if (platform.equals("aix")) {
 				libPath = "LIBPATH";
 				robotAvailable = "Yes";
@@ -736,6 +739,7 @@ public class Jck implements StfPluginInterface {
 			if (platform.equals("win32")) {
 			} else if (platform.equals("linux")) {
 			} else if (platform.equals("macosx")) {
+			} else if (platform.equals("solaris")) {
 			} else if (platform.equals("aix")) {
 			} else if (platform.equals("zos")) {
 				pathToLib = testJdk + File.separator + "lib";

@@ -155,12 +155,6 @@ ifeq ($(OS),sunos)
 	LDFLAGS=-shared
 endif
 
-ifeq ($(OS),osx)
-	CC=gcc
-	CFLAGS=-fPIC -I$(OSX_PATH) -I$(SRC_PATH)
-	LDFLAGS=-shared
-endif
-
 ifeq ($(OS),aix)
 	CC=xlc
 	CFLAGS=-qstaticinline -q$(BitMode) -I$(UNIX_PATH) -I$(LINUX_PATH) -I$(SRC_PATH)

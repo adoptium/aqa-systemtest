@@ -150,8 +150,8 @@ ifeq ($(OS),osx)
 endif
 
 ifeq ($(OS),sunos)
-	CC=cc —m64
-	CFLAGS=-fPIC -I$(SOLARIS_PATH) -I$(SRC_PATH)
+	CC=cc
+	CFLAGS=-fPIC -m64 -I$(SOLARIS_PATH) -I$(SRC_PATH)
 	LDFLAGS=-shared
 endif
 

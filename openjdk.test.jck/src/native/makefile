@@ -151,7 +151,7 @@ endif
 
 ifeq ($(OS),sunos)
 	CC=cc
-	CFLAGS=-fPIC -I$(SOLARIS_PATH) -I$(SRC_PATH)
+	CFLAGS=-fPIC -m64 -I$(SOLARIS_PATH) -I$(SRC_PATH)
 	LDFLAGS=-shared
 endif
 

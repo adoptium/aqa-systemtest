@@ -140,7 +140,7 @@ SRC_PATH=$(SRCDIR)/src
 # From jck10 the unix include files are in src/share/lib/jni/include/linux
 
 CC=gcc
-CFLAGS=-fPIC -I$(LINUX_PATH) -I$(SRC_PATH)
+CFLAGS=-fPIC -I$(UNIX_PATH) -I$(LINUX_PATH) -I$(SRC_PATH)
 LDFLAGS=-shared 
 
 ifeq ($(OS),osx)

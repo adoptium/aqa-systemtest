@@ -1,4 +1,11 @@
 <inventory>
+	<!-- Fails on JDK11 and up if run many times.
+		 Issue: https://github.com/adoptium/aqa-tests/issues/2293
+		 Note: The issue has been fixed upstream, and has been backported.
+		 We're waiting for the fix to move from JDKx-dev forks into JDKx.
+	-->
+	<mauve class="gnu.testlet.java.lang.StringIndexOutOfBoundsException.constructor"/>
+	
 	<!-- Excluded as invalid test. Ref: https://github.com/eclipse/openj9/issues/7020 -->
 	<mauve class="gnu.testlet.java.io.InputStreamReader.utf8"/>
 	<!-- Disabled as the following sub-tests are incompatible with jdk16 on HotSpot -->

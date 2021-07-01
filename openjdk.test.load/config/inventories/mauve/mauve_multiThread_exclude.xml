@@ -1,4 +1,11 @@
 <inventory>
+	<!-- Fails on JDK11 and up if run many times.
+		 Issue: https://github.com/adoptium/aqa-tests/issues/2293
+		 Note: The issue has been fixed upstream, and has been backported.
+		 We're waiting for the fix to move from JDKx-dev forks into JDKx.
+	-->
+	<mauve class="gnu.testlet.java.lang.StringIndexOutOfBoundsException.constructor"/>
+	
 	<!-- Disabled as the following sub-tests are incompatible with jdk16 on HotSpot -->
 	<!-- Details in issue: https://github.com/adoptium/aqa-tests/issues/2150 -->
 	<mauve class="gnu.testlet.java.util.HashMap.AcuniaHashMapTest"/>

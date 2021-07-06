@@ -384,7 +384,7 @@ limitations under the License.
 		<echo message="cvs_available is ${cvs_available}"/>
 	</target>
 
-	<target name="download-cvsclient" depends="check-for-download-tool" unless="${cvs_available}">
+	<target name="download-cvsclient"  unless="${cvs_available}">
 		<mkdir dir="${first_prereqs_root}/cvsclient"/>
 		<download-file destdir="${first_prereqs_root}/cvsclient" destfile="org-netbeans-lib-cvsclient.jar" srcurl="https://repo1.maven.org/maven2/org/netbeans/lib/cvsclient/20060125/cvsclient-20060125.jar"/>
 	</target>

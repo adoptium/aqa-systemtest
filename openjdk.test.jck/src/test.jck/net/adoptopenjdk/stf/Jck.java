@@ -616,7 +616,11 @@ public class Jck implements StfPluginInterface {
 			if ( tests.contains("api/java_awt") || tests.contains("api/javax_swing") || tests.equals("api") ) {
 				keyword += "&!robot";
 			}
-			
+
+			if ( tests.contains("api/signaturetest") ) {
+				fileContent += "set jck.env.testPlatform.xWindows \"No\"" + ";\n";
+			}
+
 			fileContent += "set jck.env.runtime.testExecute.cmdAsString \"" + pathToJava + "\"" + ";\n";
 			
 			if ( tests.equals("api/java_lang") || tests.contains("api/java_lang/instrument") ||
@@ -894,7 +898,7 @@ public class Jck implements StfPluginInterface {
 			tests.contains("api/javax_swing") || tests.contains("api/javax_sound") ||
 			tests.contains("api/java_awt")  || tests.contains("api/javax_print") ||
 			tests.contains("api/java_beans") || tests.contains("api/javax_accessibility") ||
-			tests.contains("api/javax_naming") || tests.contains("api/signaturetest")) {
+			tests.contains("api/javax_naming")) {
 			return true;
 		}
 		return false;

@@ -617,7 +617,8 @@ public class Jck implements StfPluginInterface {
 				keyword += "&!robot";
 			}
 
-			if ( tests.contains("api/signaturetest") ) {
+			if ( !platform.equals("win32") &&
+                             (tests.contains("api/signaturetest") || tests.contains("api/java_io")) ) {
 				fileContent += "set jck.env.testPlatform.xWindows \"No\"" + ";\n";
 			}
 
@@ -628,7 +629,6 @@ public class Jck implements StfPluginInterface {
 				fileContent += "set jck.env.runtime.testExecute.libPathEnv " + libPath + ";\n";
 				fileContent += "set jck.env.runtime.testExecute.nativeLibPathValue \"" + jckRuntimeNativeLibValue + "\"" + ";\n";
 			}
-
 			// tools.jar was incorporated into modules from Java 9
 			if ( jckVersion.contains("jck8") ) {
 				if ( tests.startsWith("vm/jvmti") || tests.equals("vm") || tests.equals("api") || tests.equals("api/java_lang") || tests.contains("api/java_lang/instrument") ) {
@@ -894,7 +894,7 @@ public class Jck implements StfPluginInterface {
 	
 	private boolean testsRequireDisplay (String tests) {
 		if (tests.equals("api") ||
-			tests.contains("api/java_applet") || tests.contains("api/java_io") ||
+			tests.contains("api/java_applet") ||
 			tests.contains("api/javax_swing") || tests.contains("api/javax_sound") ||
 			tests.contains("api/java_awt")  || tests.contains("api/javax_print") ||
 			tests.contains("api/java_beans") || tests.contains("api/javax_accessibility") ||

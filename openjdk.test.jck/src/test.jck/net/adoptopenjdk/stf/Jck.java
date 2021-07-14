@@ -256,7 +256,7 @@ public class Jck implements StfPluginInterface {
 				config = "default";	
 			}
 			krbConfFile = repositoryConfigLoc.childFile("/" + config + "/krb5.conf");
-			testProps = repositoryConfigLoc.childFile("/" + config + "/jcktest.properties");
+			testProps = repositoryConfigLoc.childFile("/" + config + "/jcktest.properties").toString();
 			Properties prop = new Properties();
 			InputStream ins = new FileInputStream(testProps);
 			prop.load(ins);

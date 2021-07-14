@@ -850,6 +850,12 @@ public class Jck implements StfPluginInterface {
 			} else {
 				throw new StfException("Unknown platform:: " + platform);
 			}
+
+                        if (platform.equals("linux")) {
+				// bash required to run schema scripts on linux (cannot be standard sh)
+				xjcCmd = "bash "+xjcCmd;
+				jxcCmd = "bash "+jxcCmd;
+                        }
 			
 			fileContent += "concurrency " + concurrencyString + ";\n";
 			fileContent += "timeoutfactor 1" + ";\n";							// All Devtools tests take less than 1h to finish.

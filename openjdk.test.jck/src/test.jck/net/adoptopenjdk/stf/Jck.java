@@ -255,12 +255,7 @@ public class Jck implements StfPluginInterface {
 			if (config.equals("NULL")) {
 				config = "default";	
 			}
-			String subdir = "config/" + config;
-			try {
-				jckConfigLoc = test.env().findPrereqDirectory(subdir);
-			} catch (StfException e) {
-				throw new StfException(testExecutionType + "Cannot locate the configuration directory containing the Kerberos and Http server settings in a subdirectory " + subdir + " beneath a prereq directory.  The requested tests include at least one of the tests which require these files.");
-			}
+			jckConfigLoc = jckRoot + "../" + config;
 			krbConfFile = jckConfigLoc.childFile("krb5.conf");
 			testProps = jckConfigLoc + "/jcktest.properties";
 			Properties prop = new Properties();

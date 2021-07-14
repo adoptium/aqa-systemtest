@@ -257,6 +257,9 @@ public class Jck implements StfPluginInterface {
 			}
 			String subdir = "config/" + config;
 			try {
+				Path sourceDirectory = Paths.get(jckroot + "../../" + subdir);
+				Path targetDirectory = Paths.get(jckroot + subdir);
+				Files.copy(sourceDirectory, targetDirectory);
 				jckConfigLoc = test.env().findPrereqDirectory(subdir);
 			} catch (StfException e) {
 				throw new StfException(testExecutionType + "Cannot locate the configuration directory containing the Kerberos and Http server settings in a subdirectory " + subdir + " beneath a prereq directory.  The requested tests include at least one of the tests which require these files.");

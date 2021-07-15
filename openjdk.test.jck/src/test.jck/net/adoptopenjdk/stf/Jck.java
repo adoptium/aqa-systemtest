@@ -96,7 +96,6 @@ public class Jck implements StfPluginInterface {
 	private String testHost2Name;
 	private String testHost2Ip;
 	private String httpUrl;
-	private String ftpUrl;
 	private String krb5ClientPassword;
 	private String krb5ClientUsername;
 	private String krb5ServerPassword;
@@ -266,7 +265,6 @@ public class Jck implements StfPluginInterface {
 			testHost2Name = prop.getProperty("testhost2name");
 			testHost2Ip = prop.getProperty("testhost2ip");
 			httpUrl = prop.getProperty("httpurl");
-			ftpUrl = prop.getProperty("ftpurl");
 			// Make sure username properties do not have trailing whitespace before adding server location data.
 			krb5ClientPassword = prop.getProperty("krb5ClientPassword");
 			krb5ClientUsername = prop.getProperty("krb5ClientUsername");
@@ -670,7 +668,6 @@ public class Jck implements StfPluginInterface {
 			if ( tests.contains("api/java_net") || tests.equals("api") ) {
 				fileContent += "set jck.env.runtime.url.httpURL " + httpUrl + ";\n";
 				fileContent += "set jck.env.runtime.url.fileURL " + fileUrl + ";\n";
-				fileContent += "set jck.env.runtime.url.ftpURL " + ftpUrl + ";\n";
 			}
 			if ( tests.contains("api/java_net") || tests.contains("api/org_omg") || tests.contains("api/javax_management") || tests.contains("api/javax_xml") || tests.contains("vm/jdwp") || tests.equals("api")) {
 				if ( !tests.contains("api/javax_xml/bind") &&

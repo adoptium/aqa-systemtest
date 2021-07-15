@@ -324,6 +324,15 @@ public class Jck implements StfPluginInterface {
 		
 		test.doEchoFile("The JTB file generated\n", newJtbFileRef);
 
+		if ( tests.contains("api/javax_net") ) {
+			// Requires TLS 1.0/1.1 enabling
+			DirectoryRef secPropsLocation = test.env().getResultsDir().childDirectory("SecProps");
+			test.doMkdir("Creating dir to store the custom security properties", secPropsLocation);
+			FileRef secPropsFileRef = secPropsLocation.childFile("security.properties");
+			String secPropsContents = "jdk.tls.disabledAlgorithms=SSLv3, RC4, DES, MD5withRSA, DH keySize < 1024, EC keySize < 224, anon, NULL, include jdk.disabled.namedCurves";
+			test.doWriteFile("Writing into security.properties file.", secPropsFileRef, secPropsContents);
+		}
+
 		if ( PlatformFinder.isZOS() ) {
 			test.doIconvFile("Converting .jtb file to ascii", newJtbFileRef.getSpec(), "IBM-1047", "ISO8859-1");
 		}
@@ -722,7 +731,7 @@ public class Jck implements StfPluginInterface {
 			}
 			
 			// Get any additional jvm options for specific tests.
-			extraJvmOptions += getTestSpecificJvmOptions(jckVersion, tests);
+			extraJvmOptions += getTestSpecificJvmOptions(test, jckVersion, tests);
 
 			extraJvmOptions += suppressOutOfMemoryDumpOptions;
 			
@@ -888,7 +897,7 @@ public class Jck implements StfPluginInterface {
 			}
 			
 			// Get any additional jvm options for specific tests.
-			extraJvmOptions += getTestSpecificJvmOptions(jckVersion, tests);
+			extraJvmOptions += getTestSpecificJvmOptions(test, jckVersion, tests);
 
 			extraJvmOptions += suppressOutOfMemoryDumpOptions;
 			
@@ -949,8 +958,15 @@ public class Jck implements StfPluginInterface {
 		return returnJckTopDir;
 	}
 	
-	private String getTestSpecificJvmOptions (String jckVersion, String tests) {
+	private String getTestSpecificJvmOptions (StfCoreExtension test, String jckVersion, String tests) throws StfException {
 		String testSpecificJvmOptions = "";
+
+		if ( tests.contains("api/javax_net") ) {
+			// Needs extra security.properties
+			FileRef secPropsFile = test.env().getResultsDir().childDirectory("SecProps").childFile("security.properties");
+			testSpecificJvmOptions += " -Djava.security.properties=" + secPropsFile;
+		}
+
 		Matcher matcher = Pattern.compile("jck(\\d+)c?").matcher(jckVersion);
 		if (matcher.matches()) {
 			// first group is going to be 8, 9, 10, 11, etc.

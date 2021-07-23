@@ -668,14 +668,14 @@ public class Jck implements StfPluginInterface {
 			}	
 			if ( tests.contains("api/java_net") || tests.contains("api/java_nio") || tests.equals("api") ) {
 				fileContent += "set jck.env.runtime.net.localHostName " + hostname + ";\n";
-				// The Solaris tests fail with this: specified tag "jck.env.runtime.net.localHostIPAddr" was not found on path. The path is:jck.intro
+				// The Solaris tests fail with this: specified tag "jck.env.runtime.net.*" was not found on path. The path is:jck.intro
 				if (!platform.equals("solaris")) {
 					fileContent += "set jck.env.runtime.net.localHostIPAddr " + ipAddress + ";\n";
+					fileContent += "set jck.env.runtime.net.testHost1Name " + testHost1Name + ";\n";
+					fileContent += "set jck.env.runtime.net.testHost1IPAddr " + testHost1Ip + ";\n";
+					fileContent += "set jck.env.runtime.net.testHost2Name " + testHost2Name + ";\n";
+					fileContent += "set jck.env.runtime.net.testHost2IPAddr " + testHost2Ip + ";\n";
 				}
-				fileContent += "set jck.env.runtime.net.testHost1Name " + testHost1Name + ";\n";
-				fileContent += "set jck.env.runtime.net.testHost1IPAddr " + testHost1Ip + ";\n";
-				fileContent += "set jck.env.runtime.net.testHost2Name " + testHost2Name + ";\n";
-				fileContent += "set jck.env.runtime.net.testHost2IPAddr " + testHost2Ip + ";\n";
 			}
 			if ( tests.contains("api/java_net") || tests.equals("api") ) {
 				fileContent += "set jck.env.runtime.url.httpURL " + httpUrl + ";\n";

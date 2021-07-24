@@ -93,7 +93,7 @@ endif
 # Following defaults set for Unix environment. For Windows platform following variables are overriden
 LIBPREF=lib
 ifneq (,$(findstring aix,$(OS)))
-	LIBEXT=a
+	LIBEXT=so
 else
 ifneq (,$(findstring osx,$(OS)))
 	LIBEXT=dylib

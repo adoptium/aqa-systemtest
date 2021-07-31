@@ -764,8 +764,8 @@ public class Jck implements StfPluginInterface {
 				// set the file and path separators (an error is thrown if they are set).
 				fileContent += "set jck.env.testPlatform.os \"Windows\";\n";
 				fileContent += "set jck.env.testPlatform.systemRoot " + System.getenv("WINDIR") + ";\n";
-			} else if (platform.equals("zos") || platform.equals("aix")) {
-				// On z/OS and AIX set the testplatform.os Current system
+			} else if (!jckVersion.contains("jck8") && (platform.equals("zos") || platform.equals("aix"))) {
+				// On jck11+ z/OS and AIX set the testplatform.os Current system
 				// due to JCK class OsHelper bug with getFileSep() in Compiler JCK Interviewer
 				fileContent += "set jck.env.testPlatform.os \"Current system\";\n";
 				cmdAsStringOrFile = "cmdAsFile";
@@ -800,8 +800,8 @@ public class Jck implements StfPluginInterface {
 			}
 			fileContent += "set jck.env.compiler.compRefExecute." + cmdAsStringOrFile + " \"" + pathToJava + "\"" + ";\n";
 
-			if (platform.equals("zos") || platform.equals("aix")) {
-                                // On z/OS and AIX set the compRefExecute file and path separators
+			if (!jckVersion.contains("jck8") && (platform.equals("zos") || platform.equals("aix"))) {
+                                // On jck11+ z/OS and AIX set the compRefExecute file and path separators
                                 // due to JCK class OsHelper bug with getFileSep() in Compiler JCK Interviewer
                                 fileContent += "set jck.env.compiler.compRefExecute.fileSep \"/\";\n";
                                 fileContent += "set jck.env.compiler.compRefExecute.pathSep \":\";\n";

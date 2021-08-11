@@ -854,10 +854,13 @@ public class Jck implements StfPluginInterface {
 				throw new StfException("Unknown platform:: " + platform);
 			}
 
+			// bash/ksh required to run schema scripts (cannot be standard sh)
                         if (platform.equals("linux")) {
-				// bash required to run schema scripts on linux (cannot be standard sh)
 				xjcCmd = "bash "+xjcCmd;
 				jxcCmd = "bash "+jxcCmd;
+                        } else if (platform.equals("solaris")) {
+				xjcCmd = "ksh "+xjcCmd;
+				jxcCmd = "ksh "+jxcCmd;
                         }
 			
 			fileContent += "concurrency " + concurrencyString + ";\n";

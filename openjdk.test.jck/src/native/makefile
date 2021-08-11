@@ -250,7 +250,17 @@ help:
 
 build:createdir $(OBJS) installjmx
 
-$(LIBPREF)jckjni.$(LIBEXT): jckjni.c 
+ifeq ($(OS),win)
+ifneq (,$(findstring 16,$(SRCDIR)))
+EXTRAJCKJNIDEP=$(SRCDIR)\src\share\lib\jni\include\windows\jckjni_md.h-DIST
+
+$(EXTRAJCKJNIDEP):
+	cp "$(SRCDIR)\src\share\lib\jni\include\windows\jckjni_md.h" "$(EXTRAJCKJNIDEP)"
+	perl -p -i -e 'print "#if (defined(WIN32) || defined(_WIN32))\n#include <synchapi.h>\n#endif\n\n" if $$_ =~ /^#endif.*JCKJNI_MD_H/' "$(SRCDIR)\src\share\lib\jni\include\windows\jckjni_md.h"
+
+endif
+endif
+$(LIBPREF)jckjni.$(LIBEXT): jckjni.c $(EXTRAJCKJNIDEP)
 	cd $(FULLOUTDIR) && $(CC) $(CFLAGS) $(LDFLAGS) $< $(OFLAG)$(FULLOUTDIR)$(VAR)
 	$(JCKJNI)
 

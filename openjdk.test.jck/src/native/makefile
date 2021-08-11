@@ -199,7 +199,7 @@ ifeq ($(OS),win)
     endif
 
 	IFLAGS=/I. /I"$(JAVA_HOME)/../include" /I"$(SRCDIR)$(D)src$(D)share$(D)lib$(D)jni$(D)include$(D)win32" /I"$(SRCDIR)$(D)src$(D)share$(D)lib$(D)jni$(D)include$(D)windows" /I"$(SRCDIR)" /I"$(SRCDIR)$(D)src" /I"$(SRCDIR)$(D)src$(D)share$(D)lib$(D)jni$(D)include" /I"$(SRCDIR)$(D)src$(D)share$(D)lib$(D)jvmti$(D)include"
-	CFLAGS=/DWIN32 /D_WINDOWS /LD /MD $(IFLAGS)
+	CFLAGS=/DWIN32 /D_AMD64_ /D_WINDOWS /LD /MD $(IFLAGS)
 	LFLAGS=/NOLOGO /DLL /INCREMENTAL:NO /NODEFAULTLIB:LIBCMTD /OUT:
 	LINK_CMD=$(CMD_PREFIX) link
 	CC=cl

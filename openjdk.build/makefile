@@ -36,7 +36,7 @@ endif
 # Don't set it under cygwin yet, first we need to resolve any unix style paths.
 # If we're on Windows, set the shell for started processes to be cmd.exe, otherwise
 # if the Windows environment has a unix style shell on the path, make will invoke
-# that, and then Windows commands may not work as expected. 
+# that, and then Windows commands may not work as expected.
 ifeq ($(OS),Windows_NT)
   ifneq ($(CYGWIN),1)
     WINDOWS:=1
@@ -56,10 +56,10 @@ endif
 
 # Assumes directory structure is
 #
-# git repository is checked out to <testing_root>$(D)git$(D)openjdk-systemtest
+# git repository is checked out to <testing_root>$(D)git$(D)aqa-systemtest
 # So
-# <testing_root>$(D)git$(D)openjdk-systemtest$(D)test_project1
-# <testing_root>$(D)git$(D)openjdk-systemtest$(D)test_project2
+# <testing_root>$(D)git$(D)aqa-systemtest$(D)test_project1
+# <testing_root>$(D)git$(D)aqa-systemtest$(D)test_project2
 #
 # STF repository is built into <testing_root>$(D)git$(D)stf
 #
@@ -76,7 +76,7 @@ endif
 #$(warning MAKEFILE_LIST is $(MAKEFILE_LIST))
 ifeq ($(MAKEFILE_LIST),)
   $(warning The MAKEFILE_LIST variable is not supported, this inbuilt variable is available on gnu make 3.80+)
-  $(warning Expecting the OPENJDK_SYSTEMTEST_ROOT variable set instead) 
+  $(warning Expecting the OPENJDK_SYSTEMTEST_ROOT variable set instead)
   ifeq ($(OPENJDK_SYSTEMTEST_ROOT),)
     $(error The OPENJDK_SYSTEMTEST_ROOT variable is not set)
   endif
@@ -181,7 +181,7 @@ else
   EXISTING_PREREQS_ROOT_LIST:=$(wildcard $(CHECK_PREREQS_ROOT_LIST))
   #$(warning EXISTING_PREREQS_ROOT_LIST is $(EXISTING_PREREQS_ROOT_LIST))
   ERROR_PREREQS_ROOT_LIST:=$(filter-out $(EXISTING_PREREQS_ROOT_LIST),$(CHECK_PREREQS_ROOT_LIST))
-  $(foreach ERROR_PREREQS_ROOT,$(ERROR_PREREQS_ROOT_LIST),$(warning ERROR: PREREQS_ROOT directory $(ERROR_PREREQS_ROOT) does not exist. Either setup the directory $(ERROR_PREREQS_ROOT) or use PREREQS_ROOT=xxxx on the make command line to point to a different location.   Running make configure will get most of the prereqs.  See openjdk.build/docs/build.md for more details.))
+  $(foreach ERROR_PREREQS_ROOT,$(ERROR_PREREQS_ROOT_LIST),$(warning ERROR: PREREQS_ROOT directory $(ERROR_PREREQS_ROOT) does not exist. Either setup the directory $(ERROR_PREREQS_ROOT) or use PREREQS_ROOT=xxxx on the make command line to point to a different location.  Running make configure will get most of the prereqs.  See openjdk.build/docs/build.md for more details.))
   ifneq (,$(ERROR_PREREQS_ROOT_LIST))
     $(error )
   endif
@@ -311,7 +311,7 @@ ifndef ANT_HOME
       else
         $(error Unable to locate ant to start the build. Either add ant to PATH, set ANT_HOME or follow the prereq install instructions in openjdk.build$(D)docs$(D)build$(D)build.md)
       endif
-    else  # Unix
+    else # Unix
       ANT_BINDIR:=$(dir $(firstword $(shell $(WHICH) ant$(BAT) 2>$(NULL))))
       $(warning $(WHICH) ant$(BAT) 2>$(NULL) returned)
       $(warning $(ANT_BINDIR))
@@ -334,7 +334,6 @@ ifndef ANT_HOME
     endif
   endif
 endif
-
 
 ifeq (1,$(ERROR))
   $(error Fix above errors and retry)
@@ -371,32 +370,32 @@ ifneq (,$(JAVA_ARGS))
 endif
 
 ifeq ($(RM_PASS),1)
-    RM_PASS_ARG:=-rm-pass
+  RM_PASS_ARG:=-rm-pass
 endif
 
 ifneq (,$(REPEAT_ARG))
-	REPEAT_ARG_ARG:=-repeat=$(REPEAT_ARG)
+  REPEAT_ARG_ARG:=-repeat=$(REPEAT_ARG)
 endif
 
 # enable the user to override results-root from make command line
 ifneq (,$(RESULTS_ROOT))
-	RESULTS_ROOT_ARG:=-results-root="$(RESULTS_ROOT)"
+  RESULTS_ROOT_ARG:=-results-root="$(RESULTS_ROOT)"
 endif
 
 # enable the user to override results-root from make command line
 ifneq (,$(RETAIN))
-	RETAIN_ARG:=-retain="$(RETAIN)"
+  RETAIN_ARG:=-retain="$(RETAIN)"
 endif
 
 # enable the user to override results-root from make command line
 ifneq (,$(RETAIN_LIMIT))
-	RETAIN_LIMIT_ARG:=-retain-limit="$(RETAIN_LIMIT)"
+  RETAIN_LIMIT_ARG:=-retain-limit="$(RETAIN_LIMIT)"
 endif
 
 STF_COMMAND:=$(CMD_PREFIX) perl $(STF_ROOT)$(D)stf.core$(D)scripts$(D)stf.pl $(JAVA_ARGS_ARG) -test-root="$(STF_ROOT);$(OPENJDK_SYSTEMTEST_TARGET_ROOT)" -systemtest-prereqs="$(RESOLVED_PREREQS_ROOT)" $(REPEAT_ARG_ARG) $(RESULTS_ROOT_ARG) $(RETAIN_ARG) $(RETAIN_LIMIT_ARG) $(RM_PASS_ARG)
 
 # Macros to allow the tests to run to completion with a log of what passed and failed.
-# To turn on run 
+# To turn on run
 # make test LOGDIR=/home/user/logs
 # or similar on the command line.
 # To carry on running even after failures use the make -k option
@@ -659,7 +658,7 @@ test.CpMpTest_MP:
 test.CpMpTest2:
 	echo Running target $@
 	$(STF_COMMAND) -test=CpMpTest2 $(LOG)
-	echo Target $@ completed	
+	echo Target $@ completed
 test.CpMpTest3:
 	echo Running target $@
 	$(STF_COMMAND) -test=CpMpTest3 $(LOG)
@@ -667,15 +666,15 @@ test.CpMpTest3:
 test.CpMpModularJarTest:
 	echo Running target $@
 	$(STF_COMMAND) -test=CpMpModularJarTest $(LOG)
-	echo Target $@ completed	
+	echo Target $@ completed
 test.CpMpModularJarTest2:
 	echo Running target $@
 	$(STF_COMMAND) -test=CpMpModularJarTest2 $(LOG)
-	echo Target $@ completed	
+	echo Target $@ completed
 test.CpMpModularJarTest3:
 	echo Running target $@
 	$(STF_COMMAND) -test=CpMpModularJarTest3 $(LOG)
-	echo Target $@ completed	
+	echo Target $@ completed
 test.JDKInternalAPIsTest:
 	echo Running target $@
 	$(STF_COMMAND) -test=JDKInternalAPIsTest $(LOG)
@@ -687,43 +686,43 @@ test.AutomaticModulesTest1:
 test.AutomaticModulesTest2:
 	echo Running target $@
 	$(STF_COMMAND) -test=AutomaticModulesTest -test-args="variant=AutomaticModulesTest2" $(LOG)
-	echo Target $@ completed		
+	echo Target $@ completed
 test.AutomaticModulesTest_ImpliedReadabilityTest1:
 	echo Running target $@
 	$(STF_COMMAND) -test=AutomaticModulesTest -test-args="variant=ImpliedReadabilityTest1" $(LOG)
-	echo Target $@ completed	
+	echo Target $@ completed
 test.AutomaticModulesTest_ImpliedReadabilityTest2:
 	echo Running target $@
 	$(STF_COMMAND) -test=AutomaticModulesTest -test-args="variant=ImpliedReadabilityTest2" $(LOG)
-	echo Target $@ completed		
+	echo Target $@ completed
 test.AutomaticModulesTest_ImpliedReadabilityTest3:
 	echo Running target $@
 	$(STF_COMMAND) -test=AutomaticModulesTest -test-args="variant=ImpliedReadabilityTest3" $(LOG)
-	echo Target $@ completed		
+	echo Target $@ completed
 test.ExplicitModulesTest:
 	echo Running target $@
 	$(STF_COMMAND) -test=ExplicitModulesTest $(LOG)
-	echo Target $@ completed	
+	echo Target $@ completed
 test.JDKInternalAPIsTest:
 	echo Running target $@
 	$(STF_COMMAND) -test=JDKInternalAPIsTest $(LOG)
-	echo Target $@ completed		
+	echo Target $@ completed
 test.ServiceLoadersTest:
 	echo Running target $@
 	$(STF_COMMAND) -test=ServiceLoadersTest $(LOG)
-	echo Target $@ completed	
+	echo Target $@ completed
 test.PatchModuleTest_PlatformModPatchModule:
 	echo Running target $@
 	$(STF_COMMAND) -test=PatchModuleTest -test-args="variant=PlatformModPatchModule" $(LOG)
-	echo Target $@ completed		
+	echo Target $@ completed
 test.PatchModuleTest_AppModPatchModule:
 	echo Running target $@
 	$(STF_COMMAND) -test=PatchModuleTest -test-args="variant=AppModPatchModule" $(LOG)
-	echo Target $@ completed		
+	echo Target $@ completed
 test.PatchModuleTest_UnexportedTypePatchModule:
 	echo Running target $@
 	$(STF_COMMAND) -test=PatchModuleTest -test-args="variant=UnexportedTypePatchModule" $(LOG)
-	echo Target $@ completed									
+	echo Target $@ completed
 test.PatchModuleTest_AdvancedPatchModule:
 	echo Running target $@
 	$(STF_COMMAND) -test=PatchModuleTest -test-args="variant=AdvancedPatchModule" $(LOG)
@@ -731,43 +730,43 @@ test.PatchModuleTest_AdvancedPatchModule:
 test.PatchModuleImageTest_PlatformModPatchModule:
 	echo Running target $@
 	$(STF_COMMAND) -test=PatchModuleImageTest -test-args="variant=PlatformModPatchModule" $(LOG)
-	echo Target $@ completed	
+	echo Target $@ completed
 test.PatchModuleImageTest_AppModPatchModule:
 	echo Running target $@
 	$(STF_COMMAND) -test=PatchModuleImageTest -test-args="variant=AppModPatchModule" $(LOG)
-	echo Target $@ completed		
+	echo Target $@ completed
 test.PatchModuleImageTest_UnexportedTypePatchModule:
 	echo Running target $@
 	$(STF_COMMAND) -test=PatchModuleImageTest -test-args="variant=UnexportedTypePatchModule" $(LOG)
-	echo Target $@ completed		
+	echo Target $@ completed
 test.PatchModuleImageTest_AdvancedPatchModule:
 	echo Running target $@
 	$(STF_COMMAND) -test=PatchModuleImageTest -test-args="variant=AdvancedPatchModule" $(LOG)
-	echo Target $@ completed			
+	echo Target $@ completed
 test.UpgradeModPathTest_ExpDirModUpgrade:
 	echo Running target $@
 	$(STF_COMMAND) -test=UpgradeModPathTest -test-args="variant=ExpDirModUpgrade" $(LOG)
-	echo Target $@ completed			
+	echo Target $@ completed
 test.UpgradeModPathTest_ExpDirModUpgradeCRImage:
 	echo Running target $@
 	$(STF_COMMAND) -test=UpgradeModPathTest -test-args="variant=ExpDirModUpgradeCRImage" $(LOG)
-	echo Target $@ completed	
+	echo Target $@ completed
 test.UpgradeModPathTest_JarredModUpgrade:
 	echo Running target $@
 	$(STF_COMMAND) -test=UpgradeModPathTest -test-args="variant=JarredModUpgrade" $(LOG)
-	echo Target $@ completed	
+	echo Target $@ completed
 test.UpgradeModPathTest_JarredModUpgradeCRImage:
 	echo Running target $@
 	$(STF_COMMAND) -test=UpgradeModPathTest -test-args="variant=JarredModUpgradeCRImage" $(LOG)
-	echo Target $@ completed	
+	echo Target $@ completed
 test.JlinkTest_RequiredMod:
 	echo Running target $@
 	$(STF_COMMAND) -test=JlinkTest -test-args="variant=RequiredMod" $(LOG)
-	echo Target $@ completed					
+	echo Target $@ completed
 test.JlinkTest_AddModLimitMod:
 	echo Running target $@
 	$(STF_COMMAND) -test=JlinkTest -test-args="variant=AddModLimitMod" $(LOG)
-	echo Target $@ completed		
+	echo Target $@ completed
 test.CpMpJlinkTest:
 	echo Running target $@
 	$(STF_COMMAND) -test=CpMpJlinkTest $(LOG)
@@ -775,23 +774,23 @@ test.CpMpJlinkTest:
 test.JlinkPluginOptionsTest_GeneralOptionsTest:
 	echo Running target $@
 	$(STF_COMMAND) -test=JlinkPluginOptionsTest -test-args="variant=GeneralOptionsTest" $(LOG)
-	echo Target $@ completed	
+	echo Target $@ completed
 test.LayersTest:
 	echo Running target $@
 	$(STF_COMMAND) -test=LayersTest $(LOG)
-	echo Target $@ completed		
+	echo Target $@ completed
 test.CLTest:
 	echo Running target $@
 	$(STF_COMMAND) -test=CLTest $(LOG)
-	echo Target $@ completed		
+	echo Target $@ completed
 test.CLTestImage:
 	echo Running target $@
 	$(STF_COMMAND) -test=CLTestImage test-args="variant=CLTest" $(LOG)
-	echo Target $@ completed			
+	echo Target $@ completed
 test.CLLoadTest:
 	echo Running target $@
 	$(STF_COMMAND) -test=CLLoadTest $(LOG)
-	echo Target $@ completed				
+	echo Target $@ completed
 test.CLStressWithLayers:
 	echo Running target $@
 	$(STF_COMMAND) -test=CLStressWithLayers $(LOG)
@@ -807,7 +806,7 @@ test.TestJlmLocal:
 test.TestJlmRemoteClassAuth:
 	echo Running target $@
 	$(STF_COMMAND) -test=TestJlmRemoteClassAuth $(LOG)
-	echo Target $@ completed		
+	echo Target $@ completed
 test.TestJlmRemoteClassNoAuth:
 	echo Running target $@
 	$(STF_COMMAND) -test=TestJlmRemoteClassNoAuth $(LOG)
@@ -815,19 +814,19 @@ test.TestJlmRemoteClassNoAuth:
 test.TestJlmRemoteMemoryAuth:
 	echo Running target $@
 	$(STF_COMMAND) -test=TestJlmRemoteMemoryAuth $(LOG)
-	echo Target $@ completed	
+	echo Target $@ completed
 test.TestJlmRemoteMemoryNoAuth:
 	echo Running target $@
 	$(STF_COMMAND) -test=TestJlmRemoteMemoryNoAuth $(LOG)
-	echo Target $@ completed	
+	echo Target $@ completed
 test.TestJlmRemoteNotifierProxyAuth:
 	echo Running target $@
 	$(STF_COMMAND) -test=TestJlmRemoteNotifierProxyAuth $(LOG)
-	echo Target $@ completed	
+	echo Target $@ completed
 test.TestJlmRemoteThreadNoAuth:
 	echo Running target $@
 	$(STF_COMMAND) -test=TestJlmRemoteThreadNoAuth $(LOG)
-	echo Target $@ completed	
+	echo Target $@ completed
 test.MixedLoadTest:
 	echo Running target $@
 	$(STF_COMMAND) -test=MixedLoadTest -test-args="timeLimit=1m" $(LOG)
@@ -895,7 +894,7 @@ test.MixedLoadTest_5m:
 
 # The test.Custom target enables users to execute arbitrary stf.pl command lines if required for investigating failures.
 # Example:
-# make test.Custom TEST=JdiTest TEST_ARGS="test=basic_launch" 
+# make test.Custom TEST=JdiTest TEST_ARGS="test=basic_launch"
 test.Custom:
 	echo Running target $@
 	$(STF_COMMAND) -test=$(TEST) -test-args="$(TEST_ARGS)" $(LOG)
@@ -905,10 +904,10 @@ help:
 	@echo -------------------------------------------------------------------------------
 	@echo Help for openjdk.build makefile
 	@echo -------------------------------------------------------------------------------
-	@echo make or make build: Builds openjdk-systemtest projects
+	@echo make or make build: Builds aqa-systemtest projects
 	@echo -------------------------------------------------------------------------------
-	@echo make test: Runs all non-JCK openjdk-systemtest tests
-	@echo make $(TEST_TARGETS): Runs all openjdk-systemtest tests
+	@echo make test: Runs all non-JCK aqa-systemtest tests
+	@echo make $(TEST_TARGETS): Runs all aqa-systemtest tests
 	@echo make test.xxxx: Runs individual test xxxx
 	@echo make test EXCLUDE=$(ESC)"test.xxxx test.yyyy$(ESC)": Runs all tests except test.xxxx and test.yyyy
 	@echo -------------------------------------------------------------------------------

@@ -4,8 +4,8 @@ This repository contains the test cases which can be run against an OpenJDK with
 
 The tests all run under the [STF System Test Framework](https://github.com/AdoptOpenJDK/stf).
 
-[Quick start (Unix)](#unix)  
-[Quick start (Windows)](#windows)  
+[Quick start (Unix)](#unix)
+[Quick start (Windows)](#windows)
 [More documentation](openjdk.build/docs/build.md)
 
 <a name="unix"></a>
@@ -18,7 +18,6 @@ Before running the build for the first time make sure GNU make, ant and wget are
 wget is only required for the make configure step, which only needs to be done once.
 
 Either copy, paste and execute [this script](openjdk.build/scripts/openjdk-systemtest-clone-make.sh) which runs the command below, or run the commands yourself.
-
 
 ```shell
 # 1. Create a directory for the git clone
@@ -90,5 +89,3 @@ cd C:\%USERPROFILE%\git\openjdk-systemtest\openjdk.build
 make test
 echo See c:\stf_temp to view the test results
 ```
-
-

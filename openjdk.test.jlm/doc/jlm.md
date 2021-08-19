@@ -2,7 +2,7 @@ java.lang.management Test Suite
 ===============================
 
 Contents
-----------
+--------
 1. [What does it test?](#what-does-it-test)
 2. [How are the tests implemented?](#how-are-the-tests-implemented)
 3. [What setup is required?](#what-setup-is-required)
@@ -58,7 +58,7 @@ The testing of the Java 6.0 extensions to **java.lang.management** (LockInfo and
 - STF
 - Testcase Material
 
-Since JLM tests are written based on STF, they will require the same set up as STF in general. Please follow the [STF Getting Started Guide](https://github.com/AdoptOpenJDK/stf/blob/master/stf.core/docs/STF-GettingStarted.md) and install everything that is required to run STF tests.
+Since JLM tests are written based on STF, they will require the same set up as STF in general. Please follow the [STF Getting Started Guide](https://github.com/adoptium/stf/blob/master/stf.core/docs/STF-GettingStarted.md) and install everything that is required to run STF tests.
 
 ### How do I run the tests?
 

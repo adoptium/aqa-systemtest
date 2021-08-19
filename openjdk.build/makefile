@@ -56,10 +56,10 @@ endif
 
 # Assumes directory structure is
 #
-# git repository is checked out to <testing_root>$(D)git$(D)openjdk-systemtest
+# git repository is checked out to <testing_root>$(D)git$(D)aqa-systemtest
 # So
-# <testing_root>$(D)git$(D)openjdk-systemtest$(D)test_project1
-# <testing_root>$(D)git$(D)openjdk-systemtest$(D)test_project2
+# <testing_root>$(D)git$(D)aqa-systemtest$(D)test_project1
+# <testing_root>$(D)git$(D)aqa-systemtest$(D)test_project2
 #
 # STF repository is built into <testing_root>$(D)git$(D)stf
 #
@@ -904,10 +904,10 @@ help:
 	@echo -------------------------------------------------------------------------------
 	@echo Help for openjdk.build makefile
 	@echo -------------------------------------------------------------------------------
-	@echo make or make build: Builds openjdk-systemtest projects
+	@echo make or make build: Builds aqa-systemtest projects
 	@echo -------------------------------------------------------------------------------
-	@echo make test: Runs all non-JCK openjdk-systemtest tests
-	@echo make $(TEST_TARGETS): Runs all openjdk-systemtest tests
+	@echo make test: Runs all non-JCK aqa-systemtest tests
+	@echo make $(TEST_TARGETS): Runs all aqa-systemtest tests
 	@echo make test.xxxx: Runs individual test xxxx
 	@echo make test EXCLUDE=$(ESC)"test.xxxx test.yyyy$(ESC)": Runs all tests except test.xxxx and test.yyyy
 	@echo -------------------------------------------------------------------------------

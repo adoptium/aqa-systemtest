@@ -111,6 +111,13 @@ public class ClassMapHog
 								continue;
 							}
 						}
+						
+						if (javaVersion >= 17) {
+							// The RMI Activation mechanism has been deprecated from jdk 17
+							if ( classToLoad.startsWith("java.rmi.activation") ) {
+								continue;
+							}
+						}
 					
 						// get the class loader to load the current class
 						// Class is the class that represents a classes 'blueprint'

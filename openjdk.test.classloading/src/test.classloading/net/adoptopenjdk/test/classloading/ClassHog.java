@@ -68,6 +68,13 @@ public class ClassHog
 							continue;
 						}
 					}
+					
+					if (javaVersion >= 17) {
+						// The RMI Activation mechanism has been deprecated from jdk 17
+						if ( classToLoad.startsWith("java.rmi.activation") ) {
+							continue;
+						}
+					}
 					// use the class loader to get the Class class that represents the class on the current line
 					c = Class.forName (classToLoad);
 					cnt++;

@@ -25,7 +25,7 @@ mkdir -p $HOME/git
 
 # 2. Clone the STF repository
 cd $HOME/git
-git clone git@github.com:adoptium/stf.git stf
+git clone git@github.com:adoptium/STF.git stf
 
 # 3. Clone the aqa-systemtest repository
 cd $HOME/git
@@ -67,7 +67,7 @@ mkdir c:\%USERPROFILE%\git
 
 REM 2. Clone the STF repository
 cd c:\%USERPROFILE%\git
-git clone git@github.com:adoptium/stf.git stf
+git clone git@github.com:adoptium/STF.git stf
 
 REM 3. Clone the test cases repository
 cd c:\%USERPROFILE%\git

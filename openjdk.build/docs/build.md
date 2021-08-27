@@ -40,7 +40,7 @@ These prereqs must be installed before attempting to build aqa-systemtest
 | wget                  | https://www.gnu.org/copyleft/gpl.html                         | stf.build, openjdk.build | Windows - download from https://sourceforge.net/projects/gnuwin32/files/wget/1.11.4-1/wget-1.11.4-1-bin.zip<br>This needs below dependency so download it from <br>https://sourceforge.net/projects/gnuwin32/files/wget/1.11.4-1/wget-1.11.4-1-dep.zip                                                                                                                                                | Add both downloads to PATH                                                                                                                                                                                                                                                           | No                                 |
 
 ## Building from a command line
-1. git clone https://github.com/adoptium/stf.git stf
+1. git clone https://github.com/adoptium/STF.git stf
 1. git clone https://github.com/adoptium/aqa-systemtest.git aqa-systemtest
 1. cd &lt;git-root&gt;openjdk.build
 1. make
@@ -88,7 +88,7 @@ make test LOGDIR=$HOME
 LOGDIR must exist prior to invoking the test.
 
 The commands which write to the log file always succeed whether or not the preceding test passed or failed.
-This means that all the tests will be run if LOGDIR= is used even if the make -k (keep going) option is not used. 
+This means that all the tests will be run if LOGDIR= is used even if the make -k (keep going) option is not used.
 
 ### Executing a test plan
 Individual projects also contain testplan.xml files which define more elaborate plans combining the test cases
@@ -104,7 +104,7 @@ will list all the tests in the stf and aqa-systemtest repositories (the stf repo
 ```
 perl $HOME/git/stf/stf.pl -test-root="$HOME/git/aqa-systemtest" -test=xxxx
 ```
-will execute the test xxxx.  
+will execute the test xxxx.
 Some tests require test specific arguments:
 ```
 perl $HOME/git/stf/stf.pl -test-root="$HOME/git/aqa-systemtest" -test=xxxx
@@ -114,4 +114,3 @@ JVM arguments can be passed to the Java command run during the test via:
 perl $HOME/git/stf/stf.pl -test-root="$HOME/git/aqa-systemtest" -java-args="-Xint" -test=xxxx
 ```
 For a full list of ways to direct stf behaviour refer to the stf documentation in the stf repository https://github.com/adoptium/stf.
-

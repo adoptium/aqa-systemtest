@@ -13,7 +13,7 @@ REM limitations under the License.
 REM Save current directory
 set currdir=%cd%
 REM Clone stf
-(IF NOT EXIST %USERPROFILE%\git mkdir %USERPROFILE%\git) && cd %USERPROFILE%\git && (IF EXIST stf rmdir /s /q stf) && git clone https://github.com/adoptium/stf.git stf
+(IF NOT EXIST %USERPROFILE%\git mkdir %USERPROFILE%\git) && cd %USERPROFILE%\git && (IF EXIST stf rmdir /s /q stf) && git clone https://github.com/adoptium/STF.git stf
 REM Clone aqa-systemtest
 (IF NOT EXIST %USERPROFILE%\git mkdir %USERPROFILE%\git) && cd %USERPROFILE%\git && (IF EXIST aqa-systemtest rmdir /s /q aqa-systemtest) && git clone https://github.com/adoptium/aqa-systemtest.git aqa-systemtest
 REM Configure (get prereqs)

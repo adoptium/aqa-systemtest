@@ -98,19 +98,19 @@ repository to generate makefiles to run the tests.
 ### Running stf.pl directly
 For debugging test failures and developing new tests you are likely to want to STF directly on the command line yourself.
 ```
-perl $HOME/git/stf/stf.pl -test-root="$HOME/git/aqa-systemtest" -list
+perl $HOME/git/stf/stf.core/scripts/stf.pl -test-root="$HOME/git/aqa-systemtest" -list
 ```
 will list all the tests in the stf and aqa-systemtest repositories (the stf repository contains sample tests).
 ```
-perl $HOME/git/stf/stf.pl -test-root="$HOME/git/aqa-systemtest" -test=xxxx
+perl $HOME/git/stf/stf.core/scripts/stf.pl -test-root="$HOME/git/aqa-systemtest" -test=xxxx
 ```
 will execute the test xxxx.
 Some tests require test specific arguments:
 ```
-perl $HOME/git/stf/stf.pl -test-root="$HOME/git/aqa-systemtest" -test=xxxx
+perl $HOME/git/stf/stf.core/scripts/stf.pl -test-root="$HOME/git/aqa-systemtest" -test=xxxx
 ```
 JVM arguments can be passed to the Java command run during the test via:
 ```
-perl $HOME/git/stf/stf.pl -test-root="$HOME/git/aqa-systemtest" -java-args="-Xint" -test=xxxx
+perl $HOME/git/stf/stf.core/scripts/stf.pl -test-root="$HOME/git/aqa-systemtest" -java-args="-Xint" -test=xxxx
 ```
 For a full list of ways to direct stf behaviour refer to the stf documentation in the stf repository https://github.com/adoptium/stf.

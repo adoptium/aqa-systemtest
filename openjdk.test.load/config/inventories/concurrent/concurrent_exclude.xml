@@ -2,4 +2,6 @@
    <!-- Excluding because of https://bugs.openjdk.java.net/browse/JDK-8185830.
         Reinstate when the bug is fixed. -->
    <junit class="net.adoptopenjdk.test.concurrent.ConcurrentSkipListSetTest"/>
+   <!-- https://github.com/eclipse-openj9/openj9/issues/12073  -->
+   <junit class="net.adoptopenjdk.test.concurrent.jsr166y.ForkJoinTaskTest"/>
 </inventory>

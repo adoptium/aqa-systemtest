@@ -1,0 +1,13 @@
+@startuml
+Client -> Server: request for protected resources
+Server -> Client: proxy to login
+Client -> OAuth : login
+OAuth ->  Client: Login Authorization Code Grant
+
+Client -> Server: request with Authorization Code
+Server -> OAuth : request for access token with code
+OAuth  --> OAuth: verify code, create token
+OAuth  -> Server: return token
+
+
+@enduml

@@ -475,7 +475,8 @@ test.TestJlmRemoteMemoryAuth \
 test.TestJlmRemoteMemoryNoAuth \
 test.TestJlmRemoteNotifierProxyAuth \
 test.TestJlmRemoteThreadNoAuth \
-test.MixedLoadTest
+test.MixedLoadTest \
+test.OAuthTest
 
 # Tests which won't run on Java 8
 NOT_JAVA8_TESTS:=\
@@ -890,6 +891,10 @@ test.LambdaLoadTest_5m:
 test.MixedLoadTest_5m:
 	echo Running target $@
 	$(STF_COMMAND) -test=MixedLoadTest -test-args="timeLimit=5m" $(LOG)
+	echo Target $@ completed
+test.OAuthTest:
+	echo Running target $@
+	$(STF_COMMAND) -test=OAuthTest $(LOG)
 	echo Target $@ completed
 
 # The test.Custom target enables users to execute arbitrary stf.pl command lines if required for investigating failures.

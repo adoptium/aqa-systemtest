@@ -34,8 +34,8 @@ endif
 
 ifneq (,$(findstring darwin,$(OS)))
 	OS:=osx
+	# Detect a M1 processor. Needed because uname -m doesn't work when the shell runs in x86_64 emulation
 	ARCH:=$(shell sysctl -n machdep.cpu.brand_string)
-	# Detected M1 chip
 	ifeq ($(ARCH),Apple M1)
 		ARCH:=arm64
 	endif

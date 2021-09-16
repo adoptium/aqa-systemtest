@@ -26,6 +26,7 @@
 # Figure out current platform
 ###
 OS:=$(shell uname -s | tr "[:upper:]" "[:lower:]")
+ARCH:=$(shell uname -m | tr "[:upper:]" "[:lower:]")
 
 ifneq (,$(findstring cygwin,$(OS)))
 	OS:=win
@@ -145,7 +146,11 @@ LDFLAGS=-shared
 
 ifeq ($(OS),osx)
 	CC=gcc
-	CFLAGS=-fPIC -I$(OSX_PATH) -I$(SRC_PATH)
+	ifeq ($(ARCH),arm64)
+		CFLAGS=-arch arm64 -fPIC -I$(OSX_PATH) -I$(SRC_PATH)
+	else
+		CFLAGS=-fPIC -I$(OSX_PATH) -I$(SRC_PATH)
+	endif
 	LDFLAGS=-shared
 endif
 

@@ -34,6 +34,11 @@ endif
 
 ifneq (,$(findstring darwin,$(OS)))
 	OS:=osx
+	ARCH:=$(shell sysctl -n machdep.cpu.brand_string)
+	# Detected M1 chip
+	ifeq ($(ARCH),Apple M1)
+		ARCH:=arm64
+	endif
 endif
 
 ifeq ($(OS),os/390)

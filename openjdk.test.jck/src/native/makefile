@@ -45,6 +45,7 @@ ifneq (,$(findstring win,$(OS)))
 endif
 
 $(info OS is $(OS))
+$(info ARCH is $(ARCH))
 
 ifeq ($(OS),win)
 	DESTDIR=$(OUTDIR)\$(OS)

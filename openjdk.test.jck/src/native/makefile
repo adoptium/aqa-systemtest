@@ -26,6 +26,7 @@
 # Figure out current platform
 ###
 OS:=$(shell uname -s | tr "[:upper:]" "[:lower:]")
+ARCH:=$(shell uname -m | tr "[:upper:]" "[:lower:]")
 
 ifneq (,$(findstring cygwin,$(OS)))
 	OS:=win
@@ -33,6 +34,11 @@ endif
 
 ifneq (,$(findstring darwin,$(OS)))
 	OS:=osx
+	# Detect a M1 processor. Needed because uname -m doesn't work when the shell runs in x86_64 emulation
+	ARCH:=$(shell sysctl -n machdep.cpu.brand_string)
+	ifeq ($(ARCH),Apple M1)
+		ARCH:=arm64
+	endif
 endif
 
 ifeq ($(OS),os/390)
@@ -44,6 +50,7 @@ ifneq (,$(findstring win,$(OS)))
 endif
 
 $(info OS is $(OS))
+$(info ARCH is $(ARCH))
 
 ifeq ($(OS),win)
 	DESTDIR=$(OUTDIR)\$(OS)
@@ -145,7 +152,11 @@ LDFLAGS=-shared
 
 ifeq ($(OS),osx)
 	CC=gcc
-	CFLAGS=-fPIC -I$(OSX_PATH) -I$(SRC_PATH)
+	ifeq ($(ARCH),arm64)
+		CFLAGS=-arch arm64 -fPIC -I$(OSX_PATH) -I$(SRC_PATH)
+	else
+		CFLAGS=-fPIC -I$(OSX_PATH) -I$(SRC_PATH)
+	endif
 	LDFLAGS=-shared
 endif
 

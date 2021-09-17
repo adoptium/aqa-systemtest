@@ -327,7 +327,7 @@ public class Jck implements StfPluginInterface {
 			test.doWriteFile("Writing into security.properties file.", secPropsFileRef, secPropsContents);
 		}
 	
-		if ( tests.contains("api-javax_xml") ) {
+		if ( tests.contains("api/javax_xml") ) {
 			// Requires SHA1 enabling
 			DirectoryRef secPropsLocation = test.env().getResultsDir().childDirectory("SecProps");
 			test.doMkdir("Creating dir to store the custom security properties", secPropsLocation);
@@ -982,7 +982,7 @@ public class Jck implements StfPluginInterface {
 	private String getTestSpecificJvmOptions (StfCoreExtension test, String jckVersion, String tests) throws StfException {
 		String testSpecificJvmOptions = "";
 
-		if ( tests.contains("api/javax_net") || tests.contains("api-javax_xml") ) {
+		if ( tests.contains("api/javax_net") || tests.contains("api/javax_xml") ) {
 			// Needs extra security.properties
 			FileRef secPropsFile = test.env().getResultsDir().childDirectory("SecProps").childFile("security.properties");
 			testSpecificJvmOptions += " -Djava.security.properties=" + secPropsFile;

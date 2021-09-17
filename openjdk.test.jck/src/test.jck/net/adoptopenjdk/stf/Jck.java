@@ -326,6 +326,30 @@ public class Jck implements StfPluginInterface {
 			String secPropsContents = "jdk.tls.disabledAlgorithms=SSLv3, RC4, DES, MD5withRSA, DH keySize < 1024, EC keySize < 224, anon, NULL, include jdk.disabled.namedCurves";
 			test.doWriteFile("Writing into security.properties file.", secPropsFileRef, secPropsContents);
 		}
+	
+		if ( tests.contains("api/javax_xml") ) {
+			// Requires SHA1 enabling
+			DirectoryRef secPropsLocation = test.env().getResultsDir().childDirectory("SecProps");
+			test.doMkdir("Creating dir to store the custom security properties", secPropsLocation);
+			FileRef secPropsFileRef = secPropsLocation.childFile("security.properties");
+			String secPropsContents = "jdk.xml.dsig.secureValidationPolicy=\\" + "\n";
+			    secPropsContents += "disallowAlg http://www.w3.org/TR/1999/REC-xslt-19991116,\\" + "\n";
+			    secPropsContents += "disallowAlg http://www.w3.org/TR/1999/REC-xslt-19991116,\\" + "\n";
+			    secPropsContents += "disallowAlg http://www.w3.org/2001/04/xmldsig-more#rsa-md5,\\" + "\n";
+			    secPropsContents += "disallowAlg http://www.w3.org/2001/04/xmldsig-more#hmac-md5,\\" + "\n";
+			    secPropsContents += "disallowAlg http://www.w3.org/2001/04/xmldsig-more#md5,\\" + "\n";
+			    secPropsContents += "disallowAlg http://www.w3.org/2007/05/xmldsig-more#sha1-rsa-MGF1,\\" + "\n";
+			    secPropsContents += "disallowAlg http://www.w3.org/2001/04/xmldsig-more#ecdsa-sha1,\\" + "\n";
+			    secPropsContents += "maxTransforms 5,\\" + "\n";
+			    secPropsContents += "maxReferences 30,\\" + "\n";
+			    secPropsContents += "disallowReferenceUriSchemes file http https,\\" + "\n";
+			    secPropsContents += "minKeySize RSA 1024,\\" + "\n";
+			    secPropsContents += "minKeySize DSA 1024,\\" + "\n";
+			    secPropsContents += "minKeySize EC 224,\\" + "\n";
+			    secPropsContents += "noDuplicateIds,\\" + "\n";
+			    secPropsContents += "noRetrievalMethodLoops";
+			test.doWriteFile("Writing into security.properties file.", secPropsFileRef, secPropsContents);
+		}
 
 		if ( PlatformFinder.isZOS() ) {
 			test.doIconvFile("Converting .jtb file to ascii", newJtbFileRef.getSpec(), "IBM-1047", "ISO8859-1");
@@ -958,7 +982,7 @@ public class Jck implements StfPluginInterface {
 	private String getTestSpecificJvmOptions (StfCoreExtension test, String jckVersion, String tests) throws StfException {
 		String testSpecificJvmOptions = "";
 
-		if ( tests.contains("api/javax_net") ) {
+		if ( tests.contains("api/javax_net") || tests.contains("api/javax_xml") ) {
 			// Needs extra security.properties
 			FileRef secPropsFile = test.env().getResultsDir().childDirectory("SecProps").childFile("security.properties");
 			testSpecificJvmOptions += " -Djava.security.properties=" + secPropsFile;

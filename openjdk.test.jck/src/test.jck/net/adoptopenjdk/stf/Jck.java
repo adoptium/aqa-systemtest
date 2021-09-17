@@ -338,8 +338,6 @@ public class Jck implements StfPluginInterface {
 			    secPropsContents += "disallowAlg http://www.w3.org/2001/04/xmldsig-more#rsa-md5,\\" + "\n";
 			    secPropsContents += "disallowAlg http://www.w3.org/2001/04/xmldsig-more#hmac-md5,\\" + "\n";
 			    secPropsContents += "disallowAlg http://www.w3.org/2001/04/xmldsig-more#md5,\\" + "\n";
-			    secPropsContents += "disallowAlg http://www.w3.org/2000/09/xmldsig#dsa-sha1,\\" + "\n";
-			    secPropsContents += "disallowAlg http://www.w3.org/2000/09/xmldsig#rsa-sha1,\\" + "\n";
 			    secPropsContents += "disallowAlg http://www.w3.org/2007/05/xmldsig-more#sha1-rsa-MGF1,\\" + "\n";
 			    secPropsContents += "disallowAlg http://www.w3.org/2001/04/xmldsig-more#ecdsa-sha1,\\" + "\n";
 			    secPropsContents += "maxTransforms 5,\\" + "\n";
@@ -350,7 +348,6 @@ public class Jck implements StfPluginInterface {
 			    secPropsContents += "minKeySize EC 224,\\" + "\n";
 			    secPropsContents += "noDuplicateIds,\\" + "\n";
 			    secPropsContents += "noRetrievalMethodLoops";
-
 			test.doWriteFile("Writing into security.properties file.", secPropsFileRef, secPropsContents);
 		}
 

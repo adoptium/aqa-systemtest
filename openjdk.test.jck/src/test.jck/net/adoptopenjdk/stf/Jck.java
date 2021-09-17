@@ -332,23 +332,24 @@ public class Jck implements StfPluginInterface {
 			DirectoryRef secPropsLocation = test.env().getResultsDir().childDirectory("SecProps");
 			test.doMkdir("Creating dir to store the custom security properties", secPropsLocation);
 			FileRef secPropsFileRef = secPropsLocation.childFile("security.properties");
-			String secPropsContents = "jdk.xml.dsig.secureValidationPolicy=\" +
-			    "disallowAlg http://www.w3.org/TR/1999/REC-xslt-19991116,\" +
-			    "disallowAlg http://www.w3.org/2001/04/xmldsig-more#rsa-md5,\" +
-			    "disallowAlg http://www.w3.org/2001/04/xmldsig-more#hmac-md5,\ +
-			    "disallowAlg http://www.w3.org/2001/04/xmldsig-more#md5,\" +
-			    "disallowAlg http://www.w3.org/2000/09/xmldsig#dsa-sha1,\" +
-			    "disallowAlg http://www.w3.org/2000/09/xmldsig#rsa-sha1,\" +
-			    "disallowAlg http://www.w3.org/2007/05/xmldsig-more#sha1-rsa-MGF1,\" +
-			    "disallowAlg http://www.w3.org/2001/04/xmldsig-more#ecdsa-sha1,\" +
-			    "maxTransforms 5,\" +
-			    "maxReferences 30,\" +
-			    "disallowReferenceUriSchemes file http https,\" +
-			    "minKeySize RSA 1024,\" +
-			    "minKeySize DSA 1024,\" +
-			    "minKeySize EC 224,\" +
-			    "noDuplicateIds,\" +
-			    "noRetrievalMethodLoops";
+			String secPropsContents = "jdk.xml.dsig.secureValidationPolicy=\\" + "\n";
+			    secPropsContents += "disallowAlg http://www.w3.org/TR/1999/REC-xslt-19991116,\\" + "\n";
+			    secPropsContents += "disallowAlg http://www.w3.org/TR/1999/REC-xslt-19991116,\\" + "\n";
+			    secPropsContents += "disallowAlg http://www.w3.org/2001/04/xmldsig-more#rsa-md5,\\" + "\n";
+			    secPropsContents += "disallowAlg http://www.w3.org/2001/04/xmldsig-more#hmac-md5,\\" + "\n";
+			    secPropsContents += "disallowAlg http://www.w3.org/2001/04/xmldsig-more#md5,\\" + "\n";
+			    secPropsContents += "disallowAlg http://www.w3.org/2000/09/xmldsig#dsa-sha1,\\" + "\n";
+			    secPropsContents += "disallowAlg http://www.w3.org/2000/09/xmldsig#rsa-sha1,\\" + "\n";
+			    secPropsContents += "disallowAlg http://www.w3.org/2007/05/xmldsig-more#sha1-rsa-MGF1,\\" + "\n";
+			    secPropsContents += "disallowAlg http://www.w3.org/2001/04/xmldsig-more#ecdsa-sha1,\\" + "\n";
+			    secPropsContents += "maxTransforms 5,\\" + "\n";
+			    secPropsContents += "maxReferences 30,\\" + "\n";
+			    secPropsContents += "disallowReferenceUriSchemes file http https,\\" + "\n";
+			    secPropsContents += "minKeySize RSA 1024,\\" + "\n";
+			    secPropsContents += "minKeySize DSA 1024,\\" + "\n";
+			    secPropsContents += "minKeySize EC 224,\\" + "\n";
+			    secPropsContents += "noDuplicateIds,\\" + "\n";
+			    secPropsContents += "noRetrievalMethodLoops";
 
 			test.doWriteFile("Writing into security.properties file.", secPropsFileRef, secPropsContents);
 		}

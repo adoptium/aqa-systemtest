@@ -626,7 +626,7 @@ public class Jck implements StfPluginInterface {
 					fileContent += "set jck.env.runtime.testExecute.otherEnvVars LIBPATH=/usr/lpp/tcpip/X11R66/lib" + ";\n";
 				}
 				else {
-					if ( !platform.equals("win32") ) {
+					if ( !platform.equals("win32") || !platform.equals("macosx") ) {
 						fileContent += "set jck.env.testPlatform.headless No" + ";\n";
 						fileContent += "set jck.env.testPlatform.xWindows Yes" + ";\n";
 						String display = System.getenv("DISPLAY");

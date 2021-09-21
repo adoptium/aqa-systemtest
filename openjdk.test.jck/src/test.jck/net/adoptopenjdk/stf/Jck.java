@@ -384,8 +384,8 @@ public class Jck implements StfPluginInterface {
 						.addArg(" -passive")
 						);
 				
-				// We only need RMI registry and RMI activation daemon processes for tests under api/java_rmi
-				if (tests.contains("api/java_rmi")) { 
+				// We only need RMI registry and RMI activation daemon processes for tests under api/java_rmi, and only for JDK 16 or under.
+				if (tests.contains("api/java_rmi") && (jckVersion.contains("jck8") || jckVersion.contains("jck11") || jckVersion.contains("jck16"))) { 
 					rmiRegistry = test.doRunBackgroundProcess("Starting RMI registry", "RMI", ECHO_ON, ExpectedOutcome.neverCompletes(), test.createJDKToolProcessDefinition()
 							.setJDKToolOrUtility("rmiregistry")	);
 					

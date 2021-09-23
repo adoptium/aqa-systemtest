@@ -26,6 +26,7 @@
 # Figure out current platform
 ###
 OS:=$(shell uname -s | tr "[:upper:]" "[:lower:]")
+ARCH:=$(shell uname -m | tr "[:upper:]" "[:lower:]")
 
 .SUFFIXES: .c
 
@@ -51,8 +52,13 @@ ifneq (,$(findstring cygwin,$(OS)))
 	OS:=win
 endif
 
-ifeq ($(OS),darwin)
+ifneq (,$(findstring darwin,$(OS)))
 	OS:=osx
+	# Detect a M1 processor. Needed because uname -m doesn't work when the shell runs in x86_64 emulation
+	ARCH:=$(shell sysctl -n machdep.cpu.brand_string)
+	ifneq (,$(findstring Apple,$(ARCH)))
+		ARCH:=arm64
+	endif
 endif
 
 ifneq (,$(findstring win,$(OS)))
@@ -64,6 +70,7 @@ ifeq ($(OS),os/390)
 endif 
 
 $(info OS = $(OS))
+$(info ARCH is $(ARCH))
 
 DESTDIR=$(OUTDIR)/$(OS)
 OBJDIR=$(HEADERDIR)/$(OS)
@@ -87,6 +94,10 @@ ifeq ($(OS),osx)
     SUFFIX=.dylib
     LFLAGS=-dynamiclib -o
     IFLAGS=-I. -I$(HEADERDIR) -I$(JAVA_HOME)/include/darwin -I$(JAVA_HOME)/include -I/usr/include
+    ifeq ($(ARCH),arm64)
+        CFLAGS+=-arch arm64
+        LFLAGS=-arch arm64 -dynamiclib -o
+    endif
 endif
 
 ifeq ($(OS),Win)

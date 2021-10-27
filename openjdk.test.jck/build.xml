@@ -20,7 +20,7 @@ limitations under the License.
 	<property name="source_root" location="../"/>
 
 	<!-- Set default for STF location.  -->
-	<property name="stf_root" location="${source_root}/../stf"/>
+	<property name="stf_root" location="${source_root}/../STF"/>
 	
 	<!--Set default system test location-->
 	<property name="openjdk_systemtest_root" location="${source_root}/../aqa-systemtest"/>

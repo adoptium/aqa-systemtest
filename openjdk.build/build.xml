@@ -29,7 +29,7 @@ limitations under the License.
 		If the stf repository has been cloned or built to a different location, the stf_root property
 		must be set on the command line - e.g. -Dstf_root=/my_stf_build_dir
 	-->
-	<property name="stf_root" location="${source_root}/../stf"/>
+	<property name="stf_root" location="${source_root}/../STF"/>
     <property name="openjdk_systemtest_root" location="${source_root}/../aqa-systemtest"/>
 
 	<!-- Import stf settings. -->

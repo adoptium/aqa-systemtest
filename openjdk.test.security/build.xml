@@ -1,0 +1,108 @@
+<?xml version="1.0"?>
+
+<!--
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+     https://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+<project name="openjdk.test.security" default="build">
+
+	<echo message="Executing openjdk.test.security/build.xml"/>
+
+	<!-- Set default for source_root.  -->
+	<property name="source_root" location="../"/>
+
+	<!-- Set default for STF location.  -->
+	<!-- Assumes source repositories are checked out under a common root and the repository
+		has been built in-situ - i.e.
+		stf repository: /home/userid/git/stf
+		aqa-systemtest repository: /home/userid/git/aqa-systemtest
+		If the stf repository has been cloned or built to a different location, the stf_root property
+		must be set on the command line - e.g. -Dstf_root=/my_stf_build_dir
+	-->
+	<property name="stf_root" location="${source_root}/../stf"/>
+
+	<!-- Import settings used by multiple projects.  -->
+	<import file="${stf_root}/stf.build/include/top.xml"/>
+
+	<!-- For modularity you need a directory above the package structure to hold the module.java file -->
+	<property name="openjdk_test_security_module" value="test.security" />
+	<property name="openjdk_test_security_src_dir" value="src/${openjdk_test_security_module}" />
+	<property name="openjdk_test_security_bin_dir" value="bin" />
+
+	<property name="openjdk_test_security_jar_file" value="${openjdk_test_security_bin_dir}/${openjdk_test_security_module}.jar" />
+
+	<!-- We need junit and stf to compile this project. -->
+	<path id="project.class.path">
+		<path refid="junit.class.path" />
+		<path refid="stf.class.path" />
+	</path>
+
+	<!-- Projects which need to be built before this one. -->
+	<!-- dir must be set on the ant task otherwise the basedir property is not set to a new value in the subant task. -->
+	<target name="build-dependencies" depends="check-prereqs">
+	</target>
+
+	<target name="build" depends="check-prereqs, build-no-natives, build-natives">
+	</target>
+
+	<target name="build-no-natives" depends="check-prereqs, build-dependencies, build-archives">
+	</target>
+
+	<target name="build-natives">
+	</target>
+
+	<target name="build-archives" depends="build-jar">
+	</target>
+
+	<target name="build-jar" depends="build-java, create-bin-dir">
+		<jar destfile="${openjdk_test_security_jar_file}">
+			<fileset dir="${openjdk_test_security_bin_dir}" includes="**/*.class" />
+		</jar>
+	</target>
+
+	<target name="build-java" depends="check-prereqs, create-bin-dir">
+		 <!--
+		 	The Ant javac task only checks time dependencies between .java files and their .class files,
+			so fails to recompile in situations such as the signatures of a dependent method changing.
+			The depend target checks the dependencies and deletes any .class files older than the files
+			which depend on them, thereby ensuring recompilation.
+		-->
+		<!--
+		Commented out because depend appears to be evaluating class files as always out of date with jdk11 (at 28/03/2019)
+		<depend srcdir="${openjdk_test_security_src_dir}" destdir="${openjdk_test_security_bin_dir}" classpathref="project.class.path">
+			<include name="**/*.java"/>
+		</depend>
+		-->
+		<javac srcdir="${openjdk_test_security_src_dir}"
+			   destdir="${openjdk_test_security_bin_dir}"
+			   fork="true"
+			   executable="${java_compiler}"
+			   debug="true"
+			   classpathref="project.class.path"
+			   encoding="${src-encoding}"
+			   includeantruntime="false"
+			   failonerror="true">
+			<compilerarg value="-Xlint:deprecation,unchecked" />
+			<include name="**/*.java"/>
+		</javac>
+	</target>
+
+	<target name="create-bin-dir">
+		<mkdir dir="${openjdk_test_security_bin_dir}"/>
+	</target>
+
+	<target name="clean">
+		<delete dir="${openjdk_test_security_bin_dir}"/>
+	</target>
+
+</project>

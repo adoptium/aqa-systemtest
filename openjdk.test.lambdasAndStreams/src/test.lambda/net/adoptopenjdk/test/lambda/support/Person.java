@@ -86,7 +86,9 @@ public class Person extends Animal implements Serializable {
 		this.name = new NameDetails(firstName, surname);
 		this.age = age;
 		
-		this.serialNumber = nextSerialNumber++;
+		synchronized (Person.class) {
+			this.serialNumber = nextSerialNumber++;
+		}
 	}
 	
 	public Title getTitle() {

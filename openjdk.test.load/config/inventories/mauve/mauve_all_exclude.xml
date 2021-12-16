@@ -1,4 +1,6 @@
 <inventory>
+	<!-- Fails on JDK 18. Excluded due to https://github.com/eclipse-openj9/openj9/issues/14168 -->
+	<mauve class="gnu.testlet.java.net.HttpURLConnection.requestPropertiesTest"/>
 	<!-- Fails on JDK11 and up if run many times.
 		 Issue: https://github.com/adoptium/aqa-tests/issues/2293
 		 Note: The issue has been fixed upstream, and has been backported.

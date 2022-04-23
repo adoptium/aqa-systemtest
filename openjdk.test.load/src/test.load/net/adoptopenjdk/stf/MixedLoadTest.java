@@ -17,6 +17,7 @@ package net.adoptopenjdk.stf;
 import net.adoptopenjdk.loadTest.InventoryData;
 import net.adoptopenjdk.loadTest.TimeBasedLoadTest;
 import net.adoptopenjdk.stf.environment.FileRef;
+import net.adoptopenjdk.stf.environment.PlatformFinder;
 import net.adoptopenjdk.stf.extensions.core.StfCoreExtension;
 import net.adoptopenjdk.stf.extensions.core.StfCoreExtension.Echo;
 import net.adoptopenjdk.stf.processes.ExpectedOutcome;
@@ -42,8 +43,14 @@ public class MixedLoadTest extends TimeBasedLoadTest {
 		if (!fileSystemJar.asJavaFile().exists()) {
 			throw new StfException("The filesystem.jar does not exist: " + fileSystemJar.getSpec());
 		}
-
+		
 		String inventoryFile = "/openjdk.test.load/config/inventories/mix/mix-more.xml";
+		
+		// When on z/OS, use a load mix that does not contain nio load tests 
+		if ( PlatformFinder.isZOS() ) {
+			inventoryFile = "/openjdk.test.load/config/inventories/mix/mix-more-zos.xml";
+		}
+		
 		int totalTests = InventoryData.getNumberOfTests(test, inventoryFile);
 		int cpuCount = Runtime.getRuntime().availableProcessors();
 

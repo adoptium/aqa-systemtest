@@ -60,7 +60,7 @@ public class SolverTest extends TestCase {
 							 "FRSA","RASF","RFAS","RFBS","RFSB","ASFB","BFSA","FBSL","BLFS","ABRL","BLAR","ABLR");
 	
 	Set<Card> cardPool = d.cards; // a Deck, which is made up of all the cards currently available. We subtract from this as we go on.
-	final Set<Card> masterCardPool = new HashSet<Card>(cardPool); //CREATE A COPY OF THE FULL SET OF CARDS, TO ITERATE OVER FOR POSITION (0,0)
+	final Set<Card> mainCardPool = new HashSet<Card>(cardPool); //CREATE A COPY OF THE FULL SET OF CARDS, TO ITERATE OVER FOR POSITION (0,0)
 	CardLayout cl = new CardLayout();
 	
 	int cardRow = 0;
@@ -144,7 +144,7 @@ public class SolverTest extends TestCase {
 		List<Card> miniDeck;
 		
 		if ((cardCol == 0) && (cardRow == 0)){
-			miniDeck = new ArrayList<Card>(masterCardPool);//pick from any
+			miniDeck = new ArrayList<Card>(mainCardPool);//pick from any
 		}
 				
 		else {

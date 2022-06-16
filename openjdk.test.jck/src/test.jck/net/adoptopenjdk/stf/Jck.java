@@ -381,7 +381,7 @@ public class Jck implements StfPluginInterface {
 						.addJarToClasspath(test.env().findPrereqFile(testSuiteFolder + executeJar))
 						.addDirectoryToClasspath(test.env().findPrereqDirectory(testSuiteFolder + "/classes"))
 						.runClass("com.sun.javatest.agent.AgentMain")
-						//.addArg(" -passive")
+						.addArg(" -passive")
 						);
 				
 				// We only need RMI registry and RMI activation daemon processes for tests under api/java_rmi, and only for JDK 16 or under.

@@ -184,23 +184,23 @@ public class TestStreamOperations extends TestCase {
 	// Limit intermediate operation
 	// 
 	// limit() returns a stream with all elements in the original stream but stops after [n]
-	// Two streams are used to get harbours where harbourMaster is true, in the second this number of 
+	// Two streams are used to get harbours where harbourOperator is true, in the second this number of 
 	// harbours returned is limited to two.
 	//
 	// Initial run with no limit
 	public void testStreamsLimit() {
-		List<String> harboursWithHarbourMasters = (List<String>) harbours.stream()
-				.filter(h -> h.getHarbourMaster() == true)
+		List<String> harboursWithHarbourOperators = (List<String>) harbours.stream()
+				.filter(h -> h.getHarbourOperator() == true)
 				.map(Harbour::getName)
 				.collect(Collectors.toList());
-		checkList(new String[]{"Hamble", "Cowes", "Plymouth"}, harboursWithHarbourMasters);
+		checkList(new String[]{"Hamble", "Cowes", "Plymouth"}, harboursWithHarbourOperators);
 		// Redo but now with a limit of 2
-		List<String> harboursWithHarbourMastersLimit = (List<String>) harbours.stream()
-				.filter(h -> h.getHarbourMaster() == true)
+		List<String> harboursWithHarbourOperatorsLimit = (List<String>) harbours.stream()
+				.filter(h -> h.getHarbourOperator() == true)
 				.map(Harbour::getName)
 				.limit(2)
 				.collect(Collectors.toList());
-		checkList(new String[]{"Hamble", "Cowes"}, harboursWithHarbourMastersLimit);
+		checkList(new String[]{"Hamble", "Cowes"}, harboursWithHarbourOperatorsLimit);
 	}
 	
 	// Skip intermediate operation

@@ -25,18 +25,18 @@ public class Harbour {
 	private String initials;
 	private int berths;
 	private double harbourRates;
-	private boolean harbourMaster;
+	private boolean harbourOperator;
 	private double depth;
 	private boolean marinas;
 	private ArrayList<KeelBoat> registeredBoats = new ArrayList<KeelBoat>();
 
-	public Harbour(String name, String initials, int berths, double harbourRates, boolean harbourMaster, double depth, boolean marinas) {
+	public Harbour(String name, String initials, int berths, double harbourRates, boolean harbourOperator, double depth, boolean marinas) {
 		super();
 		this.name = name;
 		this.initials = initials;
 		this.berths = berths;
 		this.harbourRates = harbourRates;
-		this.harbourMaster = harbourMaster;
+		this.harbourOperator = harbourOperator;
 		this.depth = depth;
 		this.marinas = marinas;
 	}
@@ -57,8 +57,8 @@ public class Harbour {
 		return harbourRates;
 	}
 
-	public boolean getHarbourMaster() {
-		return harbourMaster;
+	public boolean getHarbourOperator() {
+		return harbourOperator;
 	}
 
 	public double getDepth() {

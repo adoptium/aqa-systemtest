@@ -1,4 +1,8 @@
 <inventory>
+	
+	<!-- Fails on JDK 20. Excluded due to https://github.com/eclipse-openj9/openj9-systemtest/issues/147 -->
+	<mauve class="gnu.testlet.java.lang.ThreadDeath.classInfo.isAnnotationPresent"/>
+	
 	<!-- Fails on JDK 18. Excluded due to https://github.com/eclipse-openj9/openj9/issues/14168 -->
 	<mauve class="gnu.testlet.java.net.HttpURLConnection.requestPropertiesTest"/>
 

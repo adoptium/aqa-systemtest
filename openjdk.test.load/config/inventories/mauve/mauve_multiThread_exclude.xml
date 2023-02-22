@@ -1,4 +1,7 @@
 <inventory>
+	<!-- Fails on JDK 20. Excluded due to https://github.com/eclipse-openj9/openj9-systemtest/issues/147 -->
+	<mauve class="gnu.testlet.java.lang.ThreadDeath.classInfo.isAnnotationPresent"/>
+	
 	<!-- Disabled as the following sub-tests are incompatible with jdk16 on HotSpot -->
 	<!-- Details in issue: https://github.com/adoptium/aqa-tests/issues/2150 -->
 	<mauve class="gnu.testlet.java.util.HashMap.AcuniaHashMapTest"/>

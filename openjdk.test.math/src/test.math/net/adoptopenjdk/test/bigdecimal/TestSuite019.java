@@ -1060,7 +1060,7 @@ public class TestSuite019 extends TestCase
   public void testItem_0159()
   {
     rc_BigDecimal = (new BigDecimal("-4E+1")).movePointRight(0);
-    if (JavaSpecVersionChecker.isJDK13OrNewer()) {
+    if (JavaSpecVersionChecker.isJDKWithin13And19()) {
     	Assert.assertEquals("-4E+1", rc_BigDecimal.toString());
     } else {
     	Assert.assertEquals("-40", rc_BigDecimal.toString());

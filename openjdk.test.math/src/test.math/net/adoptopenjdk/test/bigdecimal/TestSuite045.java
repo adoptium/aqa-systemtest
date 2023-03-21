@@ -4538,7 +4538,7 @@ public class TestSuite045 extends TestCase
   public void testItem_0682()
   {
     rc_BigDecimal = (new BigDecimal("1.8446744073709551616E+38")).movePointLeft(0);
-    if (JavaSpecVersionChecker.isJDK13OrNewer()) {
+    if (JavaSpecVersionChecker.isJDKWithin13And19()) {
     	Assert.assertEquals("1.8446744073709551616E+38", rc_BigDecimal.toString());	
     } else {
     	Assert.assertEquals("184467440737095516160000000000000000000", rc_BigDecimal.toString());        	
@@ -4562,7 +4562,7 @@ public class TestSuite045 extends TestCase
   public void testItem_0686()
   {
     rc_BigDecimal = (new BigDecimal("-2E+9")).movePointRight(0);
-    if (JavaSpecVersionChecker.isJDK13OrNewer()) {
+    if (JavaSpecVersionChecker.isJDKWithin13And19()) {
     	 Assert.assertEquals("-2E+9", rc_BigDecimal.toString());
     } else {
     	 Assert.assertEquals("-2000000000", rc_BigDecimal.toString());

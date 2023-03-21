@@ -5349,7 +5349,7 @@ public class TestSuite046 extends TestCase
   public void testItem_0785()
   {
     rc_BigDecimal = (new BigDecimal("1.135879015891E+13")).movePointLeft(0);  
-    if (JavaSpecVersionChecker.isJDK13OrNewer()) {
+    if (JavaSpecVersionChecker.isJDKWithin13And19()) {
     	 Assert.assertEquals("1.135879015891E+13", rc_BigDecimal.toString());
     } else {
     	 Assert.assertEquals("11358790158910", rc_BigDecimal.toString());

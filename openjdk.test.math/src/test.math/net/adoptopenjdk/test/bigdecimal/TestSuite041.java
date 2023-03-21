@@ -2723,7 +2723,7 @@ public class TestSuite041 extends TestCase
   public void testItem_0409()
   {
     rc_BigDecimal = (new BigDecimal("1E+1")).movePointLeft(0);
-    if (JavaSpecVersionChecker.isJDK13OrNewer()) {
+    if (JavaSpecVersionChecker.isJDKWithin13And19()) {
     	Assert.assertEquals("1E+1", rc_BigDecimal.toString());
     } else {
     	Assert.assertEquals("10", rc_BigDecimal.toString());

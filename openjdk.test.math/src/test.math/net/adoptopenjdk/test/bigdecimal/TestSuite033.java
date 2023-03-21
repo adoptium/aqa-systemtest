@@ -2369,7 +2369,7 @@ public class TestSuite033 extends TestCase
   public void testItem_0328()
   {
     rc_BigDecimal = (new BigDecimal("6E+2")).movePointRight(0);
-    if (JavaSpecVersionChecker.isJDK13OrNewer()) {
+    if (JavaSpecVersionChecker.isJDKWithin13And19()) {
     	 Assert.assertEquals("6E+2", rc_BigDecimal.toString());
     } else {
     	 Assert.assertEquals("600", rc_BigDecimal.toString());

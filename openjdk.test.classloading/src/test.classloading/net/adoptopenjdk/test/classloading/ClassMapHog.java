@@ -95,30 +95,36 @@ public class ClassMapHog
 					try
 					{
 						// Mauve CORBA related tests have been removed from all Java releases 
-						if ( classToLoad.startsWith("org.omg") ) {
+						if (classToLoad.startsWith("org.omg") ) {
 							continue; 
 						}
 						if (javaVersion >= 11) {
 							// javax.transaction and CORBA has been removed from Java 11
-							if ( classToLoad.startsWith("javax.transaction") ) {
+							if (classToLoad.startsWith("javax.transaction") ) {
 								continue;
 							}
 						}
 						
 						if (javaVersion >= 14) {
 							// java.security.acl package has been removed from jdk 14
-							if ( classToLoad.startsWith("java.security.acl") ) {
+							if (classToLoad.startsWith("java.security.acl") ) {
 								continue;
 							}
 						}
 						
 						if (javaVersion >= 17) {
 							// The RMI Activation mechanism has been deprecated from jdk 17
-							if ( classToLoad.startsWith("java.rmi.activation") ) {
+							if (classToLoad.startsWith("java.rmi.activation") ) {
 								continue;
 							}
 						}
-					
+
+						if (javaVersion >= 21) {
+							// The java.lang.Compiler class has been removed from jdk 21
+							if (classToLoad.startsWith("java.lang.Compiler") ) {
+								continue;
+							}
+						}
 						// get the class loader to load the current class
 						// Class is the class that represents a classes 'blueprint'
 						c = Class.forName (classToLoad);

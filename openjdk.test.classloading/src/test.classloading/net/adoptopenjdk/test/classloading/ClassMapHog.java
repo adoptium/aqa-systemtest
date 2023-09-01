@@ -95,12 +95,12 @@ public class ClassMapHog
 					try
 					{
 						// Mauve CORBA related tests have been removed from all Java releases 
-						if (classToLoad.startsWith("org.omg") ) {
+						if (classToLoad.startsWith("org.omg")) {
 							continue; 
 						}
 						if (javaVersion >= 11) {
 							// javax.transaction and CORBA has been removed from Java 11
-							if (classToLoad.startsWith("javax.transaction") ) {
+							if (classToLoad.startsWith("javax.transaction")) {
 								continue;
 							}
 						}

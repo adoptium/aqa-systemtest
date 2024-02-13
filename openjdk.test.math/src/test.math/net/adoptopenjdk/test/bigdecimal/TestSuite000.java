@@ -1064,6 +1064,11 @@ public class TestSuite000 extends TestCase
     catch (java.lang.NegativeArraySizeException e) {
       caught = true;
     }
+    catch (java.lang.OutOfMemoryError e) {
+    	if (e.getMessage().contains("too large")) {
+    		caught = true;
+    	}
+    }
     Assert.assertEquals("35.23489932885906%", true, caught);
   }
   public void testItem_0143()
@@ -4134,6 +4139,11 @@ public class TestSuite000 extends TestCase
     }
     catch (java.lang.NegativeArraySizeException e) {
       caught = true;
+    }
+    catch (java.lang.OutOfMemoryError e) {
+    	if (e.getMessage().contains("too large")) {
+    		caught = true;
+    	}
     }
     Assert.assertEquals("76.1744966442953%", true, caught);
   }

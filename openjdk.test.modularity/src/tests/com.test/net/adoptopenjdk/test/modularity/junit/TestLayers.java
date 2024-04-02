@@ -72,7 +72,9 @@ public class TestLayers {
 		 * at command line) will cause classes to be unloaded, which will trigger 
 		 *the trace point events that the test validation depends on.*/
 		System.gc();
-		Thread.sleep(2000);
-		System.gc();
+		for (int i = 0; i < 3; i++) {
+			Thread.sleep(200);
+			System.gc();
+		}
 	}
 }

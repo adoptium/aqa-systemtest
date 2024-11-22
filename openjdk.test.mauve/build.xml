@@ -106,11 +106,10 @@ limitations under the License.
 			<exclude name="/junit/textui/*.java" />
 		</depend>
 		-->
-		<!-- The test cases are built with release="8" if supported by the compiler,
-		    otherwise with source="1.8" and target="1.8". -->
+		<!-- The test cases are built with source="1.8" and target="1.8" because they need packages
+		    which have been moved into madules which are not visible by default in Java 9. -->
 		<javac srcdir="${openjdk_test_mauve_src_dir}"
 			   destdir="${openjdk_test_mauve_src_dir}"
-			   release="8"
 			   source="1.8"
 			   target="1.8"
 			   fork="true"
@@ -125,23 +124,6 @@ limitations under the License.
 			<exclude name="**/junit/framework/*.java" />
 			<exclude name="/junit/runner/*.java" />
 			<exclude name="/junit/textui/*.java" />
-			<exclude name="**/gnu/testlet/java/lang/Class/classInfo/getDeclaredMethod.java" />
-		</javac>
-		<!-- The file gnu/testlet/java/lang/Class/classInfo/getDeclaredMethod.java is built with
-		    source="1.8" and target="1.8" because it requires sun.reflect.annotation.AnnotationType
-		    that is in module not visible by default in Java 9 and later when using release=8. -->
-		<javac srcdir="${openjdk_test_mauve_src_dir}"
-			   destdir="${openjdk_test_mauve_src_dir}"
-			   source="1.8"
-			   target="1.8"
-			   fork="true"
-			   executable="${java_compiler}"
-			   classpathref="project.class.path"
-			   debug="true"
-			   encoding="${src-encoding}"
-			   includeantruntime="false"
-			   failonerror="true">
-			<include name="**/gnu/testlet/java/lang/Class/classInfo/getDeclaredMethod.java" />
 		</javac>
 	</target>
 

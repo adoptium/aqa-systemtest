@@ -2047,4 +2047,9 @@
 	<mauve class="gnu.testlet.java.util.IllegalFormatWidthException.classInfo.getDeclaredMethods"/>
 	<mauve class="gnu.testlet.java.util.IllegalFormatWidthException.classInfo.getFields"/>
 	<mauve class="gnu.testlet.java.util.IllegalFormatWidthException.classInfo.getMethods"/>
+
+	<!-- Tests using the SecurityManager will fail in JDK 24+. -->
+	<mauve class="gnu.testlet.java.security.ProtectionDomain.Implies"/>
+	<mauve class="gnu.testlet.java.util.logging.Logger.getAnonymousLogger"/>
+	<mauve class="gnu.testlet.java.util.logging.Logger.getName"/>
 </inventory>

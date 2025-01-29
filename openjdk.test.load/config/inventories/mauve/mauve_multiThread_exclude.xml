@@ -43,8 +43,10 @@
 	Issue ref: https://github.com/adoptium/aqa-systemtest/issues/298 -->
 	<mauve class="gnu.testlet.java.util.Calendar.getInstance"/>
 	<mauve class="gnu.testlet.java.util.Date.range"/>
-	<!-- Exclude tests that install SecurityManager 
+	<!-- Tests using the SecurityManager will fail in JDK 24+.
+	The Logger tests were also excluded previously due to 
 	Issue Ref: https://github.com/adoptium/aqa-systemtest/issues/284-->
+	<mauve class="gnu.testlet.java.security.ProtectionDomain.Implies"/>
 	<mauve class="gnu.testlet.java.util.logging.Logger.getAnonymousLogger"/>
 	<mauve class="gnu.testlet.java.util.logging.Logger.getName"/>
 	<!-- Fails on jdk12 hotspot with: 

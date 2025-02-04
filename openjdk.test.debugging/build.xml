@@ -232,7 +232,6 @@ limitations under the License.
                         <compilerarg value="-source"/>
                         <compilerarg value="${java.specification.version}"/>
                         <compilerarg value="--enable-preview"/>
-                        <compilerarg line='${addExports}' />
                 </javac>
         </target>
 	

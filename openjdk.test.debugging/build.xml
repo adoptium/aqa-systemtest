@@ -59,13 +59,51 @@ limitations under the License.
 	<condition property="isJavas11" value="true">
 		<equals arg1="${java.specification.version}" arg2="11"/>
 	</condition>
-	
-	<condition property="isBelowJava12" value="true">
-		<or>
-			<isset property="isJavas8"/>
-			<isset property="isJavas11"/>
-		</or>
-	</condition>
+
+        <condition property="isJavas17" value="true">
+                <equals arg1="${java.specification.version}" arg2="17"/>
+        </condition>
+
+        <condition property="isJavas21" value="true">
+                <equals arg1="${java.specification.version}" arg2="21"/>
+        </condition>
+
+        <condition property="isJavas23" value="true">
+                <equals arg1="${java.specification.version}" arg2="23"/>
+        </condition>
+
+        <condition property="isJavas24" value="true">
+                <equals arg1="${java.specification.version}" arg2="24"/>
+        </condition>
+
+        <condition property="isBelowJava25" value="true">
+                <or>
+                        <isset property="isJavas8"/>
+                        <isset property="isJavas11"/>
+                        <isset property="isJavas17"/>
+                        <isset property="isJavas21"/>
+                        <isset property="isJavas23"/>
+                        <isset property="isJavas24"/>
+                </or>
+        </condition>
+
+        <condition property="isJavas11or25AndAbove" value="true">
+                <or>
+                        <isset property="isJavas11"/>
+                        <not>
+                          <isset property="isBelowJava25"/>
+                        </not>
+                </or>
+        </condition>
+
+        <condition property="isJavas17to24" value="true">
+                <or>
+                        <isset property="isJavas17"/>
+                        <isset property="isJavas21"/>
+                        <isset property="isJavas23"/>
+                        <isset property="isJavas24"/>
+                </or>
+        </condition>
 
 	<!-- Projects which need to be built before this one. -->
 	<!-- dir must be set on the ant task otherwise the basedir property is not set to a new value in the subant task. -->
@@ -108,7 +146,7 @@ limitations under the License.
 		</jar>
 	</target>
 
-	<target name="build-java" depends="build-java-8, build-java-11, build-java-above-11" />
+	<target name="build-java" depends="build-java-8, build-java-11-25plus, build-java-17-24" />
 		
 	<target name="build-java-8" if="${isJavas8}" depends="check-prereqs, create-bin-dir">
 		 <!--
@@ -137,7 +175,7 @@ limitations under the License.
 		</javac>
 	</target>
 	
-	<target name="build-java-11" if="${isJavas11}" depends="check-prereqs, create-bin-dir">
+	<target name="build-java-11-25plus" if="${isJavas11or25AndAbove}" depends="check-prereqs, create-bin-dir">
 		 <!--
 		 	The Ant javac task only checks time dependencies between .java files and their .class files,
 			so fails to recompile in situations such as the signatures of a dependent method changing.
@@ -167,7 +205,7 @@ limitations under the License.
 		</javac>
 	</target>
 		
-	<target name="build-java-above-11" unless="${isBelowJava12}" depends="check-prereqs, create-bin-dir">
+	<target name="build-java-17-24" if="${isJavas17to24}" depends="check-prereqs, create-bin-dir">
 		<property name="addExports" value="--add-exports java.base/jdk.internal.org.objectweb.asm=ALL-UNNAMED" />
 		<javac srcdir="${openjdk_test_debugging_src_dir}"
 			destdir="${openjdk_test_debugging_bin_dir}"

@@ -64,7 +64,7 @@ limitations under the License.
 		<path path="${openjdk_test_modularity_bin_dir}/common-mods" />
 	</path>
 
-	<target name="build" depends="build-no-natives, build-natives">
+	<target name="build" depends="build-no-natives">
 	</target>
 
 	<target name="check-compiler-level">
@@ -259,10 +259,6 @@ limitations under the License.
 		</condition>
 		<echo message="openjdk_test_modularity_javac_ran is ${openjdk_test_modularity_javac_ran}" />
 		<echo message="openjdk_test_modularity_javac_did_not_run is ${openjdk_test_modularity_javac_did_not_run}" />
-	</target>
-	
-
-	<target name="build-natives" depends="check-prereqs, check-compiler-level, setup-native-build-command">
 	</target>
 	
 	<target name="setup-native-build-command" if="${can_build_modularity}">

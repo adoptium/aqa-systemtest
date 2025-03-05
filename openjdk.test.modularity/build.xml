@@ -64,7 +64,7 @@ limitations under the License.
 		<path path="${openjdk_test_modularity_bin_dir}/common-mods" />
 	</path>
 
-	<target name="build" depends="build-no-natives, build-natives">
+	<target name="build" depends="build-no-natives">
 	</target>
 
 	<target name="check-compiler-level">
@@ -95,7 +95,7 @@ limitations under the License.
 		<echo message="can_build_modularity_natives_windows is ${can_build_modularity_natives_windows}"/>
 	</target>
 	
-	<target name="build-no-natives" depends="check-prereqs, check-compiler-level, build-java, build-javah">
+	<target name="build-no-natives" depends="check-prereqs, check-compiler-level, build-java">
 	</target>
 
 	<target name="build-java" depends="check-prereqs, create-bin-dir" if="${can_build_modularity}">
@@ -189,11 +189,6 @@ limitations under the License.
 		        includes="**/*.properties" />
 		</copy>
 		
-		<copy todir="${openjdk_test_modularity_bin_dir}/tests/com.test.jlink/conf">
-			<fileset dir="${openjdk_test_modularity_src_dir}/tests/com.test.jlink/conf"
-				includes="**/*.properties" />
-		</copy>
-
 		<apply executable="${java_compiler}" failonerror="true" parallel="true">
 			<arg value="-d" />
 			<arg value="${openjdk_test_modularity_bin_dir}/common" />
@@ -266,55 +261,6 @@ limitations under the License.
 		<echo message="openjdk_test_modularity_javac_did_not_run is ${openjdk_test_modularity_javac_did_not_run}" />
 	</target>
 	
-	<target name="build-javah" depends="check-prereqs, check-if-javac_ran" unless="javac_did_not_run">
-		<!-- Build JNI header files. -->
-		<!--From Java10, the 'javah' executable has been replaced with 'javac with options'. -->
-		
-		<property name="openjdk_test_modularity_javah_src" value="${openjdk_test_modularity_src_dir}/tests/com.test.jlink/adoptopenjdk/test/modularity/jlink/JniTest.java"/>
-		<property name="openjdk_test_modularity_headerdir" value="${openjdk_test_modularity_jlink_nativedir}/lib"/>
-		<mkdir dir="${openjdk_test_modularity_headerdir}" />
-		 
-		<!-- First delete the header file -->
-		<delete includeemptydirs="true" verbose="true">
-			<fileset dir="${openjdk_test_modularity_headerdir}" includes="adoptopenjdk_test_modularity_jlink_JniTest.h"/>
-		</delete>
-		
-		<!-- Then recreate it -->
-		<echo message="Building JNI header file for JniTest to ${openjdk_test_modularity_headerdir}" />
-		<exec executable="${java_compiler}" failonerror="true">
-			<arg value="-classpath"/>
-			<arg pathref="jlink.project.class.path" />
-			<arg value="-h"/>
-			<arg value="${openjdk_test_modularity_headerdir}"/>
-			<arg value="-d"/>
-			<arg value="${openjdk_test_modularity_bin_dir}"/>
-			<arg value="${openjdk_test_modularity_javah_src}"/>
-		</exec>
-	</target>
-	
-	<target name="build-natives" depends="check-prereqs, check-compiler-level, setup-native-build-command, build-natives-windows, build-natives-unix">
-	</target>
-	
-	<target name="setup-native-build-command" if="${can_build_modularity}">
-		<echo message="building natives for java_platform ${java_platform}"/>
-		<property name="openjdk_test_modularity_native_build_command" value='${setup_windows_build_env}${MAKE} -C ${openjdk_test_modularity_jlink_testcase_src}/native SRC=${openjdk_test_modularity_native_src} JAVA_HOME=${java_home} OUTDIR=${openjdk_test_modularity_jlink_outdir} HEADERDIR=${openjdk_test_modularity_jlink_headerdir} OSNAME=${java_osname}'/>
-		<tempfile property="openjdk_test_modularity_native_build_command_file" destDir="${java.io.tmpdir}" prefix="openjdk.build.command."/>
-	</target>
-
-	<target name="build-natives-windows" if="${can_build_modularity_natives_windows}">
-		<echo message="${openjdk_test_modularity_native_build_command}" file="${openjdk_test_modularity_native_build_command_file}.bat"/>
-		<exec executable="${openjdk_test_modularity_native_build_command_file}.bat" failonerror="true"/>
-		<delete file="${openjdk_test_modularity_native_build_command_file}.bat" verbose="true"/>
-	</target>
-
-	<target name="build-natives-unix" if="${can_build_modularity_natives_unix}">
-		<echo message="${openjdk_test_modularity_native_build_command}" file="${openjdk_test_modularity_native_build_command_file}.sh"/>
-		<exec executable="/bin/sh" failonerror="true">
-			<arg value="${openjdk_test_modularity_native_build_command_file}.sh"/>
-		</exec>
-		<delete file="${openjdk_test_modularity_native_build_command_file}.sh" verbose="true"/>
-	</target>
-
 	<target name="clean">
 		<delete dir="${openjdk_test_modularity_bin_dir}"/>
 	</target>

@@ -37,6 +37,22 @@
 			 https://github.com/eclipse/openj9/issues/8620
 	-->
 	<mauve class="gnu.testlet.java.text.DecimalFormat.setGroupingSize"/>
+	<!-- Fails on jdk25 with: 
+		 java.lang.NullPointerException: prefix must not be null
+		 Issue reference: https://github.com/eclipse-openj9/openj9/issues/21729 -->
+	<mauve class="gnu.testlet.java.text.DecimalFormat.setNegativePrefix"/>
+	<!-- Fails on jdk25 with: 
+		 java.lang.NullPointerException: suffix must not be null
+		 Issue reference: https://github.com/eclipse-openj9/openj9/issues/21729 -->
+	<mauve class="gnu.testlet.java.text.DecimalFormat.setNegativeSuffix"/>
+	<!-- Fails on jdk25 with: 
+		 java.lang.NullPointerException: prefix must not be null
+		 Issue reference: https://github.com/eclipse-openj9/openj9/issues/21729 -->
+	<mauve class="gnu.testlet.java.text.DecimalFormat.setPositivePrefix"/>
+	<!-- Fails on jdk25 with: 
+		 java.lang.NullPointerException: suffix must not be null
+		 Issue reference: https://github.com/eclipse-openj9/openj9/issues/21729 -->
+	<mauve class="gnu.testlet.java.text.DecimalFormat.setPositiveSuffix"/>
 	<!-- Excluded as invalid test. Ref: https://github.com/eclipse/openj9/issues/7020 -->
 	<mauve class="gnu.testlet.java.io.InputStreamReader.utf8"/>
 	<!-- Exclude tests not suited for multi-threaded testing
@@ -116,6 +132,10 @@
 	<mauve class="gnu.testlet.javax.imageio.spi.ServiceRegistry.deregisterAll"/>
 	<mauve class="gnu.testlet.javax.imageio.spi.ServiceRegistry.getCategories"/>
 	<mauve class="gnu.testlet.javax.imageio.spi.ServiceRegistry.getServiceProviderByClass"/>
+	<!-- Fails on jdk25
+		 FAIL: gnu.testlet.java.lang.Package.classInfo.getModifiers (number 4)
+	-->
+	<mauve class="gnu.testlet.java.lang.Package.classInfo.getModifiers"/>
 	<!-- Fails on Oracle Java 9 with
 		 FAIL: gnu.testlet.java.lang.Package.classInfo.getSuperclass (number 0)
 		 got java.lang.NamedPackage but expected java.lang.Object

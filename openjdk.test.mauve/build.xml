@@ -51,7 +51,7 @@ limitations under the License.
 	<target name="build-dependencies">
 	</target>
 
-	<target name="configure" depends="check-if-already-built, check-if-cvs-available, download-cvsclient, output-recreate-message, get-source, check-if-source-available, build-archives, check-if-work_jar_file-exists, install-archives, delete-work-dir">
+	<target name="configure" depends="check-if-already-built, output-recreate-message, get-source, check-if-source-available, build-archives, check-if-work_jar_file-exists, install-archives, delete-work-dir">
 	</target>
 
 	<!--
@@ -64,7 +64,7 @@ limitations under the License.
 		   identifer which is illegal in java 9.
 		   This will rebuild from the source and put the results mauve.jar into ${first_prereqs_root}/mauve
 	-->
-	<target name="force-build" depends="check-if-cvs-available, check-if-source-available, build-archives, check-if-work_jar_file-exists, install-archives">
+	<target name="force-build" depends="check-if-source-available, build-archives, check-if-work_jar_file-exists, install-archives">
 	</target>
 
 	<target name="output-recreate-message" if="${openjdk_test_mauve_already_built}">
@@ -359,16 +359,12 @@ limitations under the License.
 		<delete dir="${openjdk_test_mauve_src_dir}/gnu/testlet/org/omg/PortableServer/POAOperations"/>
 	</target>
 
-	<target name="get-source" depends="download-cvsclient, create-work-dir" unless="openjdk_test_mauve_already_built">
-		<exec dir="${openjdk_test_mauve_work_dir}" executable="java">
-		<arg value="-Dcvs.root=:pserver:anoncvs@sourceware.org:/cvs/mauve"/>
-		<arg value="-jar"/>
-		<arg value="${first_prereqs_root}/cvsclient/org-netbeans-lib-cvsclient.jar"/>
-		<arg value="export"/>
-		<arg value="-r"/>
-		<arg value="HEAD"/>
-		<arg value="mauve"/>
-</exec>
+	<target name="get-source" depends="create-work-dir" unless="openjdk_test_mauve_already_built">
+		<exec dir="${openjdk_test_mauve_work_dir}" executable="git">
+		<arg value="--depth 1"/>
+		<arg value="-b master"/>
+		<arg value="https://git.linaro.org/leg/openjdk/mauve.git"/>
+		</exec>
 	</target>
 
 	<target name="check-if-source-available">
@@ -376,12 +372,6 @@ limitations under the License.
 		<echo message="Checking if ${openjdk_test_mauve_work_dir}/mauve/gnu/testlet/config.java.in exists"/>
 		<available file="${openjdk_test_mauve_work_dir}/mauve/gnu/testlet/config.java.in" property="mauve_source_available"/>
 		<echo message="mauve_source_available is ${mauve_source_available}"/>
-	</target>
-
-	<target name="check-if-cvs-available">
-		<echo message="Checking if ${first_prereqs_root}/cvsclient/org-netbeans-lib-cvsclient.jar exists"/>
-		<available file="${first_prereqs_root}/cvsclient/org-netbeans-lib-cvsclient.jar" property="cvs_available"/>
-		<echo message="cvs_available is ${cvs_available}"/>
 	</target>
 
 	<target name="download-cvsclient"  unless="${cvs_available}">

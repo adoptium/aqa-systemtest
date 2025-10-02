@@ -361,7 +361,6 @@ limitations under the License.
 
 	<target name="get-source" depends="create-work-dir" unless="openjdk_test_mauve_already_built">
 		<exec dir="${openjdk_test_mauve_work_dir}" executable="git">
-		<arg value="--depth 1"/>
 		<arg value="-b master"/>
 		<arg value="https://git.linaro.org/leg/openjdk/mauve.git"/>
 		</exec>
@@ -372,11 +371,6 @@ limitations under the License.
 		<echo message="Checking if ${openjdk_test_mauve_work_dir}/mauve/gnu/testlet/config.java.in exists"/>
 		<available file="${openjdk_test_mauve_work_dir}/mauve/gnu/testlet/config.java.in" property="mauve_source_available"/>
 		<echo message="mauve_source_available is ${mauve_source_available}"/>
-	</target>
-
-	<target name="download-cvsclient"  unless="${cvs_available}">
-		<mkdir dir="${first_prereqs_root}/cvsclient"/>
-		<download-file destdir="${first_prereqs_root}/cvsclient" destfile="org-netbeans-lib-cvsclient.jar" srcurl="https://repo1.maven.org/maven2/org/netbeans/lib/cvsclient/20060125/cvsclient-20060125.jar"/>
 	</target>
 
 	<target name="install-archives" if="openjdk_test_mauve_work_jar_file_exists">

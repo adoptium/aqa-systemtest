@@ -361,6 +361,7 @@ limitations under the License.
 
 	<target name="get-source" depends="create-work-dir" unless="openjdk_test_mauve_already_built">
 		<exec dir="${openjdk_test_mauve_work_dir}" executable="git">
+		<arg value="clone"/>
 		<arg value="https://git.linaro.org/leg/openjdk/mauve.git"/>
 		</exec>
 	</target>

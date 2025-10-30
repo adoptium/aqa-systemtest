@@ -82,6 +82,13 @@ public class ClassHog
 							continue;
 						}
 					}
+					if (javaVersion >= 26) {
+						// The java.applet has been removed from jdk 26
+						if (classToLoad.startsWith("java.applet") || 
+							classToLoad.startsWith("java.beans.AppletInitializer")) {
+							continue;	
+						}
+					}
 					// use the class loader to get the Class class that represents the class on the current line
 					c = Class.forName (classToLoad);
 					cnt++;

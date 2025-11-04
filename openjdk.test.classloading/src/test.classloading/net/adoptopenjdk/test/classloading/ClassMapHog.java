@@ -125,6 +125,13 @@ public class ClassMapHog
 								continue;
 							}
 						}
+						if (javaVersion >= 26) {
+							// The java.applet has been removed from jdk 26
+							if (classToLoad.startsWith("java.applet") || 
+								classToLoad.startsWith("java.beans.AppletInitializer")) {
+								continue;	
+							}
+						}
 						// get the class loader to load the current class
 						// Class is the class that represents a classes 'blueprint'
 						c = Class.forName (classToLoad);

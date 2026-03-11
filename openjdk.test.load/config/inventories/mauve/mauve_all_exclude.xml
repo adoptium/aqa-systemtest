@@ -2072,4 +2072,7 @@
 	<mauve class="gnu.testlet.java.security.ProtectionDomain.Implies"/>
 	<mauve class="gnu.testlet.java.util.logging.Logger.getAnonymousLogger"/>
 	<mauve class="gnu.testlet.java.util.logging.Logger.getName"/>
+
+	<!--  Disabled due to https://github.com/eclipse-openj9/openj9/issues/22912 -->
+	<mauve class="gnu.testlet.java.util.SimpleTimeZone.hashCode"/>
 </inventory>

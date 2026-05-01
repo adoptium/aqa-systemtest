@@ -39,7 +39,14 @@ public class MessageHeader {
 				if (keyValue.length != 2) {
 					System.err.println("Malformed header line - '" + parts[index] + "'");
 				}
-				map.put(keyValue[0], keyValue[1]);
+				try {
+					map.put(keyValue[0], keyValue[1]);
+				} catch (NullPointerException e) {
+					NullPointerException npe = new NullPointerException("parts[" + index + "] '" + parts[index] + "' split length "
+							+ keyValue.length + " [0] '" + keyValue[0] + "' [1] '" + keyValue[1] + "'");
+					npe.initCause(e);
+					throw npe;
+				}
 			}
 		}
 	}

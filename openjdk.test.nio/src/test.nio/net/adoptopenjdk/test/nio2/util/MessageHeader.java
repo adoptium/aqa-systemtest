@@ -41,11 +41,11 @@ public class MessageHeader {
 				}
 				try {
 					map.put(keyValue[0], keyValue[1]);
-				} catch (NullPointerException e) {
-					NullPointerException npe = new NullPointerException("parts[" + index + "] '" + parts[index] + "' split length "
-							+ keyValue.length + " [0] '" + keyValue[0] + "' [1] '" + keyValue[1] + "'");
-					npe.initCause(e);
-					throw npe;
+				} catch (ArrayIndexOutOfBoundsException e) {
+					ArrayIndexOutOfBoundsException boundsex = new ArrayIndexOutOfBoundsException("parts[" + index + "] '" + parts[index] + "' split length "
+							+ keyValue.length + " [0] '" + keyValue[0] + "'");
+					boundsex.initCause(e);
+					throw boundsex;
 				}
 			}
 		}

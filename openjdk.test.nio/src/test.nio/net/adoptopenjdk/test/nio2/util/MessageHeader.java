@@ -37,13 +37,14 @@ public class MessageHeader {
 				// Key value are delimited by ':'
 				String[] keyValue = parts[index].split(":", 2);
 				if (keyValue.length != 2) {
+					System.out.println("Malformed header line - '" + parts[index] + "'");
 					System.err.println("Malformed header line - '" + parts[index] + "'");
 				}
 				try {
 					map.put(keyValue[0], keyValue[1]);
 				} catch (ArrayIndexOutOfBoundsException e) {
 					ArrayIndexOutOfBoundsException boundsex = new ArrayIndexOutOfBoundsException("parts[" + index + "] '" + parts[index] + "' split length "
-							+ keyValue.length + " [0] '" + keyValue[0] + "'");
+							+ keyValue.length + " [0] '" + keyValue[0] + "' header '" + headerString +"'");
 					boundsex.initCause(e);
 					throw boundsex;
 				}
